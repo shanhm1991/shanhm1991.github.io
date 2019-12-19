@@ -161,7 +161,7 @@ article.link .title a:after {
   vertical-align: super;
 }
 article .post-content {
-  padding: 20px 20px 15px 77px;
+  padding: 20px 20px 15px 72px;
   margin-bottom: 50px;
   position: relative;
 }
@@ -715,7 +715,7 @@ figure.highlight {
   background: #eee;
   border: 1px solid #ddd;
   margin-top: 15px;
-  padding: 7px 15px;
+  padding: 0px;
   border-radius: 2px;
   text-shadow: 0 0 1px #fff;
   line-height: 1.6;
@@ -743,7 +743,7 @@ figure.highlight table {
 }
 figure.highlight .gutter {
   color: #999;
-  padding-right: 15px;
+  padding: 5px;
   border-right: 1px solid #ddd;
   text-align: right;
 }
