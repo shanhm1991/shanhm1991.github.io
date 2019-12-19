@@ -174,18 +174,21 @@
 
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
 <div id="gitalk-container"></div>
 <script type="text/javascript">
     var gitalk = new Gitalk({
         clientID: 'd7beb7890a79c73a3e3d',
         clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
-        id: window.location.pathname,
+        id: md5(window.location.pathname),
         repo: 'shanhm1991.github.io',
         owner: 'shanhm1991',
         admin: 'shanhm1991'
     })
     gitalk.render('gitalk-container')
 </script>                              
+
+
 
 </div></div>
     <aside id="sidebar" class="alignright">
