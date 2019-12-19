@@ -120,6 +120,45 @@
 
 
 
+  <article id="post-2019-07-01-java容器Api. ArrayList与LinkedList" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-06-30T16:00:00.000Z"><a href="/2019/07/01/2019-07-01-java容器Api. ArrayList与LinkedList/">2019-07-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2019/07/01/2019-07-01-java容器Api. ArrayList与LinkedList/">java容器Api[1.8].ArrayList与LinkedList</a></h1>
+  
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java中的容器就是对各种数据结构的实现，按照接口实现可以分为<code>Collection</code>和<code>Map</code>。也可以按照是否线程安全来进行划分，比如JDK1.5之后，在<code>concurrent</code>包下面加了很多线程安全的容器，
+具体放在并发工具介绍过之后在说明，因为它们的实现中或多或少都会依赖一些并发api。因此，接下来对于java容器，只介绍一些常见的基本容器实现，它们对于并发修改统一提供了一个及时反馈：
+<code>ConcurrentModificationException</code>，通过记一个修改次数来实现的，比如在迭代期间如果发现容器的修改次数与迭代开始时不一样，那么就立即失败并反馈异常给调用者，
+事实上这个异常在单线程环境下也会触发，比如在迭代期间通过迭代器自身之外的方法修改容器，不管修改是不是来自同一个线程，因此需要注意。<br>另外，对于<code>Hashtable</code>或者<code>Vector</code>这种在JDK1.0实现的，已经被淘汰的容器也不说了，它们实现的想法也比较简单，就是通过一个内置锁限制所有对容器的访问和操作。</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/07/01/2019-07-01-java容器Api. ArrayList与LinkedList/#more" class="more-link">more&gt;&gt;</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article id="post-2019-07-02-java容器Api. HashMap与LinkedHashMap" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -151,45 +190,6 @@
         
           <div class="alignleft">
             <a href="/2019/07/01/2019-07-02-java容器Api. HashMap与LinkedHashMap/#more" class="more-link">more&gt;&gt;</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article id="post-2019-07-01-java容器Api. ArrayList与LinkedList" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-30T16:00:00.000Z"><a href="/2019/07/01/2019-07-01-java容器Api. ArrayList与LinkedList/">2019-07-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2019/07/01/2019-07-01-java容器Api. ArrayList与LinkedList/">java容器Api[1.8].ArrayList与LinkedList</a></h1>
-  
-
-    </header>
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java中的容器就是对各种数据结构的实现，按照接口实现可以分为<code>Collection</code>和<code>Map</code>。也可以按照是否线程安全来进行划分，比如JDK1.5之后，在<code>concurrent</code>包下面加了很多线程安全的容器，
-具体放在并发工具介绍过之后在说明，因为它们的实现中或多或少都会依赖一些并发api。因此，接下来对于java容器，只介绍一些常见的基本容器实现，它们对于并发修改统一提供了一个及时反馈：
-<code>ConcurrentModificationException</code>，通过记一个修改次数来实现的，比如在迭代期间如果发现容器的修改次数与迭代开始时不一样，那么就立即失败并反馈异常给调用者，
-事实上这个异常在单线程环境下也会触发，比如在迭代期间通过迭代器自身之外的方法修改容器，不管修改是不是来自同一个线程，因此需要注意。<br>另外，对于<code>Hashtable</code>或者<code>Vector</code>这种在JDK1.0实现的，已经被淘汰的容器也不说了，它们实现的想法也比较简单，就是通过一个内置锁限制所有对容器的访问和操作。</p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/07/01/2019-07-01-java容器Api. ArrayList与LinkedList/#more" class="more-link">more&gt;&gt;</a>
           </div>
         
         
