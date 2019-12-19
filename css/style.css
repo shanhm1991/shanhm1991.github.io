@@ -375,10 +375,12 @@ article ol dl,
 article dl dl {
   margin-top: 0;
 }
+article h1 {
+  border-bottom: 1px solid #ddd;
+}
 article h1,
 article h2 {
   font-weight: normal;
-  border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
   margin-top: 20px;
 }
