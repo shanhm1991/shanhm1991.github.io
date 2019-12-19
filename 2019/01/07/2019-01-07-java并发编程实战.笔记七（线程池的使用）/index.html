@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>java并发编程实战.笔记七（线程池的使用） | Eassy</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。
+如果将运行时间较长的与运行时间较短的任务混合在一起，那么除非线程池很大，否则将可能造成拥塞；如果提交的任务依赖于其他任务，那么除非线程池无线大，否则将可能造成死锁，称为饥饿死锁。
+关于线程池Api的具体设置和使用想在以后介绍api源码时再做整理，这里笔记就不赘述了。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="java并发编程实战.笔记七（线程池的使用）"/>
+  <meta property="og:site_name" content="Eassy"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Eassy" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Eassy</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-2019-01-07-java并发编程实战.笔记七（线程池的使用）" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-06T16:00:00.000Z"><a href="/2019/01/07/2019-01-07-java并发编程实战.笔记七（线程池的使用）/">2019-01-07</a></time>
+      
+      
+  
+    <h1 class="p-name title" itemprop="headline name">java并发编程实战.笔记七（线程池的使用）</h1>
+  
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><font color="red">只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。</font></p>
+<p>如果将运行时间较长的与运行时间较短的任务混合在一起，那么除非线程池很大，否则将可能造成拥塞；如果提交的任务依赖于其他任务，那么除非线程池无线大，否则将可能造成死锁，称为<strong>饥饿死锁</strong>。</p>
+<p><font color="Gray">关于线程池Api的具体设置和使用想在以后介绍api源码时再做整理，这里笔记就不赘述了。</font></p>
+<a id="more"></a>
+
+<h3 id="1-饱和策略"><a href="#1-饱和策略" class="headerlink" title="1. 饱和策略"></a>1. 饱和策略</h3><p>通常<code>ThreadPoolExecutor</code>会使用一个有界队列来保存已提交的任务，当有界队列被填满后，饱和策略开始发挥作用，可以通过<code>setRejectedExecutionHandler</code>来设置。</p>
+<p>默认的饱和策略是中止，并抛出一个未检查的<code>RejectedExecutionException</code>，调用者可以捕获这个异常，然后根据需求编写自己的处理代码。</p>
+<h4 id="1-1-调用者运行策略"><a href="#1-1-调用者运行策略" class="headerlink" title="1.1. 调用者运行策略"></a>1.1. 调用者运行策略</h4><p>调用者运行策略实现了一种调节机制，该策略既不会抛弃任务，也不会抛出异常，<font color="LimeGreen">而是将任务回退到调用者，让调用者自己执行这个任务，从而降低新任务的流量。</font>因为执行任务需要一定的时间，
+因此调用线程至少在一段时间内不能提交任何任务，从而使得工作者线程有时间来消化已经提交的任务。例如对于WebServer，当线程池中的所有线程都被占用，并且工作队列被填满后，下一个任务在调用<code>execute</code>时在主线程中执行。在这期间，
+主线程不会调用<code>accept</code>，因此到达的请求将被保存在TCP层的队列中而不是在应用程序的队列中，如果持续过载，那么TCP层最终发现它的请求队列被填满，然后开始抛弃请求。这样当服务器过载时，
+这种过载会逐渐向外蔓延开来—从线程池到工作队列到应用程序再到TCP层，最终到达客户端，导致服务器在高负载下实现一种平缓的性能降低。</p>
+<h3 id="2-扩展ThreadPoolExecutor"><a href="#2-扩展ThreadPoolExecutor" class="headerlink" title="2. 扩展ThreadPoolExecutor"></a>2. 扩展ThreadPoolExecutor</h3><p><code>ThreadPoolExecutor</code>是支持扩展的，比如上一篇文章中通过重写<code>newTaskFor</code>来取消一些不可中断的任务，此外它还专门提供了几个方法给子类：<code>beforeExecute</code>、<code>afterExecute</code>、以及<code>terminated</code>。在线程池完成关闭操作时调用<code>terminated</code>，
+也就是在所有任务都已经完成并且所有工作者线程也已经关闭后。<code>terminated</code>可以用来释放<code>Executor</code>在其生命周期里分配的各种资源，此外还可以执行发送通知、记录日志或者收集finalize统计信息等操作。</p>
+<h4 id="2-1-示例：添加统计信息"><a href="#2-1-示例：添加统计信息" class="headerlink" title="2.1. 示例：添加统计信息"></a>2.1. 示例：添加统计信息</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimingThreadPool</span> <span class="keyword">extends</span> <span class="title">ThreadPoolExecutor</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TimingThreadPool</span><span class="params">(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">long</span> keepAliveTime, TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ThreadLocal&lt;Long&gt; startTime = <span class="keyword">new</span> ThreadLocal&lt;Long&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Logger log = Logger.getLogger(<span class="string">"TimingThreadPool"</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicLong numTasks = <span class="keyword">new</span> AtomicLong();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicLong totalTime = <span class="keyword">new</span> AtomicLong();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeExecute</span><span class="params">(Thread t,Runnable r)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.beforeExecute(t, r);</span><br><span class="line">        log.fine(String.format(<span class="string">"Thread %s: start %s"</span>, t,r));</span><br><span class="line">        startTime.set(System.nanoTime());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterExecute</span><span class="params">(Throwable t,Runnable r)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">long</span> endTime = System.nanoTime();</span><br><span class="line">            <span class="keyword">long</span> taskTime = endTime - startTime.get();</span><br><span class="line">            numTasks.incrementAndGet();</span><br><span class="line">            totalTime.addAndGet(taskTime);</span><br><span class="line">            log.fine(String.format(<span class="string">"Thread %s: end %s, time=%dns"</span>, t,r,taskTime));</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.afterExecute(r, t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">terminated</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            log.info(String.format(<span class="string">"Terminated: avg time=%dns"</span>, totalTime.get()/numTasks.get()));</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.terminated();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>TimingThreadPool</code>中给出了一个自定义的线程池，通过<code>beforeExecute</code>、<code>afterExecute</code>、<code>terminated</code>等方法来添加日志记录和统计信息收集。为了测量任务的运行时间，<code>beforeExecute</code>必须记录开始时间并把它保存到一个<code>afterExecute</code>可用访问的地方。
+因为这些方法将在执行任务的线程中调用，因此<code>beforeExecute</code>可以把值保存到一个<code>ThreadLocal</code>变量中。然后由<code>afterExecute</code>来取。在<code>TimingThreadPool</code>中使用了两个<code>AtomicLong</code>变量，分别用于记录已处理的任务和总的处理时间，
+并在<code>terminated</code>中计算任务的平均时间。</p>
+<ul>
+<li>Copyright&nbsp;&copy;《java并发编程实战》</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/读书笔记/">读书笔记</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: window.location.pathname,
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+<div class="widget tag">
+<h3 class="title">Catlog</h3>
+<ul class="entry">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-饱和策略"><span class="toc-text">1. 饱和策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-调用者运行策略"><span class="toc-text">1.1. 调用者运行策略</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-扩展ThreadPoolExecutor"><span class="toc-text">2. 扩展ThreadPoolExecutor</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-示例：添加统计信息"><span class="toc-text">2.1. 示例：添加统计信息</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2019 shanhm1991
+  
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

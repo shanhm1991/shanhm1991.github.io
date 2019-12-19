@@ -1,0 +1,259 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>java并发编程实战.笔记三（线程安全类的设计） | Eassy</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言在设计线程安全类的过程中，需要包含以下三个基本要素：1.找出构成对象状态的所有变量；2.找出约束状态变量的不变性条件；3.建立对象状态的并发访问管理策略；
+对象封装它拥有的状态，并拥有这些状态的所有权或者说控制权，它决定采用何种加锁协议来维持变量状态的完整性，然而，如果发布了某个可变对象的引用，那么就不再拥有独占的控制权，
+最多是共享控制权。一般对于从构造器或者从方法中传递进来的对象，类并不拥有这些对象，除非这些方法是被专门设计来转移传递进来的对象的所有权，例如容器。
+容器通常表现出一种所有权分离的形式，其中容器拥有其自身的状态，而客户代码则拥有容器中各个对象的状态。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="java并发编程实战.笔记三（线程安全类的设计）"/>
+  <meta property="og:site_name" content="Eassy"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Eassy" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Eassy</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-2019-01-03-java并发编程实战.笔记三（线程安全类的设计）" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-02T16:00:00.000Z"><a href="/2019/01/03/2019-01-03-java并发编程实战.笔记三（线程安全类的设计）/">2019-01-03</a></time>
+      
+      
+  
+    <h1 class="p-name title" itemprop="headline name">java并发编程实战.笔记三（线程安全类的设计）</h1>
+  
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在设计线程安全类的过程中，需要包含以下三个基本要素：<br>1.找出构成对象状态的所有变量；<br>2.找出约束状态变量的不变性条件；<br>3.建立对象状态的并发访问管理策略；</p>
+<p>对象封装它拥有的状态，并拥有这些状态的所有权或者说控制权，它决定采用何种加锁协议来维持变量状态的完整性，然而，如果发布了某个可变对象的引用，那么就不再拥有独占的控制权，
+最多是共享控制权。一般对于从构造器或者从方法中传递进来的对象，类并不拥有这些对象，除非这些方法是被专门设计来转移传递进来的对象的所有权，例如容器。
+容器通常表现出一种所有权分离的形式，其中容器拥有其自身的状态，而客户代码则拥有容器中各个对象的状态。</p>
+<a id="more"></a>
+
+<p>比如<code>Servlet</code>框架中的<code>ServletContext</code>，<code>ServletContext</code>为<code>Servlet</code>提供了类似于<code>Map</code>形式的对象容器服务，在<code>ServletContext</code>中可以通过名称来注册或获取应用程序的<code>Attribute</code>对象。
+但这些对象由应用程序拥有，<code>ServletContext</code>容器只是替应用程序保管它们。<code>ServletContext</code>必须是线程安全的，因为它肯定会被多个线程同时访问。因此当调用<code>setAttribute</code>或<code>getAttribute</code>时，
+<code>Servlet</code>不需要使用同步。而如果<code>Attribute</code>对象本身不是线程安全的，那么在<code>getAttribute</code>之后为防止多线程并发访问，访问者依然需要使用同步。<code>HttpSession</code>与<code>ServletContext</code>有类似的功能，
+但它可能更加严格，会要求保存的<code>Attribute</code>对象是线程安全的，因为<code>Servlet</code>容器可能与Web Application同时访问<code>HttpSession</code>中的对象，而且对于<code>Session</code>通常会有复制或持久化之类的操作，
+所以要求这些对象是线程安全的。</p>
+<h3 id="1-实例封闭"><a href="#1-实例封闭" class="headerlink" title="1. 实例封闭"></a>1. 实例封闭</h3><p>当一个对象被封装到另一个对象中时，能够访问被封装对象的所有代码路径都是已知的，与对象可以由整个程序访问相比，更易于对代码进行分析。通常会将数据封装在对象内部，
+将数据的访问限制在对象的方法上，以便更容易确保线程在访问数据时能持有正确的锁。</p>
+<p>java平台的类库中有很多线程封闭的示例，其中一些类的唯一用途就是将非线程安全的类转为线程安全的类。一些基本的容器类并非线程安全，如<code>ArrayList</code>和<code>HashMap</code>，但类库提供了包装器工厂方法，
+如<code>Collections.synchronizedList</code>,使这些非线程安全的类可以在多线程环境中安全地使用。这些工厂方法通过“装饰器”模式将容器类封装在一个同步的封装器对象中，
+包装器将接口中的每个方法都实现为同步方法，并将调用请求转发到底层的容器对象上。只要包装器对象拥有对底层容器对象的唯一引用，那么它就是线程安全的。</p>
+<h3 id="2-监视器模式"><a href="#2-监视器模式" class="headerlink" title="2. 监视器模式"></a>2. 监视器模式</h3><p>遵循java监视器模式的对象会把对象的所有可变状态都封装起来，并由对象自己的内置锁来保护，
+内置锁的主要优势在于它的简单性。<font color="LimeGreen">监视器模式仅仅是一种编写代码的约定，对于任何一种锁对象，只要自始至终都使用该锁对象，都可以用来保护对象的状态。
+也可以使用私有的锁，使客户代码无法获得锁。</font>如果客户代码希望参与到同步策略中，可以通过公有方法访问锁。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();    </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span>(lock)&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-示例：出租车的调度器"><a href="#3-示例：出租车的调度器" class="headerlink" title="3. 示例：出租车的调度器"></a>3. 示例：出租车的调度器</h3><p>假设：每台车都由一个相应的String对象来标识，并拥有一个相应的位置坐标（x,y）</p>
+<h4 id="3-1-基于监视器模式实现"><a href="#3-1-基于监视器模式实现" class="headerlink" title="3.1. 基于监视器模式实现"></a>3.1. 基于监视器模式实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MonitorVehicleTracker</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String,Point&gt; locations;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MonitorVehicleTracker</span><span class="params">(Map&lt;String,Point&gt; locations)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.locations = deepCopy(locations);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Map&lt;String,Point&gt; <span class="title">getLocations</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> deepCopy(locations);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Point <span class="title">getLocation</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        Point p = locations.get(key);</span><br><span class="line">        <span class="keyword">return</span> p == <span class="keyword">null</span> ? <span class="keyword">null</span> : <span class="keyword">new</span> Point(p);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">setLocation</span><span class="params">(String key,<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        Point p = locations.get(key);</span><br><span class="line">        <span class="keyword">if</span>(p == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"no such id"</span> + key);</span><br><span class="line">        &#125;</span><br><span class="line">        p.x = x;</span><br><span class="line">        p.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String,Point&gt; <span class="title">deepCopy</span><span class="params">(Map&lt;String,Point&gt; locations)</span></span>&#123;</span><br><span class="line">        Map&lt;String,Point&gt; copy = <span class="keyword">new</span> HashMap&lt;String,Point&gt;();</span><br><span class="line">        <span class="keyword">for</span>(Entry&lt;String,Point&gt; entry : locations.entrySet())&#123;</span><br><span class="line">            copy.put(entry.getKey(), entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> copy;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> x;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> y;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Point</span><span class="params">()</span></span>&#123;</span><br><span class="line">        x = <span class="number">0</span>;</span><br><span class="line">        y = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Point</span><span class="params">(Point p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = p.x;</span><br><span class="line">        <span class="keyword">this</span>.y = p.y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>示例中虽然<code>Point</code>并不是线程安全的，但调度器是线程安全的。它所包含的可变的<code>Point</code>对象和<code>Map</code>对象都未曾发布。这种实现方式是通过返回客户代码之前复制可变的数据来维持线程的安全性，
+但这在车辆容器非常大的情况下将极大的降低性能。<br>而且，由于每次调用<code>getLocation</code>都要复制数据，将出现一种错误情况。虽然车辆的实际位置发生了变化，但返回的信息却保持不变。（线程T1获取位置是通过复制原对象，
+在线程T2更新是通过替换原对象，T2的替换操作对于T1是未知的）</p>
+<h4 id="3-2-改进：委托线程安全性"><a href="#3-2-改进：委托线程安全性" class="headerlink" title="3.2. 改进：委托线程安全性"></a>3.2. 改进：委托线程安全性</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DelegatingVehicleTracker</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;String,Point&gt; locations;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DelegatingVehicleTracker</span><span class="params">(Map&lt;String,Point&gt; points)</span></span>&#123;</span><br><span class="line">        locations = <span class="keyword">new</span> ConcurrentHashMap&lt;String,Point&gt;(points);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Point <span class="title">getLocation</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> locations.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLocation</span><span class="params">(String key,<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(locations.replace(key, <span class="keyword">new</span> Point(x,y)) == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"no such id"</span> + key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> x;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> y;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Point</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将车辆的位置保存到一个线程安全的<code>ConcurrentHashMap</code>中，另外因为<code>Point</code>类是不可变的，因而它是线程安全的，在返回<code>location</code>时不需要复制。</p>
+<p>在使用监视器模式的车辆追踪器中返回的是车辆位置的快照，而在使用委托的车辆追踪器中返回的是一个不可修改但却实时的车辆位置。线程T1调用<code>getLocations</code>，线程T2随后更新了某些点的位置，
+那么在返回给线程T1的<code>Map</code>中将反映出来。这样做能获取更新的数据，但同时也可能导致不一致的车辆位置视图，具体的权衡需要视需求而定。</p>
+<h4 id="3-3-改进：发布底层状态"><a href="#3-3-改进：发布底层状态" class="headerlink" title="3.3. 改进：发布底层状态"></a>3.3. 改进：发布底层状态</h4><p><font color="LimeGreen">如果一个类是由多个独立且线程安全的状态变量组成，并且在所有的操作中都不包含无效状态转换，那么可以将线程安全性委托给底层的状态变量。</font></p>
+<p>上面的方式将线程安全责任委托给了线程安全的<code>ConcurrentHashMap</code>，其实还可以直接将线程安全性委托给底层的多个状态，只要这些状态是线程安全且相互独立的。
+示例中的各个Point之间肯定是相互独立的，但我们还需要将Point构造成一个线程安全的类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> x;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> y;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Point</span><span class="params">(<span class="keyword">int</span>[] a)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(a[<span class="number">0</span>],a[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Point</span><span class="params">(Point p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(p.get());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Point</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">int</span>[] get()&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;x,y&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Point</code>的同步方法<code>get()</code>可以同时获取x和y的值，如果为x和y分别提供get方法，那么在获得这两个不同坐标的操作之间，x和y的值可能发生变化，从而导致调用者看到不一致的值。
+因此在拷贝方法<code>Point(Point p)</code>中实现为<code>this(p.get())</code>，而不是<code>this(p.x,p.y)</code>，就是为了避免出现不一致的情况。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PublishingVehicleTracker</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String,Point&gt; locations;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PublishingVehicleTracker</span><span class="params">(Map&lt;String,Point&gt; points)</span></span>&#123;</span><br><span class="line">        locations = <span class="keyword">new</span> HashMap&lt;String,Point&gt;(points);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Point <span class="title">getLocation</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> locations.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLocation</span><span class="params">(String key,<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!locations.containsKey(key))&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"no such id"</span> + key);</span><br><span class="line">        &#125;</span><br><span class="line">        locations.get(key).set(x, y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>PublishingVehicleTracker</code>发布的<code>Point</code>不再是不可变的，而是可变但线程安全的。所以可以直接通过修改返回<code>Map</code>中的<code>Point</code>值来改变车辆的位置。<font color="Gray">（调用者不能增加或删除车辆，所以没有再用线程安全的ConcurrentHashMap，
+因为locations是一个安全发布的事实不可变对象，但这里书里依然用的ConcurrentHashMap，如果有同学觉得这里有问题可以交流下）</font>。</p>
+<h4 id="3-3-1-发布底层状态的问题"><a href="#3-3-1-发布底层状态的问题" class="headerlink" title="3.3.1. 发布底层状态的问题"></a>3.3.1. 发布底层状态的问题</h4><p><code>PublishingVehicleTracker</code>中如果需要对车辆位置的变化进行判断或者当位置变化执行一些操作，那么直接发布底层状态的方法将不再适用。事实上，大多组合对象中的状态之间都会存在着某些不变性约束。<br>考虑一个区间问题：区间的上下限可以动态设置，并提供一个判断给定数字是否在区间内的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NumberRange</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger lower = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger upper = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLower</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(i &gt; upper.get())&#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">		&#125;</span><br><span class="line">		lower.set(i);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUpper</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(i &lt; lower.get())&#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">		&#125;</span><br><span class="line">		upper.set(i);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isInRange</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> (i &gt;= lower.get() &amp;&amp; i &lt;= upper.get());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因此，如果某个类含有复合操作，那么仅靠委托并不足以实现线程安全性。这种情况下，这个类必须提供自己的加锁机制<font color="Gray">（在后面介绍非阻塞同步机制时，
+会看到还可以利用CAS来提供一种并发性更好的解决办法）</font>以保住这些复合操作都是原子操作，除非整个复合操作都可以委托给状态变量。</p>
+<h3 id="4-为线程安全类添加操作问题，例如：若没有则添加"><a href="#4-为线程安全类添加操作问题，例如：若没有则添加" class="headerlink" title="4. 为线程安全类添加操作问题，例如：若没有则添加"></a>4. 为线程安全类添加操作问题，例如：若没有则添加</h3><p>最安全的方法是修改原始类，但这通常无法做到，因为无法访问或修改源代码。而且要想修改原始的类，需要理解代码中的同步策略，这样增加的功能才能与原有的设计保持一致。</p>
+<ul>
+<li>第二种方法是<strong>扩展</strong>这个类，假设这个类在设计时考虑了可扩展性。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExtendVector</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Vector</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">putIfAbsent</span><span class="params">(E x)</span></span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> absent = !contains(x);</span><br><span class="line">        <span class="keyword">if</span>(absent)&#123;</span><br><span class="line">            add(x);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> absent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>扩展Vector很简单，但并非所有的类都像Vector那样将状态向子类公开，因此也就不适合采用这种方法。<font color="red">并且扩展比直接将代码添加到类中更脆弱，
+如果底层的类改变了同步策略并选择了不同的锁来保护它的状态变量，那么子类会被破坏，</font>因为同步策略改变后它无法再使用正确的锁来控制对基类状态的并发访问，
+Vector是因为在规范中定义了它的同步策略，所以不存在问题。</p>
+<ul>
+<li><p>第三种策略是扩展类的功能，但并不扩展类本身，而是将代码放入一个‘辅助类’中，在<strong>客户端加锁</strong>。    </p>
+</li>
+<li><p>错误的加锁方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> List&lt;E&gt; list = Collections.synchronizedList(<span class="keyword">new</span> ArrayList&lt;E&gt;());</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">putIfAbsent</span><span class="params">(E x)</span></span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> absent = !list.contains(x);</span><br><span class="line">        <span class="keyword">if</span>(absent)&#123;</span><br><span class="line">            list.add(x);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> absent;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><code>list</code>并不是使用的<code>Demo</code>上的锁来保护它的状态，<code>Demo</code>只是带来了同步的假象，并不能保证<code>putIfAbsent</code>的原子操作。     </p>
+<ul>
+<li>正确的加锁方式：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> List&lt;E&gt; list = Collections.synchronizedList(<span class="keyword">new</span> ArrayList&lt;E&gt;());</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">putIfAbsent</span><span class="params">(E x)</span></span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(list)&#123;</span><br><span class="line">            <span class="keyword">boolean</span> absent = !list.contains(x);</span><br><span class="line">            <span class="keyword">if</span>(absent)&#123;</span><br><span class="line">                list.add(x);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> absent;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>客户端加锁是指，对于使用某个对象X的客户端代码，使用X本身用于保护其状态的锁来保护这段客户端代码。<font color="red">因此要使用客户端加锁，首先你必须知道对象X使用的是哪一个锁。</font>
+通过添加一个原子操作来扩展类是脆弱的，因为它将类的加锁代码分布到多个类中。然而，客户端加锁却更加脆弱，因为它将类的加锁代码放到与它完全无关的其他类中。
+在那些并不承诺遵循加锁策略的类上使用客户端加锁需要格外小心。<br>客户端加锁与扩展类机制有许多共同点，它们都将派生类的行为与基类的耦合在一起，这破坏了同步策略的封装性。   </p>
+<ul>
+<li>更好的方式是使用<strong>组合：</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExtendList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;E&gt; list;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ExtendList</span><span class="params">(List&lt;E&gt; list)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list = list;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">putIfAbsent</span><span class="params">(E x)</span></span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> contains = list.contains(x);</span><br><span class="line">        <span class="keyword">if</span>(contains)&#123;</span><br><span class="line">            list.add(x);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> !contains;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//类似方式委托list的其他方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ExtendList</code>通过将操作委托给底层的<code>List</code>实例来实现，同时添加一个原子的<code>putIfAbsent</code>方法。其实这里就是使用了监视器模式来封装现有的<code>list</code>，
+<code>ExtendList</code>通过自身的内置锁增加了一层额外的锁,因此不再需要关心底层<code>List</code>是否线程安全，即使不是线程安全或修改了加锁的实现，<code>ExtendList</code>也能提供一致的加锁机制来实现线程安全性。
+虽然额外的同步层可能导致轻微的性能损失，但与模仿另一个对象的加锁策略相比，它更为健壮。</p>
+<ul>
+<li>Copyright&nbsp;&copy;《java并发编程实战》</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/读书笔记/">读书笔记</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: window.location.pathname,
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+<div class="widget tag">
+<h3 class="title">Catlog</h3>
+<ul class="entry">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-实例封闭"><span class="toc-text">1. 实例封闭</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-监视器模式"><span class="toc-text">2. 监视器模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-示例：出租车的调度器"><span class="toc-text">3. 示例：出租车的调度器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-基于监视器模式实现"><span class="toc-text">3.1. 基于监视器模式实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-改进：委托线程安全性"><span class="toc-text">3.2. 改进：委托线程安全性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-改进：发布底层状态"><span class="toc-text">3.3. 改进：发布底层状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-发布底层状态的问题"><span class="toc-text">3.3.1. 发布底层状态的问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-为线程安全类添加操作问题，例如：若没有则添加"><span class="toc-text">4. 为线程安全类添加操作问题，例如：若没有则添加</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2019 shanhm1991
+  
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
