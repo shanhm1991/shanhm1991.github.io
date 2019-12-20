@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>ubuntu安装mysql | Eassy</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="概括ubuntu版本：16.04MySQL版本：8.0.11问题：   
+
+安装mysql及配置
+root无法登录
+客户端认证失败">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ubuntu安装mysql"/>
+  <meta property="og:site_name" content="Eassy"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Eassy" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Eassy</a></h1>
+  <h2><font style="color: #999;">articles:  35 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-2018-05-27-ubuntu安装mysql" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-05-26T16:00:00.000Z"><a href="/2018/05/27/2018-05-27-ubuntu安装mysql/">2018-05-27</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">ubuntu安装mysql</h1>
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 2.4k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>ubuntu版本：16.04<br>MySQL版本：8.0.11<br>问题：   </p>
+<ol>
+<li>安装mysql及配置</li>
+<li>root无法登录</li>
+<li>客户端认证失败<a id="more"></a>
+
+</li>
+</ol>
+<h3 id="1-安装及配置"><a href="#1-安装及配置" class="headerlink" title="1. 安装及配置"></a>1. 安装及配置</h3><p>安装比较简单，参考<a href="https://www.cnblogs.com/oldfish/p/5039772.html" target="_blank" rel="noopener">https://www.cnblogs.com/oldfish/p/5039772.html</a>  ,只是这里下载的包是mysql-server_8.0.11-1ubuntu16.04_amd64.deb-bundle.tar，稍微有点不同</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i mysql-common_8.0.11-1ubuntu16.04_amd64.deb</span><br><span class="line">sudo dpkg -i libmysqlclient-dev_8.0.11-1ubuntu16.04_amd64.deb</span><br><span class="line">sudo dpkg -i mysql-community-client-core_8.0.11-1ubuntu16.04_amd64.deb</span><br><span class="line">sudo dpkg -i mysql-community-client_8.0.11-1ubuntu16.04_amd64.deb</span><br><span class="line">sudo dpkg -i mysql-community-server-core_8.0.11-1ubuntu16.04_amd64.deb  (需要安装依赖：apt install libmecab2)</span><br><span class="line">sudo dpkg -i mysql-client_8.0.11-1ubuntu16.04_amd64.deb</span><br><span class="line">sudo dpkg -i mysql-community-server_8.0.11-1ubuntu16.04_amd64.deb  (需要设置root密码)</span><br><span class="line">sudo dpkg -i mysql-server_8.0.11-1ubuntu16.04_amd64.deb</span><br><span class="line">sudo dpkg -i mysql-community-test_8.0.11-1ubuntu16.04_amd64.deb (需要安装依赖：apt install libjson-perl)</span><br><span class="line">sudo dpkg -i mysql-testsuite_8.0.11-1ubuntu16.04_amd64.deb</span><br></pre></td></tr></table></figure>
+
+<p>其实mysql用户使用sudo命令的话需要先设置一下，参考<a href="https://www.cnblogs.com/xiaochaoyxc/p/6206481.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiaochaoyxc/p/6206481.html</a>    </p>
+<h3 id="2-登录"><a href="#2-登录" class="headerlink" title="2. 登录"></a>2. 登录</h3><p>上面安装就已经好了，但是还无法登录，虽然service mysql状态是启着的，会提示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql@ubuntu:~$ mysql -u root -p</span><br><span class="line">mysql: [ERROR] Found option without preceding group in config file &#x2F;etc&#x2F;mysql&#x2F;conf.d&#x2F;mysql.cnf at line 28!</span><br><span class="line">Enter password:</span><br></pre></td></tr></table></figure>
+
+<p>其实安装的时候已经设置过密码为root，但这里就算你输入root还是不行的。ERROR的提示里有个配置文件/etc/mysql/conf.d/mysql.cnf，看一下是空的，应该是需要增加一些必要的配置项。
+在网上看到别人提问时晒出了自己配置<a href="https://stackoverflow.com/questions/8020297/mysql-my-cnf-file-found-option-without-preceding-group" target="_blank" rel="noopener">https://stackoverflow.com/questions/8020297/mysql-my-cnf-file-found-option-without-preceding-group</a>  ，就抄过来用了，但是后面发现是有问题的，
+在重启mysql服务的时候失败了，查看日志发现是配置问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2018-05-27T05:17:06.314386Z 0 [System] [MY-010910] [Server] &#x2F;usr&#x2F;sbin&#x2F;mysqld: Shutdown complete (mysqld 8.0.11)  MySQL Community Server - GPL.</span><br><span class="line">2018-05-27T05:17:06.622622Z 0 [Warning] [MY-011068] [Server] The syntax &#39;expire-logs-days&#39; is deprecated and will be removed in a future release. Please use binlog_expire_logs_seconds instead.</span><br><span class="line">2018-05-27T05:17:06.623628Z 0 [System] [MY-010116] [Server] &#x2F;usr&#x2F;sbin&#x2F;mysqld (mysqld 8.0.11) starting as process 1562</span><br><span class="line">2018-05-27T05:17:06.875097Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.</span><br><span class="line">2018-05-27T05:17:06.876797Z 0 [ERROR] [MY-011071] [Server] unknown variable &#39;key_buffer&#x3D;16M&#39;</span><br><span class="line">2018-05-27T05:17:06.876813Z 0 [Warning] [MY-010952] [Server] The privilege system failed to initialize correctly. If you have upgraded your server, make sure you&#39;re executing mysql_upgrade to correct the issue.</span><br><span class="line">2018-05-27T05:17:06.876879Z 0 [ERROR] [MY-010119] [Server] Aborting</span><br></pre></td></tr></table></figure>
+
+<p>应该是由于mysql版本原因，各版本的配置不尽相同，于是去掉所有报错的配置，另外还增加了一行<br>default_authentication_plugin=mysql_native_password，修改后配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">user        &#x3D; mysql</span><br><span class="line">socket      &#x3D; &#x2F;var&#x2F;run&#x2F;mysqld&#x2F;mysqld.sock</span><br><span class="line">port        &#x3D; 3306</span><br><span class="line">basedir     &#x3D; &#x2F;usr</span><br><span class="line">datadir     &#x3D; &#x2F;var&#x2F;lib&#x2F;mysql</span><br><span class="line">tmpdir      &#x3D; &#x2F;tmp</span><br><span class="line">bind-address        &#x3D;  0.0.0.0</span><br><span class="line">max_allowed_packet  &#x3D; 16M</span><br><span class="line">thread_stack        &#x3D; 192K</span><br><span class="line">thread_cache_size       &#x3D; 8</span><br><span class="line">log_error                &#x3D; &#x2F;var&#x2F;log&#x2F;mysql&#x2F;error.log</span><br><span class="line">expire_logs_days    &#x3D; 10</span><br><span class="line">max_binlog_size         &#x3D; 100M</span><br><span class="line"> </span><br><span class="line">default_authentication_plugin  &#x3D; mysql_native_password</span><br><span class="line">check_proxy_users  &#x3D; ON</span><br><span class="line">mysql_native_password_proxy_users  &#x3D; ON</span><br><span class="line"> </span><br><span class="line">[client]</span><br><span class="line">port        &#x3D; 3306</span><br><span class="line">socket      &#x3D; &#x2F;var&#x2F;run&#x2F;mysqld&#x2F;mysqld.sock</span><br><span class="line"> </span><br><span class="line">[mysqld_safe]</span><br><span class="line">socket      &#x3D; &#x2F;var&#x2F;run&#x2F;mysqld&#x2F;mysqld.sock</span><br><span class="line">nice        &#x3D; 0</span><br><span class="line"> </span><br><span class="line">[mysqldump]</span><br><span class="line">quick</span><br><span class="line">quote-names</span><br><span class="line">max_allowed_packet  &#x3D; 16M</span><br><span class="line"> </span><br><span class="line">[mysql]</span><br><span class="line"> </span><br><span class="line">[isamchk]</span><br></pre></td></tr></table></figure>
+
+<p>到这里，就可以使用root登录了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# mysql -u root -proot</span><br><span class="line">mysql: [Warning] Using a password on the command line interface can be insecure.</span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 11</span><br><span class="line">Server version: 8.0.11 MySQL Community Server - GPL</span><br><span class="line"> </span><br><span class="line">Copyright (c) 2000, 2018, Oracle and&#x2F;or its affiliates. All rights reserved.</span><br><span class="line"> </span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and&#x2F;or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"> </span><br><span class="line">Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.</span><br><span class="line"> </span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-客户端连接"><a href="#3-客户端连接" class="headerlink" title="3. 客户端连接"></a>3. 客户端连接</h3><p>这里下载了一个免费版的客户端<a href="https://www.heidisql.com/download.php" target="_blank" rel="noopener">https://www.heidisql.com/download.php</a>  ，连接时发现错误提示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Host x.x.x.x is not allowed to connect to this MySQL server</span><br></pre></td></tr></table></figure>
+
+<p>参考<a href="https://blog.csdn.net/bingjianit/article/details/54384299" target="_blank" rel="noopener">https://blog.csdn.net/bingjianit/article/details/54384299</a>  ，照做</p>
+<p>然后又发现另一个问题，不支持的认证方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client does not support authentication protocol requested by server;</span><br></pre></td></tr></table></figure>
+
+<p>这个问题是由于新版本的mysql更新了root账户的加密方式，虽然知道了这个原因但是还是花了很久的时间，最后在这篇文章中找到了答案<a href="https://www.hi-linux.com/posts/61905.html" target="_blank" rel="noopener">https://www.hi-linux.com/posts/61905.html</a><br>以mysql_native_password的方式重新设置root账户的密码就可以了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter user &#39;root&#39;@&#39;%&#39; identified with mysql_native_password by &#39;root&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>最后终于可以使用客户端登录了：</p>
+<p><img src="/img/20180527.1.jpg" alt=""> </p>
+<h4 id="3-1-回顾下问题3的过程"><a href="#3-1-回顾下问题3的过程" class="headerlink" title="3.1. 回顾下问题3的过程"></a>3.1. 回顾下问题3的过程</h4><ol>
+<li>一开始参考<a href="http://www.jb51.net/article/10345.htm" target="_blank" rel="noopener">http://www.jb51.net/article/10345.htm</a> ，尝试用old_password重新设置下user的password字段，但是mysql8即没有old_password这个方法也没有password这个字段，
+虽然不死心花了很长时间，但最后还是不得不承认这个方法肯定是不行的。反思一下可能是自己太想有个简单地办法尽快把问题处理掉才舍不得放弃，这也是一种偷懒吧，
+思想上的偷懒，其实查看下user表的结果就知道了</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; desc user;</span><br><span class="line">+------------------------+-----------------------------------+------+-----+-----------------------+-------+</span><br><span class="line">| Field                  | Type                              | Null | Key | Default               | Extra |</span><br><span class="line">+------------------------+-----------------------------------+------+-----+-----------------------+-------+</span><br><span class="line">| Host                   | char(60)                          | NO   | PRI |                       |       |</span><br><span class="line">| User                   | char(32)                          | NO   | PRI |                       |       |</span><br><span class="line">| Select_priv            | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Insert_priv            | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Update_priv            | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Delete_priv            | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Create_priv            | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Drop_priv              | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Reload_priv            | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Shutdown_priv          | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Process_priv           | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| File_priv              | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Grant_priv             | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| References_priv        | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Index_priv             | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Alter_priv             | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Show_db_priv           | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Super_priv             | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Create_tmp_table_priv  | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Lock_tables_priv       | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Execute_priv           | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Repl_slave_priv        | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Repl_client_priv       | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Create_view_priv       | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Show_view_priv         | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Create_routine_priv    | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Alter_routine_priv     | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Create_user_priv       | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Event_priv             | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Trigger_priv           | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Create_tablespace_priv | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| ssl_type               | enum(&#39;&#39;,&#39;ANY&#39;,&#39;X509&#39;,&#39;SPECIFIED&#39;) | NO   |     |                       |       |</span><br><span class="line">| ssl_cipher             | blob                              | NO   |     | NULL                  |       |</span><br><span class="line">| x509_issuer            | blob                              | NO   |     | NULL                  |       |</span><br><span class="line">| x509_subject           | blob                              | NO   |     | NULL                  |       |</span><br><span class="line">| max_questions          | int(11) unsigned                  | NO   |     | 0                     |       |</span><br><span class="line">| max_updates            | int(11) unsigned                  | NO   |     | 0                     |       |</span><br><span class="line">| max_connections        | int(11) unsigned                  | NO   |     | 0                     |       |</span><br><span class="line">| max_user_connections   | int(11) unsigned                  | NO   |     | 0                     |       |</span><br><span class="line">| plugin                 | char(64)                          | NO   |     | caching_sha2_password |       |</span><br><span class="line">| authentication_string  | text                              | YES  |     | NULL                  |       |</span><br><span class="line">| password_expired       | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| password_last_changed  | timestamp                         | YES  |     | NULL                  |       |</span><br><span class="line">| password_lifetime      | smallint(5) unsigned              | YES  |     | NULL                  |       |</span><br><span class="line">| account_locked         | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Create_role_priv       | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Drop_role_priv         | enum(&#39;N&#39;,&#39;Y&#39;)                     | NO   |     | N                     |       |</span><br><span class="line">| Password_reuse_history | smallint(5) unsigned              | YES  |     | NULL                  |       |</span><br><span class="line">| Password_reuse_time    | smallint(5) unsigned              | YES  |     | NULL                  |       |</span><br><span class="line">+------------------------+-----------------------------------+------+-----+-----------------------+-------+</span><br><span class="line">49 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>在mysql8中password字段已经改成authentication_string字段了。另外也已经废弃了以前的加密函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select old_password(&#39;root&#39;);</span><br><span class="line">ERROR 1305 (42000): FUNCTION mysql.old_password does not exist</span><br><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; select password(&#39;root&#39;);</span><br><span class="line">ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;(&#39;root&#39;)&#39; at line 1</span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>不知道还在哪一篇文章中看到说设置variables中的old_password为on，但是我设置了并没有生效，于是修改mysql.cnf，结果重启失败，显然人家根本没有这个配置。然后我把所有配置变量打了出来</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql@ubuntu:~$ mysql -u root -proot -e &quot;show variables;&quot; &gt; var.info</span><br></pre></td></tr></table></figure>
+
+<p>这里贴一下命令主要是注意下-p后面直接跟密码，不需要空格</p>
+<p>再对照mysql官方文档<a href="https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_sha256_password_proxy_users" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_sha256_password_proxy_users</a> 看下，
+很可惜，花了不少时间，最后怀疑的是可能是与这3个配置有关，但是都不是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">check_proxy_users  &#x3D; ON</span><br><span class="line">sha256_password_public_key_path &#x3D; OFF</span><br><span class="line">mysql_native_password_proxy_users  &#x3D; ON</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>又花费了很长时间，看到了这篇文章<a href="https://blog.csdn.net/fly_leopard/article/details/80178640" target="_blank" rel="noopener">https://blog.csdn.net/fly_leopard/article/details/80178640</a> ，原来是跟配置default-authentication-plugin=mysql_native_password有关，
+感觉就跟看到了希望一样，但是就算加上配置也只是对后续新建的用户生效，已有的root用户需要重新设置密码，参考<a href="https://www.cnblogs.com/jjg0519/p/9034713.html" target="_blank" rel="noopener">https://www.cnblogs.com/jjg0519/p/9034713.html</a><br>但是重新设置密码后并没有解决，查看user表发现</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select host,user,authentication_string, plugin from user;</span><br><span class="line">+-----------+------------------+------------------------------------------------------------------------+-----------------------+</span><br><span class="line">| host      | user             | authentication_string                                                  | plugin                |</span><br><span class="line">+-----------+------------------+------------------------------------------------------------------------+-----------------------+</span><br><span class="line">| %         | root             | $A$005$#FZA&#96;2oB</span><br><span class="line">                                                &#123;qY t;FipbFCon9K8MfNxz2H4OnzzhVVtX3LVpmL&#x2F;&#x2F;ZsxPGS3&#x2F; | caching_sha2_password |</span><br><span class="line">| localhost | mysql.infoschema | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE                              | mysql_native_password |</span><br><span class="line">| localhost | mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE                              | mysql_native_password |</span><br><span class="line">| localhost | mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE                              | mysql_native_password |</span><br><span class="line">+-----------+------------------+------------------------------------------------------------------------+-----------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>应该是由于加密的plugin不对，于是又</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update user set authentication_string&#x3D;&#39;&#39; where user&#x3D;&#39;root&#39;;</span><br><span class="line">Query OK, 1 row affected (0.01 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"> </span><br><span class="line">mysql&gt; update user set plugin&#x3D;&#39;mysql_native_password&#39; where user&#x3D;&#39;root&#39;;</span><br><span class="line">Query OK, 1 row affected (0.04 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"> </span><br><span class="line">mysql&gt; select host,user,authentication_string, plugin from user;</span><br><span class="line">+-----------+------------------+-------------------------------------------+-----------------------+</span><br><span class="line">| host      | user             | authentication_string                     | plugin                |</span><br><span class="line">+-----------+------------------+-------------------------------------------+-----------------------+</span><br><span class="line">| %         | root             |                                           | mysql_native_password |</span><br><span class="line">| localhost | mysql.infoschema | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password |</span><br><span class="line">| localhost | mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password |</span><br><span class="line">| localhost | mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password |</span><br><span class="line">+-----------+------------------+-------------------------------------------+-----------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>然后再次重新设置密码，但是设完之后发现居然还是一样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER user &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;root&#39;;</span><br><span class="line">Query OK, 0 rows affected (0.06 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; select host,user,authentication_string, plugin from user;</span><br><span class="line">+-----------+------------------+------------------------------------------------------------------------+-----------------------+</span><br><span class="line">| host      | user             | authentication_string                                                  | plugin                |</span><br><span class="line">+-----------+------------------+------------------------------------------------------------------------+-----------------------+</span><br><span class="line">| %         | root             | $A$005$jw~ZNxh*|&#125;wrkwOAEJ7s194ZpWGjOcncXwEcGJaDoPgtZ&#x2F;XcKZINJ6rd8 | caching_sha2_password |</span><br><span class="line">| localhost | mysql.infoschema | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE                              | mysql_native_password |</span><br><span class="line">| localhost | mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE                              | mysql_native_password |</span><br><span class="line">| localhost | mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE                              | mysql_native_password |</span><br><span class="line">+-----------+------------------+------------------------------------------------------------------------+-----------------------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>其实到这里已经有直觉了，alter不仅是赋值了authentication_string字段，它还赋值了plugin字段，并且它还自作主张的将默认值设成了caching_sha2_password，
+所以我就直接搜alter的语法使用就可以了，最后终于找到了上面的答案，即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter user &#39;root&#39;@&#39;%&#39; identified with mysql_native_password by &#39;root&#39;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>参考：</strong>    </p>
+<ol>
+<li><a href="https://www.cnblogs.com/oldfish/p/5039772.html" target="_blank" rel="noopener">https://www.cnblogs.com/oldfish/p/5039772.html</a></li>
+<li><a href="https://www.cnblogs.com/xiaochaoyxc/p/6206481.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiaochaoyxc/p/6206481.html</a></li>
+<li><a href="https://stackoverflow.com/questions/8020297/mysql-my-cnf-file-found-option-without-preceding-group" target="_blank" rel="noopener">https://stackoverflow.com/questions/8020297/mysql-my-cnf-file-found-option-without-preceding-group</a></li>
+<li><a href="https://blog.csdn.net/bingjianit/article/details/54384299" target="_blank" rel="noopener">https://blog.csdn.net/bingjianit/article/details/54384299</a></li>
+<li><a href="https://www.hi-linux.com/posts/61905.html" target="_blank" rel="noopener">https://www.hi-linux.com/posts/61905.html</a></li>
+<li><a href="http://www.jb51.net/article/10345.htm" target="_blank" rel="noopener">http://www.jb51.net/article/10345.htm</a></li>
+<li><a href="https://blog.csdn.net/fly_leopard/article/details/80178640" target="_blank" rel="noopener">https://blog.csdn.net/fly_leopard/article/details/80178640</a></li>
+<li><a href="https://www.cnblogs.com/jjg0519/p/9034713.html" target="_blank" rel="noopener">https://www.cnblogs.com/jjg0519/p/9034713.html</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/问题解决/">问题解决</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Mysql/">Mysql</a>, <a href="/tags/ubuntu/">ubuntu</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+<div class="widget tag">
+<h3 class="title">Catlog</h3>
+<ul class="entry">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概括"><span class="toc-text">概括</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-安装及配置"><span class="toc-text">1. 安装及配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-登录"><span class="toc-text">2. 登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-客户端连接"><span class="toc-text">3. 客户端连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-回顾下问题3的过程"><span class="toc-text">3.1. 回顾下问题3的过程</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2019 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
