@@ -80,37 +80,14 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>结论：ubuntu不支持用yum来管理软件安装的，只是自己太无知。</p>
-<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p>一开始是想把windows桌面上的文件拖到xshell登录的ubuntu的目录中，但是没成功，参考<a href="https://blog.csdn.net/liuao107329/article/details/49994935" target="_blank" rel="noopener">https://blog.csdn.net/liuao107329/article/details/49994935</a><br>要先安装下lrasz软件，并且作者好心地直接贴出了命令：<code>yum -y install lrasz</code>，于是我也这么干了，但是：</p>
-<p><img src="/img/20180518.1.png" alt=""> </p>
-<p>提示意思应该是没有可用的仓库，确认下确实是没有</p>
-<p><img src="/img/20180518.2.png" alt=""> </p>
-<p>于是创建yum仓库，参考<a href="http://www.178linux.com/39458以及https://blog.csdn.net/qq_26437925/article/details/73693757" target="_blank" rel="noopener">http://www.178linux.com/39458以及https://blog.csdn.net/qq_26437925/article/details/73693757</a><br>大概知道，要添加一个目录作为仓库的话需要在这个目录下编辑一个*.repo文件，看了下yum.conf文件</p>
-<p><img src="/img/20180518.3.png" alt=""> </p>
-<p>于是就到/etc/yum/repos.d下编辑文件了，这地方就是个坑，后面发现了</p>
-<p><img src="/img/20180518.4.png" alt=""> </p>
-<p>再次查看yum仓库，看到：</p>
-<p><img src="/img/20180518.5.png" alt=""> </p>
-<p>但是，仅仅只是解决了仓库问题而已</p>
-<p><img src="/img/20180518.6.png" alt=""> </p>
-<p>其实本来看到404，一直以为自己编辑的文件有问题，搞了很久后来找到一个别人写的很完整的下载过来，单还是不行，<br>后来参考<a href="http://www.opstool.com/article/294" target="_blank" rel="noopener">http://www.opstool.com/article/294</a> ，发现yum要获取当前系统的发行版本，但是它从ubuntu中获取不到，就是下面这个releasever</p>
-<p><img src="/img/20180518.7.png" alt=""> </p>
-<p>对于正常的CentOS系统。执行yum whatprovides redhat-release可以系统的发行版本，但我是ubuntu..</p>
-<p><img src="/img/20180518.8.png" alt=""> </p>
-<p>最后看到这篇<a href="https://blog.csdn.net/luke_wang/article/details/71512530" target="_blank" rel="noopener">https://blog.csdn.net/luke_wang/article/details/71512530</a> ，终于释然了，这个问题只是ubuntu不支持yum而已，linux的各个发行版本是有分派的，
-难怪上面下载的repo文件名上看到centos字眼，人家是给centos用的啊。所以总结是ubuntu装软件apt管理就行了，而在centos上是用yum比较合适。</p>
-<p><strong>参考：</strong>  </p>
-<ol>
-<li><a href="https://blog.csdn.net/liuao107329/article/details/49994935" target="_blank" rel="noopener">https://blog.csdn.net/liuao107329/article/details/49994935</a></li>
-<li><a href="http://www.178linux.com/39458" target="_blank" rel="noopener">http://www.178linux.com/39458</a></li>
-<li><a href="https://blog.csdn.net/qq_26437925/article/details/73693757" target="_blank" rel="noopener">https://blog.csdn.net/qq_26437925/article/details/73693757</a></li>
-<li><a href="http://www.opstool.com/article/294" target="_blank" rel="noopener">http://www.opstool.com/article/294</a></li>
-<li><a href="https://blog.csdn.net/luke_wang/article/details/71512530" target="_blank" rel="noopener">https://blog.csdn.net/luke_wang/article/details/71512530</a></li>
-</ol>
-
       
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2018/05/18/2018-05-18-ubuntu使用yum安装软件问题/#more" class="more-link">more</a>
+          </div>
         
         
       
@@ -142,33 +119,21 @@
     </header>
     <div class="e-content entry" itemprop="articleBody">
       
-        <a id="more"></a>
-
-<ol>
+        <ol>
 <li><p>首先排除脚本自身问题，可以手动点杠执行下试试，</p>
 </li>
 <li><p>脚本确定没问题后，放到开机启动程序引用的路径下</p>
 </li>
 </ol>
 <p>2.1. 查看系统的运行级别</p>
-<p><img src="/img/20180515.1.jpg" alt=""> </p>
-<p>2.2. 到对应运行的rcX.d的目录找到指向rc.local的软连接，将rc.locad放到指向的地址，重启后发现问题解决。</p>
-<p><img src="/img/20180515.2.jpg" alt=""> </p>
-<p>文件如下：</p>
-<p><img src="/img/20180515.3.jpg" alt=""> </p>
-<p>刚开始我是照着参考文章在rc5.d目录下添加了一个<code>S99local -&gt; /etc/rc.d/ec.local</code>，然后发现问题并没有解决，我本来以为启动时它会遍历rc5.d下所有初始化文件，
-可能是我错了，它这些软链接名应该是在系统中注册好的。我安装的版本是ubuntu 16，默认软链接名是S14rc.local，于是我又将rc.local从/etc/rc.d中移到了/etc下面，发现问题终于解决。</p>
-<p>其实一开始rc.local文件就在/etc下面，只是我脚本写的有问题导致没执行，然后我看网上文章说要将它移到/etc/rc.d下面，我照做了发现还是不行，在浪费了很多时间后，
-直到遇到下面这篇文章才理解了问题的原因。</p>
-<p><strong>参考：</strong>   </p>
-<ol>
-<li><a href="http://www.cnblogs.com/montya/archive/2011/09/09/2172001.html" target="_blank" rel="noopener">http://www.cnblogs.com/montya/archive/2011/09/09/2172001.html</a> </li>
-</ol>
-
       
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2018/05/15/2018-05-15-ubuntu中rc.local不执行问题/#more" class="more-link">more</a>
+          </div>
         
         
       
