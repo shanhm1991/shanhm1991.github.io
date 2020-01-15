@@ -42,6 +42,15 @@ h2 {
 h3 {
   font-size: 1.3em;
 }
+h4 {
+  font-size: 1.2em;
+}
+h5 {
+  font-size: 1.1em;
+}
+h6 {
+  font-size: 1em;
+}
 a {
   text-decoration: none;
   color: #258fb8;
@@ -294,39 +303,40 @@ article .entry table {
   border-collapse: collapse;
   border-spacing: 0;
   empty-cells: show;
-  border: 1px solid #e2e2e2;
+  border: none;
+}
+article table-layout fixed {
   width: 100%;
 }
-article .entry table th {
+article table-layout fixed th {
   white-space: nowrap;
   color: #444;
   font-weight: 600;
   background: #eee;
 }
-article .entry table td,
-article .entry table th {
+article table-layout fixed td,
+article table-layout fixed th {
   border: 1px solid #e2e2e2;
-  padding: 8px 16px;
+  padding: 2px;
   text-align: left;
 }
-article .entry blockquote {
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-}
-article font-color #93a1a1 {
-  font-style: Roboto-Regular;
+article blockquote {
+  background: #f6f6f6;
+  border-left: 6px solid #ddd;
+  font-style: ormal;
+  font-family: "Georgia", serif;
   font-size: 1em;
-  padding: 5px;
+  padding: 0 20px 10px;
   text-align: left;
 }
-article font-color #93a1a1 footer {
+article blockquote footer {
   border-top: none;
   font-size: 1em;
   line-height: 1;
   margin: 5px 0 0;
   padding-top: 0;
 }
-article font-color #93a1a1 footer cite:before {
+article blockquote footer cite:before {
   content: '—';
   color: #ccc;
   padding: 0 0.5em;
@@ -345,61 +355,61 @@ article code {
   border-radius: 3px;
 }
 article pre {
+  overflow-y: hidden;
+}
+article pre overflow-x auto {
   background: #eee;
-  border: 1px solid #ddd;
-  margin-top: 15px;
-  overflow: auto;
+  border: none;
+  margin-top: 10px;
   padding: 7px 15px;
   border-radius: 2px;
 }
-article pre code {
+article pre overflow-x auto code {
   background: none;
   padding: 0;
   margin: 0;
   border: none;
   border-radius: 0;
 }
-article ul,
-article ol,
-article dl {
+article pre ul,
+article pre ol,
+article pre dl {
   margin-left: 20px;
 }
-article ul ul,
-article ol ul,
-article dl ul,
-article ul ol,
-article ol ol,
-article dl ol,
-article ul dl,
-article ol dl,
-article dl dl {
+article pre ul ul,
+article pre ol ul,
+article pre dl ul,
+article pre ul ol,
+article pre ol ol,
+article pre dl ol,
+article pre ul dl,
+article pre ol dl,
+article pre dl dl {
   margin-top: 0;
 }
-article h1 {
+article pre h1 {
   border-bottom: 1px solid #ddd;
 }
-article h1,
-article h2 {
+article pre h1,
+article pre h2,
+article pre h3,
+article pre h4,
+article pre h5,
+article pre h6 {
   font-weight: normal;
-  padding-bottom: 10px;
-  margin-top: 20px;
+  padding-bottom: 5px;
+  margin-top: 12px;
 }
-article h3,
-article h4,
-article h5,
-article h6 {
-  font-weight: normal;
-}
-article img,
-article video {
+article pre img,
+article pre video {
   max-width: 100%;
   height: auto;
   border: none;
 }
-article iframe {
+article pre iframe {
   border: none;
 }
-article .caption {
+article pre .caption {
   display: block;
   margin-top: 5px;
   color: #999;
@@ -407,7 +417,7 @@ article .caption {
   font-size: 0.9em;
   padding-left: 25px;
 }
-article .caption:before {
+article pre .caption:before {
   content: '\f040';
   position: absolute;
   font: 1.3em FontAwesome;
@@ -415,16 +425,16 @@ article .caption:before {
   left: 0;
   top: 3px;
 }
-article .video-container {
+article pre .video-container {
   position: relative;
   padding-bottom: 56.25%;
   padding-top: 30px;
   height: 0;
   overflow: hidden;
 }
-article .video-container iframe,
-article .video-container object,
-article .video-container embed {
+article pre .video-container iframe,
+article pre .video-container object,
+article pre .video-container embed {
   position: absolute;
   top: 0;
   left: 0;
@@ -432,7 +442,7 @@ article .video-container embed {
   height: 100%;
   margin-top: 0;
 }
-article .pullquote {
+article pre .pullquote {
   float: right;
   border: none;
   padding: 0;
@@ -704,7 +714,7 @@ article footer .addthis iframe {
   padding: 7px 15px;
   border-radius: 2px;
   text-shadow: 0 0 1px #fff;
-  line-height: 1.6;
+  line-height: 1.4;
   overflow: auto;
   color: #666;
 }
@@ -738,11 +748,11 @@ article footer .addthis iframe {
 }
 figure.highlight {
   background: #eee;
-  margin-top: 15px;
+  margin-top: 10px;
   padding: 0px;
   border-radius: 2px;
   text-shadow: 0 0 1px #fff;
-  line-height: 1.6;
+  line-height: 1.4;
   overflow: auto;
   position: relative;
   font-size: 0.9em;
@@ -757,30 +767,39 @@ figure.highlight figcaption a {
   right: 15px;
 }
 figure.highlight pre {
-  border: none;
-  padding: 0;
-  margin: 0;
+  overflow-y: hidden;
 }
-figure.highlight table {
+overflow-x auto {
+  border: none;
+  padding: 0px;
+}
+table {
   margin-top: 0;
   border-spacing: 0;
 }
-figure.highlight .gutter {
+.gutter {
+  width: 30px;
   color: #999;
-  padding: 5px;
+  padding-right: 5px;
   border-right: 1px solid #ddd;
   text-align: right;
 }
-figure.highlight .code {
-  padding-left: 12px;
+.code {
+  width: 768px;
+  padding-left: 5px;
   border-left: 1px solid #fff;
   color: #666;
 }
-figure.highlight .line {
-  height: 20px;
+.line {
+  display: inline-block;
 }
-figure.highlight .line.marked {
+height: 15px .line.marked {
   background: #d6d6d6;
+}
+figcaption {
+  padding-left: 5px;
+  padding-top: 5px;
+  border-bottom: 1px solid #ddd;
 }
 pre .comment,
 pre .template_comment,
