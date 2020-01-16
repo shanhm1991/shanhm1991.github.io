@@ -791,6 +791,9 @@ table {
   border-left: 1px solid #fff;
   color: #666;
 }
+.nine {
+  display: inline-block;
+}
 .line {
   display: inline-block;
 }
