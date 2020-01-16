@@ -35,21 +35,27 @@ h6 {
 }
 h1 {
   font-size: 1.8em;
+  font-weight: normal;
 }
 h2 {
   font-size: 1.5em;
+  font-weight: normal;
 }
 h3 {
   font-size: 1.3em;
+  font-weight: normal;
 }
 h4 {
   font-size: 1.2em;
+  font-weight: normal;
 }
 h5 {
   font-size: 1.1em;
+  font-weight: normal;
 }
 h6 {
   font-size: 1em;
+  font-weight: normal;
 }
 a {
   text-decoration: none;
@@ -759,7 +765,7 @@ figure.highlight {
 }
 figure.highlight figcaption {
   color: #999;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   text-shadow: 0 0 1px #fff;
 }
 figure.highlight figcaption a {
@@ -793,7 +799,7 @@ table {
 .line {
   display: inline-block;
 }
-height: 15px .line.marked {
+.marked {
   background: #d6d6d6;
 }
 figcaption {
