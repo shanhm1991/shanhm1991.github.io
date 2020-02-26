@@ -300,28 +300,31 @@ article .entry h6,
 article .entry .video-container {
   margin-top: 15px;
 }
-article .entry table {
+img {
+  max-width: 100%;
+}
+table {
   border-collapse: collapse;
   border-spacing: 0;
   empty-cells: show;
   border: none;
 }
-article table-layout fixed {
+table-layout fixed {
   width: 100%;
 }
-article table-layout fixed th {
+table-layout fixed th {
   white-space: nowrap;
   color: #444;
   font-weight: 600;
   background: #eee;
 }
-article table-layout fixed td,
-article table-layout fixed th {
+table-layout fixed td,
+table-layout fixed th {
   border: 1px solid #e2e2e2;
   padding: 2px;
   text-align: left;
 }
-article blockquote {
+blockquote {
   background: #f6f6f6;
   border-left: 6px solid #ddd;
   font-style: ormal;
@@ -330,23 +333,23 @@ article blockquote {
   padding: 0 20px 10px;
   text-align: left;
 }
-article blockquote footer {
+blockquote footer {
   border-top: none;
   font-size: 1em;
   line-height: 1;
   margin: 5px 0 0;
   padding-top: 0;
 }
-article blockquote footer cite:before {
+blockquote footer cite:before {
   content: '—';
   color: #ccc;
   padding: 0 0.5em;
 }
-article code,
-article pre {
+code,
+pre {
   font-family: Monaco, Menlo, Consolas, Courier New, monospace;
 }
-article code {
+code {
   background: #eee;
   color: #666;
   padding: 0 5px;
@@ -355,62 +358,62 @@ article code {
   border: 1px solid #ddd;
   border-radius: 3px;
 }
-article pre {
+pre {
   overflow-y: hidden;
 }
-article pre overflow-x auto {
+pre overflow-x auto {
   background: #eee;
   border: none;
   margin-top: 10px;
   padding: 7px 15px;
   border-radius: 2px;
 }
-article pre overflow-x auto code {
+pre overflow-x auto code {
   background: none;
   padding: 0;
   margin: 0;
   border: none;
   border-radius: 0;
 }
-article pre ul,
-article pre ol,
-article pre dl {
+pre ul,
+pre ol,
+pre dl {
   margin-left: 20px;
 }
-article pre ul ul,
-article pre ol ul,
-article pre dl ul,
-article pre ul ol,
-article pre ol ol,
-article pre dl ol,
-article pre ul dl,
-article pre ol dl,
-article pre dl dl {
+pre ul ul,
+pre ol ul,
+pre dl ul,
+pre ul ol,
+pre ol ol,
+pre dl ol,
+pre ul dl,
+pre ol dl,
+pre dl dl {
   margin-top: 0;
 }
-article pre h1 {
+pre h1 {
   border-bottom: 1px solid #ddd;
 }
-article pre h1,
-article pre h2,
-article pre h3,
-article pre h4,
-article pre h5,
-article pre h6 {
+pre h1,
+pre h2,
+pre h3,
+pre h4,
+pre h5,
+pre h6 {
   font-weight: normal;
   padding-bottom: 5px;
   margin-top: 12px;
 }
-article pre img,
-article pre video {
+pre img,
+pre video {
   max-width: 100%;
   height: auto;
   border: none;
 }
-article pre iframe {
+pre iframe {
   border: none;
 }
-article pre .caption {
+pre .caption {
   display: block;
   margin-top: 5px;
   color: #999;
@@ -418,7 +421,7 @@ article pre .caption {
   font-size: 0.9em;
   padding-left: 25px;
 }
-article pre .caption:before {
+pre .caption:before {
   content: '\f040';
   position: absolute;
   font: 1.3em FontAwesome;
@@ -426,16 +429,16 @@ article pre .caption:before {
   left: 0;
   top: 3px;
 }
-article pre .video-container {
+pre .video-container {
   position: relative;
   padding-bottom: 56.25%;
   padding-top: 30px;
   height: 0;
   overflow: hidden;
 }
-article pre .video-container iframe,
-article pre .video-container object,
-article pre .video-container embed {
+pre .video-container iframe,
+pre .video-container object,
+pre .video-container embed {
   position: absolute;
   top: 0;
   left: 0;
@@ -443,7 +446,7 @@ article pre .video-container embed {
   height: 100%;
   margin-top: 0;
 }
-article pre .pullquote {
+pre .pullquote {
   float: right;
   border: none;
   padding: 0;
@@ -452,7 +455,7 @@ article pre .pullquote {
   width: 45%;
   font-size: 1.5em;
 }
-article footer {
+footer {
   margin-top: 15px;
   padding-top: 10px;
   border-top: 1px solid #ddd;
@@ -462,49 +465,49 @@ article footer {
   position: relative;
   min-height: 16px;
 }
-article footer a {
+footer a {
   color: #999;
 }
-article footer a:hover {
+footer a:hover {
   color: #258fb8;
   text-decoration: none;
 }
-article footer a:before {
+footer a:before {
   font: 1.1em FontAwesome;
   padding-right: 10px;
   vertical-align: middle;
 }
-article footer a.more-link:before {
+footer a.more-link:before {
   content: '\f054';
 }
-article footer a.comment-link:before {
+footer a.comment-link:before {
   content: '\f075';
 }
-article footer .categories,
-article footer .tags {
+footer .categories,
+footer .tags {
   position: relative;
   padding-left: 25px;
   margin: 5px 0;
 }
-article footer .categories:before,
-article footer .tags:before {
+footer .categories:before,
+footer .tags:before {
   position: absolute;
   font: 1.1em FontAwesome;
 }
-article footer .categories:before {
+footer .categories:before {
   content: '\f07b';
   top: 2px;
   left: 1px;
 }
-article footer .tags:before {
+footer .tags:before {
   content: '\f02b';
   top: 3px;
   left: 2px;
 }
-article footer .addthis {
+footer .addthis {
   margin-top: 15px;
 }
-article footer .addthis iframe {
+footer .addthis iframe {
   margin-top: 0;
 }
 #comment {
