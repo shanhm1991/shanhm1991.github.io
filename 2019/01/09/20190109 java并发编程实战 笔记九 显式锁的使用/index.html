@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>java并发编程实战.笔记九（显式锁的使用） | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言java 5.0之前，在协调共享对象的访问时可以使用的机制有synchronized和volatile。java 5.0新增了一种新的机制：ReentrantLock。它的作用并不是用来替代内置锁，而是当内置加锁机制不适用时，作为一种可选择的高级功能。
+在java 6.0中，使用了与ReentrantLock类似的算法对内置锁进行了改进，有效地提高了内置锁的可伸缩性。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="java并发编程实战.笔记九（显式锁的使用）"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20190109 java并发编程实战 笔记九 显式锁的使用" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-08T16:00:00.000Z"><a href="/2019/01/09/20190109 java并发编程实战 笔记九 显式锁的使用/">2019-01-09</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">java并发编程实战.笔记九（显式锁的使用）</h1>
+	
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 2k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java 5.0之前，在协调共享对象的访问时可以使用的机制有<code>synchronized</code>和<code>volatile</code>。java 5.0新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置加锁机制不适用时，作为一种可选择的高级功能。
+在java 6.0中，使用了与<code>ReentrantLock</code>类似的算法对内置锁进行了改进，有效地提高了内置锁的可伸缩性。</p>
+<a id="more"></a>
+
+<h3 id="1-Lock与ReentrantLock"><a href="#1-Lock与ReentrantLock" class="headerlink" title="1. Lock与ReentrantLock"></a>1. Lock与ReentrantLock</h3><p><font color="LimeGreen">Lock接口提供了一种无条件的、可轮询的、定时的以及可中断的锁获取操作，所有加锁和解锁的方法都是显示的。</font></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> timeout,TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ReentrantLock</code>实现了<code>Lock</code>接口，并提供了与<code>synchronized</code>相同的互斥性和内存可见性。<code>ReentrantLock</code>支持在<code>Lock</code>接口中定义的所有获取锁模式，并且为处理锁的不可用性问题提供了更高的灵活性。但对这种锁的使用应该更谨慎一些，
+必须在<code>finally</code>块中释放锁，否则，如果在被保护的代码中抛出了异常，那么这个锁永远都无法释放。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">lock.lock();</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//更新对象状态</span></span><br><span class="line">    <span class="comment">//捕获异常，并在必要时恢复不变性条件</span></span><br><span class="line">&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">    lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-1-轮询锁"><a href="#1-1-轮询锁" class="headerlink" title="1.1. 轮询锁"></a>1.1. 轮询锁</h4><p>可轮询或可定时的锁获取模式由<code>tryLock</code>方法实现的，与无条件的锁获取模式相比，它具有更完善的错误恢复机制。在处理死锁的问题上，也提供了另一种选择。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">transferMoney</span><span class="params">(Account fromAcct,Account toAcct,</span></span></span><br><span class="line"><span class="function"><span class="params">            DollarAmount amount,<span class="keyword">long</span> timeout,TimeUnit unit)</span><span class="keyword">throws</span> InterruptedException</span>&#123;</span><br><span class="line">        <span class="keyword">long</span> fixedDelay = getFixedDelayComponentNanos(timeout,unit);</span><br><span class="line">        <span class="keyword">long</span> randMod = getRandomDelayModulusNanos(timeout,unit);</span><br><span class="line">        <span class="keyword">long</span> stopTime = System.nanoTime() + unit.toNanos(timeout);</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(fromAcct.lock.tryLock())&#123;</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(toAcct.lock.tryLock())&#123;</span><br><span class="line">                        <span class="keyword">try</span>&#123;</span><br><span class="line">                            <span class="keyword">if</span>(fromAcct.getBlance()compareTo(amount) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                                <span class="keyword">throw</span> <span class="keyword">new</span> InsufficientFundsException();</span><br><span class="line">                            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                                fromAcct.debit(amount);</span><br><span class="line">                                toAcct.credit(amount);</span><br><span class="line">                                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">                            toAcct.lock.unlock();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">                    fromAcct.lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(System.nanoTime() &lt; stopTime)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            TimeUnit.NANOSECONDS.sleep(fixedDelay + rnd.nextLong() % randMod);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>transferMoney</code>中使用<code>tryLock</code>来获取两个锁，如果不能同时获得，那么就回退并重新尝试。在休眠时间中包括固定部分和随机部分，从而降低发生活锁的可能性。如果在指定时间内不能获得所有需要的锁，那么<code>transferMoney</code>将返回一个失败的状态。</p>
+<h4 id="1-2-定时锁"><a href="#1-2-定时锁" class="headerlink" title="1.2. 定时锁"></a>1.2. 定时锁</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">trySendOnSharedLine</span><span class="params">(String meassage, <span class="keyword">long</span> timeout, </span></span></span><br><span class="line"><span class="function"><span class="params">                                   TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>&#123;</span><br><span class="line">        <span class="keyword">long</span> nanosToLock = unit.toNanos(timeout) - estimatedNanosToSend(meassage);</span><br><span class="line">        <span class="keyword">if</span>(lock.tryLock(nanosToLock, TimeUnit.NANOSECONDS))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> sendOnSharedLine(meassage);</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>tryLock</code>能够在带有时间限制的操作中实现独占的加锁行为。如示例中，试图在<code>Lock</code>保护的共享通信线路上发送一条消息，如果已经获取锁的线程不能在指定时间内完成，即等待的线程不能在指定时间内获取锁，那等待的线程就会失败。</p>
+<h4 id="1-3-可中断锁"><a href="#1-3-可中断锁" class="headerlink" title="1.3. 可中断锁"></a>1.3. 可中断锁</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">sendOnSharedLine</span><span class="params">(String message)</span> <span class="keyword">throws</span> InterruptedException</span>&#123;</span><br><span class="line">        lock.lockInterruptibly();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> cancellableSendOnSharedLine(meassage);</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>lockInterruptibly</code>方法能够在获得锁的同时保持对中断的响应，并且由于它包含在<code>Lock</code>中，无须自己创建其他类型的不可中断阻塞机制。另外定时的<code>tryLock</code>同样能响应中断，所以当需要实现一个可定时和可中断的锁获取操作时，可以使用<code>tryLock</code>。</p>
+<h3 id="2-公平性"><a href="#2-公平性" class="headerlink" title="2. 公平性"></a>2. 公平性</h3><p>ReentrantLock的构造函数中提供了两种公平性的选择：创建一个非公平的锁（默认）或者一个公平的锁。在公平的锁上，线程将按照它们发出请求的顺序来获得锁，但在非公平的锁上，则允许插队：<font color="LimeGreen">当一个线程请求非公平的锁时，
+如果在发出请求的同时该锁的状态变为可用，那么这个线程将跳过队列中所有的等待线程并获得这个锁。</font>而在公平的锁中，如果另一个线程持有这个锁或者有其他线程在队列中等待这个锁，那么新发出请求的线程将被放入队列中。在非公平的锁中，
+只有当锁被某个线程持有时，新发出请求的线程才会被放入队列中。因此当执行加锁操作时，公平性将由于在挂起线程和恢复线程时存在的开销而极大地降低性能。</p>
+<p><font color="LimeGreen">非公平锁能提高性能的一个原因是：在恢复一个被挂起的线程与该线程真正开始运行之间存在着严重的延迟。</font>假设线程A持有一个锁，如果线程B请求这个锁，那么B将被挂起。当A释放锁时，B将会被唤醒并再次尝试获取锁。
+与此同时，如果C也请求这个锁，那么C很可能在B被完全唤醒之前完成获取、使用以及释放这个锁。这样的情况下，C更早的获得了锁，而B获得锁的时刻也没有推迟。可以想象，越在竞争激烈的情况下，越能体现非公平锁的优势。</p>
+<h3 id="3-读写锁"><a href="#3-读写锁" class="headerlink" title="3. 读写锁"></a>3. 读写锁</h3><p><code>ReentrantLock</code>实现了一种标准的互斥锁，互斥通常是一种强硬和保守的加锁策略。在许多情况下，数据结构上的操作都是读操作，如果能够放宽需求，允许多个读操作的线程同时访问数据结构，那么将提升程序的性能。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReadWriteLock</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">Lock <span class="title">readLock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Lock <span class="title">writeLock</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ReadWriteLock</code>允许多个读操作同时进行，但每次只允许一个写操作。对于读取锁和写入锁之间的交互的实现，有多种不同的方式，这些方式在性能、调度保证、获取优先性、公平性以及加锁语义等方面会有所不同，具体的需要考虑以下问题：</p>
+<ul>
+<li><strong>释放优先</strong> 当一个写入操作释放写入操作时，并且队列中同时存在读线程和写线程，那么应该优先选择读线程、写线程、还是最先发出请求的线程？</li>
+<li><strong>读线程插队</strong> 如果锁是由读线程持有，但有写线程在等待，那么新到达的读线程能否立即获得访问权，还是应该在写线程后面等待？如果允许读线程插队，那么将提高并发性，但却可能造成写线程发生饥饿问题。</li>
+<li><strong>重入性</strong> 读取锁和写入锁是否是可重入的。</li>
+<li><strong>降级</strong> 如果一个线程持有写入锁，那么它能否在不释放该锁的情况下获取读取锁？这可能会使得写入锁被降级为读取锁，同时不允许其他写线程修改被保护的资源，</li>
+<li><strong>升级</strong> 读取锁能否优先于其他正在等待的读线程或写线程而升级为一个写入锁？在大多数的读写锁实现中并不支持升级，因为如果没有显式的升级操作，那么很容易造成死锁，比如当两个读线程同时试图升级为写入锁，那么二者都不会释放读取锁。</li>
+</ul>
+<p><code>ReentrantReadWriteLock</code>实现了<code>ReadWriteLock</code>，默认提供非公平的锁并提供可重入的语义，它允许锁的降级操作但不支持升级。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReadWriteMap</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;K, V&gt; map;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ReadWriteLock lock = <span class="keyword">new</span> ReentrantReadWriteLock();</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Lock r = lock.readLock();</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Lock w = lock.writeLock();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">ReadWriteMap</span><span class="params">(Map&lt;K, V&gt; map)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.map = map;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span></span>&#123;</span><br><span class="line">    w.lock();</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> map.put(key, value);</span><br><span class="line">    &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">      w.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span></span>&#123;</span><br><span class="line">    r.lock();</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">      w.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常，基于散列的<code>ConcurrentHashMap</code>的性能已经很好了，如果需要对另一种Map实现提高并发访问性，比如<code>LinkedHashMap</code>，则可以如示例一样通过<code>ReentrantReadWriteLock</code>来封装。</p>
+<ul>
+<li>Copyright&nbsp;&copy;《java并发编程实战》</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/读书笔记/">读书笔记</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Lock与ReentrantLock"><span class="toc-text">1. Lock与ReentrantLock</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-轮询锁"><span class="toc-text">1.1. 轮询锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-定时锁"><span class="toc-text">1.2. 定时锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-可中断锁"><span class="toc-text">1.3. 可中断锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-公平性"><span class="toc-text">2. 公平性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-读写锁"><span class="toc-text">3. 读写锁</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

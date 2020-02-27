@@ -1,0 +1,268 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>ubuntu安装elasticsearch及head插件 | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="概括ubuntu版本：16.0.4elasticsearch版本：6.2.4问题：  
+
+安装elasticsearch服务   
+安装elasticsearch-head插件">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ubuntu安装elasticsearch及head插件"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20181004 ubuntu安装elasticsearch及head插件" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-10-03T16:00:00.000Z"><a href="/2018/10/04/20181004 ubuntu安装elasticsearch及head插件/">2018-10-04</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">ubuntu安装elasticsearch及head插件</h1>
+	
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 1.2k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>ubuntu版本：16.0.4<br>elasticsearch版本：6.2.4<br>问题：  </p>
+<ol>
+<li>安装elasticsearch服务   </li>
+<li>安装elasticsearch-head插件<a id="more"></a>
+
+</li>
+</ol>
+<h3 id="1-安装elasticsearch"><a href="#1-安装elasticsearch" class="headerlink" title="1. 安装elasticsearch"></a>1. 安装elasticsearch</h3><p>参考<a href="http://www.cnblogs.com/hanyinglong/p/5409003.html" target="_blank" rel="noopener">http://www.cnblogs.com/hanyinglong/p/5409003.html</a> ，照做，简单描述下：    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p &#x2F;usr&#x2F;local&#x2F;kencery&#x2F;elasticsearch</span><br><span class="line">groupadd elasticsearch</span><br><span class="line">useradd -d &#x2F;usr&#x2F;local&#x2F;kencery&#x2F;elasticsearch -g elasticsearch -p elasticsearch elasticsearch</span><br></pre></td></tr></table></figure>
+
+<p>然后将tar包解压到elasticsearch目录下就可以了，我下载的版本是elasticsearch-6.2.4.tar.gz<br>启动时直接在bin目录下执行：./elasticsearch<br>有两个问题注意下，一是不要用root用户执行，二是有可能会遇到错误：    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</span><br></pre></td></tr></table></figure>
+
+<p>参考<a href="https://blog.csdn.net/jiankunking/article/details/65448030" target="_blank" rel="noopener">https://blog.csdn.net/jiankunking/article/details/65448030</a> ，修改下/etc/sysctl.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">name    &quot;4tlNeHN&quot;</span><br><span class="line">cluster_name    &quot;elasticsearch&quot;</span><br><span class="line">cluster_uuid    &quot;BYwLfhswS8O2y-WYXAKUsA&quot;</span><br><span class="line">version    </span><br><span class="line">number    &quot;6.2.4&quot;</span><br><span class="line">build_hash    &quot;ccec39f&quot;</span><br><span class="line">build_date    &quot;2018-04-12T20:37:28.497551Z&quot;</span><br><span class="line">build_snapshot    false</span><br><span class="line">lucene_version    &quot;7.2.1&quot;</span><br><span class="line">minimum_wire_compatibility_version    &quot;5.6.0&quot;</span><br><span class="line">minimum_index_compatibility_version    &quot;5.0.0&quot;</span><br><span class="line">tagline    &quot;You Know, for Search&quot;</span><br></pre></td></tr></table></figure>
+
+<p>记得改下elasticsearch.yml中的network.host以及端口配置，重启后就可以访问了：<a href="http://192.168.141.13:9200/" target="_blank" rel="noopener">http://192.168.141.13:9200/</a></p>
+<h3 id="2-安装elasticsearch-head"><a href="#2-安装elasticsearch-head" class="headerlink" title="2. 安装elasticsearch-head"></a>2. 安装elasticsearch-head</h3><p>elasticsearch 5.x之后不支持直接plugin安装head插件，而是将head作为一个独立的服务安装的 </p>
+<ol>
+<li>参考<a href="https://blog.csdn.net/hard_boy/article/details/79565068" target="_blank" rel="noopener">https://blog.csdn.net/hard_boy/article/details/79565068</a> ，首先需要安装依赖的node，npm，grunt  </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt-get install npm</span><br><span class="line">apt-get install nodejs-legacy</span><br><span class="line">npm install -g grunt</span><br><span class="line">npm install -g grunt-cli</span><br></pre></td></tr></table></figure>
+
+<p>下载elasticsearch-head，我解压到目录/usr/local/kencery/elasticsearch-head，将目录用户改为elasticsearch</p>
+<ol start="2">
+<li>然后修改配置</li>
+</ol>
+<p>2.1. 修改head的连接地址: elasticsearch-head/_site/app.js，将localhost改为自己的ip</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">this.base_uri &#x3D; this.config.base_uri || this.prefs.get(&quot;app-base_uri&quot;) || &quot;http:&#x2F;&#x2F;localhost:9200&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>2.2. 修改服务器的监听地址: elasticsearch-head/Gruntfile.js, 在options中添加 hostname: ‘*’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">connect: &#123;  </span><br><span class="line">               server: &#123;  </span><br><span class="line">                   options: &#123;  </span><br><span class="line">                       port: 9100,  </span><br><span class="line">                       base: &#39;.&#39;,  </span><br><span class="line">                       keepalive: true  </span><br><span class="line">                   &#125;  </span><br><span class="line">               &#125;  </span><br><span class="line">           &#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.3. 修改elasticseach的配置文件elasticsearch.yml, 修改对应的ip以及跨域的设置，添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http.cors.enabled: true </span><br><span class="line">http.cors.allow-origin: &quot;*&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在elasticsearch-head下运行: grunt server</li>
+</ol>
+<p>3.1. 但是会出现错误（当时命令敲的npm start，一样的）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:&#x2F;usr&#x2F;local&#x2F;kencery&#x2F;elasticsearch-head# npm start</span><br><span class="line"></span><br><span class="line">&gt; elasticsearch-head@0.0.0 start &#x2F;usr&#x2F;local&#x2F;kencery&#x2F;elasticsearch-head</span><br><span class="line">&gt; grunt server</span><br><span class="line"></span><br><span class="line">grunt-cli: The grunt command line interface (v1.2.0)</span><br><span class="line"></span><br><span class="line">Fatal error: Unable to find local grunt.</span><br><span class="line"></span><br><span class="line">If you&#39;re seeing this message, grunt hasn&#39;t been installed locally to</span><br><span class="line">your project. For more information about installing and configuring grunt,</span><br><span class="line">please see the Getting Started guide:</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;gruntjs.com&#x2F;getting-started</span><br><span class="line"></span><br><span class="line">npm ERR! Linux 4.4.0-62-generic</span><br><span class="line">npm ERR! argv &quot;&#x2F;usr&#x2F;bin&#x2F;nodejs&quot; &quot;&#x2F;usr&#x2F;bin&#x2F;npm&quot; &quot;start&quot;</span><br><span class="line">npm ERR! node v4.2.6</span><br><span class="line">npm ERR! npm  v3.5.2</span><br><span class="line">npm ERR! code ELIFECYCLE</span><br><span class="line">npm ERR! elasticsearch-head@0.0.0 start: &#96;grunt server&#96;</span><br><span class="line">npm ERR! Exit status 99</span><br><span class="line">npm ERR! </span><br><span class="line">npm ERR! Failed at the elasticsearch-head@0.0.0 start script &#39;grunt server&#39;.</span><br><span class="line">npm ERR! Make sure you have the latest version of node.js and npm installed.</span><br><span class="line">npm ERR! If you do, this is most likely a problem with the elasticsearch-head package,</span><br><span class="line">npm ERR! not with npm itself.</span><br><span class="line">npm ERR! Tell the author that this fails on your system:</span><br><span class="line">npm ERR!     grunt server</span><br><span class="line">npm ERR! You can get information on how to open an issue for this project with:</span><br><span class="line">npm ERR!     npm bugs elasticsearch-head</span><br><span class="line">npm ERR! Or if that isn&#39;t available, you can get their info via:</span><br><span class="line">npm ERR!     npm owner ls elasticsearch-head</span><br><span class="line">npm ERR! There is likely additional logging output above.</span><br><span class="line"></span><br><span class="line">npm ERR! Please include the following file with any support request:</span><br><span class="line">npm ERR!     &#x2F;usr&#x2F;local&#x2F;kencery&#x2F;elasticsearch-head&#x2F;npm-debug.log</span><br></pre></td></tr></table></figure>
+
+<p>提示大概是版本不是最新的问题，所以就抱着试一试的心态去升级npm以及node，<br>参考<a href="https://www.cnblogs.com/ae6623/p/6242423.html" target="_blank" rel="noopener">https://www.cnblogs.com/ae6623/p/6242423.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm cache clean -f</span><br><span class="line">npm install -g n</span><br><span class="line">n stable</span><br><span class="line">npm install npm@latest -g</span><br></pre></td></tr></table></figure>
+
+<p>再查看下版本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">elasticsearch@ubuntu:~$ node -v</span><br><span class="line">v10.4.0</span><br><span class="line">elasticsearch@ubuntu:~$ npm -v</span><br><span class="line">6.1.0</span><br></pre></td></tr></table></figure>
+
+<p>3.2. 但是运行grunt server依然报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grunt hasn&#39;t been installed locally to your project</span><br></pre></td></tr></table></figure>
+
+<p>参考<a href="https://segmentfault.com/q/1010000004172559/a-1020000004193932" target="_blank" rel="noopener">https://segmentfault.com/q/1010000004172559/a-1020000004193932</a> 安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install grunt --save-dev</span><br></pre></td></tr></table></figure>
+
+<p>3.3 再次运行，依然报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">elasticsearch@ubuntu:&#x2F;usr&#x2F;local&#x2F;kencery&#x2F;elasticsearch-head$ grunt server</span><br><span class="line">&gt;&gt; Local Npm module &quot;grunt-contrib-clean&quot; not found. Is it installed?</span><br><span class="line">&gt;&gt; Local Npm module &quot;grunt-contrib-concat&quot; not found. Is it installed?</span><br><span class="line">&gt;&gt; Local Npm module &quot;grunt-contrib-watch&quot; not found. Is it installed?</span><br><span class="line">&gt;&gt; Local Npm module &quot;grunt-contrib-connect&quot; not found. Is it installed?</span><br><span class="line">&gt;&gt; Local Npm module &quot;grunt-contrib-copy&quot; not found. Is it installed?</span><br><span class="line">&gt;&gt; Local Npm module &quot;grunt-contrib-jasmine&quot; not found. Is it installed?</span><br><span class="line">Warning: Task &quot;connect:server&quot; not found. Use --force to continue.</span><br></pre></td></tr></table></figure>
+
+<p>然后干脆把有关grunt的都装了一遍最新的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">npm install grunt@latest</span><br><span class="line">npm install grunt-cli@latest</span><br><span class="line">npm install grunt-contrib-copy@latest</span><br><span class="line">npm install grunt-contrib-concat@latest</span><br><span class="line">npm install grunt-contrib-uglify@latest</span><br><span class="line">npm install grunt-contrib-clean@latest</span><br><span class="line">npm install grunt-contrib-watch@latest</span><br><span class="line">npm install grunt-contrib-connect@latest</span><br><span class="line">npm install grunt-contrib-jasmine@latest</span><br></pre></td></tr></table></figure>
+
+<p>3.4. 最后grunt server可以启动了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">elasticsearch@ubuntu:&#x2F;usr&#x2F;local&#x2F;kencery&#x2F;elasticsearch-head$ grunt server</span><br><span class="line">(node:1527) ExperimentalWarning: The http2 module is an experimental API.</span><br><span class="line">Running &quot;connect:server&quot; (connect) task</span><br><span class="line">Waiting forever...</span><br><span class="line">Started connect web server on http:&#x2F;&#x2F;localhost:9100</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/20181004.1.jpg" alt=""> </p>
+<p>可以看到elasticsearch服务的端口是9200，head插件服务的端口是9100，我们访问head然后head再访问的elasticsearch。可以新建索引：</p>
+<p><img src="/img/20181004.2.jpg" alt=""> </p>
+<p><strong>参考：</strong>    </p>
+<ol>
+<li><a href="http://www.cnblogs.com/hanyinglong/p/5409003.html" target="_blank" rel="noopener">http://www.cnblogs.com/hanyinglong/p/5409003.html</a></li>
+<li><a href="https://blog.csdn.net/jiankunking/article/details/65448030" target="_blank" rel="noopener">https://blog.csdn.net/jiankunking/article/details/65448030</a></li>
+<li><a href="https://blog.csdn.net/hard_boy/article/details/79565068" target="_blank" rel="noopener">https://blog.csdn.net/hard_boy/article/details/79565068</a></li>
+<li><a href="https://www.cnblogs.com/ae6623/p/6242423.html" target="_blank" rel="noopener">https://www.cnblogs.com/ae6623/p/6242423.html</a></li>
+<li><a href="https://segmentfault.com/q/1010000004172559/a-1020000004193932" target="_blank" rel="noopener">https://segmentfault.com/q/1010000004172559/a-1020000004193932</a> </li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/问题解决/">问题解决</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/ubuntu/">ubuntu</a>, <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概括"><span class="toc-text">概括</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-安装elasticsearch"><span class="toc-text">1. 安装elasticsearch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-安装elasticsearch-head"><span class="toc-text">2. 安装elasticsearch-head</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
