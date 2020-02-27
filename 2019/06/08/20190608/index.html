@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>数据结构. AVL树 | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言1. 定义Avl树在二叉查找树的基础上加了一个平衡条件：对于任意节点，其左右子树的高度差最多为1。
+
+数据结构. 二叉查找树">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="数据结构. AVL树"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20190608" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-06-07T16:00:00.000Z"><a href="/2019/06/08/20190608/">2019-06-08</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">数据结构. AVL树</h1>
+	
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 1.8k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h3><p>Avl树在二叉查找树的基础上加了一个平衡条件：对于任意节点，其左右子树的高度差最多为1。</p>
+<ul>
+<li><a href="https://shanhm1991.github.io/2019/06/05/2019-06-05-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.%20%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91/">数据结构. 二叉查找树</a><a id="more"></a>
+
+</li>
+</ul>
+<h3 id="2-分析实现"><a href="#2-分析实现" class="headerlink" title="2. 分析实现"></a>2. 分析实现</h3><p>首先，Avl树也是一颗二叉查找树，因此它的查找、插入和删除以及迭代都可以复用查找二叉树的实现。区别在于插入和删除操作之后需要恢复平衡，那么给每个节点记一个高度属性<code>height</code>，
+平衡的目标就是保证任意节点左右子节点的<code>height</code>差不超过1，而平衡的手段则是旋转。</p>
+<h4 id="2-1-旋转"><a href="#2-1-旋转" class="headerlink" title="2.1. 旋转"></a>2.1. 旋转</h4><p>首先根据旋转方向，可以将旋转分为<strong>左旋</strong>和<strong>右旋</strong>。根据二叉查找树的性质，可以画出如下示意图：</p>
+<p><img src="/img/AvlTree5.jpg" alt=""> </p>
+<p>可以看出，右旋转会将左子树的高度减一而右子树的高度加一，左旋转则相反。因此，可以通过旋转来平衡左右子树的高度。<br>对于图中的节点，可以确定K2 &lt; B &lt; K1<br>如果右旋转，则旋转的动作是让K2上升，K1下沉，使K1成为K2的右子树，并将K2的原右子树B变为K1的左子树；<br>如果左旋转，则是让K1上升，K2下沉，使K2替换K1的左子树，并将K1的原左子树B变为K2的右子树；<br>另外，可以看出每次旋转只需要重新计算K1和K2的高度，而对其他节点没有任何影响。</p>
+<p>由于每个节点最多有两个儿子，因此针对需要重新平衡的节点，可以将需要旋转的情形分为4种：</p>
+<p><img src="/img/AvlTree0.jpg" alt=""> </p>
+<p>1和2是对称的两种情形，需要调整的是左子树的左子树，或者右子树的右子树，通过一次<strong>单旋转</strong>即可恢复平衡；<br>3和4也是对称的，但需要调整的是左子树的右子树，或者右子树的左子树，由于较深的子树处于树结构的中间，这时仅用单旋转并不能解决问题，
+而是需要通过<strong>双旋转</strong>才能恢复平衡。<font color="LimeGreen">其思路是将深度过深的树从内侧转移到外侧，这样就可以将情形3和4转化成情形1或2，然后再通过单旋转来达到平衡。</font></p>
+<p>以情形4为例：<br>可以先对右子树的k1-k2两个节点进行一次右旋转，然后再对K3-K2进行一次左旋转以达到重新平衡。</p>
+<p><img src="/img/AvlTree6.jpg" alt=""> </p>
+<h4 id="2-2-示例"><a href="#2-2-示例" class="headerlink" title="2.2. 示例"></a>2.2. 示例</h4><p>例如下面，依次插入10, 11, 9, 5, 2, 1, 6, 8，然后删除1</p>
+<p>在插入节点2之后，将会在节点9上检测到不平衡，需要一次右旋转来恢复平衡</p>
+<p><img src="/img/AvlTree1.jpg" alt=""> </p>
+<p>同样，在插入节点1之后，将会在节点10上检测到不平衡，需要一次右旋转来恢复平衡</p>
+<p><img src="/img/AvlTree2.jpg" alt=""> </p>
+<p>在连续插入节点6和8之后，将会在节点9上检测到不平衡，需要一个左-右双旋转来恢复平衡</p>
+<p><img src="/img/AvlTree3.jpg" alt=""> </p>
+<p>而在删除节点1后，将会在根节点5上检测到不平衡，需要一个右-左双旋转来恢复平衡</p>
+<p><img src="/img/AvlTree4.jpg" alt=""> </p>
+<h3 id="3-java实现"><a href="#3-java实现" class="headerlink" title="3. java实现"></a>3. java实现</h3><p>继承二叉查找树的实现，重写一下插入和删除，提供<code>Set</code>实现</p>
+<h4 id="3-1-Set"><a href="#3-1-Set" class="headerlink" title="3.1. Set"></a>3.1. Set</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AvlTreeSet</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;? <span class="title">super</span> <span class="title">E</span>&gt;&gt; <span class="keyword">extends</span> <span class="title">BinarySearchTreeSet</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ALLOWED_IMBALANCE = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> AvlNode&lt;E&gt; root;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> AvlNode&lt;E&gt; <span class="title">getRoot</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> root;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		root = <span class="keyword">null</span>;</span><br><span class="line">		size = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E o)</span></span>&#123;</span><br><span class="line">		root = add(o, root);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> AvlNode&lt;E&gt; <span class="title">add</span><span class="params">(E e, AvlNode&lt;E&gt; node)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(node == <span class="keyword">null</span>)&#123;</span><br><span class="line">			size++;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> AvlNode&lt;&gt;(e);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> compare = e.compareTo(node.element);</span><br><span class="line">		<span class="keyword">if</span>(compare &lt; <span class="number">0</span>)&#123;</span><br><span class="line">			node.left = add(e, (AvlNode&lt;E&gt;)node.left);</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(compare &gt; <span class="number">0</span>)&#123;</span><br><span class="line">			node.right = add(e, (AvlNode&lt;E&gt;)node.right);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			node.element = e;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> balance(node);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> AvlNode&lt;E&gt; <span class="title">balance</span><span class="params">(AvlNode&lt;E&gt; node)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(node == <span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="keyword">return</span> node;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(getHeight(node.left) - getHeight(node.right) &gt; ALLOWED_IMBALANCE)&#123;</span><br><span class="line">			<span class="keyword">if</span>(getHeight(node.left.left) &gt;= getHeight(node.left.right))&#123;</span><br><span class="line">				node = rotateRight(node);</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				node = rotateLeftRight(node);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(getHeight(node.right) - getHeight(node.left) &gt; ALLOWED_IMBALANCE)&#123;</span><br><span class="line">			<span class="keyword">if</span>(getHeight(node.right.right) &gt;= getHeight(node.right.left))&#123;</span><br><span class="line">				node = rotateLeft(node);</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				node = rotateRightLeft(node);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		node.height = Math.max(getHeight(node.left), getHeight(node.right)) + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> node;</span><br><span class="line">	&#125; </span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> AvlNode&lt;E&gt; <span class="title">rotateRight</span><span class="params">(AvlNode&lt;E&gt; node)</span> </span>&#123;</span><br><span class="line">		AvlNode&lt;E&gt; leftNode = (AvlNode&lt;E&gt;)node.left;</span><br><span class="line">		node.left = leftNode.right;</span><br><span class="line">		leftNode.right = node;</span><br><span class="line">		</span><br><span class="line">		node.height = Math.max(getHeight(node.left), getHeight(node.right)) + <span class="number">1</span>;</span><br><span class="line">		leftNode.height = Math.max(getHeight(leftNode.left), node.height) + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> leftNode;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> AvlNode&lt;E&gt; <span class="title">rotateLeft</span><span class="params">(AvlNode&lt;E&gt; node)</span> </span>&#123;</span><br><span class="line">		AvlNode&lt;E&gt; rightNode = (AvlNode&lt;E&gt;)node.right;</span><br><span class="line">		node.right = rightNode.left;</span><br><span class="line">		rightNode.left = node;</span><br><span class="line">		</span><br><span class="line">		node.height = Math.max(getHeight(node.left), getHeight(node.right)) + <span class="number">1</span>;</span><br><span class="line">		rightNode.height = Math.max(getHeight(rightNode.right), node.height) + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> rightNode;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> AvlNode&lt;E&gt; <span class="title">rotateLeftRight</span><span class="params">(AvlNode&lt;E&gt; node)</span> </span>&#123;</span><br><span class="line">		node.left = rotateLeft((AvlNode&lt;E&gt;)node.left); </span><br><span class="line">		<span class="keyword">return</span> rotateRight(node);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> AvlNode&lt;E&gt; <span class="title">rotateRightLeft</span><span class="params">(AvlNode&lt;E&gt; node)</span> </span>&#123;</span><br><span class="line">		node.right = rotateRight((AvlNode&lt;E&gt;)node.right);</span><br><span class="line">		<span class="keyword">return</span> rotateLeft(node);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getHeight</span><span class="params">(Node&lt;E&gt; node)</span> </span>&#123;</span><br><span class="line">		AvlNode&lt;E&gt; avlNode = (AvlNode&lt;E&gt;)node;</span><br><span class="line">		<span class="keyword">return</span> avlNode == <span class="keyword">null</span> ? -<span class="number">1</span> : avlNode.height;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>&#123;</span><br><span class="line">		root = remove((E)o, root);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> AvlNode&lt;E&gt; <span class="title">remove</span><span class="params">(E e, AvlNode&lt;E&gt; node)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(node == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> node;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> compare = e.compareTo(node.element);</span><br><span class="line">		<span class="keyword">if</span>(compare &lt; <span class="number">0</span>)&#123;</span><br><span class="line">			node.left = remove(e, (AvlNode&lt;E&gt;)node.left);</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(compare &gt; <span class="number">0</span>)&#123;</span><br><span class="line">			node.right = remove(e, (AvlNode&lt;E&gt;)node.right);</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(node.left != <span class="keyword">null</span> &amp;&amp; node.right != <span class="keyword">null</span>)&#123;</span><br><span class="line">			node = (AvlNode&lt;E&gt;)removeLeftMax(node);</span><br><span class="line">			size--;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			node = (node.left != <span class="keyword">null</span>) ? (AvlNode&lt;E&gt;)node.left : (AvlNode&lt;E&gt;)node.right;</span><br><span class="line">			size--;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> balance(node);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">AvlNode</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> height = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		AvlNode(E e) &#123;</span><br><span class="line">			<span class="keyword">super</span>(e);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">super</span>.toString();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-Avl树的高度"><a href="#4-Avl树的高度" class="headerlink" title="4. Avl树的高度"></a>4. Avl树的高度</h3><p>关于节点数为N的Avl树的高度H：    </p>
+<p>最好的情形与查找二叉树一样，即一颗满二叉树：H = logN - 1    </p>
+<p>再看最差的情形，即满足Avl树规则的同时拥有最少的节点数。考虑如下一种极端情形：保证每个节点的右子树刚好比左子树高1
+<img src="/img/AvlTree7.jpg" alt=""> </p>
+<p>假设n层的Avl树的节点数之和为Sn，那么可以看出如下规律：<br>S1 = 1;<br>S2 = 2;<br>S3 = S2 + S1 + 1;<br>S4 = S3 + S2 + 1;<br>S5 = S4 + S3 + 1;<br>S6 = S5 + S4 + 1;
+…
+Sn=S(n-1) + S(n-2) + 1;<br>看上去就像一个斐波那契数列，要推导这个数列的通项式以及求和公式有点困难，不过如果不要求严谨，可以试着证明得到一个不等式，H &lt; f(N)，最好能是对数关系。   </p>
+<p>可以确定上面这个数列的通项和求和肯定都比斐波那契大，因为它的起点第二项为2，且后面每项都多加了1，另外斐波那契的通项和求和是已知的：</p>
+<p><img src="/img/AvlTree8.jpg" alt=""> </p>
+<p>求和：Sn=2An+A(n-1)-1 &gt; 3A(n-1)，由于3/√5 &gt; 1，以及(1-√5)/2) &lt; 1，所以Sn &gt; ((1+√5)/2)^(n-1)，也就是说：N &gt; ((1+√5)/2)^(H-1)，即H &lt; logN + 1，底数大概为一个1.6到2之间的常数。
+这里只是简单说明，其实最好能证明得到H &lt; xlogN (log底数为2, x为系数) 这样一个不等式。</p>
+<p><strong>参阅：</strong>    </p>
+<ol>
+<li>《算法导论》    </li>
+<li>《数据结构与算法分析》</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/数据结构/">数据结构</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/AVL树/">AVL树</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: window.location.pathname,
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-定义"><span class="toc-text">1. 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-分析实现"><span class="toc-text">2. 分析实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-旋转"><span class="toc-text">2.1. 旋转</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-示例"><span class="toc-text">2.2. 示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-java实现"><span class="toc-text">3. java实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-Set"><span class="toc-text">3.1. Set</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Avl树的高度"><span class="toc-text">4. Avl树的高度</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

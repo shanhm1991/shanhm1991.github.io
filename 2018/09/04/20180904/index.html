@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>centos安装oracle11g | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="概括vmware版本：14.1.1oracle版本：Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit问题：    
+
+安装vnc    
+用vnc安装oracle  
+监听服务启动
+客户端连接">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="centos安装oracle11g"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20180904" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-09-03T16:00:00.000Z"><a href="/2018/09/04/20180904/">2018-09-04</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">centos安装oracle11g</h1>
+	
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 2.8k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>vmware版本：14.1.1<br>oracle版本：Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit<br>问题：    </p>
+<ol>
+<li>安装vnc    </li>
+<li>用vnc安装oracle  </li>
+<li>监听服务启动</li>
+<li>客户端连接<a id="more"></a>
+
+</li>
+</ol>
+<h3 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h3><ol>
+<li>安装依赖，创建用户和目录，参考<a href="http://www.cnblogs.com/gaojun/archive/2012/11/22/2783257.html" target="_blank" rel="noopener">http://www.cnblogs.com/gaojun/archive/2012/11/22/2783257.html</a></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">yum -y install binutils</span><br><span class="line">rpm -ivh compat-libstdc++-33-3.2.3-61.x86_64.rpm</span><br><span class="line">yum -y install elfutils-libelf</span><br><span class="line">yum -y install elfutils-libelf-devel</span><br><span class="line">yum -y install elfutils-libelf-devel-static</span><br><span class="line">yum -y install gcc</span><br><span class="line">yum -y install gcc-c++</span><br><span class="line">yum -y install glibc</span><br><span class="line">yum -y install glibc-common</span><br><span class="line">yum -y install glibc-devel</span><br><span class="line">yum -y install glibc-headers</span><br><span class="line">yum -y install glibc-headers</span><br><span class="line">yum -y install ksh</span><br><span class="line">yum -y install libaio</span><br><span class="line">yum -y install libaio-devel</span><br><span class="line">yum -y install libgcc</span><br><span class="line">yum -y install libgomp</span><br><span class="line">yum -y install libstdc++</span><br><span class="line">yum -y install libstdc++-devel</span><br><span class="line">yum -y install make</span><br><span class="line">yum -y install sysstat</span><br><span class="line">yum -y install unixODBC</span><br><span class="line">yum -y install unixODBC-devel</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">groupadd dba</span><br><span class="line">groupadd oper</span><br><span class="line">groupadd oinstall</span><br><span class="line">useradd -g oinstall -G dba oracle</span><br><span class="line"></span><br><span class="line">mkdir -p &#x2F;opt&#x2F;oracle&#x2F;product</span><br><span class="line">mkdir -p &#x2F;opt&#x2F;oracle&#x2F;product&#x2F;OraHome</span><br><span class="line">mkdir -p &#x2F;opt&#x2F;oraInventory </span><br><span class="line">mkdir -p &#x2F;opt&#x2F;oracle&#x2F;oradata</span><br><span class="line">mkdir -p &#x2F;var&#x2F;opt&#x2F;oracle</span><br><span class="line"></span><br><span class="line">chown -R oracle.oinstall &#x2F;opt&#x2F;oracle</span><br><span class="line">chown -R oracle.oinstall &#x2F;opt&#x2F;oracle&#x2F;oradata</span><br><span class="line">chown -R oracle.oinstall &#x2F;opt&#x2F;oracle&#x2F;product&#x2F;OraHome</span><br><span class="line">chown -R oracle.dba &#x2F;opt&#x2F;oraInventory </span><br><span class="line">chown oracle.dba &#x2F;var&#x2F;opt&#x2F;oracle</span><br><span class="line">chmod -R 775 &#x2F;opt&#x2F;oracle</span><br><span class="line">chmod -R 755 &#x2F;var&#x2F;opt&#x2F;oracle</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>修改系统参数文件，设置环境变量</li>
+</ol>
+<p>2.1. 修改系统参数：<code>vim /etc/sysctl.conf</code>，添加下列内容，并运行sysctl -p 使生效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fs.aio-max-nr &#x3D; 1048576</span><br><span class="line">fs.file-max &#x3D; 6815744</span><br><span class="line">kernel.shmall &#x3D; 2097152</span><br><span class="line">kernel.shmmax &#x3D; 536870912</span><br><span class="line">kernel.shmmni &#x3D; 4096</span><br><span class="line">kernel.sem &#x3D; 250 32000 100 128</span><br><span class="line">net.ipv4.ip_local_port_range &#x3D; 9000 65500</span><br><span class="line">net.core.rmem_default &#x3D; 262144</span><br><span class="line">net.core.rmem_max &#x3D; 4194304</span><br><span class="line">net.core.wmem_default &#x3D; 262144</span><br><span class="line">net.core.wmem_max &#x3D; 1048586</span><br></pre></td></tr></table></figure>
+
+<p>2.2. 修改系统资源限制Shell Limits，提高软件的运行效率<code>vim /etc/security/limits.conf</code>，添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">oracle           soft    nproc   2047</span><br><span class="line">oracle           hard    nproc   16384</span><br><span class="line">oracle           soft    nofile  1024</span><br><span class="line">oracle           hard    nofile  65536</span><br></pre></td></tr></table></figure>
+
+<p>2.3. <code>vim /etc/pam.d/login</code>，添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">session required &#x2F;lib&#x2F;security&#x2F;pam_limits.so</span><br><span class="line">session required pam_limits.so</span><br></pre></td></tr></table></figure>
+
+<p>2.4. <code>vim /etc/profile</code>，添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if [ $USER &#x3D; &quot;oracle&quot; ]; then</span><br><span class="line">        if [ $SHELL &#x3D; &quot;&#x2F;bin&#x2F;ksh&quot; ]; then</span><br><span class="line">              ulimit -p 16384</span><br><span class="line">              ulimit -n 65536</span><br><span class="line">        else</span><br><span class="line">              ulimit -u 16384 -n 65536</span><br><span class="line">        fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p>2.5. 修改oracle用户的环境变量<code>vim .bash_profile</code>，并source生效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># .bash_profile</span><br><span class="line"></span><br><span class="line"># Get the aliases and functions</span><br><span class="line">if [ -f ~&#x2F;.bashrc ]; then</span><br><span class="line">        . ~&#x2F;.bashrc</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">export ORACLE_BASE&#x3D;&#x2F;opt&#x2F;oracle</span><br><span class="line">export ORACLE_HOME&#x3D;$ORACLE_BASE&#x2F;product&#x2F;OraHome</span><br><span class="line">export ORACLE_SID&#x3D;orcl</span><br><span class="line">export ORACLE_OWNER&#x3D;oracle</span><br><span class="line">export ORACLE_TERM&#x3D;vt100</span><br><span class="line">export ORA_NLS33&#x3D;$ORACLE_HOME&#x2F;nls&#x2F;admin&#x2F;data</span><br><span class="line">LD_LIBRARY_PATH&#x3D;$ORACLE_HOME&#x2F;lib:&#x2F;lib:&#x2F;usr&#x2F;lib:&#x2F;usr&#x2F;local&#x2F;lib</span><br><span class="line">export LD_LIBRARY_PATH</span><br><span class="line">CLASSPATH&#x3D;$ORACLE_HOME&#x2F;JRE:$ORACLE_HOME&#x2F;jlib:$ORACLE_HOME&#x2F;rdbms&#x2F;jlib</span><br><span class="line">CLASSPATH&#x3D;$CLASSPATH:$ORACLE_HOME&#x2F;network&#x2F;jlib</span><br><span class="line">export CLASSPATH</span><br><span class="line">export PATH&#x3D;$HOME&#x2F;bin:$ORACLE_HOME&#x2F;bin:$ORACLE_HOME&#x2F;Apache&#x2F;Apache&#x2F;bin:$PATH</span><br></pre></td></tr></table></figure>
+
+<p>然后便是解压下载的oracle安装包，以oracle用户运行database中的 ./runInstaller安装脚本，但是会出现错误提示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[oracle@localhost database]$ .&#x2F;runInstaller </span><br><span class="line">正在启动 Oracle Universal Installer...</span><br><span class="line"></span><br><span class="line">检查临时空间: 必须大于 120 MB。   实际为 32007 MB    通过</span><br><span class="line">检查交换空间: 必须大于 150 MB。   实际为 2047 MB    通过</span><br><span class="line">检查监视器: 监视器配置至少必须显示 256 种颜色</span><br><span class="line">    &gt;&gt;&gt; 无法使用命令 &#x2F;usr&#x2F;bin&#x2F;xdpyinfo 自动检查显示器颜色。请检查是否设置了 DISPLAY 变量。    未通过 &lt;&lt;&lt;&lt;</span><br><span class="line"></span><br><span class="line">未通过某些要求检查。必须先满足这些 要求, </span><br><span class="line"></span><br><span class="line">然后才能继续安装,</span><br></pre></td></tr></table></figure>
+
+<p>因为oracle安装时要打开图形界面，但在shell中是不行的，所以需要安装vnc服务</p>
+<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h3><h4 id="2-1-安装VNC"><a href="#2-1-安装VNC" class="headerlink" title="2.1. 安装VNC"></a>2.1. 安装VNC</h4><p>参考<a href="https://blog.csdn.net/wlzjsj/article/details/52149547" target="_blank" rel="noopener">https://blog.csdn.net/wlzjsj/article/details/52149547</a>   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install xhost</span><br><span class="line">yum -y install tigervnc tigervnc-server</span><br><span class="line">yum install -y gnome*</span><br></pre></td></tr></table></figure>
+
+<p>配置vncserver config：<code>vim /etc/sysconfig/vncservers</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># THIS FILE HAS BEEN REPLACED BY &#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vncserver@.service</span><br><span class="line">VNCSERVERS&#x3D;&quot;1:root&quot;</span><br><span class="line">VNCSERVERARGS[2]&#x3D;&quot;-geometry 800x600 -nolisten tcp -localhost&quot;</span><br><span class="line"></span><br><span class="line">VNCSERVERS&#x3D;&quot;2:oracle&quot;</span><br><span class="line">VNCSERVERARGS[2]&#x3D;&quot;-geometry 800x600 -nolisten tcp -localhost&quot;</span><br></pre></td></tr></table></figure>
+
+<p>运行vncserver后会在用户目录下创建一个.vnc目录，编辑里面的xstartup文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh</span><br><span class="line"></span><br><span class="line">#unset SESSION_MANAGER</span><br><span class="line">#unset DBUS_SESSION_BUS_ADDRESS</span><br><span class="line">#exec &#x2F;etc&#x2F;X11&#x2F;xinit&#x2F;xinitrc</span><br><span class="line"></span><br><span class="line">[ -x &#x2F;etc&#x2F;vnc&#x2F;xstartup ] &amp;&amp; exec &#x2F;etc&#x2F;vnc&#x2F;xstartup</span><br><span class="line">[ -r $HOME&#x2F;.Xresources ] &amp;&amp; xrdb $HOME&#x2F;.Xresources</span><br><span class="line">xsetroot -solid grey</span><br><span class="line">vncconfig -iconic &amp;</span><br><span class="line">xterm -geometry 80x24+10+10 -ls -title &quot;$VNCDESKTOP Desktop&quot; &amp;</span><br><span class="line">startkde &amp;</span><br><span class="line">gnome-session &amp;</span><br></pre></td></tr></table></figure>
+
+<p>记得关闭防火墙：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -F</span><br></pre></td></tr></table></figure>
+
+<p>然后运行vncserver，根据它返回的序号，使用本地vncciewer连接，端口就是5900加上返回的序号</p>
+<p><img src="/img/20180904.1.jpg" alt=""> </p>
+<p>这里5905中的5就是vncserver反馈的启动序号，密码可以自己设置一下就可以了。但是登上之后会发现都是乱码。</p>
+<h5 id="2-2-1-VNC乱码问题"><a href="#2-2-1-VNC乱码问题" class="headerlink" title="2.2.1 VNC乱码问题"></a>2.2.1 VNC乱码问题</h5><p>这个就是要安装一些语言支持的rpm包，但是怎么装都会提示缺少依赖,<br>参考<a href="http://www.bubuko.com/infodetail-196827.html" target="_blank" rel="noopener">http://www.bubuko.com/infodetail-196827.html</a> 其中有句话说的很好，可以跳过rpm脚本的依赖检查错误直接安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum -y install libXp.so.6</span><br><span class="line">yum -y install libpopt.so.0</span><br><span class="line">rpm -ivh --nodeps chkfontpath-1.10.1-1.1.i386.rpm</span><br><span class="line">rpm -ivh ttmkfdir-3.0.9-23.el5.x86_64.rpm</span><br><span class="line">rpm -ivh fonts-chinese-3.02-12.el5.noarch.rpm</span><br><span class="line">rpm -ivh fonts-ISO8859-2-75dpi-1.0-17.1.noarch.rpm</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-VNC安装oracle"><a href="#2-2-VNC安装oracle" class="headerlink" title="2.2 VNC安装oracle"></a>2.2 VNC安装oracle</h4><ol>
+<li>通过上面的VNC客户端连接上之后，打开命令终端，切换到oracle用户运行./runInstaller，但是会有错误提示：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unable to open display ...</span><br></pre></td></tr></table></figure>
+
+<p>网上有很多人说方法，但感觉还是百度经验说到了点子上<a href="https://jingyan.baidu.com/article/cbf0e5009ace292eaa2893f4.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/cbf0e5009ace292eaa2893f4.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">以root用户执行xdpyinfo，纪录下name of display后面的值，比如我上面的值是5</span><br><span class="line">执行 xhost +</span><br><span class="line">su - oracle</span><br><span class="line">export DISPLAY&#x3D;:5.0 &#x2F;&#x2F;就是上面root记下的值</span><br><span class="line">执行xdpyinfo可以出现display的信息了</span><br></pre></td></tr></table></figure>
+
+<p>然后执行./runInstaller就会出现oracle的安装提示框了</p>
+<p><img src="/img/20180904.2.jpg" alt=""> </p>
+<p>过程就不贴了，其中需要填的一些值与上面设置的环境变量保持一致就好：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">oracle base: &#x2F;opt&#x2F;oracle</span><br><span class="line">software location: &#x2F;opt&#x2F;oracle&#x2F;product&#x2F;OraHome</span><br><span class="line">Inventory Directory: &#x2F;opt&#x2F;oralnventory</span><br><span class="line"> </span><br><span class="line">oraInventory Group Name: oinstall</span><br><span class="line">Database Administrator(OSDBA) Group: dba</span><br><span class="line">Database Operator(OSOPER) Group: oinstall</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>swap size 检查失败问题</li>
+</ol>
+<p>参考<a href="https://blog.csdn.net/hzh839900/article/details/79215703" target="_blank" rel="noopener">https://blog.csdn.net/hzh839900/article/details/79215703</a> ，在原来的基础上添加一个2G的交换区，然后check again</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;tmp</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;swapfree bs&#x3D;32k count&#x3D;65515</span><br><span class="line">mkswap swapfree</span><br><span class="line">swapon swapfree</span><br><span class="line"> </span><br><span class="line">vim &#x2F;etc&#x2F;fstab</span><br><span class="line">&#x2F;tmp&#x2F;swapfree swap swap defaults 0 0</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>提示semmni的值为0以及缺少一些依赖包</li>
+</ol>
+<p><img src="/img/20180904.3.jpg" alt=""> </p>
+<p>但是在root用户下执行sysctl -p可以看到其实值已经设置成128了，另外对于缺少的依赖，网上有人说是由于centos 7用的版本高了，所以oracle检查不到，
+于是就怀疑是oracle的安装程序自己的检查脚本有问题了，直接勾上右上角的ignore All，继续往下走就行了。</p>
+<ol start="4">
+<li></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error in invoking target &#39;agent nmhs&#39; of makefile ...</span><br></pre></td></tr></table></figure>
+
+<p>参考：<a href="https://blog.csdn.net/ghostliming/article/details/51566562" target="_blank" rel="noopener">https://blog.csdn.net/ghostliming/article/details/51566562</a>  可以解决，最后：</p>
+<p><img src="/img/20180904.4.jpg" alt=""> </p>
+<h4 id="2-3-配置监听和创建数据库实例"><a href="#2-3-配置监听和创建数据库实例" class="headerlink" title="2.3. 配置监听和创建数据库实例"></a>2.3. 配置监听和创建数据库实例</h4><p>参考<a href="https://www.cnblogs.com/anzerong2012/p/7940850.html" target="_blank" rel="noopener">https://www.cnblogs.com/anzerong2012/p/7940850.html</a><br>还是用vnc客户端登录，以oracle用户运行netca，照图说明就行了，注意填的值与自己配的环境变量要保持一致。</p>
+<h3 id="3-启动服务"><a href="#3-启动服务" class="headerlink" title="3. 启动服务"></a>3. 启动服务</h3><p>oracle用户下执行登录<code>sqlplus / as sysdba</code>，然后startup</p>
+<h4 id="3-1-ORA-01078"><a href="#3-1-ORA-01078" class="headerlink" title="3.1. ORA-01078"></a>3.1. ORA-01078</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ORA-01078: failure in processing system parameters</span><br><span class="line">LRM-00109: could not open parameter file &#39;&#x2F;u01&#x2F;app&#x2F;oracle&#x2F;product&#x2F;11.1.0&#x2F;db_1&#x2F;dbs&#x2F;initorc11g.ora&#39;</span><br></pre></td></tr></table></figure>
+
+<p>参考<a href="http://blog.itpub.net/128333/viewspace-1026068/" target="_blank" rel="noopener">http://blog.itpub.net/128333/viewspace-1026068/</a><br>在/opt下<code>find -name init.ora.*</code>，可以找到这么一个文件，然后copy到目录/opt/oracle/product/OraHome/dbs下，记得重命名为initorc11g.ora</p>
+<h4 id="3-2-ORA-00845"><a href="#3-2-ORA-00845" class="headerlink" title="3.2. ORA-00845"></a>3.2. ORA-00845</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ORA-00845: MEMORY_TARGET not supported on this system</span><br></pre></td></tr></table></figure>
+
+<p>参考<a href="https://www.linuxidc.com/Linux/2012-12/76976.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2012-12/76976.htm</a><br>大意是：在oracle 11g中新增的内存自动管理的参数MEMORY_TARGET,它能自动调整SGA和PGA，这个特性需要用到/dev/shm共享文件系统，而且要求/dev/shm必须大于MEMORY_TARGET，
+如果/dev/shm比MEMORY_TARGET小就会报错，所以可以增加/dev/shm</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mount -o remount,size&#x3D;16G &#x2F;dev&#x2F;shm</span><br><span class="line"> </span><br><span class="line">vi &#x2F;etc&#x2F;fstab</span><br><span class="line">#添加一行</span><br><span class="line">tmpfs     &#x2F;dev&#x2F;shm      tmpfs  defaults,size&#x3D;16g      0 0</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-ORA-01102"><a href="#3-3-ORA-01102" class="headerlink" title="3.3. ORA-01102"></a>3.3. ORA-01102</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ORA-01102: cannot mount database in EXCLUSIVE mode</span><br></pre></td></tr></table></figure>
+
+<p>参考<a href="https://www.cnblogs.com/fengqingtao/archive/2011/09/28/2194691.html" target="_blank" rel="noopener">https://www.cnblogs.com/fengqingtao/archive/2011/09/28/2194691.html</a> ，可以解决，具体原因没细究</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;sbin&#x2F;fuser -k lkTEST</span><br><span class="line">&#x2F;sbin&#x2F;fuser -u lkTEST</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-乱码问题"><a href="#3-4-乱码问题" class="headerlink" title="3.4. 乱码问题"></a>3.4. 乱码问题</h4><p>一堆问号，我是把/opt/oracle/product/OraHome/dbs/initorcl.ora 就是刚才拷贝的那个文件中的nls_language由SIMPLIFIED CHINESE改成了AMERICAN就好了，
+觉得问题并没有解决，可能是我安装oracle选择的字符集有问题，记得还特意选择了utf8，但是中文还是有乱码。</p>
+<h3 id="4-客户端连接"><a href="#4-客户端连接" class="headerlink" title="4. 客户端连接"></a>4. 客户端连接</h3><ol>
+<li>Oracle Client安装报错:引用数据不可用于验证此操作系统分发的先决条件</li>
+</ol>
+<p>参考<a href="http://www.zhimengzhe.com/shujuku/Oracle/345523.html" target="_blank" rel="noopener">http://www.zhimengzhe.com/shujuku/Oracle/345523.html</a> ，添加win10支持</p>
+<ol start="2">
+<li>监听启动错误</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">TNS-12541: TNS:no listener</span><br><span class="line"> TNS-12560: TNS:protocol adapter error</span><br><span class="line">  TNS-00511: No listener</span><br><span class="line">   Linux Error: 111: Connection refused</span><br></pre></td></tr></table></figure>
+
+<p>参考<a href="https://www.cnblogs.com/xing901022/p/3895719.html" target="_blank" rel="noopener">https://www.cnblogs.com/xing901022/p/3895719.html</a> ，检查/etc/hosts文件，localhost只保留127.0.0.1一个映射</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1   localhost</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[oracle@bogon ~]$ lsnrctl status</span><br><span class="line"> </span><br><span class="line">LSNRCTL for Linux: Version 11.2.0.1.0 - Production on 21-JUN-2018 09:50:55</span><br><span class="line"> </span><br><span class="line">Copyright (c) 1991, 2009, Oracle.  All rights reserved.</span><br><span class="line"> </span><br><span class="line">Connecting to (DESCRIPTION&#x3D;(ADDRESS&#x3D;(PROTOCOL&#x3D;TCP)(HOST&#x3D;192.168.141.21)(PORT&#x3D;1521)))</span><br><span class="line">STATUS of the LISTENER</span><br><span class="line">------------------------</span><br><span class="line">Alias                     LISTENER</span><br><span class="line">Version                   TNSLSNR for Linux: Version 11.2.0.1.0 - Production</span><br><span class="line">Start Date                21-JUN-2018 09:44:27</span><br><span class="line">Uptime                    0 days 0 hr. 6 min. 53 sec</span><br><span class="line">Trace Level               off</span><br><span class="line">Security                  ON: Local OS Authentication</span><br><span class="line">SNMP                      OFF</span><br><span class="line">Listener Parameter File   &#x2F;opt&#x2F;oracle&#x2F;product&#x2F;OraHome&#x2F;network&#x2F;admin&#x2F;listener.ora</span><br><span class="line">Listener Log File         &#x2F;opt&#x2F;oracle&#x2F;diag&#x2F;tnslsnr&#x2F;bogon&#x2F;listener&#x2F;alert&#x2F;log.xml</span><br><span class="line">Listening Endpoints Summary...</span><br><span class="line">  (DESCRIPTION&#x3D;(ADDRESS&#x3D;(PROTOCOL&#x3D;tcp)(HOST&#x3D;192.168.141.21)(PORT&#x3D;1521)))</span><br><span class="line">The listener supports no services</span><br><span class="line">The command completed successfully</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>The listener supports no services</code>，参考<a href="https://blog.csdn.net/jar_java/article/details/51188687" target="_blank" rel="noopener">https://blog.csdn.net/jar_java/article/details/51188687</a> ，通过vnc登录，进行网络配置，oracle用户运行netmgr</p>
+<p><img src="/img/20180904.5.jpg" alt=""> </p>
+<p>添加一个database,再说一遍sid及oracle home要与环境变量及initctl.ora中的值保持一致，然后退出保存就好。</p>
+<ol start="4">
+<li></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Instance &quot;orcl&quot;, status UNKNOWN, has 1 handler(s) for this service...</span><br></pre></td></tr></table></figure>
+
+<p>上面3添加好之后，提示可能会变成这个上面这句话，<br>参考<a href="https://blog.csdn.net/csdnones/article/details/72903344" target="_blank" rel="noopener">https://blog.csdn.net/csdnones/article/details/72903344</a> ，不能直接解决，但思路是一样的，<br>查看提示中的Listener Log File：/opt/oracle/diag/tnslsnr/bogon/listener/alert/log.xml，其中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;txt&gt;</span><br><span class="line">21-JUN-2018 09:44:58 * (CONNECT_DATA&#x3D;(CID&#x3D;(PROGRAM&#x3D;)(HOST&#x3D;bogon)(USER&#x3D;oracle))(COMMAND&#x3D;status)(ARGUMENTS&#x3D;64)(SERVICE&#x3D;LISTENER)(VERSION&#x3D;186646784)) * status * 0</span><br><span class="line">&lt;&#x2F;txt&gt;</span><br></pre></td></tr></table></figure>
+
+<p>于是在/etc/hosts中添加一行映射：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1   localhost</span><br><span class="line">192.168.141.21  bogon</span><br></pre></td></tr></table></figure>
+
+<p>最后再重新启动lsnrctl start ，会看到状态已经变成ready了，这样就可以通过plsql正常连接和操作了。</p>
+<p><img src="/img/20180904.6.jpg" alt=""> </p>
+<h3 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h3><p>虽然安装前已经做好了心理准备，但遇到的问题还是出乎意料的多，即便最终装完可以正常使用了，有些问题还是不太确定，毕竟自己对linux和oracle的认识很浅，
+只是凭着安装过程中的笔记和收藏的博文回忆出这次oracle安装过程及遇到的一些问题，并不代表下次安装就不会出现其他问题。
+不过可以作为一个借鉴，对于遇到的问题，还是要心态好，见招拆招，等到内功深厚了，就可以无所不破了。</p>
+<p><strong>参考：</strong> </p>
+<ol>
+<li><a href="http://www.cnblogs.com/gaojun/archive/2012/11/22/2783257.html" target="_blank" rel="noopener">http://www.cnblogs.com/gaojun/archive/2012/11/22/2783257.html</a></li>
+<li><a href="https://blog.csdn.net/wlzjsj/article/details/52149547" target="_blank" rel="noopener">https://blog.csdn.net/wlzjsj/article/details/52149547</a></li>
+<li><a href="http://www.bubuko.com/infodetail-196827.html" target="_blank" rel="noopener">http://www.bubuko.com/infodetail-196827.html</a></li>
+<li><a href="https://jingyan.baidu.com/article/cbf0e5009ace292eaa2893f4.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/cbf0e5009ace292eaa2893f4.html</a></li>
+<li><a href="https://blog.csdn.net/hzh839900/article/details/79215703" target="_blank" rel="noopener">https://blog.csdn.net/hzh839900/article/details/79215703</a></li>
+<li><a href="https://blog.csdn.net/ghostliming/article/details/51566562" target="_blank" rel="noopener">https://blog.csdn.net/ghostliming/article/details/51566562</a></li>
+<li><a href="https://www.cnblogs.com/anzerong2012/p/7940850.html" target="_blank" rel="noopener">https://www.cnblogs.com/anzerong2012/p/7940850.html</a></li>
+<li><a href="http://blog.itpub.net/128333/viewspace-1026068/" target="_blank" rel="noopener">http://blog.itpub.net/128333/viewspace-1026068/</a></li>
+<li><a href="https://www.linuxidc.com/Linux/2012-12/76976.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2012-12/76976.htm</a></li>
+<li><a href="https://www.cnblogs.com/fengqingtao/archive/2011/09/28/2194691.html" target="_blank" rel="noopener">https://www.cnblogs.com/fengqingtao/archive/2011/09/28/2194691.html</a></li>
+<li><a href="http://www.zhimengzhe.com/shujuku/Oracle/345523.html" target="_blank" rel="noopener">http://www.zhimengzhe.com/shujuku/Oracle/345523.html</a></li>
+<li><a href="https://www.cnblogs.com/xing901022/p/3895719.html" target="_blank" rel="noopener">https://www.cnblogs.com/xing901022/p/3895719.html</a></li>
+<li><a href="https://blog.csdn.net/jar_java/article/details/51188687" target="_blank" rel="noopener">https://blog.csdn.net/jar_java/article/details/51188687</a></li>
+<li><a href="https://blog.csdn.net/csdnones/article/details/72903344" target="_blank" rel="noopener">https://blog.csdn.net/csdnones/article/details/72903344</a> </li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/问题解决/">问题解决</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/centos/">centos</a>, <a href="/tags/oracle/">oracle</a>, <a href="/tags/VNC/">VNC</a>, <a href="/tags/ORA-01078/">ORA-01078</a>, <a href="/tags/ORA-00845/">ORA-00845</a>, <a href="/tags/ORA-01102/">ORA-01102</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: window.location.pathname,
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概括"><span class="toc-text">概括</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-准备"><span class="toc-text">1. 准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-安装"><span class="toc-text">2. 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-安装VNC"><span class="toc-text">2.1. 安装VNC</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-1-VNC乱码问题"><span class="toc-text">2.2.1 VNC乱码问题</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-VNC安装oracle"><span class="toc-text">2.2 VNC安装oracle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-配置监听和创建数据库实例"><span class="toc-text">2.3. 配置监听和创建数据库实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-启动服务"><span class="toc-text">3. 启动服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-ORA-01078"><span class="toc-text">3.1. ORA-01078</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-ORA-00845"><span class="toc-text">3.2. ORA-00845</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-ORA-01102"><span class="toc-text">3.3. ORA-01102</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-乱码问题"><span class="toc-text">3.4. 乱码问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-客户端连接"><span class="toc-text">4. 客户端连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-总结"><span class="toc-text">5. 总结</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

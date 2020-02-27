@@ -1,0 +1,220 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>ubuntu使用yum安装软件问题 | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="概括结论：ubuntu不支持用yum来管理软件安装的，只是自己太无知。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ubuntu使用yum安装软件问题"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20180518" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-05-17T16:00:00.000Z"><a href="/2018/05/18/20180518/">2018-05-18</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">ubuntu使用yum安装软件问题</h1>
+	
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 478 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>结论：ubuntu不支持用yum来管理软件安装的，只是自己太无知。</p>
+<a id="more"></a>
+
+<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p>一开始是想把windows桌面上的文件拖到xshell登录的ubuntu的目录中，但是没成功，参考<a href="https://blog.csdn.net/liuao107329/article/details/49994935" target="_blank" rel="noopener">https://blog.csdn.net/liuao107329/article/details/49994935</a><br>要先安装下lrasz软件，并且作者好心地直接贴出了命令：<code>yum -y install lrasz</code>，于是我也这么干了，但是：</p>
+<p><img src="/img/20180518.1.png" alt=""> </p>
+<p>提示意思应该是没有可用的仓库，确认下确实是没有</p>
+<p><img src="/img/20180518.2.png" alt=""> </p>
+<p>于是创建yum仓库，参考<a href="http://www.178linux.com/39458以及https://blog.csdn.net/qq_26437925/article/details/73693757" target="_blank" rel="noopener">http://www.178linux.com/39458以及https://blog.csdn.net/qq_26437925/article/details/73693757</a><br>大概知道，要添加一个目录作为仓库的话需要在这个目录下编辑一个*.repo文件，看了下yum.conf文件</p>
+<p><img src="/img/20180518.3.png" alt=""> </p>
+<p>于是就到/etc/yum/repos.d下编辑文件了，这地方就是个坑，后面发现了</p>
+<p><img src="/img/20180518.4.png" alt=""> </p>
+<p>再次查看yum仓库，看到：</p>
+<p><img src="/img/20180518.5.png" alt=""> </p>
+<p>但是，仅仅只是解决了仓库问题而已</p>
+<p><img src="/img/20180518.6.png" alt=""> </p>
+<p>其实本来看到404，一直以为自己编辑的文件有问题，搞了很久后来找到一个别人写的很完整的下载过来，单还是不行，<br>后来参考<a href="http://www.opstool.com/article/294" target="_blank" rel="noopener">http://www.opstool.com/article/294</a> ，发现yum要获取当前系统的发行版本，但是它从ubuntu中获取不到，就是下面这个releasever</p>
+<p><img src="/img/20180518.7.png" alt=""> </p>
+<p>对于正常的CentOS系统。执行yum whatprovides redhat-release可以系统的发行版本，但我是ubuntu..</p>
+<p><img src="/img/20180518.8.png" alt=""> </p>
+<p>最后看到这篇<a href="https://blog.csdn.net/luke_wang/article/details/71512530" target="_blank" rel="noopener">https://blog.csdn.net/luke_wang/article/details/71512530</a> ，终于释然了，这个问题只是ubuntu不支持yum而已，linux的各个发行版本是有分派的，
+难怪上面下载的repo文件名上看到centos字眼，人家是给centos用的啊。所以总结是ubuntu装软件apt管理就行了，而在centos上是用yum比较合适。</p>
+<p><strong>参考：</strong>  </p>
+<ol>
+<li><a href="https://blog.csdn.net/liuao107329/article/details/49994935" target="_blank" rel="noopener">https://blog.csdn.net/liuao107329/article/details/49994935</a></li>
+<li><a href="http://www.178linux.com/39458" target="_blank" rel="noopener">http://www.178linux.com/39458</a></li>
+<li><a href="https://blog.csdn.net/qq_26437925/article/details/73693757" target="_blank" rel="noopener">https://blog.csdn.net/qq_26437925/article/details/73693757</a></li>
+<li><a href="http://www.opstool.com/article/294" target="_blank" rel="noopener">http://www.opstool.com/article/294</a></li>
+<li><a href="https://blog.csdn.net/luke_wang/article/details/71512530" target="_blank" rel="noopener">https://blog.csdn.net/luke_wang/article/details/71512530</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/问题解决/">问题解决</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/ubuntu/">ubuntu</a>, <a href="/tags/yum/">yum</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: window.location.pathname,
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概括"><span class="toc-text">概括</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过程"><span class="toc-text">过程</span></a></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
