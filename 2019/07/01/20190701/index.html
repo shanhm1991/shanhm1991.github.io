@@ -107,10 +107,8 @@
 <p><img src="/img/map2.jpg" alt=""> </p>
 <p>有些容器已经很少使用了，比如<code>Hashtable</code>或<code>Vector</code>这种在JDK1.0实现的，基本已经被废弃了，它们实现线程安全的办法比较简单粗暴，
 即通过一个内置锁限制所有对容器的访问和操作。</p>
-<h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p><code>ArrayList</code>与<code>LinkedList</code>是对列表的两种不同实现，前者通过数组，或者通过节点链接数据。     </p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/01/2019-06-01-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.%20%E9%93%BE%E8%A1%A8%E3%80%81%E6%A0%88%E3%80%81%E9%98%9F%E5%88%97/">数据结构. 链表、队列、栈</a> </li>
-</ul>
+<h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p><code>ArrayList</code>与<code>LinkedList</code>是对线性数据结构的两种不同实现，前者通过数组，或者通过节点链接数据。
+List都是有序的，不过它的顺序是放入的顺序，之前也整理过一个排序版的<code>SortedArrayList</code>：<a href="https://shanhm1991.github.io/2019/06/01/20190601/">数据结构. 线性结构</a> </p>
 <p><font color="green">数组的好处在于有位置索引，可以按下标任意访问，并且由于数组在内存上是连续的，因此访问会更快，但前提是元素必须排列紧凑，
 这样在删除元素时就免不了要进行移动，即保证元素在位置上是连续的，不能有空缺，另外由于数组长度不可变，在添加元素也可能需要扩容。</p>
 <p>链表可以弥补数组实现在插入删除上的缺陷，但代价是牺牲查询的效率。尤其是按位置索引进行访问时，它只能从前向后依次计数下标，或者反过来。</font></p>
