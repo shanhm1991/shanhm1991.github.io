@@ -42,7 +42,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -138,16 +138,37 @@
 <h4 id="3-2-应用"><a href="#3-2-应用" class="headerlink" title="3.2. 应用"></a>3.2. 应用</h4><h5 id="3-2-1-java-Connection"><a href="#3-2-1-java-Connection" class="headerlink" title="3.2.1. java Connection"></a>3.2.1. java Connection</h5><p><code>Connection</code>就相当于一个产品族，每种数据库都有自己的一套具体产品，而它们的组成结构是一致的。</p>
 <figure class="highlight java"><figcaption><span class="caption">java.sql.Connection</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Connection</span>  <span class="keyword">extends</span> <span class="title">Wrapper</span>, <span class="title">AutoCloseable</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="function">Statement <span class="title">createStatement</span><span class="params">()</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">PreparedStatement <span class="title">prepareStatement</span><span class="params">(String sql)</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">CallableStatement <span class="title">prepareCall</span><span class="params">(String sql)</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">DatabaseMetaData <span class="title">getMetaData</span><span class="params">()</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">Savepoint <span class="title">setSavepoint</span><span class="params">()</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">Clob <span class="title">createClob</span><span class="params">()</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">Blob <span class="title">createBlob</span><span class="params">()</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">SQLXML <span class="title">createSQLXML</span><span class="params">()</span> <span class="keyword">throws</span> SQLException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>参考：</strong>   </p>
+<p><br><strong>参考：</strong></p>
 <ol>
-<li>《java与模式》 </li>
+<li>《java与模式》</li>
 <li>《Java设计模式》</li>
 </ol>
 
       
     </div>
+	
+	
+	
     <footer>
       
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2017/10/03/20171003/">
+		    设计模式. 建造者模式
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2017/10/01/20171001/">
+		    设计模式. 单例模式
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
         
   
   <div class="categories">

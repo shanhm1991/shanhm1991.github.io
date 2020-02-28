@@ -44,7 +44,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -100,14 +100,36 @@
 <p><code>TimingThreadPool</code>中给出了一个自定义的线程池，通过<code>beforeExecute</code>、<code>afterExecute</code>、<code>terminated</code>等方法来添加日志记录和统计信息收集。为了测量任务的运行时间，<code>beforeExecute</code>必须记录开始时间并把它保存到一个<code>afterExecute</code>可用访问的地方。
 因为这些方法将在执行任务的线程中调用，因此<code>beforeExecute</code>可以把值保存到一个<code>ThreadLocal</code>变量中。然后由<code>afterExecute</code>来取。在<code>TimingThreadPool</code>中使用了两个<code>AtomicLong</code>变量，分别用于记录已处理的任务和总的处理时间，
 并在<code>terminated</code>中计算任务的平均时间。</p>
-<ul>
+<p><br><strong>参考：</strong> </p>
+<ol>
 <li>Copyright&nbsp;&copy;《java并发编程实战》</li>
-</ul>
+</ol>
 
       
     </div>
+	
+	
+	
     <footer>
       
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2019/01/08/20190108/">
+		    java并发编程实战.笔记八（活跃性问题以及性能思考）
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2019/01/06/20190106/">
+		    java并发编程实战.笔记六（任务的取消与关闭）
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
         
   
   <div class="categories">

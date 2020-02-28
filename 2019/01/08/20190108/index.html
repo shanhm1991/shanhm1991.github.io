@@ -42,7 +42,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -137,14 +137,36 @@ jvm会将它的对象内存分配在当前线程的栈空间上，那么就可�
 因为如果线程从对象池中请求一个对象，需要通过某种同步来协调对对象池数据结构的访问，从而可能使某个线程阻塞。而这种阻塞的开销将是构造对象时内存分配操作的数百倍。因此即使能保证对象池带来的竞争很小，也可能形成一个可伸缩性瓶颈。</p>
 <p>所以，<font color="red">通常对象分配操作的开销比同步的开销更低。对象池有其特定的用途，但对于性能优化来说，用途是有限的。</font><font color="Gray">之前在写一些工具类时总是尽量使用对象池，而且通常是一些不带数据的轻量级对象。
 直觉上想当然以为将对象缓存起来重复利用，以便能省掉一些对象的构造和回收，能让程序更好</font>。</p>
-<ul>
+<p><br><strong>参考：</strong> </p>
+<ol>
 <li>Copyright&nbsp;&copy;《java并发编程实战》</li>
-</ul>
+</ol>
 
       
     </div>
+	
+	
+	
     <footer>
       
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2019/01/09/20190109/">
+		    java并发编程实战.笔记九（显式锁的使用）
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2019/01/07/20190107/">
+		    java并发编程实战.笔记七（线程池的使用）
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
         
   
   <div class="categories">

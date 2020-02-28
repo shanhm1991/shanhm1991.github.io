@@ -88,7 +88,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -255,7 +255,7 @@ data sent.</p>
 <h3 id="2-3-mybatis-ErrorContext"><a href="#2-3-mybatis-ErrorContext" class="headerlink" title="2.3. mybatis ErrorContext"></a>2.3. mybatis ErrorContext</h3><p>ErrorContext类，通过ThreadLocal管理实例，保证线程安全，一个线程一个ErrorContext对象。</p>
 <figure class="highlight java"><figcaption><span class="caption">org.apache.ibatis.executor.ErrorContext</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ErrorContext</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;ErrorContext&gt; LOCAL = <span class="keyword">new</span> ThreadLocal&lt;ErrorContext&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">ErrorContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ErrorContext <span class="title">instance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ErrorContext context = LOCAL.get();</span><br><span class="line">        <span class="keyword">if</span> (context == <span class="keyword">null</span>) &#123;</span><br><span class="line">          context = <span class="keyword">new</span> ErrorContext();</span><br><span class="line">          LOCAL.set(context);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> context;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>参考：</strong>   </p>
+<p><br><strong>参考：</strong></p>
 <ol>
 <li>《java与模式》    </li>
 <li>《java并发编程实战》    </li>
@@ -267,8 +267,29 @@ data sent.</p>
 
       
     </div>
+	
+	
+	
     <footer>
       
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2017/10/02/20171002/">
+		    设计模式. 工厂模式
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2017/08/31/20170831/">
+		    java基础. 泛型
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
         
   
   <div class="categories">

@@ -44,7 +44,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -157,14 +157,36 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
 <p>方式1通常是最简单和最安全的方式，即使用静态的初始化器发布一个静态对象，比如<code>public static Holeder holder = new Holder(4);</code>因为静态初始化器由jvm在类的初始化阶段执行，
 由于jvm内部存在着同步机制，因此通过这种方式初始化的任何对象都可以被安全的发布。方式4的做法通常是将对象放入一个线程安全的容器中，如果线程T1将对象放入一个线程安全的容器，
 随后线程T2获取这个对象，那么不再需要额外的同步。</p>
-<ul>
+<p><br><strong>参考：</strong> </p>
+<ol>
 <li>Copyright&nbsp;&copy;《java并发编程实战》</li>
-</ul>
+</ol>
 
       
     </div>
+	
+	
+	
     <footer>
       
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2019/01/03/20190103/">
+		    java并发编程实战.笔记三（线程安全类的设计）
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2019/01/01/20190101/">
+		    java并发编程实战.笔记一（线程安全之原子性）
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
         
   
   <div class="categories">

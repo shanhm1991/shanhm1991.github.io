@@ -42,7 +42,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -112,15 +112,36 @@
 <figure class="highlight java"><figcaption><span class="caption">org.apache.ibatis.builder.xml.XMLConfigBuilder</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XMLConfigBuilder</span> <span class="keyword">extends</span> <span class="title">BaseBuilder</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Configuration <span class="title">parse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (parsed) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BuilderException(<span class="string">"Each XMLConfigBuilder can only be used once."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		parsed = <span class="keyword">true</span>;</span><br><span class="line">		parseConfiguration(parser.evalNode(<span class="string">"/configuration"</span>));</span><br><span class="line">		<span class="keyword">return</span> configuration;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">parseConfiguration</span><span class="params">(XNode root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">//issue #117 read properties first</span></span><br><span class="line">			propertiesElement(root.evalNode(<span class="string">"properties"</span>));</span><br><span class="line">			Properties settings = settingsAsProperties(root.evalNode(<span class="string">"settings"</span>));</span><br><span class="line">			loadCustomVfs(settings);</span><br><span class="line">			typeAliasesElement(root.evalNode(<span class="string">"typeAliases"</span>));</span><br><span class="line">			pluginElement(root.evalNode(<span class="string">"plugins"</span>));</span><br><span class="line">			objectFactoryElement(root.evalNode(<span class="string">"objectFactory"</span>));</span><br><span class="line">			objectWrapperFactoryElement(root.evalNode(<span class="string">"objectWrapperFactory"</span>));</span><br><span class="line">			reflectorFactoryElement(root.evalNode(<span class="string">"reflectorFactory"</span>));</span><br><span class="line">			settingsElement(settings);</span><br><span class="line">			<span class="comment">// read it after objectFactory and objectWrapperFactory issue #631</span></span><br><span class="line">			environmentsElement(root.evalNode(<span class="string">"environments"</span>));</span><br><span class="line">			databaseIdProviderElement(root.evalNode(<span class="string">"databaseIdProvider"</span>));</span><br><span class="line">			typeHandlerElement(root.evalNode(<span class="string">"typeHandlers"</span>));</span><br><span class="line">			mapperElement(root.evalNode(<span class="string">"mappers"</span>));</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BuilderException(<span class="string">"Error parsing SQL Mapper Configuration. Cause: "</span> + e, e);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><code>parse</code>方法最终返回一个<code>Configuration</code>，构建<code>Configuration</code>对象的建造过程都在<code>parseConfiguration</code>方法中，这也就是 Mybatis解析XML配置文件的主要过程了。</p>
-<p><strong>参考：</strong>   </p>
+<p><br><strong>参考：</strong></p>
 <ol>
 <li>《java与模式》 </li>
 </ol>
 
       
     </div>
+	
+	
+	
     <footer>
       
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2017/10/04/20171004/">
+		    设计模式. 原型模式
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2017/10/02/20171002/">
+		    设计模式. 工厂模式
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
         
   
   <div class="categories">

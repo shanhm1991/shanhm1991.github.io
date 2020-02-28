@@ -45,7 +45,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  41 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -165,14 +165,36 @@ Vector是因为在规范中定义了它的同步策略，所以不存在问题�
 <p><code>ExtendList</code>通过将操作委托给底层的<code>List</code>实例来实现，同时添加一个原子的<code>putIfAbsent</code>方法。其实这里就是使用了监视器模式来封装现有的<code>list</code>，
 <code>ExtendList</code>通过自身的内置锁增加了一层额外的锁,因此不再需要关心底层<code>List</code>是否线程安全，即使不是线程安全或修改了加锁的实现，<code>ExtendList</code>也能提供一致的加锁机制来实现线程安全性。
 虽然额外的同步层可能导致轻微的性能损失，但与模仿另一个对象的加锁策略相比，它更为健壮。</p>
-<ul>
+<p><br><strong>参考：</strong> </p>
+<ol>
 <li>Copyright&nbsp;&copy;《java并发编程实战》</li>
-</ul>
+</ol>
 
       
     </div>
+	
+	
+	
     <footer>
       
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2019/01/04/20190104/">
+		    java并发编程实战.笔记四（线程安全性的委托以及常见的线程安全容器和工具）
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2019/01/02/20190102/">
+		    java并发编程实战.笔记二（线程安全之可见性以及对象的发布）
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
         
   
   <div class="categories">
