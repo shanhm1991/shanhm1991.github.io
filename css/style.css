@@ -802,11 +802,12 @@ table {
   display: inline-block;
 }
 .marked {
+  width: 100%;
   background: #d6d6d6;
 }
 figcaption {
-  padding-left: 5px;
-  padding-top: 5px;
+  padding-left: 8px;
+  padding-top: 2px;
   border-bottom: 1px solid #ddd;
 }
 pre .comment,

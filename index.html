@@ -77,7 +77,11 @@
     </header>
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p>前面<code>HashMap</code>中只是用红黑树来作为散列表中发生冲突时降低节点遍历深度的一个手段，而<code>TreeMap</code>则完全是对红黑树的一个直接应用，
+因此它是有序的且查找深度不超过2lg(N+1)。前面<code>LinkedHashMap</code>中的有序是指插入的先后顺序，与<code>List</code>一样，而<code>TreeMap</code>是大小比较关系上的有序。
+其实关于红黑树之前都说过了，也利用红黑树实现了一个可以存放重复key的<code>MultiRBTreeMap</code>，可以看成<code>TreeMap</code>的扩展，只是没有完善所有接口，
+想法就是在红黑树的基础上再维护一个链表结构，具体可以见：<a href="https://shanhm1991.github.io/2019/06/10/20190610/">数据结构. 红黑树</a>     </p>
+<p>至于<code>Set</code>的各种实现，比较简单，就是依赖其对应的<code>Map</code>，将存在的元素作为Map的keySet，用一个简单对象作为统一的value，这样就将具体的操作和实现都委托给了Map。</p>
       
     </div>
 	
