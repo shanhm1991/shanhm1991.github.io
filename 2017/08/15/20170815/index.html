@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>java基础. 字符串 | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言String对象是Java中使用最频繁的对象之一，它本质上是维护了一个char数组，并提供了基于这个字节数组的一些操作。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="java基础. 字符串"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  44 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20170815" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-08-14T16:00:00.000Z"><a href="/2017/08/15/20170815/">2017-08-15</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">java基础. 字符串</h1>
+	
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 2k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>String对象是Java中使用最频繁的对象之一，它本质上是维护了一个char数组，并提供了基于这个字节数组的一些操作。</p>
+<a id="more"></a>
+
+<h3 id="1-不可变String"><a href="#1-不可变String" class="headerlink" title="1. 不可变String"></a>1. 不可变String</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-1-属性"><a href="#1-1-属性" class="headerlink" title="1.1. 属性"></a>1.1. 属性</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[]; <span class="comment">//不可变</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> hash; <span class="comment">// Default to 0</span></span><br></pre></td></tr></table></figure>
+
+<p>Java的开发者们一直在不断地对String的实现进行优化</p>
+<p><img src="/img/20170815.1.jpg" alt=""> </p>
+<p>在Java6以及之前版本中，String对象是对char数组进行了封装实现的对象，其主要有4个成员成员变量，分别是char数组、偏移量offset、
+字符数量count和哈希值hash。String对象是通过offset和count两个属性来定位char[]数组，获取字符串。这样做可以高效、
+快速地共享数组对象，同时节省内存空间，但是这种方式却可能会导致内存泄漏的发生。</p>
+<p>从Java7版本开始，Java对String类做了一些改变，具体是String类不再有offset和count两个变量了。
+这样做的好处是String对象占用的内存稍微少了点，同时String.substring()方法也不再共享char[]了，
+从而解决了使用该方法可能导致的内存泄漏问题。</p>
+<p>从Java9版本开始，Java将char[]数组改为了byte[]数组。我们都知道，char是两个字节的，
+如果用来存一个字节的情况下就会造成内存空间的浪费。而为了节约这一个字节的空间，
+Java开发者就改成了一个使用一个字节的byte来存储字符串。<br>另外，在Java9中，String对象维护了一个新的属性coder，这个属性是编码格式的标识，在计算字符串长度或者调用indexOf()方法的时候，
+会需要根据这个字段去判断如何计算字符串长度。coder属性默认有0和1两个值，其中0代表Latin-1（单字节编码），1则表示UTF-16编码。</p>
+<h3 id="2-字符串常量池"><a href="#2-字符串常量池" class="headerlink" title="2. 字符串常量池"></a>2. 字符串常量池</h3><p>java中所有的类共享一个字符串常量池<code>stringtable</code>，里面保存了字符串的引用，其相当于一个固定容量的HashMap,
+每个bucket下面包含着相同hash的string链表。</p>
+<p>在java6的早期版本中，常量池大小是个常量，在Java6u30和Java6u41版本之间变得可配置，默认大小为1009，
+可以通过参数<code>-XX:StringTableSize=N</code>指定，基于性能考虑，N最好是质数。<br>问题是java6将字符串常量池放在永久代<code>PermGen</code>中，虽然<code>PermGen</code>大小也可以通过<code>-XX:MaxPermSize=N</code>设置，
+但是其大小在运行时固定不可改变，这很容易造成内存溢出。因此在Java6时代，很多字符串常量池都通过手动维护的Maps来实现。</p>
+<p>Java7对字符串池化的作了一些改变——将字符串常量池移动到了堆中。这意味着字符串常量池不会再被一块固定大小的内存区域所限制，
+而是大多数常规对象一样，所有的Strings现在会处于堆中。<br>在java7u40版本中，将字符串常量池默认大小增加到了60013，你可以在其中缓存约30000不同的strings而不发生碰撞。
+一般来说，这已经足够你用来缓存有效数据了，当然也可以使用参数<code>-XX:StringTableSize=N</code>设置，
+也可以使用参数<code>+PrintFlagsFinalJVM</code>来获取这个值。</p>
+<p>Java8直接废弃了永久代，不过字符串常量池的位置没变，还是在堆中，参数也都没有变化。
+如果不确定字符串常量池的使用情况，可以使用参数<code>-XX:+PrintStringTableStatics</code>，它将在程序结束时打印出字符串常量池的使用情况。</p>
+<p>另外，字符串常量池中的所有对象在没有被GC roots引用的情况下都可以被回收，这个结论适用于我们讨论的所有Java版本。</p>
+<h4 id="2-1-字符串构造"><a href="#2-1-字符串构造" class="headerlink" title="2.1. 字符串构造"></a>2.1. 字符串构造</h4><h5 id="2-1-1-字面量法"><a href="#2-1-1-字面量法" class="headerlink" title="2.1.1. 字面量法"></a>2.1.1. 字面量法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"abc"</span>;</span><br></pre></td></tr></table></figure>
+<p>这种方法首先从常量池中查找是否有相同值的字符串对象，如果有，则直接将对象地址赋予引用变量；如果没有，
+在首先在常量池区域中创建一个新的字符串对象，然后将地址赋予引用变量。</p>
+<p><font color="red">要注意的是，凡是有双引号括起字符串的地方都会相当于一个字符串对象的创建。</font> </p>
+<h5 id="2-1-2-构造器创建"><a href="#2-1-2-构造器创建" class="headerlink" title="2.1.2. 构造器创建"></a>2.1.2. 构造器创建</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>看上去与一般的对象实例化好像一样，但其实它相当于构造了两个对象，首先在字符串常量池创建了一个字面量，
+然后又用这个字面量在堆上new了一个String实例，相当于：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"abc"</span>;</span><br><span class="line">String str = <span class="keyword">new</span> String(a); <span class="comment">//str != a</span></span><br></pre></td></tr></table></figure>
+
+<p>如果看String类的构造器，可以发现其接收的参数本身已经是一个String了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = original.value;</span><br><span class="line">    <span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-String-intern"><a href="#2-2-String-intern" class="headerlink" title="2.2. String.intern"></a>2.2. String.intern</h4><p>有两种方法可以将字符串放入字符串常量池，一种是上面的字面量方式直接在字符串常量池中创建；另一种就是String.intern()，
+将不在常量池中的字符串放入池中。</p>
+<p>此方法在不同JDK版本中的行为有些区别：<br>JDK1.6中，String.intern()会把首次遇到的字符串实例复制到永久代中，然后返回永久代中这个字符串实例的引用；<br>JDK1.7后，String.intern()的实现不会再复制实例，只是在常量池中记录一个引用，指向首次出现的字符串实例；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str1 = <span class="keyword">new</span> StringBuilder(<span class="string">"计算机"</span>).append(<span class="string">"软件"</span>).toString(); <span class="comment">//首次出现</span></span><br><span class="line">System.out.println(str1.intern() == str1);</span><br><span class="line"></span><br><span class="line">String str2 = <span class="keyword">new</span> StringBuilder(<span class="string">"Java(TM) SE "</span>).append(<span class="string">"Runtime Environment"</span>).toString(); <span class="comment">//常量池已存在</span></span><br><span class="line">System.out.println(str2.intern() == str2);</span><br></pre></td></tr></table></figure>
+
+<p>所以对于以上语句，如果在1.6中，将返回两个false，而在1.7中，将返回true和false。</p>
+<p>另外，再结合2.1看一下下面的问题，由于字面量构造，test2将不符合首次出现原则，因此返回false。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> StringBuilder(<span class="string">"test"</span>).append(<span class="string">"1"</span>).toString();</span><br><span class="line">System.out.println(s.intern() == s); <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"test2"</span>);</span><br><span class="line">System.out.println(s1.intern() == s1); <span class="comment">//false</span></span><br></pre></td></tr></table></figure>
+
+<p>可以<code>javap -c -l XXX</code>看一下具体的指令，就能发现上面的代码创建了3个字符串<code>test</code>,<code>1</code>,<code>test2</code>并且加载到了字符串常量池，
+（指令ldc：load constant），但是没有创建<code>test1</code>，因此，最终<code>s.intern</code>与<code>s</code>一样指向第一次出现的由StringBuilder创建的实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">  public static void main(java.lang.String[]) throws java.lang.InterruptedExcept</span><br><span class="line">ion, java.io.IOException;</span><br><span class="line">    Code:</span><br><span class="line">       0: new           #21    &#x2F;&#x2F; class java&#x2F;lang&#x2F;StringBuilder</span><br><span class="line">       3: dup</span><br><span class="line marked">       4: ldc           #23    &#x2F;&#x2F; String test</span><br><span class="line">       6: invokespecial #25    &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.&quot;&lt;init&gt;&quot;:(Ljava&#x2F;lang&#x2F;String;)V</span><br><span class="line marked">       9: ldc           #28    &#x2F;&#x2F; String 1</span><br><span class="line">      11: invokevirtual #30    &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.append:(Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;StringBuilder;</span><br><span class="line">      14: invokevirtual #34    &#x2F;&#x2F; Method java&#x2F;lang&#x2F;StringBuilder.toString:()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">      17: astore_1</span><br><span class="line">      18: getstatic     #38    &#x2F;&#x2F; Field java&#x2F;lang&#x2F;System.out:Ljava&#x2F;io&#x2F;PrintStream;</span><br><span class="line">      21: aload_1</span><br><span class="line">      22: invokevirtual #44    &#x2F;&#x2F; Method java&#x2F;lang&#x2F;String.intern:()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">      25: aload_1</span><br><span class="line">      26: if_acmpne     33</span><br><span class="line">      29: iconst_1</span><br><span class="line">      30: goto          34</span><br><span class="line">      33: iconst_0</span><br><span class="line">      34: invokevirtual #49    &#x2F;&#x2F; Method java&#x2F;io&#x2F;PrintStream.println:(Z)V</span><br><span class="line">      37: new           #45    &#x2F;&#x2F; class java&#x2F;lang&#x2F;String</span><br><span class="line">      40: dup</span><br><span class="line marked">      41: ldc           #55    &#x2F;&#x2F; String test2</span><br><span class="line">      43: invokespecial #57    &#x2F;&#x2F; Method java&#x2F;lang&#x2F;String.&quot;&lt;init&gt;&quot;:(Ljava&#x2F;lang&#x2F;String;)V</span><br><span class="line">      46: astore_2</span><br><span class="line">      47: getstatic     #38    &#x2F;&#x2F; Field java&#x2F;lang&#x2F;System.out:Ljava&#x2F;io&#x2F;PrintStream;</span><br><span class="line">      50: aload_2</span><br><span class="line">      51: invokevirtual #44    &#x2F;&#x2F; Method java&#x2F;lang&#x2F;String.intern:()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">      54: aload_2</span><br><span class="line">      55: if_acmpne     62</span><br><span class="line">      58: iconst_1</span><br><span class="line">      59: goto          63</span><br><span class="line">      62: iconst_0</span><br><span class="line">      63: invokevirtual #49    &#x2F;&#x2F; Method java&#x2F;io&#x2F;PrintStream.println:(Z)V</span><br><span class="line">      66: return</span><br><span class="line">    LineNumberTable:</span><br><span class="line">      line 19: 0</span><br><span class="line">      line 20: 18</span><br><span class="line">      line 23: 37</span><br><span class="line">      line 24: 47</span><br><span class="line">      line 64: 66</span><br><span class="line">    LocalVariableTable:</span><br><span class="line">      Start  Length  Slot  Name   Signature</span><br><span class="line">          0      67     0  args   [Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">         18      49     1     s   Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">         47      20     2    s1   Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><br><strong>参考：</strong></p>
+<ol>
+<li>《Java编程思想》</li>
+<li><a href="https://www.jianshu.com/p/6f92d743e4c4" target="_blank" rel="noopener">https://www.jianshu.com/p/6f92d743e4c4</a></li>
+<li><a href="https://www.jianshu.com/p/8ab48b990870" target="_blank" rel="noopener">https://www.jianshu.com/p/8ab48b990870</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1329311" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1329311</a> </li>
+</ol>
+
+      
+    </div>
+	
+	
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2017/08/31/20170831/">
+		    java基础. 泛型
+		  </a>
+	  
+	  
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/java基础/">java基础</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/字符串/">字符串</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-不可变String"><span class="toc-text">1. 不可变String</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-属性"><span class="toc-text">1.1. 属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-字符串常量池"><span class="toc-text">2. 字符串常量池</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-字符串构造"><span class="toc-text">2.1. 字符串构造</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-1-字面量法"><span class="toc-text">2.1.1. 字面量法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-构造器创建"><span class="toc-text">2.1.2. 构造器创建</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-String-intern"><span class="toc-text">2.2. String.intern</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

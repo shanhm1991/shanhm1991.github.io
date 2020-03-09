@@ -50,7 +50,7 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  44 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -84,7 +84,7 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 3.8k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+<font style="color: #999;">words: 4k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
 
     </header>
     <div class="e-content entry" itemprop="articleBody">
@@ -183,9 +183,17 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? extends Fruit&gt; list = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</span><br><span class="line">Apple apple = (Apple)list.get(<span class="number">0</span>);</span><br><span class="line">list.add(<span class="keyword">new</span> Apple()); <span class="comment">//compile error</span></span><br></pre></td></tr></table></figure>
 
 <p>这里<font color="red"><code>List&lt;? extends Fruit&gt;</code>表示List将持有Fruit的某种具体的子类型，只是为了向上转型，并不关心它具体是哪种子类型。<br>一旦执行这种向上转型，将丢失向其中传递任何对象的能力，甚至传递Object也不行。因为编译器已经无法不知道List可以持有的具体类型，
-因此它将直接拒绝对参数列表中涉及通配符方法的调用。</font>
-这就可以解释为什么上面ArrayList中的<code>remove</code>、<code>contains</code>、<code>indexof</code>等方法的参数是Object了，
-因为这样当泛型参数涉及通配符时它们才不受影响。不过，如果是从list中get元素的话，那么可以确定返回的至少是一个Fruit。</p>
+因此它将直接拒绝对参数列表中涉及通配符方法的调用。</font>不过，如果是返回参数的话，比如get，那么可以确定通配符代表的至少是一个Fruit。</p>
+<p>这就可以解释为什么上面ArrayList中的<code>remove</code>、<code>contains</code>、<code>indexof</code>等方法的参数是Object了，
+只有这样这些方法的调用才能不受泛型通配符的影响。<br>另外，这些方法都有一个共同点，即它们的行为只依赖equals的执行结果，而equals并不要求必须是相同的类型，每个类都可以自定义自己equals的实现，
+所以如果用参数类型作为方法参数反而限制了方法的语义。比如对于<code>ArrayList</code>与<code>LinkedList</code>，它们的<code>equals</code>都在<code>AbstractList</code>中实现，
+只要集合中的元素一样就成立，并不区分是哪种子类型。解释来自
+<a href="https://stackoverflow.com/questions/857420/what-are-the-reasons-why-map-getobject-key-is-not-fully-generic" target="_blank" rel="noopener">stackoverflow</a></p>
+<blockquote>
+<p>As mentioned by others, the reason why get(), etc. is not generic because the key of the entry you are retrieving does not have to be 
+the same type as the object that you pass in to get(); the specification of the method only requires that they be equal. This follows 
+from how the equals() method takes in an Object as parameter, not just the same type as the object.</p>
+</blockquote>
 <h4 id="5-2-super"><a href="#5-2-super" class="headerlink" title="5.2. super"></a>5.2. super</h4><p>使用超类型通配符可以解决上面list的问题，即声明通配符是由某个特定类的任何基类来界定的，比如</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? <span class="keyword">super</span> Fruit&gt; list = <span class="keyword">new</span> ArrayList&lt;Fruit&gt;();</span><br><span class="line">list.add(<span class="keyword">new</span> Fruit()); </span><br><span class="line">list.add(<span class="keyword">new</span> Orange()); </span><br><span class="line">list.add(<span class="keyword">new</span> Apple());  </span><br><span class="line">Object fruit = list.get(<span class="number">0</span>);</span><br><span class="line">Apple apple = (Apple)list.get(<span class="number">1</span>); <span class="comment">//ClassCastException</span></span><br></pre></td></tr></table></figure>
 
@@ -206,12 +214,10 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; <span class="function">T <span class="title">max</span><span class="params">(Collection&lt;? extends T&gt; Collection)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><br><strong>参考：</strong></p>
-<blockquote>
-<ul>
+<ol>
 <li>《Java编程思想》</li>
 <li><a href="https://www.cnblogs.com/sanzao/p/10415035.html" target="_blank" rel="noopener">https://www.cnblogs.com/sanzao/p/10415035.html</a></li>
-</ul>
-</blockquote>
+</ol>
 
       
     </div>
@@ -224,11 +230,15 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
 	    
 	<nav id="pagination">
 	  
-		  <a class="alignleft prev" href="/2017/10/01/20171001/">
-		    设计模式. 单例模式
+		  <a class="alignleft prev" href="/2017/09/01/20170901/">
+		    java基础. 异常
 		  </a>
 	  
 	  
+	  
+		  <a class="alignright next" href="/2017/08/15/20170815/">
+		    java基础. 字符串
+		  </a>
 	  
 	  <div class="clearfix"></div>
 	</nav>

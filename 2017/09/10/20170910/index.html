@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>java容器Api. ArrayList与LinkedList | Essay</title>
+  <title>java基础. 容器一. ArrayList与LinkedList | Essay</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言java中的容器就是对各种数据结构的实现，按照接口实现可以分为Collection和Map。也可以按照是否线程安全来进行划分，
 比如JDK1.5之后，在concurrent包下面加了很多线程安全的容器，这些放在以后再整理，因为它们的实现或多或少都依赖了一些多线程api。
+另外，在阅读各种容器工具的源码之前，最好先了解下关于java泛型的一些内容：java基础. 泛型  
 这里只介绍一些常见的基本容器，它们对于并发修改会及时反馈一个异常ConcurrentModificationException，其实是通过记一个修改次数来实现的，
 比如在某些操作过程中检测到修改次数与操作开始时不一样，那么立即结束操作并反馈异常给调用者。事实上，这个异常在单线程环境下也会触发，
 比如在迭代期间通过迭代器自身之外的方法修改容器，不管修改是不是来自同一个线程，因此需要注意。">
@@ -15,7 +16,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="java容器Api. ArrayList与LinkedList"/>
+  <meta property="og:title" content="java基础. 容器一. ArrayList与LinkedList"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -46,7 +47,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  42 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  44 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -64,35 +65,34 @@
 <div class="clearfix"></div>
 </header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20190701" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20170910" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-30T16:00:00.000Z"><a href="/2019/07/01/20190701/">2019-07-01</a></time>
+        <time class="dt-published" datetime="2017-09-09T16:00:00.000Z"><a href="/2017/09/10/20170910/">2017-09-10</a></time>
 	  
       
   
-    <h1 class="p-name title" itemprop="headline name">java容器Api. ArrayList与LinkedList</h1>
+    <h1 class="p-name title" itemprop="headline name">java基础. 容器一. ArrayList与LinkedList</h1>
 	<div class="title" style="padding: 5px 0px 20px 10px; color: #766;">———— jdk 1.8</div> 
   
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 2.8k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+<font style="color: #999;">words: 2.9k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
 
     </header>
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java中的容器就是对各种数据结构的实现，按照接口实现可以分为<code>Collection</code>和<code>Map</code>。也可以按照是否线程安全来进行划分，
-比如JDK1.5之后，在<code>concurrent</code>包下面加了很多线程安全的容器，这些放在以后再整理，因为它们的实现或多或少都依赖了一些多线程api。
-这里只介绍一些常见的基本容器，它们对于并发修改会及时反馈一个异常<code>ConcurrentModificationException</code>，其实是通过记一个修改次数来实现的，
+比如JDK1.5之后，在<code>concurrent</code>包下面加了很多线程安全的容器，这些放在以后再整理，因为它们的实现或多或少都依赖了一些多线程api。</p>
+<p>另外，在阅读各种容器工具的源码之前，最好先了解下关于java泛型的一些内容：<a href="https://shanhm1991.github.io/2017/08/31/20170831/">java基础. 泛型</a>  </p>
+<p>这里只介绍一些常见的基本容器，它们对于并发修改会及时反馈一个异常<code>ConcurrentModificationException</code>，其实是通过记一个修改次数来实现的，
 比如在某些操作过程中检测到修改次数与操作开始时不一样，那么立即结束操作并反馈异常给调用者。事实上，这个异常在单线程环境下也会触发，
-比如在迭代期间通过迭代器自身之外的方法修改容器，不管修改是不是来自同一个线程，因此需要注意。  </p>
-<a id="more"></a>
-
-<p>可以画一个图看下java容器类库的大概结构：</p>
+比如在迭代期间通过迭代器自身之外的方法修改容器，不管修改是不是来自同一个线程，因此需要注意。<br> <a id="more"></a></p>
+<p>这里通过画图先看下java容器类库的大概结构：</p>
 <p>1、Collection</p>
 <p><img src="/img/collection.jpg" alt=""></p>
 <ul>
@@ -109,9 +109,12 @@
 即通过一个内置锁限制所有对容器的访问和操作。</p>
 <h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p><code>ArrayList</code>与<code>LinkedList</code>是对线性数据结构的两种不同实现，前者通过数组，或者通过节点链接数据。
 List都是有序的，不过它的顺序是放入的顺序，之前也整理过一个排序版的<code>SortedArrayList</code>：<a href="https://shanhm1991.github.io/2019/06/01/20190601/">数据结构. 线性结构</a> </p>
-<p><font color="green">数组的好处在于有位置索引，可以按下标任意访问，并且由于数组在内存上是连续的，因此访问会更快，但前提是元素必须排列紧凑，
-这样在删除元素时就免不了要进行移动，即保证元素在位置上是连续的，不能有空缺，另外由于数组长度不可变，在添加元素也可能需要扩容。</p>
-<p>链表可以弥补数组实现在插入删除上的缺陷，但代价是牺牲查询的效率。尤其是按位置索引进行访问时，它只能从前向后依次计数下标，或者反过来。</font></p>
+<font color="green">
+数组的好处在于有位置索引，可以按下标任意访问，并且由于数组在内存上是连续的，因此访问会更快，但前提是元素必须排列紧凑，
+这样在删除元素时就免不了要进行移动，即保证元素在位置上是连续的，不能有空缺，另外由于数组长度不可变，在添加元素也可能需要扩容。
+
+<p>链表可以弥补数组实现在插入删除上的缺陷，但代价是牺牲查询的效率。尤其是按位置索引进行访问时，它只能从前向后依次计数下标，或者反过来。
+</font></p>
 <h3 id="2-ArrayList"><a href="#2-ArrayList" class="headerlink" title="2. ArrayList"></a>2. ArrayList</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br></pre></td></tr></table></figure>
 
 <h4 id="2-1-属性"><a href="#2-1-属性" class="headerlink" title="2.1. 属性"></a>2.1. 属性</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认容量，其实是第一次扩容的最小容量</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//最大容量，超过这个长度可能导致内存溢出，因此，相当于提前检查，</span></span><br><span class="line"><span class="comment">//如果没有溢出就将长度放开到Integer.MAX_VALUE，因为有的VM可能会将数组中保存一些头信息</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_ARRAY_SIZE = Integer.MAX_VALUE - <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//空数组</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//实际存放元素的数组</span></span><br><span class="line"><span class="keyword">transient</span> Object[] elementData;</span><br><span class="line"></span><br><span class="line"><span class="comment">//元素总数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> size;</span><br></pre></td></tr></table></figure>
@@ -158,14 +161,14 @@ List都是有序的，不过它的顺序是放入的顺序，之前也整理过�
 	    
 	<nav id="pagination">
 	  
-		  <a class="alignleft prev" href="/2019/07/02/20190702/">
-		    java容器Api. HashMap与LinkedHashMap
+		  <a class="alignleft prev" href="/2017/09/11/20170911/">
+		    java基础. 容器二. HashMap与LinkedHashMap
 		  </a>
 	  
 	  
 	  
-		  <a class="alignright next" href="/2019/06/30/20190630/">
-		    基于poi包装一个简单的Excel读取器.三（Excel解析示例）
+		  <a class="alignright next" href="/2017/09/01/20170901/">
+		    java基础. 异常
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -175,7 +178,7 @@ List都是有序的，不过它的顺序是放入的顺序，之前也整理过�
         
   
   <div class="categories">
-    <a href="/categories/java源码/">java源码</a>
+    <a href="/categories/java基础/">java基础</a>
   </div>
 
         
