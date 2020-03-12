@@ -203,9 +203,9 @@
     </tr >
 </table>
 
-<h3 id="1-1-魔数与版本号"><a href="#1-1-魔数与版本号" class="headerlink" title="1.1. 魔数与版本号"></a>1.1. 魔数与版本号</h3><p>很多文件存储标准都使用魔数来进行身份识别，比如图片格式gif或者jepg，使用魔数而不是扩展名来进行识别主要是基于安全方面的考虑，
+<h4 id="1-1-魔数与版本号"><a href="#1-1-魔数与版本号" class="headerlink" title="1.1. 魔数与版本号"></a>1.1. 魔数与版本号</h4><p>很多文件存储标准都使用魔数来进行身份识别，比如图片格式gif或者jepg，使用魔数而不是扩展名来进行识别主要是基于安全方面的考虑，
 因为扩展名可以随意地改动。<br>class文件的头4个字节即为固定的魔数值：0XCAFEBABE，意为咖啡宝贝。紧接着魔数的4字节则为class文件的版本号。</p>
-<h3 id="1-2-常量池"><a href="#1-2-常量池" class="headerlink" title="1.2. 常量池"></a>1.2. 常量池</h3><p>紧接着版本号的是常量池，入口是一项u2类型的数据，代表常量池的计数（从1开始），其中主要存放两大类常量：    </p>
+<h4 id="1-2-常量池"><a href="#1-2-常量池" class="headerlink" title="1.2. 常量池"></a>1.2. 常量池</h4><p>紧接着版本号的是常量池，入口是一项u2类型的数据，代表常量池的计数（从1开始），其中主要存放两大类常量：    </p>
 <ul>
 <li>字面量： 接近Java语言层面的常量概念，如文本字符串、声明为final的常量值等。    </li>
 <li>符号引用： 属于编译原理的概念，包括三类常量：1.类和接口的全限定名；2.字段的名称和描述符；3.方法的名称和描述符。</li>
@@ -415,7 +415,7 @@ class文件中不会保存各个方法、字段的最终内存布局。因此，
     </tr>
 </table>
 
-<h3 id="1-3-访问标志"><a href="#1-3-访问标志" class="headerlink" title="1.3. 访问标志"></a>1.3. 访问标志</h3><p>在常量池之后，紧接着的两个字节代表访问标志access_flags，用于识别一些类或者接口层次的访问信息，包括：这个Class是类还是接口、
+<h4 id="1-3-访问标志"><a href="#1-3-访问标志" class="headerlink" title="1.3. 访问标志"></a>1.3. 访问标志</h4><p>在常量池之后，紧接着的两个字节代表访问标志access_flags，用于识别一些类或者接口层次的访问信息，包括：这个Class是类还是接口、
 是否为public类型、是否为abstract类型、类是否声明为final等。<br>access_flags中一共有16个标志位可以使用，当前只定义了其中8个，没用使用到的标志位要求一律为0。</p>
 <table style="width:100%;">
     <tr style="border-bottom:1px solid gray;">
@@ -465,11 +465,11 @@ class文件中不会保存各个方法、字段的最终内存布局。因此，
     </tr >
 </table>
 
-<h3 id="1-4-类索引、父类索引与接口索引集合"><a href="#1-4-类索引、父类索引与接口索引集合" class="headerlink" title="1.4. 类索引、父类索引与接口索引集合"></a>1.4. 类索引、父类索引与接口索引集合</h3><p>类索引和父类索引用两个u2类型的索引值表示。它们各自指向一个类型为CONSTANT_Class_info的类描述符常量，
+<h4 id="1-4-类-父类-接口索引集合"><a href="#1-4-类-父类-接口索引集合" class="headerlink" title="1.4. 类/父类/接口索引集合"></a>1.4. 类/父类/接口索引集合</h4><p>类索引和父类索引用两个u2类型的索引值表示。它们各自指向一个类型为CONSTANT_Class_info的类描述符常量，
 通过CONSTANT_Class_info常量中的索引值找到定义在CONSTANT_Utf8_info中的全限定名称字符串。</p>
 <p>接口索引集合的入口第一项是u2类型的数据，表示接口索引计数interfaces_count。
 如果该类没用实现任何接口，则值为0，后面的接口索引表也不再占用任何字节。</p>
-<h3 id="1-5-字段表集合"><a href="#1-5-字段表集合" class="headerlink" title="1.5. 字段表集合"></a>1.5. 字段表集合</h3><p>字段表用于描述接口或类中声明的变量，包括类级变量以及实例级变量，但是不会列出超类或者从父类继承而来的字段。
+<h4 id="1-5-字段表集合"><a href="#1-5-字段表集合" class="headerlink" title="1.5. 字段表集合"></a>1.5. 字段表集合</h4><p>字段表用于描述接口或类中声明的变量，包括类级变量以及实例级变量，但是不会列出超类或者从父类继承而来的字段。
 不过，有可能列出代码中不存在的字段，比如在内部类中为了保持对外部类的访问，会自动添加指向外部类实例的字段。其结构如下：</p>
 <table style="width:100%;">
     <tr style="border-bottom:1px solid gray;">
@@ -564,7 +564,7 @@ class文件中不会保存各个方法、字段的最终内存布局。因此，
     </tr >
 </table>
 
-<h4 id="1-5-1-描述符"><a href="#1-5-1-描述符" class="headerlink" title="1.5.1. 描述符"></a>1.5.1. 描述符</h4><p>简单名称：没有类型和参数的方法或者字段名称，比如inc()方法和m字段的简单名称分别为inc和m。<br>全限定名：将类全名中的“.”替换成“/”，并在最后添加一个“;”表示全限定名结束。<br>描述符：相对复杂一些，用来描述字段的数据类型、方法的参数列表（包括数量、类型以及顺序）和返回值。<br>描述符规则：</p>
+<h5 id="1-5-1-描述符"><a href="#1-5-1-描述符" class="headerlink" title="1.5.1. 描述符"></a>1.5.1. 描述符</h5><p>简单名称：没有类型和参数的方法或者字段名称，比如inc()方法和m字段的简单名称分别为inc和m。<br>全限定名：将类全名中的“.”替换成“/”，并在最后添加一个“;”表示全限定名结束。<br>描述符：相对复杂一些，用来描述字段的数据类型、方法的参数列表（包括数量、类型以及顺序）和返回值。<br>描述符规则：</p>
 <ul>
 <li><p>基本数据类型以及void都用一个大写字符来表示</p>
 <table style="width:100%;">
@@ -621,7 +621,7 @@ class文件中不会保存各个方法、字段的最终内存布局。因此，
 会被描述成“([CII[CII)I”</p>
 </li>
 </ul>
-<h3 id="1-6-方法表集合"><a href="#1-6-方法表集合" class="headerlink" title="1.6. 方法表集合"></a>1.6. 方法表集合</h3><p>Class文件中对方法的描述与对字段的描述几乎一致，只是在访问标志和属性表集合的可选项中有所区别。相应的，如果父类方法在子类中没有被重写，
+<h4 id="1-6-方法表集合"><a href="#1-6-方法表集合" class="headerlink" title="1.6. 方法表集合"></a>1.6. 方法表集合</h4><p>Class文件中对方法的描述与对字段的描述几乎一致，只是在访问标志和属性表集合的可选项中有所区别。相应的，如果父类方法在子类中没有被重写，
 方法表集合中就不会出现来自父类的方法信息，但有可能出现由编译器自动添加的方法，如类构造器<clinit>方法和实例构造器<init>方法</p>
 <table style="width:100%;">
     <tr style="border-bottom:1px solid gray;">
@@ -731,7 +731,7 @@ class文件中不会保存各个方法、字段的最终内存布局。因此，
     </tr >
 </table>
 
-<h3 id="1-7-属性表集合"><a href="#1-7-属性表集合" class="headerlink" title="1.7. 属性表集合"></a>1.7. 属性表集合</h3><p>Class文件、字段表、方法表都可以有自己的属性表集合，用于描述某些场景的专有信息。属性表集合的限制更宽松一些，
+<h4 id="1-7-属性表集合"><a href="#1-7-属性表集合" class="headerlink" title="1.7. 属性表集合"></a>1.7. 属性表集合</h4><p>Class文件、字段表、方法表都可以有自己的属性表集合，用于描述某些场景的专有信息。属性表集合的限制更宽松一些，
 不要求各个属性表具有严格顺序，并且只要不与已有属性名重复即可，任何人实现的编译器都可以向属性表中写入自定义的属性信息，
 java虚拟机在运行时会忽略掉它不认识的属性。<br>在《Java虚拟机规范(Java SE 7)》中，预定义了21种虚拟机应该能识别的属性</p>
 <table style="width:100%;">
@@ -929,7 +929,7 @@ java程序方法体中的代码经过javac编译处理后，最终变为字节�
 <p>通过字节码可以看出，<font color="green">由于方法最后只能返回一个栈顶元素（不管是通过areturn还是athrow），也就是说，
 如果栈顶元素被覆盖了，将会丢失原本期望返回的值。比如在finally中抛出新的异常或者进行return。
 </font></p>
-<h3 id="2-附录：字节码指令"><a href="#2-附录：字节码指令" class="headerlink" title="2. 附录：字节码指令"></a>2. 附录：字节码指令</h3><p><br><strong>参考：</strong></p>
+<p><br><strong>参考：</strong></p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
 </ol>
@@ -968,7 +968,7 @@ java程序方法体中的代码经过javac编译处理后，最终变为字节�
         
   
   <div class="tags">
-    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>, <a href="/tags/class文件/">class文件</a>, <a href="/tags/字节码指令/">字节码指令</a>
+    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>, <a href="/tags/class文件/">class文件</a>
   </div>
 
         
@@ -1027,7 +1027,7 @@ java程序方法体中的代码经过javac编译处理后，最终变为字节�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-类文件结构"><span class="toc-text">1. 类文件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-魔数与版本号"><span class="toc-text">1.1. 魔数与版本号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-常量池"><span class="toc-text">1.2. 常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-访问标志"><span class="toc-text">1.3. 访问标志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-类索引、父类索引与接口索引集合"><span class="toc-text">1.4. 类索引、父类索引与接口索引集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-字段表集合"><span class="toc-text">1.5. 字段表集合</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-1-描述符"><span class="toc-text">1.5.1. 描述符</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-方法表集合"><span class="toc-text">1.6. 方法表集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-属性表集合"><span class="toc-text">1.7. 属性表集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-附录：字节码指令"><span class="toc-text">2. 附录：字节码指令</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-类文件结构"><span class="toc-text">1. 类文件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-魔数与版本号"><span class="toc-text">1.1. 魔数与版本号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-常量池"><span class="toc-text">1.2. 常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-访问标志"><span class="toc-text">1.3. 访问标志</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-类-父类-接口索引集合"><span class="toc-text">1.4. 类&#x2F;父类&#x2F;接口索引集合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-字段表集合"><span class="toc-text">1.5. 字段表集合</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-5-1-描述符"><span class="toc-text">1.5.1. 描述符</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-方法表集合"><span class="toc-text">1.6. 方法表集合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-7-属性表集合"><span class="toc-text">1.7. 属性表集合</span></a></li></ol></li></ol></li></ol>
 </div>
 
 

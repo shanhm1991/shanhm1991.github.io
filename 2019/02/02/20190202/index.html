@@ -75,12 +75,12 @@
       
   
     <h1 class="p-name title" itemprop="headline name">深入理解java虚拟机.笔记八（类加载）</h1>
-	
+	<div class="title" style="padding: 5px 0px 20px 10px; color: #766;">———— Java SE 7</div> 
   
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 342 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+<font style="color: #999;">words: 3.3k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
 
     </header>
     <div class="e-content entry" itemprop="articleBody">
@@ -92,13 +92,110 @@
 从最基础的Applet、JSP到相对复杂的OSGI。</p>
 <a id="more"></a>
 
-<h3 id="1-加载过程"><a href="#1-加载过程" class="headerlink" title="1. 加载过程"></a>1. 加载过程</h3><h3 id="2-类加载器"><a href="#2-类加载器" class="headerlink" title="2. 类加载器"></a>2. 类加载器</h3><p><br><strong>参考：</strong></p>
+<h3 id="1-类加载过程"><a href="#1-类加载过程" class="headerlink" title="1. 类加载过程"></a>1. 类加载过程</h3><h4 id="1-1-加载"><a href="#1-1-加载" class="headerlink" title="1.1. 加载"></a>1.1. 加载</h4><p>类加载阶段，即将虚拟机外部的class文件（二进制字节流）按照虚拟机所需的格式存储到方法区，具体需要完成3件事件：</p>
 <ol>
-<li>《深入理解java虚拟机》</li>
+<li>通过一个类的全限定名获取定义该类的二进制字节流</li>
+<li>将字节流代表的静态存储结构转换为方法区的运行时数据结构</li>
+<li>在方法区中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口</li>
+</ol>
+<h4 id="1-2-验证"><a href="#1-2-验证" class="headerlink" title="1.2. 验证"></a>1.2. 验证</h4><p>验证是连接阶段的第一步，目的是保证Class文件的字节流包含的信息符合当前虚拟机的要求，保证输入的字节流能被正确解析并存储于方法区。
+主要包括4个阶段：</p>
+<ol>
+<li>文件格式验证，验证字节流是否符合Class文件的格式规范，并且能当前被虚拟机处理。</li>
+<li>元数据验证，对类的元数据信息进行语义分析，保证不存在不符合Java语言规范的元数据。</li>
+<li>字节码验证，最复杂的阶段，通过数据流和控制流分析程序语义是否合法，对类的方法体进行校验，保证被校验方法运行时不会危害虚拟机。</li>
+<li>符号引用验证，虚拟机将符号引用转换为直接引用的时候，对常量池中各种符号引用进行校验。</li>
+</ol>
+<h4 id="1-3-准备"><a href="#1-3-准备" class="headerlink" title="1.3. 准备"></a>1.3. 准备</h4><p>准备阶段即<font color="green">正式为类变量（即static修饰的变量，不包括实例变量）分配内存并设置类变量初始值的阶段，这些内存在方法区进行分配。
+但是这里设置的初始值一般是数据类型的零值，除非变量使用<code>final</code>修饰。
+</font>  </p>
+<h4 id="1-4-解析"><a href="#1-4-解析" class="headerlink" title="1.4. 解析"></a>1.4. 解析</h4><p>解析就是虚拟机<font color="green">将常量池内的符号引用替换为直接引用的过程</font>，所以可以理解为对符合引用的解析。<br><strong>符号引用</strong>即以一组符号来描述所引用的目标，符号可以上任何形式的字面量，只要使用时能无歧义地定位到目标即可。<br><strong>直接引用</strong>可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄，总之引用的目标必定已经在内存中存在。</p>
+<p>虚拟机规范并未对什么时候进行解析阶段有规定，只要求了在执行<code>anewarray</code>、<code>checkcast</code>、<code>getfield</code>、<code>getstatic</code>、<code>instanceof</code>、
+<code>invokedynamic</code>、<code>invokeinterface</code>、<code>invokespecial</code>、<code>invokeestatic</code>、<code>involevirtual</code>、<code>ldc</code>、<code>ldc_w</code>、<code>multianewarray</code>、<code>new</code>、
+<code>putstatic</code>和<code>putfield</code>这16个用于操作符号引用的字节码指令之前，先对他们所使用的符号引用进行解析。</p>
+<p>其中，除了<code>invokedynamic</code>之外，虚拟机可以对其它指令第一次解析的结果进行缓存，即在运行时常量池中记录直接引用，
+并标识为已解析状态，从而避免解析动作重复进行。而<code>invokedynamic</code>的本意用于动态语言支持，必须等到程序实际运行到这条指令时才进行解析。</p>
+<p>解析动作主要针对：类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符7类符号引用进行解析。<br><strong>类或接口的解析</strong><br>假设当前代码所处的类为D，如果想把一个从未解析过的符号引用N解析到一个类或接口C的直接引用，虚拟机完成整个解析阶段的过程分为以下3步：</p>
+<ol>
+<li>如果C是不是一个数组类型，虚拟机将会把符号引用N的全项定类名传递给D的类加载器去加载这个类C。在加载的过程中由于需要验证，
+可能又会触发其他类的加载，一当加载过程出现错误，解析过程直接失败。</li>
+<li>如果C是一个数组类型，数组元素也是对象类型的话，N的描述符将会是类似<code>[Ljava/lang/Integer</code>的形式。
+那将会按照第一点的规则加载数组元素类型，接着由虚拟机生成一个代表此数组维度和元素的数组对象</li>
+<li>如果前面的步骤都没有出现错误，在解析完成前还需要进行符号引用的验证，确认D是否具备对C的访问权限，如果D没有对C的访问权限，
+抛出java.lang.IllegalAccessEroor异常。</li>
+</ol>
+<p><strong>字段解析</strong><br>要解析一个未被解析过的字段的符号引用。首先会对字段表内的class_index项索引的CONSTANT_Class_info符号引用解析，
+也就是字段所属的类或接口的符号引用。如果在解析这个类或接口的符号引用出现异常，都会导致字段解析的失败。
+如果这个类或接口解析成功，将这个字段所属的类或接口用C表示，然后对C进行后续的字段搜索</p>
+<ol>
+<li>如果C本身就包含了简单名称和字段描述符都与目标字段相同的字段，则返回这个字段的直接引用，查找结束</li>
+<li>否则，如果在C中实现了接口，将会按照继承关系从下往上递归搜索每个接口和它的父接口，然后按照步骤1去查找</li>
+<li>否则，如果C不是object类的话，按照继承关系从下往上递归搜索其父类，然后按照步骤1去查找</li>
+<li>否则，查找失败，抛出java.lang.NoSuchFieldError异常。</li>
+</ol>
+<p><strong>类方法解析</strong><br>类方的解析的第一个步骤与字段解析一样，也需要先解析出类方法表的claaa_index索引的方法所属类或接口的符号引用.如果解析成功，
+用C表示这个类，接下来虚拟机按照以下步骤进行类方法的搜索：</p>
+<ol>
+<li>在类C中查找是否有简单名称和描述符都与目标匹配的方法，如果有返回这个方法的直接引用，查找结束</li>
+<li>否则在类C的父类中递归查找</li>
+<li>否则在类C的接口或父接口中查找</li>
+<li>否则查找失败，抛出java.lang.NoSuchMethodError异常。</li>
+</ol>
+<h4 id="1-5-初始化"><a href="#1-5-初始化" class="headerlink" title="1.5. 初始化"></a>1.5. 初始化</h4><p>前面的加载过程中，除了在加载阶段应用程序可以自定义加载器参与类的加载过程外，其余的动作完全由虚拟机主导和控制。
+到了初始化阶段，才真正开始执行类中定义的Java代码。</p>
+<p>在准备阶段，变量已经被赋值为类型的零值，而在初始化阶段，则根据程序制定的主观计划去初始化类变量和其他资源，
+即<font color="green">初始化阶段是执行类构造器方法<code>&lt;cinit&gt;()</code>的过程</font>。</p>
+<p><code>&lt;cinit&gt;()</code>方法是由编译器自动收集类中的所有类变量的赋值操作和静态语句块<code>static{}</code>中的所有语句合并而生的，因此，它不是必须的。
+静态语句块只能访问到定义在静态语句前的变量，对于定义在它之后的变量，只能赋值而不能访问。</p>
+<p>另外，虚拟机会保证在执行子类的<code>&lt;cinit&gt;()</code>之前，父类的<code>&lt;cinit&gt;()</code>已经执行完毕。不过，
+执行接口的<code>&lt;cinit&gt;()</code>不需要先执行父接口的<code>&lt;cinit&gt;()</code>，接口实现类在初始化时也一样不需要执行父接口的<code>&lt;cinit&gt;()</code>，
+只有当父接口中定义的变量使用时，父接口才会初始化。<br>特别的，虚拟机会保证一个类的<code>&lt;cinit&gt;()</code>在多线程环境中被正确的加锁、同步。如果多线程同时去初始化一个类，那么只会有一个线程执行，
+其他线程都需要阻塞等待，直到初始化完毕。要注意的是，其他线程虽然会被阻塞，但在执行<code>&lt;cinit&gt;()</code>的线程退出之后，
+它们也不会再进入<code>&lt;cinit&gt;()</code>方法。即同一个类加载器下，一个类型只会初始化一次。</p>
+<h3 id="2-类加载器"><a href="#2-类加载器" class="headerlink" title="2. 类加载器"></a>2. 类加载器</h3><font color="green">
+虚拟机设计者将类加载过程中的加载动作放到虚拟机外部去实现，以便让应用程序自己决定如何去获取所需要的类，
+实现这个动作的代码模块便称为类加载器。
+</font> 
+
+<p>因此，类加载器的任务便是根据一个类的全限定名来读取此类的二进制字节流到JVM中，
+然后转换为一个与目标类对应的java.lang.Class对象实例。<font color="green">对于任意一个类，
+都需要由加载它的类加载器和这个类本身一同确立其在java虚拟机中唯一性，每一个类加载器，都拥有一个独立的类名称空间。</font></p>
+<p>虚拟机提供了3种类加载器：</p>
+<ol>
+<li>启动类加载器（Bootstrap）</li>
+</ol>
+<p>启动类加载器主要加载的是JVM自身需要的类，这个类加载使用C++语言实现的，是虚拟机自身的一部分，
+它负责将 <code>&lt;JAVA_HOME&gt;/lib</code>路径下的核心类库或<code>-Xbootclasspath</code>参数指定的路径下的jar包加载到内存中，
+注意虚拟机是按照文件名识别加载jar包的，如rt.jar，如果文件名不被虚拟机识别，
+即使把jar包丢到lib目录下也是没有作用的(出于安全考虑，Bootstrap启动类加载器只加载包名为java、javax、sun等开头的类)。</p>
+<ol start="2">
+<li>扩展类加载器（Extension）</li>
+</ol>
+<p>由sun.misc.Launcher$ExtClassLoader实现，
+它负责加载<code>&lt;JAVA_HOME&gt;/lib/ext</code>目录下或者由系统变量<code>-Djava.ext.dir</code>指定位路径中的类库，
+开发者可以直接使用标准扩展类加载器。</p>
+<ol start="3">
+<li>应用程序类加载器（Application）</li>
+</ol>
+<p>由sun.misc.Launcher$AppClassLoader实现，它负责加载classpath路径下的类库，开发者可以直接使用系统类加载器，
+一般情况下该类加载是程序中默认的类加载器，通过<code>ClassLoader.getSystemClassLoader()</code>可以获取到该类加载器。</p>
+<h4 id="2-1-双亲委派模式"><a href="#2-1-双亲委派模式" class="headerlink" title="2.1. 双亲委派模式"></a>2.1. 双亲委派模式</h4><p>在日常应用程序开发中，类的加载都是由上述3种类加载器相互配合执行的，必要时，也可以自定义类加载器。
+它们直接存在着父子关系，不过不是通过继承实现的，而是通过组合的方式，如下称为双亲委派模型：</p>
+<p><img src="/img/20190202.1.jpg" alt=""></p>
+<p>双亲委派模式是在Java 1.2后引入的，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，
+而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归，
+请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，
+子加载器才会尝试自己去加载。</p>
+<p>使用双亲委派模式的是好处是Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，
+当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。<br>其次考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，
+通过双亲委托模式传递到启动类加载器，而启动类加载器发现该类已被加载，则直接返回已加载过的Integer.class，
+这样便可以防止核心API库被篡改。</p>
+<p>下面简单看一下ClassLoader的实现：</p>
+<p><img src="/img/20190202.2.jpg" alt=""></p>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
 <li><a href="https://blog.csdn.net/javazejian/article/details/73413292" target="_blank" rel="noopener">https://blog.csdn.net/javazejian/article/details/73413292</a></li>
-<li><a href="https://www.ibm.com/developerworks/cn/java/j-lo-classloader/index.html" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/java/j-lo-classloader/index.html</a></li>
-<li><a href="https://www.jianshu.com/p/a6ba4f152968" target="_blank" rel="noopener">https://www.jianshu.com/p/a6ba4f152968</a></li>
-<li><a href="https://juejin.im/post/5c866e00f265da2dd1689f8b" target="_blank" rel="noopener">https://juejin.im/post/5c866e00f265da2dd1689f8b</a> </li>
 </ol>
 
       
@@ -194,7 +291,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-加载过程"><span class="toc-text">1. 加载过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-类加载器"><span class="toc-text">2. 类加载器</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-类加载过程"><span class="toc-text">1. 类加载过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-加载"><span class="toc-text">1.1. 加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-验证"><span class="toc-text">1.2. 验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-准备"><span class="toc-text">1.3. 准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-解析"><span class="toc-text">1.4. 解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-初始化"><span class="toc-text">1.5. 初始化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-类加载器"><span class="toc-text">2. 类加载器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-双亲委派模式"><span class="toc-text">2.1. 双亲委派模式</span></a></li></ol></li></ol></li></ol>
 </div>
 
 
