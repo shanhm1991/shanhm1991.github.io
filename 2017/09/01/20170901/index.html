@@ -48,7 +48,7 @@ java使用异常来提供统一的错误报告模型，使得构件能够与客�
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  44 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  49 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -82,7 +82,7 @@ java使用异常来提供统一的错误报告模型，使得构件能够与客�
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 1.7k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+<font style="color: #999;">words: 1.8k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
 
     </header>
     <div class="e-content entry" itemprop="articleBody">
@@ -156,10 +156,12 @@ java使用异常来提供统一的错误报告模型，使得构件能够与客�
 <p>不要捕获了异常而什么事情也不做，如果不知道如果处理则应该声明抛出，通常只有在知道如何处理异常的的情况下才可以捕获。
 如果异常事实上不用处理，也应该日志记录一下异常信息。<br>不过有时，我们可能会遇到一些检查异常，不知道如何处理，但又不能忽略，同时也不想声明抛给调用者，那么一种做法是将其转化为运行时异常，
 即捕获异常后，抛出一个运行时异常，并在构造时带上异常信息。<br>通常在业务中，会在处理流程中选择一些节点，在这些节点中统一进行异常捕获处理，而在具体的处理中则直接向上声明抛出，以便保持代码结构清晰。</p>
-<p>另外，java的异常实现也是有缺憾的：如果在finally中抛出异常，那么会覆盖捕获的异常，进而造成异常丢失</p>
+<h3 id="3-问题"><a href="#3-问题" class="headerlink" title="3. 问题"></a>3. 问题</h3><p>java的异常实现也是有缺憾的：如果在finally中抛出异常，则可能造成异常丢失。
+<font color="red">fianlly应该仅仅用来释放资源最合适，不要在其中做一些其它的事情，尤其不要抛出异常或者进行return。</font>  </p>
+<p>比如下面的代码，调用者将丢失原本想捕获的fun1的异常.原因是在方法返回或抛出时，栈顶的值被覆盖了。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun1</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"fun1"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun2</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException(<span class="string">"fun2"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, IOException</span>&#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		fun1();</span><br><span class="line">	&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">		fun2();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>因此fianlly应该仅仅用来释放资源最合适，最后不要在其中做一些其它的事情，尤其不要抛出异常或者进行return。</p>
+<p>可以看之前整理的笔记，其中有字节码分析：<a href="(https://shanhm1991.github.io/2019/02/01/20190201/">深入理解java虚拟机.笔记七（类文件结构）</a></p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《Java编程思想》</li>
@@ -259,7 +261,7 @@ java使用异常来提供统一的错误报告模型，使得构件能够与客�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-java标准异常"><span class="toc-text">1. java标准异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-异常处理建议"><span class="toc-text">2. 异常处理建议</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-java标准异常"><span class="toc-text">1. java标准异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-异常处理建议"><span class="toc-text">2. 异常处理建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-问题"><span class="toc-text">3. 问题</span></a></li></ol></li></ol>
 </div>
 
 

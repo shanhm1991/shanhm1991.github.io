@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>深入理解java虚拟机.笔记八（类加载） | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言关于虚拟机的类加载机制，即把描述类的字节数据加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。与那些编译时需要链接的语言不同，java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，
+但是为java应用程序提供了高度的灵活性，期动态扩展的语言特性就是依赖运行期动态加载和链接这个特点来实现的。
+如果编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过java预定义或自定义的加载器，
+让一个本地的应用程序可以在运行时从网络或其他地方加载一个二进制流作为程序代码的一部分。这种组装应用程序的方式已广泛应用于java程序之中，
+从最基础的Applet、JSP到相对复杂的OSGI。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="深入理解java虚拟机.笔记八（类加载）"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  49 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20190202" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-02-01T16:00:00.000Z"><a href="/2019/02/02/20190202/">2019-02-02</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">深入理解java虚拟机.笔记八（类加载）</h1>
+	
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 342 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>关于虚拟机的类加载机制，即把描述类的字节数据加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。<br>与那些编译时需要链接的语言不同，java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，
+但是为java应用程序提供了高度的灵活性，期动态扩展的语言特性就是依赖运行期动态加载和链接这个特点来实现的。</p>
+<p>如果编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过java预定义或自定义的加载器，
+让一个本地的应用程序可以在运行时从网络或其他地方加载一个二进制流作为程序代码的一部分。这种组装应用程序的方式已广泛应用于java程序之中，
+从最基础的Applet、JSP到相对复杂的OSGI。</p>
+<a id="more"></a>
+
+<h3 id="1-加载过程"><a href="#1-加载过程" class="headerlink" title="1. 加载过程"></a>1. 加载过程</h3><h3 id="2-类加载器"><a href="#2-类加载器" class="headerlink" title="2. 类加载器"></a>2. 类加载器</h3><p><br><strong>参考：</strong></p>
+<ol>
+<li>《深入理解java虚拟机》</li>
+<li><a href="https://blog.csdn.net/javazejian/article/details/73413292" target="_blank" rel="noopener">https://blog.csdn.net/javazejian/article/details/73413292</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/java/j-lo-classloader/index.html" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/java/j-lo-classloader/index.html</a></li>
+<li><a href="https://www.jianshu.com/p/a6ba4f152968" target="_blank" rel="noopener">https://www.jianshu.com/p/a6ba4f152968</a></li>
+<li><a href="https://juejin.im/post/5c866e00f265da2dd1689f8b" target="_blank" rel="noopener">https://juejin.im/post/5c866e00f265da2dd1689f8b</a> </li>
+</ol>
+
+      
+    </div>
+	
+	
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2019/02/15/20190215/">
+		    深入理解java虚拟机.笔记九（内存模型）
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2019/02/01/20190201/">
+		    深入理解java虚拟机.笔记七（类文件结构）
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/读书笔记/">读书笔记</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>, <a href="/tags/类加载/">类加载</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-加载过程"><span class="toc-text">1. 加载过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-类加载器"><span class="toc-text">2. 类加载器</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

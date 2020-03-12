@@ -42,7 +42,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  44 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  49 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -76,7 +76,7 @@
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 2k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+<font style="color: #999;">words: 2.1k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
 
     </header>
     <div class="e-content entry" itemprop="articleBody">
@@ -115,7 +115,9 @@ Java开发者就改成了一个使用一个字节的byte来存储字符串。<br
 <h4 id="2-1-字符串构造"><a href="#2-1-字符串构造" class="headerlink" title="2.1. 字符串构造"></a>2.1. 字符串构造</h4><h5 id="2-1-1-字面量法"><a href="#2-1-1-字面量法" class="headerlink" title="2.1.1. 字面量法"></a>2.1.1. 字面量法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"abc"</span>;</span><br></pre></td></tr></table></figure>
 <p>这种方法首先从常量池中查找是否有相同值的字符串对象，如果有，则直接将对象地址赋予引用变量；如果没有，
 在首先在常量池区域中创建一个新的字符串对象，然后将地址赋予引用变量。</p>
-<p><font color="red">要注意的是，凡是有双引号括起字符串的地方都会相当于一个字符串对象的创建。</font> </p>
+<p><font color="red">要注意的是，凡是有双引号括起字符串的地方都会相当于一个字符串对象的创建。</font> 
+如果看编译后的字节码就会知道，编译时已经将这些字面量全部放到class的常量池中了，然后在方法中通过符合的方式进行引用，
+并且在真正首次使用时会用<code>ldc</code>指令到字符串常量池中进行创建，然后将引用存入当前栈顶。见：2.2</p>
 <h5 id="2-1-2-构造器创建"><a href="#2-1-2-构造器创建" class="headerlink" title="2.1.2. 构造器创建"></a>2.1.2. 构造器创建</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br></pre></td></tr></table></figure>
 
 <p>看上去与一般的对象实例化好像一样，但其实它相当于构造了两个对象，首先在字符串常量池创建了一个字面量，

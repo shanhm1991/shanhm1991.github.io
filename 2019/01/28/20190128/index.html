@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>深入理解java虚拟机.笔记五（GC日志与GC参数） | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="深入理解java虚拟机.笔记五（GC日志与GC参数）"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  49 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20190128" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-27T16:00:00.000Z"><a href="/2019/01/28/20190128/">2019-01-28</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">深入理解java虚拟机.笔记五（GC日志与GC参数）</h1>
+	<div class="title" style="padding: 5px 0px 20px 10px; color: #766;">———— Java SE 7</div> 
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 1.1k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+
+<h3 id="1-GC日志分析"><a href="#1-GC日志分析" class="headerlink" title="1. GC日志分析"></a>1. GC日志分析</h3><p>每一种收集器的日志形式都是由它们自身的实现所决定，虚拟机设计者为了方便用户阅读，将各个收集器的日志都维持一定的共性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0.097: [GC [PSYoungGen: 5396K-&gt;568K(75776K)] 5396K-&gt;568K(248320K), 0.0009988 secs] </span><br><span class="line">       [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.00 secs] </span><br><span class="line">0.098: [Full GC [PSYoungGen: 568K-&gt;0K(75776K)] [ParOldGen: 0K-&gt;468K(172544K)] 568K-&gt;468K(248320K) </span><br><span class="line">       [PSPermGen: 2563K-&gt;2562K(21504K)], 0.0074459 secs] [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.01 secs]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>最前面的数字0.097、0.098，代表GC发生的时间，这个数字的含义是Java虚拟机启动以来经过的秒数。</p>
+</li>
+<li><p>开头的[GC、[Full GC是说明这次垃圾收集的停顿类型，而不是用来区分新生代GC还是老年代GC。如果有“Full”，说明发生了Stop-The-World。
+例如在收集器ParNew在收集新生代时的日志中也可能出现[Full GC (一般由于分配担保失败之类的问题引起)。</p>
+</li>
+<li><p>在后面的[PSYoungGen、[ParOldGen、[PSPermGen表示GC发生的区域，这里显示的区域名称与使用的GC收集器密切相关，
+例如这里使用的收集器为Parallel Scavenge，那它对应的新生代名称为PSYoungGen；如果使用的是Serial收集器，则新生代名称为DefNew；
+如果是ParNew收集器，则叫ParNew；同理对于老年代和永久代的名称。</p>
+</li>
+<li><p>对于方括号内部的比如：5396K-&gt;568K(75776K)，意思是“GC前该内存区域已使用容量 -&gt; GC后该内存区域已使用容量（该内存区域总容量）”。</p>
+</li>
+<li><p>对于方括号外部的：5396K-&gt;568K(248320K)、568K-&gt;468K(248320K)，表示“GC前Java堆已使用容量 -&gt; GC后Java堆已使用容量(Java堆总容量)”。</p>
+</li>
+<li><p>最后的：0.0009988 secs、0.0074459 secs，表示该内存区域GC所占用的时间，单位秒。有的收集器会给出更具体的时间数据数据，如这里的[Times: user=0.00 sys=0.00, real=0.00 secs]，
+里面的时间与Linux的time命令所输出的时间含义一致，分别代表用户消耗的CPU时间、内核消耗的CPU时间、操作从开始到结束所经过的墙钟时间。<strong>墙钟时间</strong>与CPU时间的区别是它包括各种非运算的等待耗时，
+如等待磁盘I/O、等待线程阻塞，而CPU时间不包括这些。但当系统有多CPU或者多核的话，多线程操作会叠加这些CPU时间，所以当看到user或sys时间超过real也是正常的。</p>
+</li>
+</ul>
+<h3 id="2-GC参数"><a href="#2-GC参数" class="headerlink" title="2. GC参数"></a>2. GC参数</h3><table style="width:100%;">
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseSerialGC</td>
+        <td>Client模式下的默认值，使用Serial + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseParNewGC</td>
+        <td>使用ParNew + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseConcMarkSweepGC</td>
+        <td>使用ParNew + CMS + Serial Old的收集器组合进行内存回收，Serial Old作为CMS出现Concurrent Mode Failure失败后的后备收集器使用</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseParallelGC</td>
+        <td>Server模式下的默认值，使用Parallel Scavenge + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseParallelOldGC</td>
+        <td>使用Parallel Scavenge + Parallel Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">SurvivorRatio</td>
+        <td>设置新生代中Eden与Survivor的比例，默认8</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">PretenureSizeThreshold</td>
+        <td>设置直接进入老年代的对象大小</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">MaxPretenureThreshold</td>
+        <td>设置晋升到老年代的对象年龄</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseAdaptiveSizePolicy</td>
+        <td>是否动态调整Java堆中各个区域的大小以及进入老年代的年龄</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">HandlePromotionFailure</td>
+        <td>是否允许分配担保失败，即老年代的剩余空间不足以应付新生代的整个Eden和Survivor区的所有对象都存活的极端情况</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">ParallelGCThreads</td>
+        <td>设置并行GC时进行内存回收的线程数</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">GCTimeRatio</td>
+        <td>仅在使用Parallel Scavenge收集器时生效，GC时间占总时间的比率，默认99，即允许1%的GC时间</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">MAXGCPauseMillis</td>
+        <td>仅在使用Parallel Scavenge收集器时生效，设置GC最大停顿时间</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">CMSInitiatingOccupancyFraction</td>
+        <td>仅在使用CMS收集器时生效，设置老年代空间被使用多少后触发垃圾收集，默认68%</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseCMSCompactAtFullCollection</td>
+        <td>仅在使用CMS收集器时生效，完成垃圾收集后是否要进行一次内存碎片整理</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">CMSFullGCsBeforeCompaction</td>
+        <td>仅在使用CMS收集器时生效，设置收集器在进行若干次垃圾收集后再启动一次内存碎片整理</td>
+    </tr >
+</table>
+
+<p><br><strong>参考：</strong></p>
+<ol>
+<li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
+</ol>
+
+      
+    </div>
+	
+	
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2019/01/31/20190131/">
+		    深入理解java虚拟机.笔记六（Jvm监控与故障处理工具）
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2019/01/18/20190118/">
+		    深入理解java虚拟机.笔记四（垃圾标记与收集算法）
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/读书笔记/">读书笔记</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>, <a href="/tags/GC/">GC</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-GC日志分析"><span class="toc-text">1. GC日志分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GC参数"><span class="toc-text">2. GC参数</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
