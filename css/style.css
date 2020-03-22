@@ -30,7 +30,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+h7 {
   font-family: "Times New Roman", Helvetica Neue, Helvetica, Arial, sans-serif;
   font-weight: normal;
 }
@@ -50,6 +51,9 @@ h5 {
   font-size: 1.1em;
 }
 h6 {
+  font-size: 1em;
+}
+h7 {
   font-size: 1em;
 }
 a {

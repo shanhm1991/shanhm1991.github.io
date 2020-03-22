@@ -1,0 +1,447 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tomcat. 笔记一（容器结构） | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言Tomcat作为一个web应用容器，其中包含了各种组件以及子容器，相互之间存在一定的层级和作用关系，并且通过server.xml来描述。
+
+其实Tomcat本质是一个Servlet容器，servlet是一组处理网络请求的接口规范，它的实现知道如何处理具体的请求，
+Servlet容器的作用就是负责将接收到的请求分配给对应的servlet进行处理。可以将Tomcat当成一个比较大的Servlet容器，然后它通过协议端口、url等将servlet请求做了一个层次分类，
+具体的做法就是给每种分类都对应一个组件，比如通过协议和端口号可以确定Connector，通过url可以确定Cotext，也就确定了对应的web应用，
+因此，了解Tomcat的容器结构也就基本可以理解它是如何分配和处理请求的。 本文从server.xml切入，梳理一下主要的组件，
+从中可以体会一下Tomcat高度模块化的设计。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Tomcat. 笔记一（容器结构）"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  51 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20171101" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-10-31T16:00:00.000Z"><a href="/2017/11/01/20171101/">2017-11-01</a></time>
+	  
+      
+  
+    <h1 class="p-name title" itemprop="headline name">Tomcat. 笔记一（容器结构）</h1>
+	
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<font style="color: #999;">words: 4.6k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>Tomcat作为一个web应用容器，其中包含了各种组件以及子容器，相互之间存在一定的层级和作用关系，并且通过<code>server.xml</code>来描述。
+<font color="green">
+其实Tomcat本质是一个Servlet容器，servlet是一组处理网络请求的接口规范，它的实现知道如何处理具体的请求，
+Servlet容器的作用就是负责将接收到的请求分配给对应的servlet进行处理。<br>可以将Tomcat当成一个比较大的Servlet容器，然后它通过协议端口、url等将servlet请求做了一个层次分类，
+具体的做法就是给每种分类都对应一个组件，比如通过协议和端口号可以确定Connector，通过url可以确定Cotext，也就确定了对应的web应用，
+因此，了解Tomcat的容器结构也就基本可以理解它是如何分配和处理请求的。</font> 本文从<code>server.xml</code>切入，梳理一下主要的组件，
+从中可以体会一下Tomcat高度模块化的设计。</p>
+<a id="more"></a>
+
+<br>
+
+<h2 id="1-容器结构"><a href="#1-容器结构" class="headerlink" title="1. 容器结构"></a>1. 容器结构</h2><p><img src="/img/20171101.1.jpg" alt=""></p>
+<p>如上图所示，可以大体概括一下Tomcat的结构：Server代表一个Tomcat实例，其中可以有多个Service服务。
+每个Service中可以有一个Engine容器和多个Connector，Service将它们组装在一起作为一个服务对外提供，其中Connector接收请求，
+Engine处理请求。另外，Engine可以包含多个子容器Host和Context，每个Host代表一个虚拟主机；每个Context则代表一个Web应用；
+不过，所有这些组件都可以通过server.xml来进行配置。<br><font color="green">
+当请求被发送到Tomcat所在的主机时，Tomcat可以根据协议和端口号（Service中的Connector组件可以接收特定端口的请求，当Tomcat启动时，
+Service就会监听特定的端口）选定处理请求的Service，Service一旦选定，Engine也就确定。
+然后在Engine中寻找名称与域名/IP地址匹配的Host处理该请求，如果没有找到，则使用defaultHost来处理，
+接着，Host会寻找path属性与URI的匹配程度最高的Context来处理，最终Context将请求交给对应的Selvlet处理。</font> </p>
+<br>
+
+<h2 id="2-server-xml"><a href="#2-server-xml" class="headerlink" title="2. server.xml"></a>2. server.xml</h2><p>关于server.xml的详细内容可以查看<a href="http://tomcat.apache.org/tomcat-8.0-doc/config/index.html" target="_blank" rel="noopener">官方文档</a>，
+下面列举一下其中的主要配置，其实与上面的容器结构图是相对应的。</p>
+<br>
+
+<h3 id="2-1-核心组件"><a href="#2-1-核心组件" class="headerlink" title="2.1 核心组件"></a>2.1 核心组件</h3><br>
+
+<h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">"8005"</span> <span class="attr">shutdown</span>=<span class="string">"SHUTDOWN"</span>&gt;</span> <span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>server组件<font color="green">定义了一个tomcat实例，默认监听8005端口，要启用多个tomcat实例，将它们监听在不同的端口即可。
+port表示Server接收shutdown指令关闭实例的端口号，不过基于安全角度的考虑，通常不允许远程进行。
+Server中可以多个Service元素，它的任务就是提供一个接口让客户端能够访问到这个Service集合，同时维护这些Service的生命周期。</font> </p>
+<p>相关属性：</p>
+<ul>
+<li><code>className</code>：给定<code>org.apache.catalina.Server</code>的实现，默认为<code>org.apache.catalina.core.StandardServer</code></li>
+<li><code>address</code>：监听端口绑定的地址，默认为Localhost，即只能在localhost上发送SHUTDOWN命令</li>
+<li><code>port</code>：接收shutdown指令的端口，默认为8005；</li>
+<li><code>shutdown</code>：通过TCP/IP连接发往此Server用于实现关闭tomcat实例的命令字符串。</li>
+</ul>
+<br>
+
+<h4 id="Server-Service"><a href="#Server-Service" class="headerlink" title="Server/Service"></a>Server/Service</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Service</span> <span class="attr">name</span>=<span class="string">"Catalina"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>定义了service就能提供服务了，service组件中封装connector和containor，将它们绑定起来组成一个service向外提供服务。</p>
+<p>相关属性：</p>
+<ul>
+<li><code>className</code>：给定<code>org.apache.catalina.Service</code>的实现，默认为<code>org.apache.catalina.core.StandardService</code></li>
+<li><code>name</code>：service名称，主要用于在日志中进行标识service，默认为Catalina。</li>
+</ul>
+<br>
+
+<h4 id="Server-Service-Executor"><a href="#Server-Service-Executor" class="headerlink" title="Server/Service/Executor"></a>Server/Service/Executor</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Executor</span> <span class="attr">name</span>=<span class="string">"tomcatThreadPool"</span> <span class="attr">namePrefix</span>=<span class="string">"catalina-exec-"</span> <span class="attr">maxThreads</span>=<span class="string">"150"</span> <span class="attr">minSpareThreads</span>=<span class="string">"4"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在Service中可以定义执行器，其实就是一个线程池，在connector之间共享使用。
+当然connector也可以不引用executor创建的线程池，根据自己指定的属性创建自己的线程池。</p>
+<p>相关属性：</p>
+<ul>
+<li><code>className</code>：给定<code>org.apache.catalina.Executor</code>的实现，默认为<code>org.apache.catalina.core.StandardThreadExecutor</code></li>
+<li><code>name</code>：线程池的名称，connector可以使用该名称进行引用。</li>
+<li><code>threadPriority</code>：线程优先级，默认值为5。</li>
+<li><code>daemon</code>：线程是否以daemon的方式运行，默认值为true。</li>
+<li><code>namePrefix</code>：执行器创建每个线程时的名称前缀，最终线程的名称为:namePrefix+threadNumber。</li>
+<li><code>maxThreads</code>：最大线程数，默认值为200。</li>
+<li><code>minSpareThreads</code>：最少空闲线程，默认值为25。</li>
+<li><code>maxIdleTime</code>：线程最大空闲毫秒数，当线程数多于minSpareThreads时进行关闭，默认值为60000。</li>
+<li><code>maxQueueSize</code>：任务最大队列数。</li>
+<li><code>prestartminSpareThreads</code>：启动executor时是否立即创建minSpareThreads个线程数，默认为false。</li>
+</ul>
+<br>
+
+<h4 id="Server-Service-Connector"><a href="#Server-Service-Connector" class="headerlink" title="Server/Service/Connector"></a>Server/Service/Connector</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span> <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8009"</span> <span class="attr">protocol</span>=<span class="string">"AJP/1.3"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>连接器<font color="green">Connector用于接收客户端发送的请求并返回响应给客户端。service中可以定义多个connector，
+每个连接器都可以将请求转发给它们相关联的engine以处理请求、创建响应。</font></p>
+<p>connector也可以是多种类型，常见的为http/1.1，http/2和ajp(apache jserv protocol)，
+在tomcat中，ajp连接协议类型专用于tomcat前端是apache反向代理的情况下。</p>
+<p>上面第2个Connector，客户端可以通过8009端口使用AJP协议访问Tomcat。<br><font color="green">AJP协议负责和其他的HTTP服务器(如Apache)建立连接，当把Tomcat与其他HTTP服务器集成时，就需要用到这个连接器。
+之所以使用Tomcat和其他服务器集成，是因为Tomcat可以用作Servlet/JSP容器，但是对静态资源的处理速度较慢，
+不如Apache和IIS等HTTP服务器；因此常常将Tomcat与Apache等集成，前者作Servlet容器，后者处理静态资源，
+而AJP协议便负责Tomcat和Apache的连接。</font></p>
+<p>相关属性：<br>HTTP连接器的属性实在太多，详细配置方法见<a href="http://tomcat.apache.org/tomcat-8.5-doc/config/http.html" target="_blank" rel="noopener">官方手册</a>，通常定义HTTP连接器时必须定义的属性只有”port”。</p>
+<ul>
+<li><code>address</code>：指定连接器监听的地址，默认为所有地址，即0.0.0.0。</li>
+<li><code>maxThreads</code>：最大并发连接数，默认为200；如果引用了executor创建的共享线程池，则该属性被忽略。</li>
+<li><code>acceptCount</code>：等待队列的最大长度，通常在tomcat所有处理线程均处于繁忙状态时，新来的请求将被放置于等待队列中；</li>
+<li><code>maxConnections</code>：最大连接数，存在一种情况，maxConnections小于acceptCount时，超出maxConnections的连接请求将被接收，但不会与之建立连接。</li>
+<li><code>port</code>：监听端口，默认为0，表示随机选一个端口，通常应该显式指定监听端口。</li>
+<li><code>protocol</code>：使用的协议，用于处理对应的请求，默认为HTTP/1.1。此时它会自动在基于Java NIO或APR/native连接器之间进行切换。定义AJP协议时通常为AJP/1.3。</li>
+<li><code>redirectPort</code>：如果协议是HTTP，当接收客户端发来的HTTPS请求时，则转发至此属性定义的端口。</li>
+<li><code>connectionTimeout</code>：等待客户端发送请求的超时时间，默认为60000ms，注意，这时候连接已经建立。</li>
+<li><code>keepAliveTimeout</code>：长连接状态的超时时间。</li>
+<li><code>enableLookups</code>：是否通过request.getRemoteHost()进行DNS查询以获取客户端的主机名，默认为true；</li>
+<li><code>compression</code>：是否压缩数据，默认为off。on表示只压缩text文本，force表示压缩所有内容。应该在压缩和sendfile之间做个权衡。</li>
+<li><code>useSendfile</code>：该属性为NIO的属性，表示是否启用sendfile的功能，默认为true，启用该属性将会禁止compression属性。</li>
+</ul>
+<p>当协议指定为HTTP/1.1时，默认会自动在NIO/APR协议处理方式上进行按需切换，如要显式指定协议，可以如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"org.apache.coyote.http11.Http11NioProtocol"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"org.apache.coyote.http11.Http11Nio2Protocol"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"org.apache.coyote.http11.Http11AprProtocol"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h4 id="Server-Service-Engine"><a href="#Server-Service-Engine" class="headerlink" title="Server/Service/Engine"></a>Server/Service/Engine</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">"Catalina"</span> <span class="attr">defaultHost</span>=<span class="string">"localhost"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>一个service中只允许有一个Engine，且Engine必须在其所需要关联的connector之后。
+<font color="green">它在service组件中用来分析协议的引擎，它从一个或多个connector上接收请求，
+并将请求交给对应的虚拟主机进行处理，最后返回完整的响应数据给connector，通过connector将响应数据返回给客户端。</font></p>
+<p>相关属性：</p>
+<ul>
+<li><code>className</code>：给定<code>org.apache.catalina.Engine</code>的实现，默认为<code>org.apache.catalina.core.StandardEngine</code>。</li>
+<li><code>defaultHost</code>：指定处理请求的默认虚拟主机，在Engine中定义的多个虚拟主机的主机名称中至少有一个跟defaultHost定义的主机名称同名。</li>
+<li><code>name</code>：Engine名称，用于记录日志和错误信息。</li>
+<li><code>jvmRoute</code>：在启用session粘性时指定使用哪种负载均衡的标识符。所有的tomcat server实例中该标识符必须唯一，
+它会追加在session标识符的尾部，因此能让前端代理总是将特定的session转发至同一个tomcat实例上。<br>注意，jvmRoute同样可以使用jvmRoute的系统属性来设置，如果此处设置了jvmRoute，则覆盖jvmRoute系统属性。</li>
+</ul>
+<p>engine是容器中的顶级子容器，可以在里面定义一个或多个Host作为虚拟主机，且至少一个host要和engine中的默认虚拟主机名称对应。
+除了host，还可以定义releam和valve组件。</p>
+<br>
+
+<h4 id="Server-Service-Engine-Host"><a href="#Server-Service-Engine-Host" class="headerlink" title="Server/Service/Engine/Host"></a>Server/Service/Engine/Host</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">"localhost"</span> <span class="attr">appBase</span>=<span class="string">"webapps"</span> <span class="attr">unpackWARs</span>=<span class="string">"true"</span> <span class="attr">autoDeploy</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Host容器用来定义虚拟主机，<font color="green">Engine从connector接收到请求进行分析后，
+会将相关的属性参数传递给对应的(筛选方式是从请求首部的host字段和虚拟主机名称进行匹配)虚拟host进行处理。
+如果没有合适的虚拟主机，则传递给默认虚拟主机。因此每个容器中必须至少定义一个虚拟主机，
+且必须有一个虚拟主机和Engine容器中定义的默认虚拟主机名称相同。</font></p>
+<p>相关属性：</p>
+<ul>
+<li><code>className</code>：给定<code>org.apache.catalina.Host</code>实现，默认为<code>org.apache.catalina.core.StandardHost</code>。</li>
+<li><code>name</code>：虚拟主机的主机名，忽略大小写。可以使用通配符，其匹配优先级低于精确名称的虚拟主机。</li>
+<li><code>appBase</code>：此Host的webapps目录，即webapp部署在此虚拟主机上时的存放目录，使用相对路径时基于<code>$CATALINA_BASE</code>。</li>
+<li><code>xmlBase</code>：部署在此虚拟主机上的context xml目录。</li>
+<li><code>startStopThreads</code>：启动context容器时的并行线程数。如果使用了自动部署功能，则再次部署或更新时使用相同的线程池。</li>
+<li><code>autoDeploy</code>：在Tomcat处于运行状态时放置于appBase目录中的应用程序文件是否自动进行deploy或自动更新部署状态，默认为true。</li>
+<li><code>unpackWars</code>：在执行此webapps时是否先对归档格式的WAR文件解压再运行，默认为true。设置为false时会损耗性能。</li>
+<li><code>workDir</code>：该虚拟主机的工作目录。每个webapp都有自己的临时IO目录，默认该工作目录为$CATALINA_BASE/work。</li>
+</ul>
+<br>
+
+<h4 id="Server-Service-Engine-Host-Context"><a href="#Server-Service-Engine-Host-Context" class="headerlink" title="Server/Service/Engine/Host/Context"></a>Server/Service/Engine/Host/Context</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Context</span> <span class="attr">docBase</span>=<span class="string">"/doc"</span> <span class="attr">path</span>=<span class="string">"/fom"</span> <span class="attr">reloadable</span>=<span class="string">"true"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>connector和containor是整个tomcat的核心，而<font color="green">context则是containor的核心，它是真正管理servlet的地方，
+它的配置影响了servlet的工作方式。每个context代表一个webapp，因此必须在虚拟主机容器Host中有一个唯一的name。</font></p>
+<p>context容器有很多属性，详细内容见<a href="http://tomcat.apache.org/tomcat-8.5-doc/config/context.html#Attributes" target="_blank" rel="noopener">官方手册</a>，常见属性如下：</p>
+<ul>
+<li><code>className</code>：给定<code>org.apache.catalina.Context</code>的实现，默认为<code>org.apache.catalina.core.StandardContext</code>。</li>
+<li><code>cookies</code>：默认为true，表示启用cookie来标识session。</li>
+<li><code>docBase</code>：即DocumentRoot，归档WAR文件或非归档内容所在目录，可以是绝对路径，或者相对于该appBase的相对路径。</li>
+<li><code>path</code>：定义webapp访问更路径。 </li>
+<li><code>reloadable</code>：是否监控/WEB-INF/class和/WEB-INF/lib中的文件，变化时将自动重载，但监控会大幅增加负载，所以默认为false。</li>
+<li><code>wrapperClass</code>：实现wrapper容器的类，wrapper用于管理该context中的servlet，如果不指定则默认为标准类。</li>
+<li><code>xmlNamespaceAware</code>：和web.xml的解析方式有关。默认为true，设置为false可以提升性能。</li>
+<li><code>xmlValidation</code>：和web.xml的解析方式有关。默认为true，设置为false可以提升性能。</li>
+</ul>
+<br>
+
+<h3 id="2-2-其他组件"><a href="#2-2-其他组件" class="headerlink" title="2.2. 其他组件"></a>2.2. 其他组件</h3><br>
+
+<h4 id="Listener"><a href="#Listener" class="headerlink" title="Listener"></a>Listener</h4><p>监听器Listener，可以在特定事件发生时执行特定的操作，比如Tomcat的启动和停止。监听器可以在Server、Engine、Host或Context中，
+比如Server中有六个默认的监听器：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.startup.VersionLoggerListener"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.AprLifecycleListener"</span> <span class="attr">SSLEngine</span>=<span class="string">"on"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.JasperListener"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.JreMemoryLeakPreventionListener"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.ThreadLocalLeakPreventionListener"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>VersionLoggerListener</code>：Tomcat启动时，记录Tomcat、Java和操作系统的信息，该监听器必须是配置的第一个监听器。</li>
+<li><code>AprLifecycleListener</code>：Tomcat启动时，检查APR库，如果存在则加载。APR，即Apache Portable Runtime，是Apache可移植运行库，可以实现高可扩展性、高性能，以及与本地服务器技术更好的集成。</li>
+<li><code>JasperListener</code>：在Web应用启动之前初始化Jasper，Jasper是JSP引擎，把JVM不认识的JSP文件解析成java文件，然后编译成class文件供JVM使用。</li>
+<li><code>JreMemoryLeakPreventionListener</code>：与类加载器导致的内存泄露有关。</li>
+<li><code>GlobalResourcesLifecycleListener</code>：初始化<GlobalNamingResources>标签中定义的全局JNDI资源；如果没有该监听器，任何全局资源都不能使用。</li>
+<li><code>ThreadLocalLeakPreventionListener</code>：当Web应用因thread-local导致的内存泄露而要停止时，会触发线程池中线程的更新。当线程执行完任务被收回线程池时，活跃线程会一个一个的更新。只有当Web应用(即Context元素)的renewThreadsWhenStoppingContext属性设置为true时，该监听器才有效。</li>
+</ul>
+<br>
+
+<h4 id="GlobalNamingResources与Realm"><a href="#GlobalNamingResources与Realm" class="headerlink" title="GlobalNamingResources与Realm"></a>GlobalNamingResources与Realm</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">"UserDatabase"</span> <span class="attr">auth</span>=<span class="string">"Container"</span> <span class="attr">type</span>=<span class="string">"org.apache.catalina.UserDatabase"</span> </span></span><br><span class="line"><span class="tag">      <span class="attr">description</span>=<span class="string">"User database that can be updated and saved"</span> </span></span><br><span class="line"><span class="tag">      <span class="attr">factory</span>=<span class="string">"org.apache.catalina.users.MemoryUserDatabaseFactory"</span> <span class="attr">pathname</span>=<span class="string">"conf/tomcat-users.xml"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">GlobalNamingResources</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>GlobalNamingResources定义了全局资源，默认配置是从$TOMCAT_HOME/conf/tomcat-users.xml读取。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.realm.UserDatabaseRealm"</span> <span class="attr">resourceName</span>=<span class="string">"UserDatabase"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>realm定义的是一个安全上下文，提供了一种用户密码与web应用的映射关系，从而达到角色安全管理的作用，可以有多种方式，
+当使用UserDatabase时，就是使用上面GlobalNamingResources配置的tomcat-users.xml。</p>
+<ul>
+<li>JAASRealm：基于Java Authintication and Authorization Service实现用户认证；</li>
+<li>JDBCRealm：通过JDBC访问某关系型数据库表实现用户认证；</li>
+<li>JNDIRealm：基于JNDI使用目录服务实现认证信息的获取；</li>
+<li>MemoryRealm：查找tomcat-user.xml文件实现用户信息的获取；</li>
+<li>UserDatabaseRealm：基于UserDatabase文件(通常是tomcat-user.xml)实现用户认证，它实现是一个完全可更新和持久有效的MemoryRealm，
+因此能够跟标准的MemoryRealm兼容；</li>
+</ul>
+<br>
+
+<h4 id="Valve"><a href="#Valve" class="headerlink" title="Valve"></a>Valve</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.valves.AccessLogValve"</span> <span class="attr">directory</span>=<span class="string">"logs"</span> <span class="attr">prefix</span>=<span class="string">"localhost_access_log."</span> </span></span><br><span class="line"><span class="tag">   <span class="attr">suffix</span>=<span class="string">".txt"</span> <span class="attr">pattern</span>=<span class="string">"%h %l %u %t <span class="symbol">&amp;quot;</span>%r<span class="symbol">&amp;quot;</span> %s %b"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Valve意思是阀门，类似于过滤器，它可以工作在Engine与Host、Host与Context、或者Context与Web应用程序的某资源之间。
+一个容器内可以建立多个Valve，而且Valve定义的次序也决定了它们生效的次序。</p>
+<p>Valve有多种，每种Value的属性也就不同，比如上面的就是用于打印访问日志：</p>
+<ul>
+<li><code>AccessLogValve</code>：访问日志；</li>
+<li><code>ExtendedAccessValve</code>：扩展功能的访问日志；</li>
+<li><code>JDBCAccessLogValve</code>：通过JDBC将访问日志信息发送到数据库中；</li>
+<li><code>RequestDumperValve</code>：请求转储；</li>
+<li><code>RemoteAddrValve</code>：基于远程地址的访问控制；</li>
+<li><code>RemoteHostValve</code>：基于远程主机名称的访问控制；</li>
+<li><code>SemaphoreValve</code>：用于控制Tomcat主机上任何容器上的并发访问数量；</li>
+<li><code>JvmRouteBinderValve</code>：在配置多个Tomcat为以Apache通过mod_proxy或mod_jk作为前端的集群架构中，当期望停止某节点时，可以通过此Valve将用记请求定向至备用节点；使用此Valve，必须使用JvmRouteSessionIDBinderListener；</li>
+<li><code>ReplicationValve</code>：专用于Tomcat集群架构中，可以在某个请求的session信息发生更改时触发session数据在各节点间进行复制；</li>
+<li><code>SingleSignOn</code>：将两个或多个需要对用户进行认证的webapp在认证用户时连接在一起，即一次认证即可访问所有连接在一起的webapp；</li>
+<li><code>ClusterSingleSingOn</code>：对SingleSignOn的扩展，专用于Tomcat集群当中，需要结合ClusterSingleSignOnListener进行工作；</li>
+</ul>
+<p>比如RemoteHostValve和RemoteAddrValve可以基于主机名和IP实现访问控制，通过allow或deny来进行定义，有点类似于Apache的访问控制功能</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.valves.RemoteAddrValve"</span> <span class="attr">allow</span>=<span class="string">"127\.0\.0\.1"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>相关属性:</p>
+<ul>
+<li><code>className</code>：实现类</li>
+<li><code>allow</code>：以逗号分开的允许访问的IP地址列表，支持正则，点号“.”用于IP地址时需要转义；仅定义allow项时，非明确allow的地址均被deny；</li>
+<li><code>deny</code>: 以逗号分开的禁止访问的IP地址列表，支持正则；使用方式同allow；仅定义deny项时，非明确deny的地址均被allow；</li>
+</ul>
+<br>
+
+<h2 id="3-配置与部署"><a href="#3-配置与部署" class="headerlink" title="3. 配置与部署"></a>3. 配置与部署</h2><p>上面已经介绍，一个Context就代表一个Web应用，所以部署应用也就是部署Context，可以有几种部署方式</p>
+<h3 id="3-1-静态部署"><a href="#3-1-静态部署" class="headerlink" title="3.1. 静态部署"></a>3.1. 静态部署</h3><p>即直接将Context配置到conf/server.xml中，但是这样只能通过重启tomcat来生效，无法自动部署应用程序。
+虽说官方不建议如此推荐，但很多人出于习惯或方便，还是会直接写在server.xml中。</p>
+<h3 id="3-2-自动部署"><a href="#3-2-自动部署" class="headerlink" title="3.2. 自动部署"></a>3.2. 自动部署</h3><p>开启自动部署即将对应虚拟主机Host的<code>deployOnStartup</code>和<code>autoDeploy</code>设置为true。<code>deployOnStartup</code>即在Tomcat启动时检测Web应用，
+而autoDeploy则在运行时定期检测Web应用的变化。检测的位置即为Host的属性<code>appBase</code>所指定的目录，默认为webapps，
+另外，xmlBase则指定Web应用的XML配置文件所在的目录，默认为<code>conf/&lt;engine_name&gt;/&lt;host_name&gt;</code>，即<code>conf\Catalina\localhost</code>。</p>
+<p>一个Web应用可以包括以下文件：XML配置，WAR包，以及一个应用目录；其中XML配置文件位于xmlBase指定的目录，WAR包和应用目录位于appBase指定的目录。
+Tomcat按照如下的顺序进行扫描，来检测应用更新：<br>1、扫描虚拟主机指定的xmlBase下的XML配置文件<br>2、扫描虚拟主机指定的appBase下的WAR文件<br>3、扫描虚拟主机指定的appBase下的应用目录     </p>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li><a href="https://www.cnblogs.com/f-ck-need-u/p/8120008.html" target="_blank" rel="noopener">https://www.cnblogs.com/f-ck-need-u/p/8120008.html</a> </li>
+<li><a href="https://www.cnblogs.com/kismetv/p/7228274.html" target="_blank" rel="noopener">https://www.cnblogs.com/kismetv/p/7228274.html</a> </li>
+</ol>
+
+      
+    </div>
+	
+	
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2017/11/03/20171103/">
+		    Tomcat. 笔记二（server.xml加载）
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2017/10/08/20171008/">
+		    设计模式. 代理模式
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/java-web/">java web</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Tomcat/">Tomcat</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-容器结构"><span class="toc-text">1. 容器结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-server-xml"><span class="toc-text">2. server.xml</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-核心组件"><span class="toc-text">2.1 核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Server"><span class="toc-text">Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service"><span class="toc-text">Server&#x2F;Service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Executor"><span class="toc-text">Server&#x2F;Service&#x2F;Executor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Connector"><span class="toc-text">Server&#x2F;Service&#x2F;Connector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine"><span class="toc-text">Server&#x2F;Service&#x2F;Engine</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine-Host"><span class="toc-text">Server&#x2F;Service&#x2F;Engine&#x2F;Host</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine-Host-Context"><span class="toc-text">Server&#x2F;Service&#x2F;Engine&#x2F;Host&#x2F;Context</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-其他组件"><span class="toc-text">2.2. 其他组件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Listener"><span class="toc-text">Listener</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GlobalNamingResources与Realm"><span class="toc-text">GlobalNamingResources与Realm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Valve"><span class="toc-text">Valve</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-配置与部署"><span class="toc-text">3. 配置与部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-静态部署"><span class="toc-text">3.1. 静态部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-自动部署"><span class="toc-text">3.2. 自动部署</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2020 shanhm1991 
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
