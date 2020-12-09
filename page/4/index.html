@@ -40,7 +40,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  51 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  52 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -447,6 +447,51 @@
 
 
 
+  <article id="post-20171105" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-11-04T16:00:00.000Z"><a href="/2017/11/05/20171105/">2017-11-05</a></time>
+	  
+      
+  
+    <h1 class="title"><a href="/2017/11/05/20171105/">Tomcat. 笔记三（类加载）</a></h1>
+  
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+      
+    </div>
+	
+	
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/11/05/20171105/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20171103" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -492,57 +537,6 @@
 
 
 
-  <article id="post-20171101" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2017-10-31T16:00:00.000Z"><a href="/2017/11/01/20171101/">2017-11-01</a></time>
-	  
-      
-  
-    <h1 class="title"><a href="/2017/11/01/20171101/">Tomcat. 笔记一（容器结构）</a></h1>
-  
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-    </header>
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>Tomcat作为一个web应用容器，其中包含了各种组件以及子容器，相互之间存在一定的层级和作用关系，并且通过<code>server.xml</code>来描述。
-<font color="green">
-其实Tomcat本质是一个Servlet容器，servlet是一组处理网络请求的接口规范，它的实现知道如何处理具体的请求，
-Servlet容器的作用就是负责将接收到的请求分配给对应的servlet进行处理。<br>可以将Tomcat当成一个比较大的Servlet容器，然后它通过协议端口、url等将servlet请求做了一个层次分类，
-具体的做法就是给每种分类都对应一个组件，比如通过协议和端口号可以确定Connector，通过url可以确定Cotext，也就确定了对应的web应用，
-因此，了解Tomcat的容器结构也就基本可以理解它是如何分配和处理请求的。</font> 本文从<code>server.xml</code>切入，梳理一下主要的组件，
-从中可以体会一下Tomcat高度模块化的设计。</p>
-      
-    </div>
-	
-	
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2017/11/01/20171101/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
 
 <nav id="pagination">
   
@@ -569,7 +563,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
   <h3 class="title">Categories</h3>
   <ul class="entry">
   
-    <li><a href="/categories/java-web/">java web</a><small>2</small></li>
+    <li><a href="/categories/java-web/">java web</a><small>3</small></li>
   
     <li><a href="/categories/java基础/">java基础</a><small>6</small></li>
   
@@ -591,7 +585,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/AVL%E6%A0%91/" style="font-size: 10px;">AVL树</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B+树</a> <a href="/tags/B%E6%A0%91/" style="font-size: 10px;">B树</a> <a href="/tags/CallerSensitive/" style="font-size: 10px;">CallerSensitive</a> <a href="/tags/ClassLoader/" style="font-size: 10px;">ClassLoader</a> <a href="/tags/ContextClassLoader/" style="font-size: 10px;">ContextClassLoader</a> <a href="/tags/Digester/" style="font-size: 10px;">Digester</a> <a href="/tags/DriverManager/" style="font-size: 10px;">DriverManager</a> <a href="/tags/ERROR-1045/" style="font-size: 10px;">ERROR#1045</a> <a href="/tags/GC/" style="font-size: 12px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/LinkedHashMap/" style="font-size: 10px;">LinkedHashMap</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Mysql/" style="font-size: 12px;">Mysql</a> <a href="/tags/ORA-00845/" style="font-size: 10px;">ORA-00845</a> <a href="/tags/ORA-01078/" style="font-size: 10px;">ORA-01078</a> <a href="/tags/ORA-01102/" style="font-size: 10px;">ORA-01102</a> <a href="/tags/SQL-3167/" style="font-size: 10px;">SQL#3167</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Tomcat/" style="font-size: 12px;">Tomcat</a> <a href="/tags/TreeMap/" style="font-size: 10px;">TreeMap</a> <a href="/tags/VNC/" style="font-size: 10px;">VNC</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class%E6%96%87%E4%BB%B6/" style="font-size: 10px;">class文件</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/jstack/" style="font-size: 10px;">jstack</a> <a href="/tags/jstat/" style="font-size: 10px;">jstat</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/poi/" style="font-size: 14px;">poi</a> <a href="/tags/rc-local%E4%B8%8D%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98/" style="font-size: 10px;">rc.local不执行问题</a> <a href="/tags/ubuntu/" style="font-size: 16px;">ubuntu</a> <a href="/tags/vmware/" style="font-size: 12px;">vmware</a> <a href="/tags/yum/" style="font-size: 10px;">yum</a> <a href="/tags/%E3%80%8Ajava%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E3%80%8B/" style="font-size: 20px;">《java并发编程实战》</a> <a href="/tags/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B/" style="font-size: 18px;">《深入理解java虚拟机》</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">代理模式</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">原型模式</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 10px;">字符串</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E5%A4%8D%E5%88%B6/" style="font-size: 10px;">对象复制</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">工厂模式</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">建造者模式</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 10px;">异常</a> <a href="/tags/%E6%9E%9A%E4%B8%BE/" style="font-size: 10px;">枚举</a> <a href="/tags/%E6%A0%88/" style="font-size: 10px;">栈</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD/" style="font-size: 10px;">类加载</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 10px;">红黑树</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" style="font-size: 10px;">运行时数据区</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 10px;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 10px;">队列</a>
+    <a href="/tags/AVL%E6%A0%91/" style="font-size: 10px;">AVL树</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B+树</a> <a href="/tags/B%E6%A0%91/" style="font-size: 10px;">B树</a> <a href="/tags/CallerSensitive/" style="font-size: 10px;">CallerSensitive</a> <a href="/tags/ClassLoader/" style="font-size: 10px;">ClassLoader</a> <a href="/tags/ContextClassLoader/" style="font-size: 10px;">ContextClassLoader</a> <a href="/tags/Digester/" style="font-size: 10px;">Digester</a> <a href="/tags/DriverManager/" style="font-size: 10px;">DriverManager</a> <a href="/tags/ERROR-1045/" style="font-size: 10px;">ERROR#1045</a> <a href="/tags/GC/" style="font-size: 12px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/LinkedHashMap/" style="font-size: 10px;">LinkedHashMap</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Mysql/" style="font-size: 12px;">Mysql</a> <a href="/tags/ORA-00845/" style="font-size: 10px;">ORA-00845</a> <a href="/tags/ORA-01078/" style="font-size: 10px;">ORA-01078</a> <a href="/tags/ORA-01102/" style="font-size: 10px;">ORA-01102</a> <a href="/tags/SQL-3167/" style="font-size: 10px;">SQL#3167</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Tomcat/" style="font-size: 14px;">Tomcat</a> <a href="/tags/TreeMap/" style="font-size: 10px;">TreeMap</a> <a href="/tags/VNC/" style="font-size: 10px;">VNC</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class%E6%96%87%E4%BB%B6/" style="font-size: 10px;">class文件</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/jstack/" style="font-size: 10px;">jstack</a> <a href="/tags/jstat/" style="font-size: 10px;">jstat</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/poi/" style="font-size: 14px;">poi</a> <a href="/tags/rc-local%E4%B8%8D%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98/" style="font-size: 10px;">rc.local不执行问题</a> <a href="/tags/ubuntu/" style="font-size: 16px;">ubuntu</a> <a href="/tags/vmware/" style="font-size: 12px;">vmware</a> <a href="/tags/yum/" style="font-size: 10px;">yum</a> <a href="/tags/%E3%80%8Ajava%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E3%80%8B/" style="font-size: 20px;">《java并发编程实战》</a> <a href="/tags/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B/" style="font-size: 18px;">《深入理解java虚拟机》</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">代理模式</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">原型模式</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 10px;">字符串</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E5%A4%8D%E5%88%B6/" style="font-size: 10px;">对象复制</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">工厂模式</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">建造者模式</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 10px;">异常</a> <a href="/tags/%E6%9E%9A%E4%B8%BE/" style="font-size: 10px;">枚举</a> <a href="/tags/%E6%A0%88/" style="font-size: 10px;">栈</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD/" style="font-size: 10px;">类加载</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 10px;">红黑树</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" style="font-size: 10px;">运行时数据区</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 10px;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 10px;">队列</a>
   </div>
 </div>
 
@@ -599,7 +593,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
   
   <div class="widget tag">
     <h3 class="title">Achives</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">18</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">2</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">18</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">2</span></li></ul>
   </div>
 
 
