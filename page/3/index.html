@@ -66,15 +66,24 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-09T16:00:00.000Z"><a href="/2019/01/10/20190110/">2019-01-10</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/10/20190110/">java并发编程实战.笔记十（同步工具类的设计）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/10/20190110/">java并发编程实战.笔记十（同步工具类的设计）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>创建状态依赖类的最简单方法通常是在类库中现有状态依赖类的基础上进行构造。如果类库中没有提供你需要的功能，可以使用java语言和类库提供的底层机制来构造自己的同步机制，
@@ -82,8 +91,6 @@
 <p><font color="LimeGreen">在单线程程序中调用方法时，如果基于某个状态的前提条件未得到满足，那么这个条件永远无法成真。而在并发程序中，基于状态的条件可能会由于其他线程的操作而改变。</font></p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -113,23 +120,30 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-08T16:00:00.000Z"><a href="/2019/01/09/20190109/">2019-01-09</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/09/20190109/">java并发编程实战.笔记九（显式锁的使用）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/09/20190109/">java并发编程实战.笔记九（显式锁的使用）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java 5.0之前，在协调共享对象的访问时可以使用的机制有<code>synchronized</code>和<code>volatile</code>。java 5.0新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置加锁机制不适用时，作为一种可选择的高级功能。
 在java 6.0中，使用了与<code>ReentrantLock</code>类似的算法对内置锁进行了改进，有效地提高了内置锁的可伸缩性。</p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -159,22 +173,29 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-07T16:00:00.000Z"><a href="/2019/01/08/20190108/">2019-01-08</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/08/20190108/">java并发编程实战.笔记八（活跃性问题以及性能思考）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/08/20190108/">java并发编程实战.笔记八（活跃性问题以及性能思考）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在安全性与活跃性之间通常存在着某种制衡，我们使用加锁机制来确保线程安全，但如果过度的使用加锁，则可能导致死锁。</p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -204,15 +225,24 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-06T16:00:00.000Z"><a href="/2019/01/07/20190107/">2019-01-07</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/07/20190107/">java并发编程实战.笔记七（线程池的使用）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/07/20190107/">java并发编程实战.笔记七（线程池的使用）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><font color="red">只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。</font></p>
@@ -220,8 +250,6 @@
 <p><font color="Gray">关于线程池Api的具体设置和使用想在以后介绍api源码时再做整理，这里笔记就不赘述了。</font></p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -251,15 +279,24 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-05T16:00:00.000Z"><a href="/2019/01/06/20190106/">2019-01-06</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/06/20190106/">java并发编程实战.笔记六（任务的取消与关闭）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/06/20190106/">java并发编程实战.笔记六（任务的取消与关闭）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>如果外部代码能在某个操作正常完成之前将其置入完成状态，那么这个操作就可以称为可取消的，<font color="red">行为良好的软件都应该能很完善地处理失败、关闭和取消等过程。</font>    </p>
@@ -274,8 +311,6 @@
 <p><font color="LimeGreen">Java中并没有提供任何机制来安全地终止线程，但它提供了一种协作机制。通过设置某个已请求取消的标志，然后任务执行过程中定期地查看该标志，如果设置了，那么任务提前结束。</font></p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -305,15 +340,24 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-04T16:00:00.000Z"><a href="/2019/01/05/20190105/">2019-01-05</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/05/20190105/">java并发编程实战.笔记五（任务的执行）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/05/20190105/">java并发编程实战.笔记五（任务的执行）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>任务通常是一些抽象且离散的工作单元。通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，并提供一种自然的并行工作结构来提升并发性。</p>
@@ -322,8 +366,6 @@
 这也为调度与负载均衡等的实现提供了更好的灵活性。</font>  </p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -353,23 +395,30 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-03T16:00:00.000Z"><a href="/2019/01/04/20190104/">2019-01-04</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/04/20190104/">java并发编程实战.笔记四（线程安全性的委托以及常见的线程安全容器和工具）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/04/20190104/">java并发编程实战.笔记四（线程安全性的委托以及常见的线程安全容器和工具）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在上一篇文章中，曾利用过将现场安全性委托给现有的线程安全类的方法。<font color="LimeGreen">委托是创建线程安全类的一个最有效策略：
 只需让现有的线程安全类管理所有的状态即可。</font>Java类库包含丰富的并发基础构建模块，如线程安全的容器以及各种用于协调多个相互协作的线程的同步工具类。</p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -399,15 +448,24 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-02T16:00:00.000Z"><a href="/2019/01/03/20190103/">2019-01-03</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/03/20190103/">java并发编程实战.笔记三（线程安全类的设计）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/03/20190103/">java并发编程实战.笔记三（线程安全类的设计）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在设计线程安全类的过程中，需要包含以下三个基本要素：<br>1.找出构成对象状态的所有变量；<br>2.找出约束状态变量的不变性条件；<br>3.建立对象状态的并发访问管理策略；</p>
@@ -416,8 +474,6 @@
 容器通常表现出一种所有权分离的形式，其中容器拥有其自身的状态，而客户代码则拥有容器中各个对象的状态。</p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -447,15 +503,24 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-01T16:00:00.000Z"><a href="/2019/01/02/20190102/">2019-01-02</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/02/20190102/">java并发编程实战.笔记二（线程安全之可见性以及对象的发布）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/02/20190102/">java并发编程实战.笔记二（线程安全之可见性以及对象的发布）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。<font color="red">同步的另一个重要目的即内存可见性。</font>我们不仅希望防止某个线程正在使用的对象状态
@@ -463,8 +528,6 @@
 满足Happens-Before规则）</font></p>
       
     </div>
-	
-	
 	
     <footer>
       
@@ -494,15 +557,24 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2018-12-31T16:00:00.000Z"><a href="/2019/01/01/20190101/">2019-01-01</a></time>
-	  
       
+      
+
   
-    <h1 class="title"><a href="/2019/01/01/20190101/">java并发编程实战.笔记一（线程安全之原子性）</a></h1>
   
+    <h1 class="title">
+       <a href="/2019/01/01/20190101/">java并发编程实战.笔记一（线程安全之原子性）</a>
+    </h1>
+    
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><font color="red">如果当多个线程访问某个类时，这个类始终都能表现正确的行为，
@@ -511,8 +583,6 @@
 一般在线程安全的类中会封装必要的同步机制来保证原子性操作，即让操作不可分割，以便使各个线程依次串行访问。
       
     </div>
-	
-	
 	
     <footer>
       
@@ -561,19 +631,19 @@
   <h3 class="title">Categories</h3>
   <ul class="entry">
   
-    <li><a href="/categories/java-web/">java web</a><small>3</small></li>
-  
     <li><a href="/categories/java基础/">java基础</a><small>6</small></li>
   
-    <li><a href="/categories/开源工具/">开源工具</a><small>3</small></li>
+    <li><a href="/categories/开源代码/">开源代码</a><small>3</small></li>
   
     <li><a href="/categories/数据结构/">数据结构</a><small>6</small></li>
   
+    <li><a href="/categories/编程笔记/">编程笔记</a><small>3</small></li>
+  
     <li><a href="/categories/设计模式/">设计模式</a><small>5</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>21</small></li>
-  
     <li><a href="/categories/问题解决/">问题解决</a><small>8</small></li>
+  
+    <li><a href="/categories/阅读笔记/">阅读笔记</a><small>21</small></li>
   
   </ul>
 </div>
@@ -603,12 +673,17 @@
     <div class="clearfix"></div>
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
+
   
-  &copy; 2020 shanhm1991 
+  
+      &copy; 2020 shanhm1991 
+  
+  
   
   <font style="float: right">
 </div>
-<div class="clearfix"></div></footer>
+<div class="clearfix"></div>
+</footer>
   
 <script src="/js/jquery-3.4.1.min.js"></script>
 

@@ -79,18 +79,48 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-06-09T16:00:00.000Z"><a href="/2019/06/10/20190610/">2019-06-10</a></time>
-	  
       
+      
+
   
-    <h1 class="p-name title" itemprop="headline name">数据结构. 红黑树</h1>
-	
   
+    <h1 class="p-name title" itemprop="headline name">
+        数据结构. 红黑树
+    </h1>
+    
+    
+  
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 7.9k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+   <font style="color: #999;"> words: 7.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 34min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/数据结构/">数据结构</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/红黑树/">红黑树</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
 
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h3><p>红黑树是Avl树的一个变种，它也是在二叉查找树的基础上添加平衡条件，只是它对平衡条件的描述不像AVl树那样直接，而是转化成对节点颜色规则的描述。</p>
@@ -108,11 +138,11 @@
 <p>通过对任何一条从根到空节点的路径上各个结点的颜色进行约束，红黑树可以确保没有一条路径会比其他路径长出2倍，因而红黑树是近似平衡的。</p>
 <a id="more"></a>
 
-<p><img src="/img/RBTree1.jpg" alt=""> </p>
+<p><img src="/img/20190610.1.jpg" alt=""> </p>
 <h3 id="2-分析实现"><a href="#2-分析实现" class="headerlink" title="2. 分析实现"></a>2. 分析实现</h3><p>为了便于处理红黑树代码中的边界条件，使用两个标记节点header和nil来充当哨兵，它们与树中的普通节点有相同的属性，颜色设为黑色。
 将header的值设为负无穷，因此它的右子节点就是真正的根，在对树进行遍历时我们可以用header作为起点。nil的值可以为任意值，将它作为所有空节点的统一引用，
 即让所有树叶的左右子节点都指向nil，那么在遍历时就可以将nil视为结束的标志。</p>
-<p><img src="/img/RBTree2.jpg" alt=""> </p>
+<p><img src="/img/20190610.2.jpg" alt=""> </p>
 <p>红黑树也是一颗查找二叉树，所以它的基本操作与查找二叉树一致，区别也在于插入和删除后的平衡恢复。
 只是<font color="LimeGreen">实现平衡时的目标就是满足它对颜色规则的定义，</font>至于树的平衡与否已经由规则本身去保证。</p>
 <h4 id="2-1-插入"><a href="#2-1-插入" class="headerlink" title="2.1. 插入"></a>2.1. 插入</h4><p>与二叉查找树一样，插入节点其实就是添加一个树叶，主要问题是在添加结束时可能要做一些调整来保证红黑树的规则不被破坏。不过，根据规则4，
@@ -122,27 +152,27 @@
 这时再做一些调整。<br>先分析一下插入之前的可能情形，根据规则3，如果parent是红色，那么可以断定grand以及parent的另一个子节点一定是黑色。不仅如此，因为插入的是树叶节点在之前一定是nil，
 那么parent的另一个子节点必然也是nil，否则插入之前parent就违反了规则4。再看parent的兄弟节点，如果它是黑色的，那么它一定也是nil节点；
 如果它是红色的，那么它的两个子节点一定都是nil节点，否则插入之前grand就违反了规则4。<br>所以，如果parent是红色，那么我们可以完整地画出插入之前的所有可能情况，一共有4种，其中待插入节点的位置就是图中parent下面的两个nil之一。</p>
-<p><img src="/img/RBTree3.jpg" alt=""> </p>
+<p><img src="/img/20190610.3.jpg" alt=""> </p>
 <p>可以看出，1和2，3和4分别是对称的两种情况，区别在于parent与grand的大小关系，其实<font color="LimeGreen">可以概括为parent的兄弟节点uncle是黑色还是红色的两种情况。</font>    </p>
 <ul>
 <li>如果parent为红色，uncle为黑色</li>
 </ul>
 <p>以情况1为例（即parent小于grand）：<br>如果current小于parent，那么插入之后，可以将parent和grand的颜色互换，然后将grand右旋，这样就能保证原来以grand为根的这个子树的黑高保持不变，也就保证了整棵树不被破坏。</p>
-<p><img src="/img/RBTree4.jpg" alt=""></p>
+<p><img src="/img/20190610.4.jpg" alt=""></p>
 <p>如果current大于parent，则可以先将parent左旋，然后将current视为parent，再与上面进行相同的操作，即可恢复平衡。</p>
-<p><img src="/img/RBTree5.jpg" alt=""></p>
+<p><img src="/img/20190610.5.jpg" alt=""></p>
 <ul>
 <li>如果parent为红色，uncle为红色</li>
 </ul>
 <p>这时无论怎么旋转都已经解决不了问题，不过可以知道，在插入之前grand到下面各个nil的黑节点数为1，因此，只要保证grand的黑高仍然为1就行，
 那么，通过将grand与其左右子节点的颜色进行翻转便可达到目标。<br>以情况3为例：</p>
-<p><img src="/img/RBTree6.jpg" alt=""></p>
+<p><img src="/img/20190610.6.jpg" alt=""></p>
 <p>但是，翻转会使grand变成红色，这时如果曾祖父也是红色，那么将违反了规则3。因此可能需要朝着树根的方向进行逐层分析，直到不再有两个相连的红色节点或者到达树根为止，但这显然会很麻烦。   </p>
 <p>事实上，由于颜色翻转的等价性，我们<font color="LimeGreen">可以在查找插入节点位置的过程中，通过颜色翻转来避免掉uncle为红色的情况，即将颜色翻转的事情提前做了。</font><br>在自上而下的查找过程中，如果看到一个节点X的两个子节点都为红色，可以使X变成红色，而两个子节点变成黑色（如果X是根，则可以在翻转之后再将其置为黑色），结果依然满足红黑树的规则。<br>只有当X的parent为红色时，才会破坏红黑树的规则。不过这时可以断定X的兄弟节点，X的grand，以及X的uncle都是黑色的（因为如果X的parent和uncle都为红色，
 那么一定会在自上而下的查找和翻转过程中被过滤掉）。那么，可以将X视为current，然后与上面parent为红色，uncle为黑色的情形进行相同的处理。<br>下面通过画图来说明一种情形（对称情形类似处理）：<br>先对X与其子节点进行颜色翻转</p>
-<p><img src="/img/RBTree7.jpg" alt=""></p>
+<p><img src="/img/20190610.7.jpg" alt=""></p>
 <p>然后，将X视为之前的current，对parent和grand进行换色和旋转</p>
-<p><img src="/img/RBTree8.jpg" alt=""></p>
+<p><img src="/img/20190610.8.jpg" alt=""></p>
 <p>完成之后，将新的根（即原本grand的位置）视为新的current，然后重新向下遍历。由于X的孙子节点之前一定为黑色，而X的儿子节点在翻转之后也为黑色，因此在调整之后，
 可以保证在X的下面将有连续两层不会出现红节点。所以，尽管旋转调整会使得gand的位置变得错误，但在接下来的遍历中，又会立即将grand-parent-current恢复成正确的位置关系。</p>
 <p><strong>总结节点插入问题：</strong>首先根据二叉查找树的性质，可以知道插入节点就是添加树叶，其次对于红黑树而言，插入红色节点不会影响路径上的黑节点数。因此，
@@ -154,39 +184,39 @@
 不过在红黑树中，为了保证节点的颜色规则，替换时将只进行值的替换。其实，根据红黑树的规则可以得出一个简单的推论：如果一个树叶没有兄弟节点，那么它一定为红色，或者说如果一个树叶为黑色，
 则它必然有兄弟节点。另外，还可以断定：对于任意节点，其右子树的最小（即最左）节点最多存在一个红色右子节点，其左子树的最大（即最右）节点最多存在一个红色左子节点。
 因此，当左子树的最大节点或右子树的最小节点不是树叶时，可以继续用同样的思路来转换要删除的目标，并且这时可以断定最后删除的树叶一定是红色。</p>
-<p><img src="/img/RBTree0.jpg" alt=""></p>
+<p><img src="/img/20190610.9.jpg" alt=""></p>
 <p>再来讨论删除黑色树叶的情形，由于黑色树叶必然会存在兄弟节点（树根除外），因此在下面的讨论中首先假设要删除的黑色树叶总是在左边（如果在右边则对称处理），
 这时可以根据其兄弟节点brother和父亲节点parent的颜色来将删除情形分为3种。下面分别进行画图分析（图中省略掉空节点nil）： </p>
 <ul>
 <li>1.parent为红色，brother为黑色<br>由于current是树叶，那么可以断定brother下面不会再有黑色的后代节点，至多只能有红色的儿子节点，否则parent在删除前将违反规则4。</li>
 </ul>
 <p>1.1 先看brother没有儿子的情况，此时看上去比较简单，直接对parent进行左旋即可解决问题，能够保证在删除调整前后以原parent为根的子树的黑高不变。</p>
-<p><img src="/img/RBTree9.jpg" alt=""></p>
+<p><img src="/img/20190610.10.jpg" alt=""></p>
 <p>1.2 但是，如果brother有一个红色左儿子（右儿子没有影响，因此忽略），那么直接对parent进行左旋，将会造成两个连续的红色的节点而违反规则3，
 这时需要先将brother右旋，然后再对parent进行换色并左旋来解决。</p>
-<p><img src="/img/RBTree10.jpg" alt=""></p>
+<p><img src="/img/20190610.11.jpg" alt=""></p>
 <p>因此，需要根据brother是否有红色左儿子将情形1再分为2种子情形来进行处理。</p>
 <ul>
 <li>2.parent为黑色，brother为红色<br>同样由于current是树叶，可以断定brother的两个黑色的儿子节点下面至多只能有一层红色子节点，下面根据brother左儿子的子节点情况（右儿子的子节点没有影响，因此忽略）来分情形讨论。</li>
 </ul>
 <p>2.1 还是先看brother的左儿子没有子节点的情况，这时可以将brother与其左儿子进行换色，然后将parent进行左旋。</p>
-<p><img src="/img/RBTree16.jpg" alt=""></p>
+<p><img src="/img/20190610.12.jpg" alt=""></p>
 <p>2.2 如果brother的左儿子有一个红色右子节点，这时需要先将brother左儿子的右子节点涂成黑色，并将brother右旋，然后再将parent左旋。</p>
-<p><img src="/img/RBTree17.jpg" alt=""></p>
+<p><img src="/img/20190610.13.jpg" alt=""></p>
 <p>2.3 如果brother的左儿子没有红色右子节点，但有一个红色左子节点。这时可以先将brother左儿子的左子节点涂成黑色，并将brother的左儿子右旋，这样将情形转化成2.2，
 然后依次将brother右旋，parent左旋。</p>
-<p><img src="/img/RBTree18.jpg" alt=""></p>
+<p><img src="/img/20190610.14.jpg" alt=""></p>
 <p>因此，需要根据brother左儿子的子节点情况将情形2再分为3种子情形来处理。</p>
 <ul>
 <li>3.parent为黑色，brother为黑色<br>还是由于current是树叶，可以断定brother下面至多只能有一层红色的儿子节点，否则parent在删除前就违反了规则4。</li>
 </ul>
 <p>3.1 还是先看brother没有儿子的情况，此时通过parent为根的子树自身已经解决不了问题，想法是将brother变成红色来降低parent子树的黑高，然后将parent子树整个视为一个current进行处理，
 下面会再详细说明。</p>
-<p><img src="/img/RBTree12.jpg" alt=""></p>
+<p><img src="/img/20190610.15.jpg" alt=""></p>
 <p>3.2 如果brother有一个红色右儿子，这时可以将brother的右儿子变成黑色，然后将parent左旋。</p>
-<p><img src="/img/RBTree13.jpg" alt=""></p>
+<p><img src="/img/20190610.16.jpg" alt=""></p>
 <p>3.3 如果brother没有红色右儿子，但是存在一个红色左儿子，这时可以将brother的左儿子变成黑色，然后将brother右旋，再将parent左旋。</p>
-<p><img src="/img/RBTree14.jpg" alt=""></p>
+<p><img src="/img/20190610.17.jpg" alt=""></p>
 <p>因此，需要根据brother的子节点情况将情形3再分为3种子情形来处理。</p>
 <p>小结一下，上面一共将删除了黑色树叶的情形分成了8种，除了3.1，其它都可以在parent子树内部解决问题。为了进一步分析3.1的问题，需要扩展下思维，
 可以想象一下，<font color="LimeGreen">将current是树叶这个前提去掉，然后将current视为根为黑色的子树。假设这时删除的黑色树叶落在current子树下面，
@@ -197,24 +227,24 @@
 并用a,b,c,d,e,f,g,h标出树根下面的一些相对位置（可以将这些位置看成nil，只是图中做了省略，没有画出current和brother到这些nil的完整路径）。
 所有图的最终目标的都是保证：如果current子树的黑高降1，那么通过调整保证x到a,b,c,d,e,f,g,h这些位置的相对黑高不变。</p>
 <p>对于1.1，如果current子树黑高降1，与之前一样，直接将parent左旋，可以保证在调整前后，x到a,b,c,d,e的相对黑高保持不变，如图：</p>
-<p><img src="/img/RBTree19.jpg" alt=""></p>
+<p><img src="/img/20190610.18.jpg" alt=""></p>
 <p>对于1.2，如果current子树黑高降1，与之前一样，先将brother右旋，然后将parent变成黑色并左旋，也能保证x到a,b,c,d,e的相对黑高保持不变，如图：</p>
-<p><img src="/img/RBTree20.jpg" alt=""></p>
+<p><img src="/img/20190610.19.jpg" alt=""></p>
 <p>对于2.1，如果current子树黑高降1，与之前一样，将brother与左儿子换色，然后对parent左旋，可以保证x到a,b,c,d,e,f,g,h的相对黑高保持不变，如图：</p>
-<p><img src="/img/RBTree24.jpg" alt=""></p>
+<p><img src="/img/20190610.20.jpg" alt=""></p>
 <p>对于2.2，如果current子树黑高降1，与之前一样，将brother的左儿子的右子节点涂成黑色，然后对brother右旋，再对parent左旋，也可以保证x到a,b,c,d,e,f,g,h的相对黑高保持不变，
 如图（A涂成灰色表示其颜色可以红或者黑，没有影响）：</p>
-<p><img src="/img/RBTree25.jpg" alt=""></p>
+<p><img src="/img/20190610.21.jpg" alt=""></p>
 <p>对于2.3，如果current子树黑高降1，与之前一样，先将brother的左儿子的左子节点涂成黑色，并对将brother的左儿子右旋，这样将情形转化成2.2，然后再进行同样的旋转调整，
 以保证x到a,b,c,d,e,f,g,h的相对黑高保持不变，如图：</p>
-<p><img src="/img/RBTree26.jpg" alt=""></p>
+<p><img src="/img/20190610.22.jpg" alt=""></p>
 <p>对于3.1，如果current子树黑高降1，与之前一样，依然只能降低brother的黑高，使x到a,b,c,d,e,f的相对黑高同时降1，然后将parent视为新的current子树继续向树根追溯，如图：</p>
-<p><img src="/img/RBTree21.jpg" alt=""></p>
+<p><img src="/img/20190610.23.jpg" alt=""></p>
 <p>对于3.2，如果current子树黑高降1，与之前一样，将brother的右儿子涂黑，然后对parent左旋，也能保证x到a,b,c,d,e,f的相对黑高保持不变，
 如图（图中将left涂成灰色表示其颜色可以红或者黑，没有影响）：</p>
-<p><img src="/img/RBTree22.jpg" alt=""></p>
+<p><img src="/img/20190610.24.jpg" alt=""></p>
 <p>对于3.3，如果current子树黑高降1，与之前一样，先将brother的左儿子涂黑，然后对parent右旋，再对parent左旋，也能保证x到a,b,c,d,e,f的相对黑高保持不变，如图：</p>
-<p><img src="/img/RBTree23.jpg" alt=""></p>
+<p><img src="/img/20190610.25.jpg" alt=""></p>
 <p><strong>总结节点删除问题：</strong>首先将问题转化为对树叶的删除，如果树叶是红色则直接删除，如果是黑色，则根据兄弟节点和父节点的颜色情况来对情形进行分类。想法是尽量在子树中解决，
 如果实在解决不了，就降低子树的高度，并将子树视为整体然后向树根进行追溯，直到问题解决。上面的分析中，对于删除黑色树叶的删除，分成了8种情形，其中3.1需要向树根追溯，
 直到转化成其它7种情形或到树根为止才能解决。其次，2.3也需要转化成2.2来解决，因此，对于黑色树叶的删除，实际上最后直接解决的情形可以归结有6种。</p>
@@ -240,8 +270,6 @@
 
       
     </div>
-	
-	
 	
     <footer>
       
@@ -269,11 +297,13 @@
     <a href="/categories/数据结构/">数据结构</a>
   </div>
 
+
         
   
   <div class="tags">
     <a href="/tags/红黑树/">红黑树</a>
   </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style">
@@ -289,6 +319,7 @@
   </div>
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
 
+        
       
       <div class="clearfix"></div>
     </footer>
@@ -341,12 +372,17 @@
     <div class="clearfix"></div>
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
+
   
-  &copy; 2020 shanhm1991 
+  
+      &copy; 2020 shanhm1991 
+  
+  
   
   <font style="float: right">
 </div>
-<div class="clearfix"></div></footer>
+<div class="clearfix"></div>
+</footer>
   
 <script src="/js/jquery-3.4.1.min.js"></script>
 

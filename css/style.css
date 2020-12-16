@@ -276,6 +276,24 @@ article header time {
   display: block;
   line-height: 1;
 }
+article header a {
+  color: #999;
+}
+article header a:hover {
+  color: #258fb8;
+  text-decoration: none;
+}
+article header a:before {
+  font: 1.1em FontAwesome;
+  padding-right: 10px;
+  vertical-align: middle;
+}
+article header a.more-link:before {
+  content: '\f054';
+}
+article header a.comment-link:before {
+  content: '\f075';
+}
 article header .title {
   font-weight: normal;
 }
@@ -285,6 +303,28 @@ article header .title a {
 article header .title a:hover {
   color: #258fb8;
   text-decoration: none;
+}
+article header .categories,
+article header .tags {
+  position: relative;
+  padding-left: 25px;
+  margin: 5px 0;
+}
+article header .categories:before,
+article header .tags:before {
+  position: absolute;
+  font: 1.1em FontAwesome;
+  color: #999;
+}
+article header .categories:before {
+  content: '\f07b';
+  top: 2px;
+  left: 1px;
+}
+article header .tags:before {
+  content: '\f02b';
+  top: 3px;
+  left: 2px;
 }
 article .entry {
   text-align: justify;

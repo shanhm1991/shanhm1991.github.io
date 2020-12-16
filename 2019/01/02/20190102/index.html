@@ -69,18 +69,48 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-01-01T16:00:00.000Z"><a href="/2019/01/02/20190102/">2019-01-02</a></time>
-	  
       
+      
+
   
-    <h1 class="p-name title" itemprop="headline name">java并发编程实战.笔记二（线程安全之可见性以及对象的发布）</h1>
-	
   
+    <h1 class="p-name title" itemprop="headline name">
+        java并发编程实战.笔记二（线程安全之可见性以及对象的发布）
+    </h1>
+    
+    
+  
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 4.4k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+   <font style="color: #999;"> words: 4.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 15min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/阅读笔记/">阅读笔记</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
 
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。<font color="red">同步的另一个重要目的即内存可见性。</font>我们不仅希望防止某个线程正在使用的对象状态
@@ -165,8 +195,6 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
       
     </div>
 	
-	
-	
     <footer>
       
 	  
@@ -190,14 +218,16 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
         
   
   <div class="categories">
-    <a href="/categories/读书笔记/">读书笔记</a>
+    <a href="/categories/阅读笔记/">阅读笔记</a>
   </div>
+
 
         
   
   <div class="tags">
     <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>
   </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style">
@@ -213,6 +243,7 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
   </div>
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
 
+        
       
       <div class="clearfix"></div>
     </footer>
@@ -265,12 +296,17 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
     <div class="clearfix"></div>
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
+
   
-  &copy; 2020 shanhm1991 
+  
+      &copy; 2020 shanhm1991 
+  
+  
   
   <font style="float: right">
 </div>
-<div class="clearfix"></div></footer>
+<div class="clearfix"></div>
+</footer>
   
 <script src="/js/jquery-3.4.1.min.js"></script>
 

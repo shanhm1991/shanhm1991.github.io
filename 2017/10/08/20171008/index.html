@@ -67,39 +67,70 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2017-10-07T16:00:00.000Z"><a href="/2017/10/08/20171008/">2017-10-08</a></time>
-	  
       
+      
+
   
-    <h1 class="p-name title" itemprop="headline name">设计模式. 代理模式</h1>
-	
   
+    <h1 class="p-name title" itemprop="headline name">
+        设计模式. 代理模式
+    </h1>
+    
+    
+  
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 2.8k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+   <font style="color: #999;"> words: 2.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 13min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/设计模式/">设计模式</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/代理模式/">代理模式</a>   <a href="/tags/CallerSensitive/">CallerSensitive</a>   <a href="/tags/WeakCache/">WeakCache</a>   <a href="/tags/cglib/">cglib</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
 
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>代理模式：即给某个对象提供一个代理，并由代理对象来控制对真实对象的访问。它的方式就是让代理类持有目标类的实例，然后在对目标类进行操作的前后加入一层代理操作。</p>
 <a id="more"></a>
 
-<h3 id="1-静态代理"><a href="#1-静态代理" class="headerlink" title="1. 静态代理"></a>1. 静态代理</h3><p>代理类在编译时就实现好了，也就是说Java编译完成后代理类是一个确定的class文件。</p>
+<h3 id="1-静态代理"><a href="#1-静态代理" class="headerlink" title="1. 静态代理"></a>1. 静态代理</h3><p><font color="green">代理类在编译时就实现好了，也就是说Java编译完成后代理类是一个确定的class文件</font></p>
 <h4 id="1-1-结构"><a href="#1-1-结构" class="headerlink" title="1.1. 结构"></a>1.1. 结构</h4><ul>
 <li>抽象主题(Subject)：定义代理类和真实主题的公共对外方法，即需要代理的方法。</li>
 <li>真实主题(RealSubject)：真正实现业务逻辑的类；</li>
 <li>代理主题(Proxy)：用来代理和封装真实主题；</li>
 </ul>
 <p><img src="/img/201710081.jpg" alt=""> </p>
-<h4 id="1-2-示例"><a href="#1-2-示例" class="headerlink" title="1.2. 示例"></a>1.2. 示例</h4><figure class="highlight java"><figcaption><span class="caption">Subject</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">query</span><span class="params">(String id)</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(String id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，客户端直接面对的是代理类，通过代理类对目标类进行访问。这样当需要在访问过程中进行一些操作时，就可以不用修改已有的实现类，只需将操作加到代理类中即可。</p>
+<h4 id="1-2-示例"><a href="#1-2-示例" class="headerlink" title="1.2. 示例"></a>1.2. 示例</h4><figure class="highlight java"><figcaption><span class="caption">Subject</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">handle</span><span class="params">(String arg)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><figcaption><span class="caption">RealSubject</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HandlerImpl</span> <span class="keyword">implements</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">query</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"query["</span> + id + <span class="string">"]..."</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"delete["</span> + id + <span class="string">"]..."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><figcaption><span class="caption">RealSubject</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HandlerImpl</span> <span class="keyword">implements</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle</span><span class="params">(String arg)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"handle["</span> + arg + <span class="string">"]"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><figcaption><span class="caption">Proxy</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticProxy</span> <span class="keyword">implements</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> Handler target;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">StaticProxy</span><span class="params">(Handler target)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.target = target;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">query</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"before query"</span>);</span><br><span class="line">		target.query(id);</span><br><span class="line">		System.out.println(<span class="string">"after query"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"before delete"</span>);</span><br><span class="line">		target.delete(id);</span><br><span class="line">		System.out.println(<span class="string">"after delete"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><figcaption><span class="caption">Proxy</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HandlerProxy</span> <span class="keyword">implements</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Handler handler;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HandlerProxy</span><span class="params">(Handler target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.handler = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle</span><span class="params">(String arg)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"before..."</span>);</span><br><span class="line">        handler.handle(arg);</span><br><span class="line">        System.out.println(<span class="string">"after..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><figcaption><span class="caption">Client</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Handler handler = <span class="keyword">new</span> HandlerImpl();</span><br><span class="line">		StaticProxy staticProxy = <span class="keyword">new</span> StaticProxy(handler);</span><br><span class="line">		staticProxy.query(<span class="string">"id1"</span>);</span><br><span class="line">		staticProxy.delete(<span class="string">"id2"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><figcaption><span class="caption">Client</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line marked">        Handler handler = <span class="keyword">new</span> HandlerImpl();</span><br><span class="line marked">        HandlerProxy handlerProxy = <span class="keyword">new</span> HandlerProxy(handler);</span><br><span class="line marked">        handlerProxy.handle(<span class="string">"test"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>可以看出，客户端直接面对的是代理类，通过代理类对目标类进行访问。这样当需要在访问过程中进行一些操作时，就可以不用修改已有的实现类，而只需将操作加到代理类中即可。</p>
+<p>上面示例看起来没啥问题，但是当需要对多个类进行代理，并且这些类属于不同接口时，就会发现很麻烦：如果只使用一个代理类，那么它需要实现所有目标类的接口，这样将使代理类显得臃肿。</p>
 <p>但是，如果需要为多个不同的目标类进行代理，并且它们各自属于不同的接口。这时如果使用一个代理类，那么它就需要实现这所有目标类的接口，这将使代理类变得臃肿，
 并且职责不明确。更严重的，<font color="red">如果以后任何一个目标类的接口发生改变，那么都要修改代理类，</font>这显然违背了设计原则的初衷。
 即便针对每个独立的主题设计一个代理类，当接口发生变化时依然避免不了对应的代理类的修改。</p>
@@ -147,8 +178,6 @@
       
     </div>
 	
-	
-	
     <footer>
       
 	  
@@ -175,11 +204,13 @@
     <a href="/categories/设计模式/">设计模式</a>
   </div>
 
+
         
   
   <div class="tags">
-    <a href="/tags/代理模式/">代理模式</a>, <a href="/tags/CallerSensitive/">CallerSensitive</a>, <a href="/tags/WeakCache/">WeakCache</a>, <a href="/tags/cglib/">cglib</a>
+    <a href="/tags/代理模式/">代理模式</a>   <a href="/tags/CallerSensitive/">CallerSensitive</a>   <a href="/tags/WeakCache/">WeakCache</a>   <a href="/tags/cglib/">cglib</a>
   </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style">
@@ -195,6 +226,7 @@
   </div>
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
 
+        
       
       <div class="clearfix"></div>
     </footer>
@@ -247,12 +279,17 @@
     <div class="clearfix"></div>
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
+
   
-  &copy; 2020 shanhm1991 
+  
+      &copy; 2020 shanhm1991 
+  
+  
   
   <font style="float: right">
 </div>
-<div class="clearfix"></div></footer>
+<div class="clearfix"></div>
+</footer>
   
 <script src="/js/jquery-3.4.1.min.js"></script>
 

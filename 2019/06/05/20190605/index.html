@@ -74,18 +74,48 @@
       
         <div class="icon"></div>
         <time class="dt-published" datetime="2019-06-04T16:00:00.000Z"><a href="/2019/06/05/20190605/">2019-06-05</a></time>
-	  
       
+      
+
   
-    <h1 class="p-name title" itemprop="headline name">数据结构. 二叉查找树</h1>
-	
   
+    <h1 class="p-name title" itemprop="headline name">
+        数据结构. 二叉查找树
+    </h1>
+    
+    
+  
+  
+  
+
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<font style="color: #999;">words: 7.1k &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span></font>
+
+   <font style="color: #999;"> words: 7.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 37min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/数据结构/">数据结构</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/二叉树/">二叉树</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
 
     </header>
+      
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面介绍线性数据结构时提到，如果数据本身是有序的，那么可以用二分法来降低查找的时间复杂度，但是在线性结构上实现二分法总有这样或那样的局限，
@@ -117,11 +147,11 @@
 
 <h4 id="2-5-示例"><a href="#2-5-示例" class="headerlink" title="2.5. 示例"></a>2.5. 示例</h4><p>例如下面，依次插入10, 11, 9, 5, 2, 1, 8, 6, 4, 3，然后删除5：   </p>
 <p>根据查找二叉树的定义，可以画出插入完成时树的形状，另外标出删除节点5时可能影响的节点（替换删除前驱或者后继）</p>
-<p><img src="/img/BinarySearchTree.1.jpg" alt=""> </p>
+<p><img src="/img/20190605.1.jpg" alt=""> </p>
 <p>要注意的是替换删除前驱节点4时不能丢掉其左子树3</p>
-<p><img src="/img/BinarySearchTree.2.jpg" alt=""> </p>
+<p><img src="/img/20190605.2.jpg" alt=""> </p>
 <p>或者替换删除后继节点，同样要注意不能丢掉其右子树 </p>
-<p><img src="/img/BinarySearchTree.3.jpg" alt=""> </p>
+<p><img src="/img/20190605.3.jpg" alt=""> </p>
 <h3 id="3-java实现"><a href="#3-java实现" class="headerlink" title="3. java实现"></a>3. java实现</h3><p>在Java集合框架中可以看到查找二叉树的应用，比如TreeMap或者TreeSet就是基于红黑树（带有平衡条件的查找二叉树）实现的。因此，我们也可以用查找二叉树来实现一下Set和Map接口，
 当然这里不会实现完整的接口，那样也没有意义，只是实现一些主要的操作以便说明问题。    </p>
 <p>另外有一个想法：<font color="LimeGreen">如果在查找二叉树的结构上再维护一个链表，那么就可以处理重复数据的问题，而且可以更容易地实现迭代或者范围查询。</font>
@@ -151,8 +181,6 @@
       
     </div>
 	
-	
-	
     <footer>
       
 	  
@@ -179,11 +207,13 @@
     <a href="/categories/数据结构/">数据结构</a>
   </div>
 
+
         
   
   <div class="tags">
     <a href="/tags/二叉树/">二叉树</a>
   </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style">
@@ -199,6 +229,7 @@
   </div>
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
 
+        
       
       <div class="clearfix"></div>
     </footer>
@@ -251,12 +282,17 @@
     <div class="clearfix"></div>
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
+
   
-  &copy; 2020 shanhm1991 
+  
+      &copy; 2020 shanhm1991 
+  
+  
   
   <font style="float: right">
 </div>
-<div class="clearfix"></div></footer>
+<div class="clearfix"></div>
+</footer>
   
 <script src="/js/jquery-3.4.1.min.js"></script>
 
