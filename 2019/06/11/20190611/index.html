@@ -6,12 +6,12 @@
   <title>数据结构. 2-3树 | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以便降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，即使树的高度与节点数完全满足H = log(N+1)， 
-但是大部分情形下，无论其如何旋转调整，都是无法做到的，毕竟对于每个节点，其最多只能有一个元素，两个子节点。既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在像二叉树中一个节点只有左子树或只有右子树的情况，
-取而代之的是节点是二叉还是三叉（如果一个节点只有一个子树，那就使成三叉节点），这也就是2-3树的字面意思了，即同时拥有二叉节点和三叉节点的树，
-这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，并使树的节点达到一个绝对平衡的状态。
-这里讨论2-3树并不是想要介绍如何实现它，或者其实际使用场景，主要是它在树形数据结构中起着一个承上启下的作用，我们可以顺着这些树的关系进行联想，前人是如何从二叉树想到了Avl树，
-又是怎样想到了2-3树，然后又想到了红黑树以及B树。
+  <meta name="description" content="引言前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足H = log(N+1)，
+但实际在大部分情形下，无论其如何旋转调整都无法做到，毕竟对于每个节点，其最多只能有一个元素，两个子节点。既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在一个节点只有单个子树的情况，取而代之的是节点是二叉还是三叉（如果一个节点只有单个子树，
+就使其成为三叉节点），这也就是2-3树的字面意思：即同时拥有二叉节点和三叉节点的树， 这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，
+并使树的节点达到一个绝对平衡的状态。
+2-3树本身并没有什么实际使用场景，但其在思维上打破了二叉树的约束，在树形数据结构中起着一个关键的连接作用，顺着这些树的关系可以联想前人是如何从二叉树想到了Avl树，
+又是怎样从2-3树想到了红黑树以及B树。
 
 数据结构. Avl树">
   
@@ -49,7 +49,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  54 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  53 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -92,7 +92,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 985  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 3min</font>
+   <font style="color: #999;"> words: 1.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 4min</font>
    
    
   
@@ -118,59 +118,66 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以便降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，即使树的高度与节点数完全满足H = log(N+1)， 
-但是大部分情形下，无论其如何旋转调整，都是无法做到的，毕竟对于每个节点，其最多只能有一个元素，两个子节点。<br>既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在像二叉树中一个节点只有左子树或只有右子树的情况，
-取而代之的是节点是二叉还是三叉（如果一个节点只有一个子树，那就使成三叉节点），这也就是2-3树的字面意思了，即同时拥有二叉节点和三叉节点的树，
-这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，并使树的节点达到一个绝对平衡的状态。</p>
-<p>这里讨论2-3树并不是想要介绍如何实现它，或者其实际使用场景，主要是它在树形数据结构中起着一个承上启下的作用，我们可以顺着这些树的关系进行联想，前人是如何从二叉树想到了Avl树，
-又是怎样想到了2-3树，然后又想到了红黑树以及B树。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足H = log(N+1)，
+但实际在大部分情形下，无论其如何旋转调整都无法做到，毕竟对于每个节点，其最多只能有一个元素，两个子节点。<br>既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在一个节点只有单个子树的情况，取而代之的是节点是二叉还是三叉（如果一个节点只有单个子树，
+就使其成为三叉节点），这也就是2-3树的字面意思：即同时拥有二叉节点和三叉节点的树， 这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，
+并使树的节点达到一个绝对平衡的状态。</p>
+<p><font color="LimeGreen">2-3树本身并没有什么实际使用场景，但其在思维上打破了二叉树的约束，在树形数据结构中起着一个关键的连接作用，顺着这些树的关系可以联想前人是如何从二叉树想到了Avl树，
+又是怎样从2-3树想到了红黑树以及B树。</font></p>
 <ul>
 <li><a href="https://shanhm1991.github.io/2019/06/08/20190608/">数据结构. Avl树</a><a id="more"></a>
 
 </li>
 </ul>
-<h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h3><ol>
+<h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h3><p>这个网上有很多，可以从维基上找到描述，这里就简要说明下其意思，其实2-3树本质上是一个阶为3的B树，后面在讨论B树时可以用更通用的描述来进行定义。</p>
+<ol>
 <li>2-3树要么为空要么具有以下性质;</li>
 <li>对于二叉节点，有一个关键字和两个子树，子树要么为空，要么也是一个2-3树，当前节点的关键字大于左子树所有关键字，并小于右子树关键字;</li>
 <li>对于三叉节点，有两个关键字a, b和三个子树，左子树中所有关键字小于a，中子树中所有关键字大于a而小于b ，右子树中所有关键字大于b;</li>
 </ol>
-<p>其实2-3树本质上就是一个阶为3的B树，后面讨论B树时可以用更通用的描述来进行定义。</p>
-<h3 id="2-分析实现"><a href="#2-分析实现" class="headerlink" title="2. 分析实现"></a>2. 分析实现</h3><h4 id="2-1-插入"><a href="#2-1-插入" class="headerlink" title="2.1 插入"></a>2.1 插入</h4><ol>
-<li>插入空树；</li>
-<li>向二叉节点进行插入；</li>
-<li>向三叉节点进行插入；</li>
-<li>向父节点为二叉节点的三叉节点进行插入；</li>
-<li>向父节点为三叉节点的三叉节点进行插入；</li>
-</ol>
+<h3 id="2-分析实现"><a href="#2-分析实现" class="headerlink" title="2. 分析实现"></a>2. 分析实现</h3><h4 id="2-1-插入"><a href="#2-1-插入" class="headerlink" title="2.1 插入"></a>2.1 插入</h4><p>继二叉树的性质，插入肯定都是从树叶开始，可以先将元素往树叶节点中进行追加，如果树叶节点超过三叉，即元素达到三个，就对其进行分裂，并将中间的元素合并到父节点，
+同时将分裂出来的左右元素作为中间元素的左右子树，如果合并到父节点之后导致父节点也超过了三叉，那么就继续递归对父节点进行相同的处理，直到满足规则为止。</p>
 <ul>
 <li>示例</li>
 </ul>
 <p>依次插入10，11，9，5，2，6，8，15，16，12，17</p>
 <p><img src="/img/20190611.1.png" alt=""> </p>
-<h4 id="2-2-删除"><a href="#2-2-删除" class="headerlink" title="2.2 删除"></a>2.2 删除</h4><ol>
-<li>删除非叶子节点，转化为对叶子节点的删除；</li>
-<li>删除三叉叶子节点；</li>
+<h4 id="2-2-删除"><a href="#2-2-删除" class="headerlink" title="2.2 删除"></a>2.2 删除</h4><p>还是与之前讨论一样，先转化为对树叶的删除，如果树叶是三叉节点，则直接删除结束，否则再其兄弟节点和父弟节点的不同情形分别讨论，这里接着上面的插入的示例，在其基础上进行删除操作。</p>
+<ol>
+<li>树叶本身是三叉节点</li>
 </ol>
 <p><img src="/img/20190611.2.png" alt=""> </p>
-<ol start="3">
-<li>删除二叉叶子节点，兄弟节点为三叉，父节点为二叉；</li>
+<ol start="2">
+<li>兄弟节点为三叉，父节点为二叉</li>
 </ol>
 <p><img src="/img/20190611.3.png" alt=""> </p>
-<ol start="4">
-<li>删除二叉叶子节点，兄弟节点为二叉，父节点为三叉；</li>
+<ol start="3">
+<li>兄弟节点为二叉，父节点为三叉</li>
 </ol>
 <p><img src="/img/20190611.4.png" alt=""> </p>
-<ol start="5">
-<li>删除二叉叶子节点，兄弟节点为二叉，父节点为二叉；</li>
+<ol start="4">
+<li>兄弟节点和父节点都为二叉</li>
 </ol>
 <p><img src="/img/20190611.5.png" alt=""> </p>
+<p>向上递归处理时，父节点的情形不一定与树叶一样，比如在上面删除15之前删除2，那么父节点就可以像兄弟节点借取</p>
 <p><img src="/img/20190611.6.png" alt=""> </p>
-<h3 id="2-3树与红黑树"><a href="#2-3树与红黑树" class="headerlink" title="2-3树与红黑树"></a>2-3树与红黑树</h3><p>2-3树解决了Avl树无法达到绝对平衡的问题，但是要想用代码把它描述出来会显得有些臃肿，于是有人想到了在二叉树的基础上附加一些规则，以使其与2-3树能达到等价的效果。
-其实现在马后炮的话，也不难想到，首先2-3树的节点是绝对平衡的，并且每个节点至多拥有两个关键字。于是我们可以规定：
-每个节点必须有且仅有一个黑色节点，那么这些黑色节点构成的显然就是一颗满二叉树，然后我们再将剩下的节点标记为红色节点。现在再回头看的话，这几乎就可以等价为红黑树的定义了。</p>
+<h3 id="3-2-3树与红黑树"><a href="#3-2-3树与红黑树" class="headerlink" title="3. 2-3树与红黑树"></a>3. 2-3树与红黑树</h3><p>2-3树解决了Avl树无法达到绝对平衡的问题，但是要想用代码把它描述出来会显得有些臃肿，于是有人想到了可以在二叉树的基础上附加一些规则，使其与2-3树能达到等价的效果。<font color="LimeGreen">
+事实上也不难想到，首先2-3树的节点是绝对平衡的，并且每个节点至多拥有两个关键字。于是我们可以规定：每个节点必须有且仅有一个黑色节点，然后剩下的都标记成红色节点，
+那么由这些黑色节点构成的显然就是一颗绝对平衡的满二叉树，如果对红黑树比较熟悉，上面两句话几乎就可以对应成红黑树的定义。</font></p>
+<ul>
+<li><a href="https://shanhm1991.github.io/2019/06/10/20190610/">数据结构. 红黑树</a></li>
+</ul>
+<p>下面还是复用上面的示例，并将所有元素涂成红色或者黑色，但是保证任何节点有且仅有一个黑色元素，那么可以发现，在任何一次插入删除完成之后，都可以将其等价成一颗红黑树</p>
+<ul>
+<li>插入</li>
+</ul>
 <p><img src="/img/20190611.7.png" alt=""> </p>
+<ul>
+<li>删除</li>
+</ul>
 <p><img src="/img/20190611.8.png" alt=""> </p>
-<p><br><strong>参考：</strong><br><a href="https://zhuanlan.zhihu.com/p/92394224" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/92394224</a></p>
+<h3 id="4-2-3树与B树"><a href="#4-2-3树与B树" class="headerlink" title="4. 2-3树与B树"></a>4. 2-3树与B树</h3><p>上面已经提过，2-3树就B树，只是其有很多二叉节点，看起来也像一颗二叉树，这里不再赘述。</p>
+<p><br><strong>参考：</strong>   </p>
 
       
     </div>
@@ -266,7 +273,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-定义"><span class="toc-text">1. 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-分析实现"><span class="toc-text">2. 分析实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-插入"><span class="toc-text">2.1 插入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-删除"><span class="toc-text">2.2 删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3树与红黑树"><span class="toc-text">2-3树与红黑树</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-定义"><span class="toc-text">1. 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-分析实现"><span class="toc-text">2. 分析实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-插入"><span class="toc-text">2.1 插入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-删除"><span class="toc-text">2.2 删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3树与红黑树"><span class="toc-text">3. 2-3树与红黑树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-3树与B树"><span class="toc-text">4. 2-3树与B树</span></a></li></ol></li></ol>
 </div>
 
 
