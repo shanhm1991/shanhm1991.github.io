@@ -494,7 +494,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
   
   
     <h1 class="title">
-       <a href="/2017/09/12/20170912/">java基础. 容器三. TreeMap以及Set</a>
+       <a href="/2017/09/12/20170912/">java基础. 笔记三. ConcurrentHashMap</a>
     </h1>
     
   
@@ -550,7 +550,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
   
   
     <h1 class="title">
-       <a href="/2017/09/11/20170911/">java基础. 容器二. HashMap与LinkedHashMap</a>
+       <a href="/2017/09/11/20170911/">java容器. 笔记二. Map</a>
     </h1>
     
   
@@ -619,7 +619,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
   
   
     <h1 class="title">
-       <a href="/2017/09/10/20170910/">java基础. 容器一. ArrayList与LinkedList</a>
+       <a href="/2017/09/10/20170910/">java容器. 笔记一. List</a>
     </h1>
     
   
@@ -633,7 +633,8 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java中的容器就是对各种数据结构的实现，按照接口实现可以分为<code>Collection</code>和<code>Map</code>。也可以按照是否线程安全来进行划分，
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java工具类中提供了非常丰富的容器实现，从实现的接口可以将它们分为两部分，即<code>Collection</code>和<code>Map</code>。</p>
+<p>java中的容器就是对各种数据结构的实现，按照接口实现可以分为<code>Collection</code>和<code>Map</code>。也可以按照是否线程安全来进行划分，
 比如JDK1.5之后，在<code>concurrent</code>包下面加了很多线程安全的容器，这些放在以后再整理，因为它们的实现或多或少都依赖了一些多线程api。</p>
 <p>另外，在阅读各种容器工具的源码之前，最好先了解下关于java泛型的一些内容：<a href="https://shanhm1991.github.io/2017/08/31/20170831/">java基础. 泛型</a>  </p>
 <p>这里只介绍一些常见的基本容器，它们对于并发修改会及时反馈一个异常<code>ConcurrentModificationException</code>，其实是通过记一个修改次数来实现的，
@@ -689,11 +690,11 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
   <h3 class="title">Categories</h3>
   <ul class="entry">
   
-    <li><a href="/categories/java基础/">java基础</a><small>6</small></li>
+    <li><a href="/categories/java基础/">java基础</a><small>3</small></li>
   
     <li><a href="/categories/代码笔记/">代码笔记</a><small>3</small></li>
   
-    <li><a href="/categories/开源代码/">开源代码</a><small>3</small></li>
+    <li><a href="/categories/开源代码/">开源代码</a><small>6</small></li>
   
     <li><a href="/categories/数据结构/">数据结构</a><small>7</small></li>
   

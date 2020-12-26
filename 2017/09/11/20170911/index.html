@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>java基础. 容器二. HashMap与LinkedHashMap | Essay</title>
+  <title>java容器. 笔记二. Map | Essay</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言1. 概述HashMap的本质就是一个散列表（也称为哈希表），至于什么是散列表可以查一下维基：zh.wikipedia.org/wiki/哈希表，
@@ -28,7 +28,7 @@ java中的Object提供一个方法public native int hashCode();用来返回对�
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="java基础. 容器二. HashMap与LinkedHashMap"/>
+  <meta property="og:title" content="java容器. 笔记二. Map"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -90,7 +90,7 @@ java中的Object提供一个方法public native int hashCode();用来返回对�
   
   
     <h1 class="p-name title" itemprop="headline name">
-        java基础. 容器二. HashMap与LinkedHashMap
+        java容器. 笔记二. Map
     </h1>
     
     
@@ -111,7 +111,7 @@ java中的Object提供一个方法public native int hashCode();用来返回对�
    
   
   <div class="categories">
-    <a href="/categories/java基础/">java基础</a>
+    <a href="/categories/开源代码/">开源代码</a>
   </div>
 
 
@@ -152,6 +152,7 @@ java中的Object提供一个方法public native int hashCode();用来返回对�
 <p>由于HashMap是一个散列表，因此它肯定是无序的，至于LinkedHashMap，它其实就是在复用HashMap的基础上加了一个链表结构，维护了对象的插入顺序。</p>
 <a id="more"></a>
 
+<p><img src="/img/20170911.1.png" alt=""></p>
 <h3 id="2-HashMap"><a href="#2-HashMap" class="headerlink" title="2. HashMap"></a>2. HashMap</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Cloneable</span>, <span class="title">Serializable</span></span></span><br></pre></td></tr></table></figure>
 
 <h4 id="2-1-属性"><a href="#2-1-属性" class="headerlink" title="2.1. 属性"></a>2.1. 属性</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//散列表默认长度：16</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//散列表最大长度：2的30次幂</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//散列表默认负载因子：0.75</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//链表转化为红黑树的条件1：链表长度&gt;=8</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//链表转化为红黑树的条件2：散列表长度&gt;=64</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_TREEIFY_CAPACITY = <span class="number">64</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//红黑树转化为链表的条件：红黑树元素个数&lt;=6</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNTREEIFY_THRESHOLD = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//散列表</span></span><br><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;</span><br><span class="line"></span><br><span class="line"><span class="comment">//HashMap自身没有实现Iterator接口，因此不能直接遍历，不过它定义了一个内部类EntrySet。</span></span><br><span class="line"><span class="comment">//EntrySet没有自己的属性，但它能引用到HashMap的所有属性和方法，那么就可以通过遍历EntrySet来间接地遍历了HashMap，</span></span><br><span class="line"><span class="comment">//这里entrySet作为EntrySet的实例将在首次使用时进行初始化。</span></span><br><span class="line"><span class="keyword">transient</span> Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet;</span><br><span class="line"></span><br><span class="line"><span class="comment">//元素总数</span></span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line"><span class="comment">//修改次数，用来阻止迭代时发生外部修改</span></span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> modCount;</span><br><span class="line"></span><br><span class="line"><span class="comment">//扩展阈值，当size的值达到threshold时会触发resize()，threshold = table.length * loadFactor</span></span><br><span class="line"><span class="keyword">int</span> threshold;</span><br><span class="line"></span><br><span class="line"><span class="comment">//负载因子</span></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">float</span> loadFactor;</span><br></pre></td></tr></table></figure>
@@ -280,13 +281,13 @@ java中的Object提供一个方法public native int hashCode();用来返回对�
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2017/09/12/20170912/">
-		    java基础. 容器三. TreeMap以及Set
+		    java基础. 笔记三. ConcurrentHashMap
 		  </a>
 	  
 	  
 	  
 		  <a class="alignright next" href="/2017/09/10/20170910/">
-		    java基础. 容器一. ArrayList与LinkedList
+		    java容器. 笔记一. List
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -296,7 +297,7 @@ java中的Object提供一个方法public native int hashCode();用来返回对�
         
   
   <div class="categories">
-    <a href="/categories/java基础/">java基础</a>
+    <a href="/categories/开源代码/">开源代码</a>
   </div>
 
 
