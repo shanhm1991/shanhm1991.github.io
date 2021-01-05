@@ -231,8 +231,9 @@ HashMap使用链表或者红黑树将这些落在同一个位置的元素链接�
 <li>对于迭代则更加简单，可以直接遍历自己维护的链表，即按照插入的先后顺序来返回节点</li>
 </ul>
 <h3 id="3-TreeMap"><a href="#3-TreeMap" class="headerlink" title="3. TreeMap"></a>3. TreeMap</h3><p>HashMap中只是用红黑树来作为散列表中发生冲突时降低节点遍历深度的一个手段，而TreeMap则完全是对红黑树的一个应用，它维护着节点key之间的大小关系。
-由于对红黑树已经有过非常详细的讨论：<a href="https://shanhm1991.github.io/2019/06/10/20190610/">数据结构. 红黑树</a>，并且还尝试实现了一个可以处理重复key的<code>MultiTreeMap</code>，有兴趣可以看下，这里就不再赘述。</p>
-<h3 id="4-Set"><a href="#4-Set" class="headerlink" title="4. Set"></a>4. Set</h3><p>其实Set实现的接口是Collection，不过实现上又依赖于对应Map，它将接口操作全部委托给了对应的Map实现，HashSet/LinkedHashSet/TreeSet都是同样的套路，所以Map的实现就是Set的实现，不再赘述。</p>
+由于对红黑树已经有过非常详细的讨论：<a href="https://shanhm1991.github.io/2019/06/10/20190610/">数据结构. 红黑树</a>，并且还尝试实现了一个可以处理重复key的<code>MultiTreeMap</code>，
+有兴趣可以看下，这里不再赘述。</p>
+<h3 id="4-Set"><a href="#4-Set" class="headerlink" title="4. Set"></a>4. Set</h3><p>其实Set的实现就是Map的实现，虽然它实现的接口是Collection，但它就全部接口的实现都委托给了对应的Map，HashSet/LinkedHashSet/TreeSet都是同样的套路，不再赘述。</p>
 
       
     </div>
