@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>java. 字符串 | Essay</title>
+  <title>java字符串 | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言String是Java中使用最频繁的对象之一，它本质上是维护了一个char数组，并提供了基于这个字节数组的一些操作。">
+  <meta name="description" content="引言String是Java中使用最频繁的对象之一，它本质上是维护了一个char或byte数组，并提供了基于这个数组的一些操作。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="java. 字符串"/>
+  <meta property="og:title" content="java字符串"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -73,9 +73,13 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        java. 字符串
+        java字符串
     </h1>
     
+    
+       <div class="title" style="padding: 5px 0px 20px 10px; color: #766;">
+            ———— JDK 1.8
+       </div> 
     
   
   
@@ -85,7 +89,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 7min</font>
+   <font style="color: #999;"> words: 5.2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 19min</font>
    
    
   
@@ -98,7 +102,7 @@
    
   
   <div class="tags">
-    <a href="/tags/String/">String</a>
+    <a href="/tags/String-编码-intern-补码/">String 编码 intern 补码</a>
   </div>
 
 
@@ -111,33 +115,96 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>String是Java中使用最频繁的对象之一，它本质上是维护了一个char数组，并提供了基于这个字节数组的一些操作。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>String是Java中使用最频繁的对象之一，它本质上是维护了一个char或byte数组，并提供了基于这个数组的一些操作。</p>
 <a id="more"></a>
 
-<h3 id="1-final不可变"><a href="#1-final不可变" class="headerlink" title="1. final不可变"></a>1. final不可变</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span> </span></span><br><span class="line"><span class="class"></span></span><br><span class="line">    private final char value[]; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> hash; <span class="comment">// Default to 0</span></span><br><span class="line">	</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-final不可变"><a href="#1-final不可变" class="headerlink" title="1. final不可变"></a>1. final不可变</h3><figure class="highlight java"><figcaption><span class="caption">java.lang.String</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span> </span></span><br><span class="line"><span class="class"></span></span><br><span class="line">    private final char value[]; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> hash; <span class="comment">// Default to 0</span></span><br><span class="line">	</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>String设计为不可变的用意主要是为了实现字符串常量池，而实现字符串常量池主要还是为了节约内存，另外由于String不可变，那么它一定是线程安全的，而且很方便用来做HashMap中的key，等等</p>
 <p>虽然String从设计上是不可变的，但Java其实一直在对String的实现进行优化</p>
 <p><img src="/img/20170815.1.jpg" alt=""> </p>
 <p>在java6及之前版本中，String中其有4个成员变量，分别是char数组、偏移量offset、字符数量count以及哈希值hash，通过offset和count两个属性来定位char[]数组，获取字符串，
-这样可以高效、快速地共享数组对象，同时节省内存空间，但是这种方式却可能会导致内存泄漏的问题：<a href="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4513622" target="_blank" rel="noopener">JDK-4513622</a>
-（比如subString，如果原来的String很长，而实际使用的只是一小段，但由于共用char数组，导致新的String依然指向原来的char数组，导致其无法被回收，造成浪费）</p>
+这样可以高效、快速地共享数组对象，同时节省内存空间，但是这种方式却可能会导致内存泄漏的问题：<a href="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4513622" target="_blank" rel="noopener">JDK-4513622</a><br>比如subString，如果原来的String很长，而subString后只使用一小段，但由于共用char数组，导致新的String依然指向原来的char数组，导致其无法被回收，造成浪费</p>
 <p>java7去掉了offset和count，subString的实现改成直接从原来数组上进行拷贝，这样避免了内存泄漏问题，代价是多了一个拷贝动作。</p>
-<p>java9将char[]改为byte[]，主要是为了节约内存空间。之前使用char数组，那么每个字符都占用两个字节，而现在可以根据coder来进行决定，如果检测到变量按照latin1或ISO进行标识，则为其分配一个字节，
-如果检测到变量按照utf-16进行标识，则为其分配两个字节。</p>
-<h3 id="2-String常量池"><a href="#2-String常量池" class="headerlink" title="2. String常量池"></a>2. String常量池</h3><p>java中所有的类共享一个字符串常量池<code>stringtable</code>，里面保存了字符串的引用，可以理解成一个容量固定的HashMap，每个bucket下面包存放着相同hash的string链表。</p>
+<p>java9将char[]改为byte[]，主要是为了节约内存空间。</p>
+<p>之前使用char数组，每个字符会占用两个字节（java内部使用UTF-16进行编码），现在使用byte数组，尝试尽量用1个byte保存编码，如果不行再使用2个byte，具体根据coder取值(0或1)决定，
+如果检测到变量按照latin1或ISO进行标识，则为每个字符分配一个字节，否则分配两个字节，这样在很多情况下可以节约一些内存。</p>
+<h3 id="2-关于编码"><a href="#2-关于编码" class="headerlink" title="2. 关于编码"></a>2. 关于编码</h3><p>凡是涉及到字符处理的地方，都免不了要考虑编码问题。由于计算机只能存储0和1，所以任何字符都必须编码之后才能由计算机识别和保存。编码即从字符char到字节byte的过程，byte是计算机的最小存储单元，对应二进制为8bit，
+换成十进制的取值范围为0 ~ 255，即一个byte最多能编码256个字符，如果有更多的字符，则可能需要2个及以上字节进行编码。</p>
+<p>如下介绍一些常用的编码，这里要感谢知乎上<a href="https://zhuanlan.zhihu.com/p/27120673" target="_blank" rel="noopener">笨笨阿林</a>的分享</p>
+<ul>
+<li><strong>ASCII码</strong>(American Standard Code for Information Interchange 美国信息交换标准码)</li>
+</ul>
+<p>ASCII用单字节的低7位进行编码，即0x00-0x7F，共编码128个字符，其中0-31是不可打印的控制字符，比如换行删除等；32-126是打印字符，可以通过键盘输入或者显示出来。</p>
+<ul>
+<li><strong>ISO-8859-1</strong>(International Organization for Standardization 国际标准化组织)</li>
+</ul>
+<p>ISO-8859-1也是单字节编码，其中0x00-0x7F与ASCII保持一致，因此对ASCII是完全兼容的，其主要是利用余下的0x80-0xFF对一些西欧语言字符进行了编码。当然后面还有ISO-8859-2 - ISO-8859-16，
+继续收录了其它一些语言的字符集，不过主要使用的还是ISO-8859-1</p>
+<ul>
+<li><strong>GB2312、GBK</strong>（GB理解为国家标准 简称国标）</li>
+</ul>
+<p>由于汉字相对英文字母要多得多，因此无法再使用单字节编码，需要采用双字节甚至更多进行编码，但是由于ASCII已经是既定标准，所以还要保持对ASCII的兼容</p>
+<p>GB2312为了避免与ASCII字符编码相冲突，规定一个汉字的编码值必须大于127(即最高位为1)，并且必须是两个大于127的字节连在一起来共同表示一个汉字；否则如果一个字节的值不大于127，则直接认为是ASCII字符。<br>GB2312标准共收录6763个汉字，不过除了汉字外还收录682个其它字符，包括一些拉丁符号、希腊字母、以及ASCII中已有的数字、标点、字母等字符，也就是说，对这些已存在的字符，GB2312又搞了一个双字节版本，
+也就是通常所说的全角字符，相对应的单字节字符也就称为半角字符（历史背景：由于早期的点阵显示器上像素有限，8像素的英文字符宽度仅为汉字的一半，出于美观考虑只好采用16像素来使其与汉字保持等宽）。</p>
+<p>GBK与GB2312一样是双字节编码，但GBK只要求第一个字节即高字节大于127就固定表示这是一个汉字的开始，不再像GB2312一样要求第二个字节即低字节也必须大于127。正因如此，作为同样是双字节编码的GBK才可以收录比GB2312更多的字符，
+并且保持对GB2312的兼容。其共收录汉字21003个、符号883个，并提供1894个造字码位。后面继续的还有GB18030等标准，不过目前用得最广泛的还是GBK。</p>
+<p>其实，GB系列编码也称为<strong>区位码</strong>，它将所有字符编入一个94 * 94的二维表，行称为区、列称为位，这样每个字符的坐标就由区和位确定。在GB2312字符集中<br>01-09区(682个)：特殊符号、数字、英文字符、制表符等，包括拉丁字母、希腊字母、日文平假名及片假名字母、俄语西里尔字母等在内的682个全角字符；<br>10-15区：空区，留待扩展；<br>16-55区(3755个)：常用一级汉字，按拼音排序；<br>56-87区(3008个)：非常用二级汉字，按部首/笔画排序；<br>88-94区：空区，留待扩展。<br>但是区位码并不能直接使用，因为可能会与已经存在的ASCII码产生冲突。这里做了两步，首先为了避免与已有控制字符及空格的编码冲突（即ASCII前32个字符），规定将区码和位码分别加上20H，作为<strong>国标码</strong>，然后为了避免与ASCII的冲突，
+再在国标码的基础上统一加上80H，这样作为<strong>内码</strong>，即在计算机内部存储时的实际编码，因此可知GBK的汉字编码肯定全部大于A0H，而原有的ASCII保持不变。</p>
+<ul>
+<li><strong>UTF-16</strong></li>
+</ul>
+<p>随着计算机的普及，各国都开始制定自己的语言编码，类似上面GBk，它们都实现了对ASCII码的兼容，但相互之间却无法兼容，于是微软将这些统称为ANSI编码并对它们编号，称为代码页。这样如果切换语言的话就直接在各个代码页之间进行切换，
+但显然是痛苦的。于是ISO试图创建一个全新的超语言字符集Unicode，让世界上所有的语言都可以通过这本字典来相互翻译。     </p>
+<p>编码方式首先使用的是UTF-16, 它使用两个字节来表示一个字符的码位，如果原来是单字节表示的字符，则直接在高位补0。其编码规则非常简单，只需将字符的高位和地位进行拆分变成两个字节。
+不过由于不同处理器对2字节序的处理方式不同(Big-endian:高位在前，低位在后；Little-endian:低位在前，高位在后)，所以前面会有两个字节用来作为标记处理方式。 </p>
+<p>实际上，即便使用两个字节16位，最多也只能编码65536个字符，这还是无法包括所有字符，有两个扩展方向，一个是UTF32，一个是在UTF-16的基础划出一部分区域作为代理来对表示增补平面中的码位（类似于GBK中使用区来对字符进行划分，
+Unicode使用的是平面，一共17个平面，第0个平面也称为BMP，几乎包含了所有常见的字符，其它平面则称为增补平面，UTF-16编码中除了代理区和保留区，其它即用作对这些字符来编码了）。</p>
+<p>由于UTF-16编码效率非常高，字符与字节相互转换简单，字符串操作方便，所以它适合在本地磁盘和内存之间使用，可以进行字符和字节之间的快速切换，这也是<font color="green">Java内存编码采用UTF-16</font>的原因。
+但是它不适合在网络之间传输，因为网络传输容易损坏字节流，一旦字节流损坏将很难恢复，而UTF-16采用顺序编码，不能对单个字符的编码进行校验，如果中间的一个字符码值损坏，后面的所有码值都将受影响。</p>
+<ul>
+<li><strong>UTF-8</strong></li>
+</ul>
+<p>UTF-8作为对UTF-16的改进（它们是对同一个字符集进行的不同编码），采用的是可边长编码，不同类型的字符可以是由1-6个字节组成，其中第一个字节指明了后面所跟的字节的数目，具体可以如下描述<br>如果首字节以0开头，则表示单字节编码，即ASCII码直接保持不变；<br>如果首字节以110开头，则表示双字节编码；<br>如果首字节以1110开头，则表示三字节编码；<br>以此类推，如果字节以10开始，则表示它不是首字节，而是多字节编码中除首字节以外的后续字节。那么可以知道ISO-8859-1中除了ASCII部分，其它字符在UTF-8中其实也是双字节编码。            </p>
+<p>因此，UTF-8是带有前缀的编码，这样便可以自校验，比如即便丢失、增加、改变了某些字节，也不会导致所有后续字符全部错乱这样传递性、连锁性的错误问题，所以容错性好，比UTF-16更适合网络传输。</p>
+<h4 id="2-1-java实现"><a href="#2-1-java实现" class="headerlink" title="2.1. java实现"></a>2.1. java实现</h4><p>java中的String提供了<code>getBytes</code>来获取字符串的指定编码，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"i am 小铭"</span>;</span><br><span class="line"><span class="keyword">byte</span>[] isoBytes = str.getBytes(<span class="string">"ISO-8859-1"</span>);</span><br><span class="line">System.out.println(DatatypeConverter.printHexBinary(isoBytes)); <span class="comment">// 69 20 61 6D 20 3F 3F</span></span><br></pre></td></tr></table></figure>
+
+<p>以1.8为例，可以简单看一下其实现，先看下与String编解码相关的类</p>
+<p><img src="/img/20170815.2.png" alt=""> </p>
+<p>从类结构图大概可以看出String编解码的一些思路：<code>String</code>将编码工作统一交给<code>StringCoding</code>，<code>StringCoding</code>想当于一个组织者，它将编码工作委托给自己维护的<code>StringEncoder</code>，最终<code>StringEncoder</code>将编码工作交给<code>CharsetEncoder</code>来执行。
+这里<code>Charset</code>相当于<code>CharsetEncoder</code>的抽象工厂，<code>StringEncoder</code>构造时根据编码即确定了<code>Charset</code>，再通过其创建真正执行编码的<code>CharsetEncoder</code>，然后将自己交给<code>StringCoding</code>来调用和维护。<br>具体实现，可画出如下时序图：</p>
+<p><img src="/img/20170815.3.png" alt=""> </p>
+<h4 id="2-2-中文乱码问题"><a href="#2-2-中文乱码问题" class="headerlink" title="2.2. 中文乱码问题"></a>2.2. 中文乱码问题</h4><p>由于各种编码都是在ASCII上扩展的，所以乱码问题一般只针对中文，结合上面对各种编码方式的了解，并且一般所使用的编码都在ISO-8859-1、GBK、UTF之间进行选择，所以可以简单做一些情形分析，其实一般出现乱码问题时，
+可能都是经过多次编解码的结果，很难说哪种乱码情形就一定是怎样的编码过程，不过如果能大概知道怎样的编码过程会出现怎样的乱码结果，那么在具体遇到问题时还是有一些帮助的</p>
+<p>如果使用ISO-8859-1对中文编码，那么解码时<font color="green">每个中文将会变成一个问号</font>。因为ISO-8859-1是单字节编码，最多只能表示256个字符，对于不认识的字符统一使用?代替，即上面示例中的3F，
+所以中文字符经过ISO-8859-1编码会丢失信息，这种现象称之为编码黑洞，它会将不认识的字符吸收掉。由于编码时已经丢失了信息，所以解码时只能看到一个?符号，此时无论选择何种编码都无济于事，比如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"我是小铭啊！！"</span>; </span><br><span class="line"><span class="keyword">byte</span>[] isoBytes = str.getBytes(<span class="string">"ISO-8859-1"</span>);</span><br><span class="line">String iso = <span class="keyword">new</span> String(isoBytes, <span class="string">"ISO-8859-1"</span>); <span class="comment">//???????</span></span><br><span class="line">String gbk = <span class="keyword">new</span> String(isoBytes, <span class="string">"GBK"</span>); <span class="comment">//???????</span></span><br><span class="line">String utf8 = <span class="keyword">new</span> String(isoBytes, <span class="string">"UTF-8"</span>); <span class="comment">//???????</span></span><br></pre></td></tr></table></figure>
+
+<p>如果解码时使用ISO-8859-1，但是编码时采用GBK、UTF-16或者UTF-8，那么<font color="green">每个中文将会变成两个或以上看不懂的西欧字符</font>（感觉java中对编解码实现做了一些省略，很多情形统一以简单的?代替，
+以下各种编解码结果通过文本编辑器得出），比如GBK，由于其字节首位为1，所以编码后的每个字节必然对应ISO-8859-1中在ASCII之后收录的西欧各国的语言字符，对于UTF-16和UTF-8，则可能某些字节会落在ASCII码中，
+甚至是控制字符，导致看上去无法通过字符位数来对应。因此可以看出，只要涉及到中文字符的编解码过程中使用过ISO-8859-1，则大概率会产生乱码，当然也可能过程中使用ISO-8859-1解码，然后又使用ISO-8859-1编码，
+然后再使用之前的编码方式进行解码，就好像ISO-8859-1从没有参与过一样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">我是小铭啊！！</span><br><span class="line">GBK编码：     CED2 CAC7 D0A1 C3FA B0A1 A3A1 A3A1                ISO-8859-1解码：ÎÒÊÇÐ¡Ãú°¡£¡£¡</span><br><span class="line">UTF-16BE编码：6211 662F 5C0F 94ED 554A FF01 FF01                ISO-8859-1解码：þÿbf&#x2F;\íUJÿÿ</span><br><span class="line">UTF-8编码：   E68891 E698AF E5B08F E993AD E5958A EFBC81 EFBC81  ISO-8859-1解码：ææ¯å°é­åï¼ï¼</span><br></pre></td></tr></table></figure>
+
+<p>如果过程不涉及ISO-8859-1，那么就在GBK、UTF-16/UTF8之间，可以先看示例，然后尝试做一些解释</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">我是小铭啊！！</span><br><span class="line">GBK编码：     CED2 CAC7 D0A1 C3FA B0A1 A3A1 A3A1                UTF-16BE解码：컒쫇킡쏺낡ꎡꎡ</span><br><span class="line">                                                                   UTF-8解码：����С��������</span><br><span class="line">UTF-16BE编码：6211 662F 5C0F 94ED 554A FF01 FF01                     GBK解码：�bf&#x2F;\旐UJ��</span><br><span class="line">                                                                   UTF-8解码：f&#x2F;\��UJ��</span><br><span class="line">UTF-8编码：   E68891 E698AF E5B08F E993AD E5958A EFBC81 EFBC81       GBK编码：鎴戞槸灏忛摥鍟婏紒锛�</span><br><span class="line">                                                                UTF-16BE解码：釦颯迩鎭諯벁�</span><br></pre></td></tr></table></figure>
+
+<p>由于GBK和UTF16都是双字节编码，所以肯定是对齐的，但是编码方式完全不同，因此看上去GBK的中文编码对应到了UTF16中的韩文区了，而反过来大多成了特殊符号，也可能对应到少数汉字；如果用UTF8来识别GBK的编码，
+则大多会被校验成非法字符，而反过来由于UTF8编码中文时的首字节为1110开头，正好符合GBK的规则，但是由于码值较大，所以会识别成一些偏后面的不常用文字，并且个数偏多。    </p>
+<h4 id="2-3-原码-反码-补码"><a href="#2-3-原码-反码-补码" class="headerlink" title="2.3. 原码 反码 补码"></a>2.3. 原码 反码 补码</h4><h3 id="3-String常量池"><a href="#3-String常量池" class="headerlink" title="3. String常量池"></a>3. String常量池</h3><p>java中所有的类共享一个字符串常量池<code>stringtable</code>，里面保存了字符串的引用，可以理解成一个容量固定的HashMap，每个bucket下面包存放着相同hash的string链表。</p>
 <p>在java6及早期版本中，常量池大小是个常量，在Java6u30和Java6u41版本之间变得可配置，默认大小为1009，可以通过参数<code>-XX:StringTableSize=N</code>指定，基于性能考虑，N最好是质数。<br>问题是java6将字符串常量池放在永久代<code>PermGen</code>中，而<code>PermGen</code>大小（<code>-XX:MaxPermSize=N</code>设置）在运行时固定不可改变，这很容易造成内存溢出（限制的只是String个数，而其实际占用内存并不能确定）。</p>
 <p>java7将字符串常量池移动到了堆中。这意味着它不会再被一块固定大小的内存区域所限制，而是与其它常规对象一样，所有的String都会处于堆中。<br>在java7u40版本中，将字符串常量池默认大小增加到了60013，你可以在其中缓存约30000不同的strings而不发生碰撞。
 一般来说，应该已经足够用来缓存有效数据了，当然也可以使用参数<code>-XX:StringTableSize=N</code>设置，并可以使用参数<code>+PrintFlagsFinalJVM</code>来获取这个值。</p>
 <p>Java8直接废弃了永久代<code>PermGen</code>，不过字符串常量池的位置没变，还是在堆中，参数也都没有变化。
 如果不确定字符串常量池的使用情况，可以使用参数<code>-XX:+PrintStringTableStatics</code>，它将在程序结束时打印出字符串常量池的使用情况。</p>
 <p>至于GC，当字符串常量池中任何String没有被GC roots引用时都可以被回收。</p>
-<h4 id="2-1-String构造"><a href="#2-1-String构造" class="headerlink" title="2.1. String构造"></a>2.1. String构造</h4><h5 id="2-1-1-字面量法"><a href="#2-1-1-字面量法" class="headerlink" title="2.1.1. 字面量法"></a>2.1.1. 字面量法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"test"</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="4-String构造"><a href="#4-String构造" class="headerlink" title="4. String构造"></a>4. String构造</h3><h4 id="4-1-字面量法"><a href="#4-1-字面量法" class="headerlink" title="4.1. 字面量法"></a>4.1. 字面量法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"test"</span>;</span><br></pre></td></tr></table></figure>
 
 <p>这种方法首先从常量池中查找是否有相同值的String，如果有，则直接将对象地址赋予引用变量；如果没有，则先在常量池中创建一个新的String，然后将地址赋予引用。</p>
 <p>值得注意的是，<font color="red">凡是双引号括起来的字符串都相当于一个String的创建。</font> 如果看编译后的字节码就会知道，编译时已经将这些字面量全部放到class的常量池中了，
 然后在方法中通过符号进行引用，并在真正首次使用时会用<code>ldc</code>指令到字符串常量池中进行创建，然后再将引用存入当前栈顶。见下面2.2的示例</p>
-<h5 id="2-1-2-构造器创建"><a href="#2-1-2-构造器创建" class="headerlink" title="2.1.2. 构造器创建"></a>2.1.2. 构造器创建</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"test"</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-构造器创建"><a href="#4-2-构造器创建" class="headerlink" title="4.2. 构造器创建"></a>4.2. 构造器创建</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="keyword">new</span> String(<span class="string">"test"</span>);</span><br></pre></td></tr></table></figure>
 
 <p>看上去与一般的对象实例化好像一样，但其实它这里构造了两个对象，首先在字符串常量池创建了一个字面量，然后又用这个字面量在堆上new了一个String实例，其相当于：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"test"</span>;</span><br><span class="line">String str = <span class="keyword">new</span> String(a); <span class="comment">//str != a</span></span><br></pre></td></tr></table></figure>
@@ -145,7 +212,7 @@
 <p>如果看String类的构造器，就会发现其接收的参数本身已经是一个String了</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = original.value;</span><br><span class="line">    <span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="2-2-String-intern"><a href="#2-2-String-intern" class="headerlink" title="2.2. String.intern"></a>2.2. String.intern</h4><p>有两种方法可以将String放入字符串常量池，一种是字面量方式直接在字符串常量池中创建；另一种则是String.intern()，将不在常量池中的字符串放入池中。</p>
+<h3 id="5-String-intern"><a href="#5-String-intern" class="headerlink" title="5. String.intern"></a>5. String.intern</h3><p>有两种方法可以将String放入字符串常量池，一种是字面量方式直接在字符串常量池中创建；另一种则是String.intern()，将不在常量池中的字符串放入池中。</p>
 <p>注意此方法在不同JDK版本中的行为有些区别：<br>jdk1.6中，String.intern()会把首次遇到的字符串实例复制到永久代中，然后返回永久代中这个字符串实例的引用；<br>jdk1.7后，String.intern()的实现不会再复制实例，只是在常量池中记录一个引用，指向首次出现的字符串实例；</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> StringBuilder(<span class="string">"test"</span>).append(<span class="string">"1"</span>).toString();</span><br><span class="line">System.out.println(s.intern() == s); <span class="comment">// 首次出现 jdk1.6 false jdk1.7 true </span></span><br><span class="line"></span><br><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">"test2"</span>);</span><br><span class="line">System.out.println(s1.intern() == s1); <span class="comment">// 常量池已存在 jdk1.6 false jdk1.7 false</span></span><br></pre></td></tr></table></figure>
 
@@ -156,9 +223,12 @@
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《Java编程思想》</li>
+<li>《深入分析Java Web》</li>
 <li><a href="https://www.jianshu.com/p/6f92d743e4c4" target="_blank" rel="noopener">https://www.jianshu.com/p/6f92d743e4c4</a></li>
 <li><a href="https://www.jianshu.com/p/8ab48b990870" target="_blank" rel="noopener">https://www.jianshu.com/p/8ab48b990870</a></li>
 <li><a href="https://cloud.tencent.com/developer/article/1329311" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1329311</a> </li>
+<li><a href="https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/computercode.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/computercode.html</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/27120673" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27120673</a></li>
 </ol>
 
       
@@ -171,7 +241,7 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2017/08/17/20170817/">
-		    java. 注解
+		    java注解
 		  </a>
 	  
 	  
@@ -190,7 +260,7 @@
         
   
   <div class="tags">
-    <a href="/tags/String/">String</a>
+    <a href="/tags/String-编码-intern-补码/">String 编码 intern 补码</a>
   </div>
 
 
@@ -251,7 +321,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-final不可变"><span class="toc-text">1. final不可变</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-String常量池"><span class="toc-text">2. String常量池</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-String构造"><span class="toc-text">2.1. String构造</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-1-字面量法"><span class="toc-text">2.1.1. 字面量法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-构造器创建"><span class="toc-text">2.1.2. 构造器创建</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-String-intern"><span class="toc-text">2.2. String.intern</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-final不可变"><span class="toc-text">1. final不可变</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-关于编码"><span class="toc-text">2. 关于编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-java实现"><span class="toc-text">2.1. java实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-中文乱码问题"><span class="toc-text">2.2. 中文乱码问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-原码-反码-补码"><span class="toc-text">2.3. 原码 反码 补码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-String常量池"><span class="toc-text">3. String常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-String构造"><span class="toc-text">4. String构造</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-字面量法"><span class="toc-text">4.1. 字面量法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-构造器创建"><span class="toc-text">4.2. 构造器创建</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-String-intern"><span class="toc-text">5. String.intern</span></a></li></ol></li></ol>
 </div>
 
 
