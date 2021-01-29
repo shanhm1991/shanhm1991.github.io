@@ -128,7 +128,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
 
 <br>
 
-<h2 id="1-容器结构"><a href="#1-容器结构" class="headerlink" title="1. 容器结构"></a>1. 容器结构</h2><p><img src="/img/20171101.1.jpg" alt=""></p>
+<h2 id="1-容器结构"><a href="#1-容器结构" class="headerlink" title="1. 容器结构"></a>1. 容器结构</h2><p><img src="/img/20171101/20171101.1.jpg" alt=""></p>
 <p>如上图所示，可以大体概括一下Tomcat的结构：Server代表一个Tomcat实例，其中可以有多个Service服务。
 每个Service中可以有一个Engine容器和多个Connector，Service将它们组装在一起作为一个服务对外提供，其中Connector接收请求，
 Engine处理请求。另外，Engine可以包含多个子容器Host和Context，每个Host代表一个虚拟主机；每个Context则代表一个Web应用；

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>深入理解java虚拟机.笔记一（运行时数据区） | Essay</title>
+  <title>深入理解java虚拟机. 笔记一（运行时数据区） | Essay</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言java虚拟机在执行java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="深入理解java虚拟机.笔记一（运行时数据区）"/>
+  <meta property="og:title" content="深入理解java虚拟机. 笔记一（运行时数据区）"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -73,7 +73,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        深入理解java虚拟机.笔记一（运行时数据区）
+        深入理解java虚拟机. 笔记一（运行时数据区）
     </h1>
     
     
@@ -102,7 +102,7 @@
    
   
   <div class="tags">
-    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>   <a href="/tags/运行时数据区/">运行时数据区</a>
+    <a href="/tags/运行时数据区/">运行时数据区</a>
   </div>
 
 
@@ -118,7 +118,7 @@
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java虚拟机在执行java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。</p>
 <a id="more"></a>
 
-<p><img src="/img/jvm.1.1.jpg" alt=""></p>
+<p><img src="/img/20190115/20190115.1.jpg" alt=""></p>
 <h3 id="1-程序计数器"><a href="#1-程序计数器" class="headerlink" title="1. 程序计数器"></a>1. 程序计数器</h3><p>一块较小的内存空间，可以看作是当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里，字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，
 分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。<br>程序计数器是线程私有的，每个线程都有一个独立的程序计数器，互不影响。如果线程正在执行的是一个java方法，则计数器记录的是正在执行的虚拟机字节码指令的地址；如果正在执行的是<code>native</code>方法，
 则计数器的值为空。</p>
@@ -169,13 +169,13 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2019/01/16/20190116/">
-		    深入理解java虚拟机.笔记二（关于HotSpot中的对象）
+		    深入理解java虚拟机. 笔记二（关于HotSpot中的对象）
 		  </a>
 	  
 	  
 	  
 		  <a class="alignright next" href="/2019/01/12/20190112/">
-		    java并发编程实战.笔记十二（java内存模型）
+		    java并发编程实战. 笔记十二（java内存模型）
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -192,7 +192,7 @@
         
   
   <div class="tags">
-    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>   <a href="/tags/运行时数据区/">运行时数据区</a>
+    <a href="/tags/运行时数据区/">运行时数据区</a>
   </div>
 
 

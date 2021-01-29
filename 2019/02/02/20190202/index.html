@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>深入理解java虚拟机.笔记八（类加载） | Essay</title>
+  <title>深入理解java虚拟机. 笔记八（类加载） | Essay</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言关于虚拟机的类加载机制，即把描述类的字节数据加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。与那些编译时需要链接的语言不同，java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，
@@ -15,7 +15,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="深入理解java虚拟机.笔记八（类加载）"/>
+  <meta property="og:title" content="深入理解java虚拟机. 笔记八（类加载）"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -77,7 +77,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        深入理解java虚拟机.笔记八（类加载）
+        深入理解java虚拟机. 笔记八（类加载）
     </h1>
     
     
@@ -106,7 +106,7 @@
    
   
   <div class="tags">
-    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>   <a href="/tags/类加载/">类加载</a>   <a href="/tags/ClassLoader/">ClassLoader</a>   <a href="/tags/ContextClassLoader/">ContextClassLoader</a>   <a href="/tags/DriverManager/">DriverManager</a>
+    <a href="/tags/类加载/">类加载</a>   <a href="/tags/ClassLoader/">ClassLoader</a>
   </div>
 
 
@@ -214,7 +214,7 @@
 一般情况下该类加载是程序中默认的类加载器，通过<code>ClassLoader.getSystemClassLoader()</code>可以获取到该类加载器。</p>
 <h4 id="2-1-双亲委派模式"><a href="#2-1-双亲委派模式" class="headerlink" title="2.1. 双亲委派模式"></a>2.1. 双亲委派模式</h4><p>在日常应用程序开发中，类的加载都是由上述3种类加载器相互配合执行的，必要时，也可以自定义类加载器。
 它们直接存在着父子关系，不过不是通过继承实现的，而是通过组合的方式，如下称为双亲委派模型：</p>
-<p><img src="/img/20190202.1.jpg" alt=""></p>
+<p><img src="/img/20190202/20190202.1.jpg" alt=""></p>
 <p>双亲委派模式是在Java 1.2后引入的，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，
 而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归，
 请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，
@@ -223,7 +223,7 @@
 当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。<br>其次考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，
 通过双亲委托模式传递到启动类加载器，而启动类加载器发现该类已被加载，则直接返回已加载过的Integer.class，
 这样便可以防止核心API库被篡改。</p>
-<h4 id="2-2-ClassLoader"><a href="#2-2-ClassLoader" class="headerlink" title="2.2. ClassLoader"></a>2.2. ClassLoader</h4><p><img src="/img/20190202.2.jpg" alt=""></p>
+<h4 id="2-2-ClassLoader"><a href="#2-2-ClassLoader" class="headerlink" title="2.2. ClassLoader"></a>2.2. ClassLoader</h4><p><img src="/img/20190202/20190202.2.jpg" alt=""></p>
 <p>下面通过代码来简单看一下ClassLoader的实现：<font color="green"><code>ClassLoader</code>本身是一个抽象父类，
 对于类加载实现它提供了一个模板方法<code>loadClass</code>，统一使用双亲委派模式进行加载。然后将其中的<code>findClass</code>过程交给子类实现，
 当然也可以直接覆盖掉<code>loadClass</code>，但是不建议。另外，它强制所有构造器必须指定一个父类加载器<code>parent</code>，
@@ -256,7 +256,7 @@
 这样就能获取到<code>AppClassLoader</code>加载的实现类了。</font></p>
 <h3 id="3-示例"><a href="#3-示例" class="headerlink" title="3. 示例"></a>3. 示例</h3><h4 id="3-1-DriverManager"><a href="#3-1-DriverManager" class="headerlink" title="3.1. DriverManager"></a>3.1. DriverManager</h4><p>JDBC(Java Database Connectivity)是java提供给各数据库厂商的spi，它使用驱动程序管理器并指定数据库的驱动程序来提供与异构数据库的透明连接。
 JDBC驱动程序管理器确保使用正确的驱动程序来访问每个数据源，并能够支持连接到多个异构数据库的多个并发驱动程序。<br>下图展示了驱动程序管理器相对于JDBC驱动程序和Java应用程序的位置：</p>
-<p><img src="/img/20190202.3.jpg" alt=""></p>
+<p><img src="/img/20190202/20190202.3.jpg" alt=""></p>
 <p>其API主要提供以下接口：</p>
 <ul>
 <li><p><code>DriverManager</code>：此类管理数据库驱动程序列表。使用通信子协议将来自java应用程序的连接请求与适当的数据库驱动程序进行匹配。
@@ -322,13 +322,13 @@ JDBC驱动程序管理器确保使用正确的驱动程序来访问每个数据�
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2019/02/15/20190215/">
-		    深入理解java虚拟机.笔记九（内存模型）
+		    深入理解java虚拟机. 笔记九（内存模型）
 		  </a>
 	  
 	  
 	  
 		  <a class="alignright next" href="/2019/02/01/20190201/">
-		    深入理解java虚拟机.笔记七（类文件结构）
+		    深入理解java虚拟机. 笔记七（类文件结构）
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -345,7 +345,7 @@ JDBC驱动程序管理器确保使用正确的驱动程序来访问每个数据�
         
   
   <div class="tags">
-    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>   <a href="/tags/类加载/">类加载</a>   <a href="/tags/ClassLoader/">ClassLoader</a>   <a href="/tags/ContextClassLoader/">ContextClassLoader</a>   <a href="/tags/DriverManager/">DriverManager</a>
+    <a href="/tags/类加载/">类加载</a>   <a href="/tags/ClassLoader/">ClassLoader</a>
   </div>
 
 

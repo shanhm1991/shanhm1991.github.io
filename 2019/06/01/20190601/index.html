@@ -132,7 +132,7 @@
 <p><strong>队列：</strong>队列是限制插入和删除必须分别在表的两端进行的表。其基本操作有<code>offer</code>和<code>poll</code>，特点是先进先出。</p>
 <p><strong>栈：</strong>栈是限制插入和删除都只能在一端进行的表，该位置也叫栈顶。其基本操作有<code>push</code>和<code>pop</code>，特点是后进先出。</p>
 <h3 id="2-jdk实现"><a href="#2-jdk实现" class="headerlink" title="2. jdk实现"></a>2. jdk实现</h3><p>线性结构其实相对比较容易，就不打算展开赘述了，java集合框架中提供了很多数据结构的实现，下图列出了部分与线性结构相关的类（这里不扩散问题，暂时忽略线程安全相关的类）</p>
-<p><img src="/img/20190601.1.png" alt=""> </p>
+<p><img src="/img/20190601/20190601.1.png" alt=""> </p>
 <p>其中<code>Vector</code>和<code>Stack</code>灰色表示其已经被废弃，保留至今除了兼容早期已经使用了这两个类的应用之外，应该只剩纪念意义了；
 <code>TreeSet</code>其实是树结构，不过它实现了<code>Collection</code>接口，刚好弥补了其它实现类没有的按照大小排序的能力；
 <code>HashSet</code>其实是个散列表集合，不过子类<code>LinkedHashSet</code>在其基础上维护了一个链表结构；
@@ -160,7 +160,7 @@
 	  
 	  
 		  <a class="alignright next" href="/2019/02/15/20190215/">
-		    深入理解java虚拟机.笔记九（内存模型）
+		    深入理解java虚拟机. 笔记九（内存模型）
 		  </a>
 	  
 	  <div class="clearfix"></div>

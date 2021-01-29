@@ -167,7 +167,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -F</span><br></pre></td></tr></table></figure>
 
 <p>然后运行vncserver，根据它返回的序号，使用本地vncciewer连接，端口就是5900加上返回的序号</p>
-<p><img src="/img/20180904.1.jpg" alt=""> </p>
+<p><img src="/img/20180904/20180904.1.jpg" alt=""> </p>
 <p>这里5905中的5就是vncserver反馈的启动序号，密码可以自己设置一下就可以了。但是登上之后会发现都是乱码。</p>
 <h5 id="2-2-1-VNC乱码问题"><a href="#2-2-1-VNC乱码问题" class="headerlink" title="2.2.1 VNC乱码问题"></a>2.2.1 VNC乱码问题</h5><p>这个就是要安装一些语言支持的rpm包，但是怎么装都会提示缺少依赖,<br>参考<a href="http://www.bubuko.com/infodetail-196827.html" target="_blank" rel="noopener">http://www.bubuko.com/infodetail-196827.html</a> 其中有句话说的很好，可以跳过rpm脚本的依赖检查错误直接安装</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum -y install libXp.so.6</span><br><span class="line">yum -y install libpopt.so.0</span><br><span class="line">rpm -ivh --nodeps chkfontpath-1.10.1-1.1.i386.rpm</span><br><span class="line">rpm -ivh ttmkfdir-3.0.9-23.el5.x86_64.rpm</span><br><span class="line">rpm -ivh fonts-chinese-3.02-12.el5.noarch.rpm</span><br><span class="line">rpm -ivh fonts-ISO8859-2-75dpi-1.0-17.1.noarch.rpm</span><br></pre></td></tr></table></figure>
@@ -181,7 +181,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">以root用户执行xdpyinfo，纪录下name of display后面的值，比如我上面的值是5</span><br><span class="line">执行 xhost +</span><br><span class="line">su - oracle</span><br><span class="line">export DISPLAY&#x3D;:5.0 &#x2F;&#x2F;就是上面root记下的值</span><br><span class="line">执行xdpyinfo可以出现display的信息了</span><br></pre></td></tr></table></figure>
 
 <p>然后执行./runInstaller就会出现oracle的安装提示框了</p>
-<p><img src="/img/20180904.2.jpg" alt=""> </p>
+<p><img src="/img/20180904/20180904.2.jpg" alt=""> </p>
 <p>过程就不贴了，其中需要填的一些值与上面设置的环境变量保持一致就好：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">oracle base: &#x2F;opt&#x2F;oracle</span><br><span class="line">software location: &#x2F;opt&#x2F;oracle&#x2F;product&#x2F;OraHome</span><br><span class="line">Inventory Directory: &#x2F;opt&#x2F;oralnventory</span><br><span class="line"> </span><br><span class="line">oraInventory Group Name: oinstall</span><br><span class="line">Database Administrator(OSDBA) Group: dba</span><br><span class="line">Database Operator(OSOPER) Group: oinstall</span><br></pre></td></tr></table></figure>
 
@@ -194,7 +194,7 @@
 <ol start="3">
 <li>提示semmni的值为0以及缺少一些依赖包</li>
 </ol>
-<p><img src="/img/20180904.3.jpg" alt=""> </p>
+<p><img src="/img/20180904/20180904.3.jpg" alt=""> </p>
 <p>但是在root用户下执行sysctl -p可以看到其实值已经设置成128了，另外对于缺少的依赖，网上有人说是由于centos 7用的版本高了，所以oracle检查不到，
 于是就怀疑是oracle的安装程序自己的检查脚本有问题了，直接勾上右上角的ignore All，继续往下走就行了。</p>
 <ol start="4">
@@ -203,7 +203,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error in invoking target &#39;agent nmhs&#39; of makefile ...</span><br></pre></td></tr></table></figure>
 
 <p>参考：<a href="https://blog.csdn.net/ghostliming/article/details/51566562" target="_blank" rel="noopener">https://blog.csdn.net/ghostliming/article/details/51566562</a>  可以解决，最后：</p>
-<p><img src="/img/20180904.4.jpg" alt=""> </p>
+<p><img src="/img/20180904/20180904.4.jpg" alt=""> </p>
 <h4 id="2-3-配置监听和创建数据库实例"><a href="#2-3-配置监听和创建数据库实例" class="headerlink" title="2.3. 配置监听和创建数据库实例"></a>2.3. 配置监听和创建数据库实例</h4><p>参考<a href="https://www.cnblogs.com/anzerong2012/p/7940850.html" target="_blank" rel="noopener">https://www.cnblogs.com/anzerong2012/p/7940850.html</a><br>还是用vnc客户端登录，以oracle用户运行netca，照图说明就行了，注意填的值与自己配的环境变量要保持一致。</p>
 <h3 id="3-启动服务"><a href="#3-启动服务" class="headerlink" title="3. 启动服务"></a>3. 启动服务</h3><p>oracle用户下执行登录<code>sqlplus / as sysdba</code>，然后startup</p>
 <h4 id="3-1-ORA-01078"><a href="#3-1-ORA-01078" class="headerlink" title="3.1. ORA-01078"></a>3.1. ORA-01078</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ORA-01078: failure in processing system parameters</span><br><span class="line">LRM-00109: could not open parameter file &#39;&#x2F;u01&#x2F;app&#x2F;oracle&#x2F;product&#x2F;11.1.0&#x2F;db_1&#x2F;dbs&#x2F;initorc11g.ora&#39;</span><br></pre></td></tr></table></figure>
@@ -240,7 +240,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[oracle@bogon ~]$ lsnrctl status</span><br><span class="line"> </span><br><span class="line">LSNRCTL for Linux: Version 11.2.0.1.0 - Production on 21-JUN-2018 09:50:55</span><br><span class="line"> </span><br><span class="line">Copyright (c) 1991, 2009, Oracle.  All rights reserved.</span><br><span class="line"> </span><br><span class="line">Connecting to (DESCRIPTION&#x3D;(ADDRESS&#x3D;(PROTOCOL&#x3D;TCP)(HOST&#x3D;192.168.141.21)(PORT&#x3D;1521)))</span><br><span class="line">STATUS of the LISTENER</span><br><span class="line">------------------------</span><br><span class="line">Alias                     LISTENER</span><br><span class="line">Version                   TNSLSNR for Linux: Version 11.2.0.1.0 - Production</span><br><span class="line">Start Date                21-JUN-2018 09:44:27</span><br><span class="line">Uptime                    0 days 0 hr. 6 min. 53 sec</span><br><span class="line">Trace Level               off</span><br><span class="line">Security                  ON: Local OS Authentication</span><br><span class="line">SNMP                      OFF</span><br><span class="line">Listener Parameter File   &#x2F;opt&#x2F;oracle&#x2F;product&#x2F;OraHome&#x2F;network&#x2F;admin&#x2F;listener.ora</span><br><span class="line">Listener Log File         &#x2F;opt&#x2F;oracle&#x2F;diag&#x2F;tnslsnr&#x2F;bogon&#x2F;listener&#x2F;alert&#x2F;log.xml</span><br><span class="line">Listening Endpoints Summary...</span><br><span class="line">  (DESCRIPTION&#x3D;(ADDRESS&#x3D;(PROTOCOL&#x3D;tcp)(HOST&#x3D;192.168.141.21)(PORT&#x3D;1521)))</span><br><span class="line">The listener supports no services</span><br><span class="line">The command completed successfully</span><br></pre></td></tr></table></figure>
 
 <p>其中<code>The listener supports no services</code>，参考<a href="https://blog.csdn.net/jar_java/article/details/51188687" target="_blank" rel="noopener">https://blog.csdn.net/jar_java/article/details/51188687</a> ，通过vnc登录，进行网络配置，oracle用户运行netmgr</p>
-<p><img src="/img/20180904.5.jpg" alt=""> </p>
+<p><img src="/img/20180904/20180904.5.jpg" alt=""> </p>
 <p>添加一个database,再说一遍sid及oracle home要与环境变量及initctl.ora中的值保持一致，然后退出保存就好。</p>
 <ol start="4">
 <li></li>
@@ -254,7 +254,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1   localhost</span><br><span class="line">192.168.141.21  bogon</span><br></pre></td></tr></table></figure>
 
 <p>最后再重新启动lsnrctl start ，会看到状态已经变成ready了，这样就可以通过plsql正常连接和操作了。</p>
-<p><img src="/img/20180904.6.jpg" alt=""> </p>
+<p><img src="/img/20180904/20180904.6.jpg" alt=""> </p>
 <h3 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h3><p>虽然安装前已经做好了心理准备，但遇到的问题还是出乎意料的多，即便最终装完可以正常使用了，有些问题还是不太确定，毕竟自己对linux和oracle的认识很浅，
 只是凭着安装过程中的笔记和收藏的博文回忆出这次oracle安装过程及遇到的一些问题，并不代表下次安装就不会出现其他问题。
 不过可以作为一个借鉴，对于遇到的问题，还是要心态好，见招拆招，等到内功深厚了，就可以无所不破了。</p>

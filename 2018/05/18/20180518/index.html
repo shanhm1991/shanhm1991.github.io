@@ -115,21 +115,21 @@
 <a id="more"></a>
 
 <h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p>一开始是想把windows桌面上的文件拖到xshell登录的ubuntu的目录中，但是没成功，参考<a href="https://blog.csdn.net/liuao107329/article/details/49994935" target="_blank" rel="noopener">https://blog.csdn.net/liuao107329/article/details/49994935</a><br>要先安装下lrasz软件，并且作者好心地直接贴出了命令：<code>yum -y install lrasz</code>，于是我也这么干了，但是：</p>
-<p><img src="/img/20180518.1.png" alt=""> </p>
+<p><img src="/img/20180518/20180518.1.png" alt=""> </p>
 <p>提示意思应该是没有可用的仓库，确认下确实是没有</p>
-<p><img src="/img/20180518.2.png" alt=""> </p>
+<p><img src="/img/20180518/20180518.2.png" alt=""> </p>
 <p>于是创建yum仓库，参考<a href="http://www.178linux.com/39458以及https://blog.csdn.net/qq_26437925/article/details/73693757" target="_blank" rel="noopener">http://www.178linux.com/39458以及https://blog.csdn.net/qq_26437925/article/details/73693757</a><br>大概知道，要添加一个目录作为仓库的话需要在这个目录下编辑一个*.repo文件，看了下yum.conf文件</p>
-<p><img src="/img/20180518.3.png" alt=""> </p>
+<p><img src="/img/20180518/20180518.3.png" alt=""> </p>
 <p>于是就到/etc/yum/repos.d下编辑文件了，这地方就是个坑，后面发现了</p>
-<p><img src="/img/20180518.4.png" alt=""> </p>
+<p><img src="/img/20180518/20180518.4.png" alt=""> </p>
 <p>再次查看yum仓库，看到：</p>
-<p><img src="/img/20180518.5.png" alt=""> </p>
+<p><img src="/img/20180518/20180518.5.png" alt=""> </p>
 <p>但是，仅仅只是解决了仓库问题而已</p>
-<p><img src="/img/20180518.6.png" alt=""> </p>
+<p><img src="/img/20180518/20180518.6.png" alt=""> </p>
 <p>其实本来看到404，一直以为自己编辑的文件有问题，搞了很久后来找到一个别人写的很完整的下载过来，单还是不行，<br>后来参考<a href="http://www.opstool.com/article/294" target="_blank" rel="noopener">http://www.opstool.com/article/294</a> ，发现yum要获取当前系统的发行版本，但是它从ubuntu中获取不到，就是下面这个releasever</p>
-<p><img src="/img/20180518.7.png" alt=""> </p>
+<p><img src="/img/20180518/20180518.7.png" alt=""> </p>
 <p>对于正常的CentOS系统。执行yum whatprovides redhat-release可以系统的发行版本，但我是ubuntu..</p>
-<p><img src="/img/20180518.8.png" alt=""> </p>
+<p><img src="/img/20180518/20180518.8.png" alt=""> </p>
 <p>最后看到这篇<a href="https://blog.csdn.net/luke_wang/article/details/71512530" target="_blank" rel="noopener">https://blog.csdn.net/luke_wang/article/details/71512530</a> ，终于释然了，这个问题只是ubuntu不支持yum而已，linux的各个发行版本是有分派的，
 难怪上面下载的repo文件名上看到centos字眼，人家是给centos用的啊。所以总结是ubuntu装软件apt管理就行了，而在centos上是用yum比较合适。</p>
 <p><br><strong>参考：</strong> </p>

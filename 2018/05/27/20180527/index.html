@@ -152,7 +152,7 @@ root无法登录
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter user &#39;root&#39;@&#39;%&#39; identified with mysql_native_password by &#39;root&#39;;</span><br></pre></td></tr></table></figure>
 
 <p>最后终于可以使用客户端登录了：</p>
-<p><img src="/img/20180527.1.jpg" alt=""> </p>
+<p><img src="/img/20180527/20180527.1.jpg" alt=""> </p>
 <h4 id="3-1-回顾下问题3的过程"><a href="#3-1-回顾下问题3的过程" class="headerlink" title="3.1. 回顾下问题3的过程"></a>3.1. 回顾下问题3的过程</h4><ol>
 <li>一开始参考<a href="http://www.jb51.net/article/10345.htm" target="_blank" rel="noopener">http://www.jb51.net/article/10345.htm</a> ，尝试用old_password重新设置下user的password字段，但是mysql8即没有old_password这个方法也没有password这个字段，
 虽然不死心花了很长时间，但最后还是不得不承认这个方法肯定是不行的。反思一下可能是自己太想有个简单地办法尽快把问题处理掉才舍不得放弃，这也是一种偷懒吧，

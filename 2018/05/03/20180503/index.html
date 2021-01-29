@@ -124,22 +124,22 @@ ssh无法登录">
 </li>
 </ol>
 <h3 id="问题1：以nat方式设置ubuntu的静态ip"><a href="#问题1：以nat方式设置ubuntu的静态ip" class="headerlink" title="问题1：以nat方式设置ubuntu的静态ip"></a>问题1：以nat方式设置ubuntu的静态ip</h3><p>参考<a href="https://www.jianshu.com/p/2e5fecf2a7df" target="_blank" rel="noopener">https://www.jianshu.com/p/2e5fecf2a7df</a> ，按部就班进行配置，比如：</p>
-<p><img src="/img/20180503.1.jpg" alt=""> </p>
-<p><img src="/img/20180503.2.jpg" alt=""> </p>
-<p><img src="/img/20180503.3.jpg" alt=""> </p>
+<p><img src="/img/20180503/20180503.1.jpg" alt=""> </p>
+<p><img src="/img/20180503/20180503.2.jpg" alt=""> </p>
+<p><img src="/img/20180503/20180503.3.jpg" alt=""> </p>
 <p>对于dns的配置，文中说修改/etc/resolv.conf，但是重启时会重写这个文件，而且它就根据interfaces里的设置来写的，
 所以可以直接设置interfaces，设置之后，重启下网络服务，会看到ip已经生效了</p>
-<p><img src="/img/20180503.4.jpg" alt=""> </p>
-<h3 id="问题2：域名无法解析"><a href="#问题2：域名无法解析" class="headerlink" title="问题2：域名无法解析"></a>问题2：域名无法解析</h3><p><img src="/img/20180503.5.jpg" alt=""> </p>
+<p><img src="/img/20180503/20180503.4.jpg" alt=""> </p>
+<h3 id="问题2：域名无法解析"><a href="#问题2：域名无法解析" class="headerlink" title="问题2：域名无法解析"></a>问题2：域名无法解析</h3><p><img src="/img/20180503/20180503.5.jpg" alt=""> </p>
 <p>提示域名无法解析，不过在windows上是可以ping的通的，所以怀疑的是配的dns地址问题。<br>这边耗了很长时间，后来参考<a href="https://blog.csdn.net/u013304231/article/details/53319375" target="_blank" rel="noopener">https://blog.csdn.net/u013304231/article/details/53319375</a><br>想到了可能是路由的问题，关于路由/网关/dns的办法介绍可以看这篇：<a href="https://blog.csdn.net/sgl520lxl/article/details/51974215" target="_blank" rel="noopener">https://blog.csdn.net/sgl520lxl/article/details/51974215</a></p>
-<p><img src="/img/20180503.6.jpg" alt=""> </p>
+<p><img src="/img/20180503/20180503.6.jpg" alt=""> </p>
 <p>增加路由后，再执行wget <a href="http://www.baidu.com，就可以看到200" target="_blank" rel="noopener">www.baidu.com，就可以看到200</a> ok的响应了。</p>
 <h3 id="问题3：ssh无法登录"><a href="#问题3：ssh无法登录" class="headerlink" title="问题3：ssh无法登录"></a>问题3：ssh无法登录</h3><p>本以为都结束了，然后发现ssh无法登录，连接失败。参考<a href="https://blog.csdn.net/niuwei22007/article/details/50486872" target="_blank" rel="noopener">https://blog.csdn.net/niuwei22007/article/details/50486872</a><br>应该是由于网关不一致的问题（以前在电脑与电脑之间用网线传数据时经常会修改网关，只要两边网关一致就可以远程桌面了）<br>于是修改本机的网络配置：</p>
-<p><img src="/img/20180503.7.jpg" alt=""> </p>
+<p><img src="/img/20180503/20180503.7.jpg" alt=""> </p>
 <p>其实一开始我是改的Ethernet，然后发现在window上能ping通了，ssh也可以登录，但是虚拟机不能上网了，改回自动获取ip后，虚拟机可以上网但是又无法ssh登录了，
 难道只能二者选其一吗，然后想大概是我用的wifi连接的网络，Ethernet本身没有连接网络所以虚拟机跟这个网关保持一致估计也不能上网，可以用有线网连上网后试一下是不是这个原因。</p>
 <p>最后是将vmnet8的网关改成一致，最后虚拟机ip改成静态，并且可以通过nat上网，主机也可以ssh登录了。</p>
-<p><img src="/img/20180503.8.jpg" alt=""> </p>
+<p><img src="/img/20180503/20180503.8.jpg" alt=""> </p>
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li><a href="https://www.jianshu.com/p/2e5fecf2a7df" target="_blank" rel="noopener">https://www.jianshu.com/p/2e5fecf2a7df</a></li>

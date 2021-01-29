@@ -120,7 +120,7 @@
 <li>真实主题(RealSubject)：真正实现业务逻辑的类；</li>
 <li>代理主题(Proxy)：用来代理和封装真实主题；</li>
 </ul>
-<p><img src="/img/201710081.jpg" alt=""> </p>
+<p><img src="/img/20171008/20171008.1.jpg" alt=""> </p>
 <p>可以看出，客户端直接面对的是代理类，通过代理类对目标类进行访问。这样当需要在访问过程中进行一些操作时，就可以不用修改已有的实现类，只需将操作加到代理类中即可。</p>
 <h4 id="1-2-示例"><a href="#1-2-示例" class="headerlink" title="1.2. 示例"></a>1.2. 示例</h4><figure class="highlight java"><figcaption><span class="caption">Subject</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">handle</span><span class="params">(String arg)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 

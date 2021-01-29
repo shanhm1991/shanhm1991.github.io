@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>深入理解java虚拟机.笔记四（垃圾标记与收集算法） | Essay</title>
+  <title>深入理解java虚拟机. 笔记四（垃圾标记与收集算法） | Essay</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言java内存运行时的各个部分，其中程序计数器、虚拟机栈、本地方法栈3个区域随线程而生，随线程而灭；
@@ -16,7 +16,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="深入理解java虚拟机.笔记四（垃圾标记与收集算法）"/>
+  <meta property="og:title" content="深入理解java虚拟机. 笔记四（垃圾标记与收集算法）"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -78,7 +78,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        深入理解java虚拟机.笔记四（垃圾标记与收集算法）
+        深入理解java虚拟机. 笔记四（垃圾标记与收集算法）
     </h1>
     
     
@@ -107,7 +107,7 @@
    
   
   <div class="tags">
-    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>   <a href="/tags/GC/">GC</a>
+    <a href="/tags/GC垃圾回收/">GC垃圾回收</a>
   </div>
 
 
@@ -138,7 +138,7 @@
 <p>从运行结果可以看到，并没有因为两个对象相互引用就不对它们进行回收。</p>
 <h4 id="1-2-可达性分析"><a href="#1-2-可达性分析" class="headerlink" title="1.2 可达性分析"></a>1.2 可达性分析</h4><p>基本思想是通过一系列的称为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链，
 当一个对象多GC Roots没有任何引用链相连时，则证明此对象是不可用的。</p>
-<p><img src="/img/20190118.1.jpg" alt=""> </p>
+<p><img src="/img/20190118/20190118.1.jpg" alt=""> </p>
 <p>Java语言中，可作为GC Roots 的对象包括：</p>
 <ul>
 <li>虚拟机栈(栈帧中的本地变量表)中的引用对象</li>
@@ -199,13 +199,13 @@
 <li>标记和清除过程效率不高；</li>
 <li>标记清除之后会产生大量不连续的内存碎片，导致后续分配大对象时，无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作；</li>
 </ul>
-<p><img src="/img/20190118.2.jpg" alt=""> </p>
-<p><img src="/img/20190118.3.jpg" alt=""> </p>
+<p><img src="/img/20190118/20190118.2.jpg" alt=""> </p>
+<p><img src="/img/20190118/20190118.3.jpg" alt=""> </p>
 <h4 id="4-1-复制算法"><a href="#4-1-复制算法" class="headerlink" title="4.1. 复制算法"></a>4.1. 复制算法</h4><p>为了解决效率问题，将可用内存容量划分为大小相等的两块，每次只使用其中的一块。当这一块用完之后，就将还存活的对象复制到另外一块上面，
 然后在把已使用过的内存空间一次清理掉。这样使得每次都是对其中的一块进行内存回收，不会产生碎片等情况，只要移动堆订的指针，按顺序分配内存即可，
 实现简单，运行高效，但它的代价是将内存缩小为原来的一半。</p>
-<p><img src="/img/20190118.4.jpg" alt=""> </p>
-<p><img src="/img/20190118.5.jpg" alt=""> </p>
+<p><img src="/img/20190118/20190118.4.jpg" alt=""> </p>
+<p><img src="/img/20190118/20190118.5.jpg" alt=""> </p>
 <p>在商业虚拟机中都采用这种收集算法，统计表明在新生代中98%的对象都是朝生夕死，所以并不需要按照1:1的比例来划分内存空间，
 而是将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor。当回收时，
 将Eden和Survivor中还存活的对象一次性地复制到另外一块Survivor空间上，然后清理掉Eden和刚使用过的Survivor。</p>
@@ -215,8 +215,8 @@
 以应对被使用的内存中所有对象都100%存活的极端情况，所以在在老年代一般不能直接选用复制算法。<font color="red">所以针对老年代，采用标记-整理算法，
 标记操作和“标记-清除”算法一致，后续操作不只是直接清理对象，而是在清理无用对象完成后让所有存活的对象都向一端移动，并更新引用其对象的指针。</font>
 它的代价是在标记-清除的基础上还需进行对象的移动，成本相对较高，好处则是不会产生内存碎片。</p>
-<p><img src="/img/20190118.6.jpg" alt=""> </p>
-<p><img src="/img/20190118.7.jpg" alt=""> </p>
+<p><img src="/img/20190118/20190118.6.jpg" alt=""> </p>
+<p><img src="/img/20190118/20190118.7.jpg" alt=""> </p>
 <p>因此当前的商业虚拟机对于垃圾收集都采用“分代收集”算法，一般把java堆分为新生代和老年代。对于新生代，每次垃圾收集都有大批对象死去，仅少量存活，
 所以选用复制算法。而老年代中因为对象存活率搞、没有额外的空间对它进行分配担保，所以就选用标记-清理或者标记整理算法。</p>
 <p><br><strong>参考：</strong> </p>
@@ -234,13 +234,13 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2019/01/28/20190128/">
-		    深入理解java虚拟机.笔记五（GC日志与GC参数）
+		    深入理解java虚拟机. 笔记五（GC日志与GC参数）
 		  </a>
 	  
 	  
 	  
 		  <a class="alignright next" href="/2019/01/17/20190117/">
-		    深入理解java虚拟机.笔记三（运行时内存异常）
+		    深入理解java虚拟机. 笔记三（运行时内存异常）
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -257,7 +257,7 @@
         
   
   <div class="tags">
-    <a href="/tags/《深入理解java虚拟机》/">《深入理解java虚拟机》</a>   <a href="/tags/GC/">GC</a>
+    <a href="/tags/GC垃圾回收/">GC垃圾回收</a>
   </div>
 
 

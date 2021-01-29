@@ -72,7 +72,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/06/30/20190630/">poi解析. 三. Excel解析示例</a>
+       <a href="/2019/06/30/20190630/">poi解析Excel. 三. 定义解析规则配置</a>
     </h1>
     
   
@@ -86,7 +86,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>相对于文本文件，Excel可以将表格数据描述的更结构化，它可以用不同的sheet存放不同的数据，并且在sheet中可指定各个字段的列头，在单元格中可以设置数据类型或格式校验。如果解析时能将这些结构信息利用并且可配，那么对解析处理将会有一些帮助</p>
       
     </div>
 	
@@ -124,7 +124,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/06/29/20190629/">poi解析. 二. 利用SAX降低内存消耗</a>
+       <a href="/2019/06/29/20190629/">poi解析Excel. 二. 借助SAX降低内存</a>
     </h1>
     
   
@@ -138,10 +138,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>上文说过，Excel的本质就是一个压缩文件，其各个sheet中的数据就存在对应的xml描述文件中，解析Excel也就是解析这些xml文件。对于纯文本文件的字节流，由于其每行数据都有一个统一的结束标记，
-因此解析时可以用行作为单位来读取。对于简单的xml，如果约定好器根节点下面只有一种类型的子节点且没有多重嵌套，那么也可以用子节点作为单位来进行数据读取。<br>但通常xml都比较复杂，会有很多不同节点以及各种嵌套，要找到一个合适的粒度来作为读取单位是很难的。对于Excel中的xml数据描述文件，当然也是比较复杂的，不过它有对应的规范标准。
-如果可以清晰的知道它的规范定义，那么我们也可以考虑另起炉灶写一个Excel的解析框架了，但这没必要，除非能写得比poi更好。其实poi也是借助sax，每次读取xml中的一行并产生一个对应的事件，
-然后交给用户自定义处理，用户需要从节点事件的处理中得出自己想要的数据内容。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面说过，Excel的数据实际上存在在Xml中，解析Excel其实就是解析这些xml文件。对于纯文本文件，所有的行都有统一的结束符，因此读取时可以很方便的划分行数据。对于xml，其描述数据的单位是节点，并且可以嵌套，因此读取时应该以节点为单位，
+但是除非事先知道xml中节点规则，即节点结构或相互之间的关系，否则无法正确读取。Excel中的Xml规则由是Excel规范来描述，poi即在这个规范的基础上提供了一套基于事件解析的api</p>
       
     </div>
 	
@@ -179,7 +177,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/06/28/20190628/">poi解析. 一. 适配一个通用的Reader</a>
+       <a href="/2019/06/28/20190628/">poi解析Excel. 一. 实现readLine读取</a>
     </h1>
     
   
@@ -193,8 +191,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>通常，读文本我们会使用<code>BufferedReader</code>，它装饰或者说管理了<code>InputStreamReader</code>，并提供<code>readLine()</code>来简化我们对文本行的读取。让我们可以像从流水线上获取产品一样读取行数据，
-每当取完一行后，它就自动准备好下一行并等待我们获取，直到全部获取结束。所以我们的目标就是希望也能管理poi并提供类似<code>readLine()</code>一样的方法来读取Excel。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java中，一般读取文本时会使用<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上提供了<code>readLine()</code>来简化对文本行的读取。使得读取行数据时可以向流水线一样，每当取完一行后，它就自动准备好下一行并等待获取，直至全部获取结束。
+因此，希望也能够在poi的基础上提供一个类似<code>readLine()</code>的方法来读取Excel，并可以很方便地获取到行数据中的字段。</p>
       
     </div>
 	
@@ -667,7 +665,7 @@
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/2-3%E6%A0%91/" style="font-size: 10px;">2-3树</a> <a href="/tags/AVL%E6%A0%91/" style="font-size: 10px;">AVL树</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B+树</a> <a href="/tags/B%E6%A0%91/" style="font-size: 10px;">B树</a> <a href="/tags/CallerSensitive/" style="font-size: 10px;">CallerSensitive</a> <a href="/tags/ClassLoader/" style="font-size: 10px;">ClassLoader</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ContextClassLoader/" style="font-size: 10px;">ContextClassLoader</a> <a href="/tags/DriverManager/" style="font-size: 10px;">DriverManager</a> <a href="/tags/ERROR-1045/" style="font-size: 10px;">ERROR#1045</a> <a href="/tags/GC/" style="font-size: 12px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/LinkedHashMap/" style="font-size: 10px;">LinkedHashMap</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Mysql/" style="font-size: 12px;">Mysql</a> <a href="/tags/ORA-00845/" style="font-size: 10px;">ORA-00845</a> <a href="/tags/ORA-01078/" style="font-size: 10px;">ORA-01078</a> <a href="/tags/ORA-01102/" style="font-size: 10px;">ORA-01102</a> <a href="/tags/SQL-3167/" style="font-size: 10px;">SQL#3167</a> <a href="/tags/String-%E7%BC%96%E7%A0%81-intern-%E8%A1%A5%E7%A0%81/" style="font-size: 10px;">String 编码 intern 补码</a> <a href="/tags/ThreadLocal/" style="font-size: 10px;">ThreadLocal</a> <a href="/tags/Unsafe/" style="font-size: 10px;">Unsafe</a> <a href="/tags/VNC/" style="font-size: 10px;">VNC</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/centos/" style="font-size: 12px;">centos</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class%E6%96%87%E4%BB%B6/" style="font-size: 10px;">class文件</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/jstack/" style="font-size: 10px;">jstack</a> <a href="/tags/jstat/" style="font-size: 10px;">jstat</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/poi/" style="font-size: 14px;">poi</a> <a href="/tags/rc-local%E4%B8%8D%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98/" style="font-size: 10px;">rc.local不执行问题</a> <a href="/tags/tomcat/" style="font-size: 14px;">tomcat</a> <a href="/tags/ubuntu/" style="font-size: 16px;">ubuntu</a> <a href="/tags/vmware/" style="font-size: 12px;">vmware</a> <a href="/tags/yum/" style="font-size: 10px;">yum</a> <a href="/tags/%E3%80%8Ajava%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E3%80%8B/" style="font-size: 20px;">《java并发编程实战》</a> <a href="/tags/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B/" style="font-size: 18px;">《深入理解java虚拟机》</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">代理模式</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">原型模式</a> <a href="/tags/%E5%8F%8D%E5%B0%84/" style="font-size: 10px;">反射</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E5%A4%8D%E5%88%B6/" style="font-size: 10px;">对象复制</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">工厂模式</a> <a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 10px;">序列化</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">建造者模式</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 10px;">异常</a> <a href="/tags/%E6%9E%9A%E4%B8%BE/" style="font-size: 12px;">枚举</a> <a href="/tags/%E6%A0%88/" style="font-size: 10px;">栈</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD/" style="font-size: 10px;">类加载</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 10px;">红黑树</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" style="font-size: 10px;">运行时数据区</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 10px;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 10px;">队列</a>
+    <a href="/tags/2-3%E6%A0%91/" style="font-size: 10px;">2-3树</a> <a href="/tags/AVL%E6%A0%91/" style="font-size: 10px;">AVL树</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B+树</a> <a href="/tags/B%E6%A0%91/" style="font-size: 10px;">B树</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/CallerSensitive/" style="font-size: 10px;">CallerSensitive</a> <a href="/tags/ClassLoader/" style="font-size: 10px;">ClassLoader</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/ERROR-1045/" style="font-size: 10px;">ERROR#1045</a> <a href="/tags/GC%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 13.33px;">GC垃圾回收</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/LinkedHashMap/" style="font-size: 10px;">LinkedHashMap</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Mysql/" style="font-size: 13.33px;">Mysql</a> <a href="/tags/ORA-00845/" style="font-size: 10px;">ORA-00845</a> <a href="/tags/ORA-01078/" style="font-size: 10px;">ORA-01078</a> <a href="/tags/ORA-01102/" style="font-size: 10px;">ORA-01102</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/SQL-3167/" style="font-size: 10px;">SQL#3167</a> <a href="/tags/String-%E7%BC%96%E7%A0%81-intern-%E8%A1%A5%E7%A0%81/" style="font-size: 10px;">String 编码 intern 补码</a> <a href="/tags/ThreadLocal/" style="font-size: 10px;">ThreadLocal</a> <a href="/tags/Unsafe/" style="font-size: 10px;">Unsafe</a> <a href="/tags/VNC/" style="font-size: 10px;">VNC</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/centos/" style="font-size: 13.33px;">centos</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class%E6%96%87%E4%BB%B6/" style="font-size: 10px;">class文件</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 13.33px;">java内存模型</a> <a href="/tags/jstack/" style="font-size: 10px;">jstack</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/poi/" style="font-size: 16.67px;">poi</a> <a href="/tags/rc-local%E4%B8%8D%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98/" style="font-size: 10px;">rc.local不执行问题</a> <a href="/tags/tomcat/" style="font-size: 16.67px;">tomcat</a> <a href="/tags/ubuntu/" style="font-size: 20px;">ubuntu</a> <a href="/tags/vmware/" style="font-size: 13.33px;">vmware</a> <a href="/tags/yum/" style="font-size: 10px;">yum</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">代理模式</a> <a href="/tags/%E4%BB%BB%E5%8A%A1%E5%8F%96%E6%B6%88/" style="font-size: 10px;">任务取消</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">单例模式</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">原型模式</a> <a href="/tags/%E5%8F%8D%E5%B0%84/" style="font-size: 10px;">反射</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E5%A4%8D%E5%88%B6/" style="font-size: 10px;">对象复制</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E8%AE%BF%E9%97%AE/" style="font-size: 10px;">对象的创建与访问</a> <a href="/tags/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">工厂模式</a> <a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 10px;">序列化</a> <a href="/tags/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">建造者模式</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 10px;">异常</a> <a href="/tags/%E6%9E%9A%E4%B8%BE/" style="font-size: 13.33px;">枚举</a> <a href="/tags/%E6%A0%88/" style="font-size: 10px;">栈</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD/" style="font-size: 10px;">类加载</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 10px;">红黑树</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8-%E5%8E%9F%E5%AD%90%E6%80%A7/" style="font-size: 10px;">线程安全 原子性</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8-%E5%8F%AF%E8%A7%81%E6%80%A7/" style="font-size: 10px;">线程安全 可见性</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" style="font-size: 10px;">运行时数据区</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 10px;">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 10px;">队列</a>
   </div>
 </div>
 
