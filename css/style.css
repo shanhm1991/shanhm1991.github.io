@@ -714,6 +714,8 @@ footer .addthis iframe {
 }
 #sidebar .tagcloud a {
   margin-right: 10px;
+}
+#sidebar font-size 10px {
   display: inline-block;
 }
 #sidebar .catlog {
