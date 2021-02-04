@@ -118,7 +118,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
     <div class="e-content entry" itemprop="articleBody">
       
         <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>Tomcat作为一个web应用容器，其中包含了各种组件以及子容器，相互之间存在一定的层级和作用关系，并且通过<code>server.xml</code>来描述。
-<font color="green">
+<font color="#9E0152">
 其实Tomcat本质是一个Servlet容器，servlet是一组处理网络请求的接口规范，它的实现知道如何处理具体的请求，
 Servlet容器的作用就是负责将接收到的请求分配给对应的servlet进行处理。<br>可以将Tomcat当成一个比较大的Servlet容器，然后它通过协议端口、url等将servlet请求做了一个层次分类，
 具体的做法就是给每种分类都对应一个组件，比如通过协议和端口号可以确定Connector，通过url可以确定Cotext，也就确定了对应的web应用，
@@ -132,7 +132,7 @@ Servlet容器的作用就是负责将接收到的请求分配给对应的servlet
 <p>如上图所示，可以大体概括一下Tomcat的结构：Server代表一个Tomcat实例，其中可以有多个Service服务。
 每个Service中可以有一个Engine容器和多个Connector，Service将它们组装在一起作为一个服务对外提供，其中Connector接收请求，
 Engine处理请求。另外，Engine可以包含多个子容器Host和Context，每个Host代表一个虚拟主机；每个Context则代表一个Web应用；
-不过，所有这些组件都可以通过server.xml来进行配置。<br><font color="green">
+不过，所有这些组件都可以通过server.xml来进行配置。<br><font color="#9E0152">
 当请求被发送到Tomcat所在的主机时，Tomcat可以根据协议和端口号（Service中的Connector组件可以接收特定端口的请求，当Tomcat启动时，
 Service就会监听特定的端口）选定处理请求的Service，Service一旦选定，Engine也就确定。
 然后在Engine中寻找名称与域名/IP地址匹配的Host处理该请求，如果没有找到，则使用defaultHost来处理，
@@ -147,7 +147,7 @@ Service就会监听特定的端口）选定处理请求的Service，Service一�
 
 <h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">"8005"</span> <span class="attr">shutdown</span>=<span class="string">"SHUTDOWN"</span>&gt;</span> <span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>server组件<font color="green">定义了一个tomcat实例，默认监听8005端口，要启用多个tomcat实例，将它们监听在不同的端口即可。
+<p>server组件<font color="#9E0152">定义了一个tomcat实例，默认监听8005端口，要启用多个tomcat实例，将它们监听在不同的端口即可。
 port表示Server接收shutdown指令关闭实例的端口号，不过基于安全角度的考虑，通常不允许远程进行。
 Server中可以多个Service元素，它的任务就是提供一个接口让客户端能够访问到这个Service集合，同时维护这些Service的生命周期。</font> </p>
 <p>相关属性：</p>
@@ -190,11 +190,11 @@ Server中可以多个Service元素，它的任务就是提供一个接口让客�
 
 <h4 id="Server-Service-Connector"><a href="#Server-Service-Connector" class="headerlink" title="Server/Service/Connector"></a>Server/Service/Connector</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span> <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8009"</span> <span class="attr">protocol</span>=<span class="string">"AJP/1.3"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>连接器<font color="green">Connector用于接收客户端发送的请求并返回响应给客户端。service中可以定义多个connector，
+<p>连接器<font color="#9E0152">Connector用于接收客户端发送的请求并返回响应给客户端。service中可以定义多个connector，
 每个连接器都可以将请求转发给它们相关联的engine以处理请求、创建响应。</font></p>
 <p>connector也可以是多种类型，常见的为http/1.1，http/2和ajp(apache jserv protocol)，
 在tomcat中，ajp连接协议类型专用于tomcat前端是apache反向代理的情况下。</p>
-<p>上面第2个Connector，客户端可以通过8009端口使用AJP协议访问Tomcat。<br><font color="green">AJP协议负责和其他的HTTP服务器(如Apache)建立连接，当把Tomcat与其他HTTP服务器集成时，就需要用到这个连接器。
+<p>上面第2个Connector，客户端可以通过8009端口使用AJP协议访问Tomcat。<br><font color="#9E0152">AJP协议负责和其他的HTTP服务器(如Apache)建立连接，当把Tomcat与其他HTTP服务器集成时，就需要用到这个连接器。
 之所以使用Tomcat和其他服务器集成，是因为Tomcat可以用作Servlet/JSP容器，但是对静态资源的处理速度较慢，
 不如Apache和IIS等HTTP服务器；因此常常将Tomcat与Apache等集成，前者作Servlet容器，后者处理静态资源，
 而AJP协议便负责Tomcat和Apache的连接。</font></p>
@@ -221,7 +221,7 @@ Server中可以多个Service元素，它的任务就是提供一个接口让客�
 <h4 id="Server-Service-Engine"><a href="#Server-Service-Engine" class="headerlink" title="Server/Service/Engine"></a>Server/Service/Engine</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">"Catalina"</span> <span class="attr">defaultHost</span>=<span class="string">"localhost"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>一个service中只允许有一个Engine，且Engine必须在其所需要关联的connector之后。
-<font color="green">它在service组件中用来分析协议的引擎，它从一个或多个connector上接收请求，
+<font color="#9E0152">它在service组件中用来分析协议的引擎，它从一个或多个connector上接收请求，
 并将请求交给对应的虚拟主机进行处理，最后返回完整的响应数据给connector，通过connector将响应数据返回给客户端。</font></p>
 <p>相关属性：</p>
 <ul>
@@ -237,7 +237,7 @@ Server中可以多个Service元素，它的任务就是提供一个接口让客�
 
 <h4 id="Server-Service-Engine-Host"><a href="#Server-Service-Engine-Host" class="headerlink" title="Server/Service/Engine/Host"></a>Server/Service/Engine/Host</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">"localhost"</span> <span class="attr">appBase</span>=<span class="string">"webapps"</span> <span class="attr">unpackWARs</span>=<span class="string">"true"</span> <span class="attr">autoDeploy</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>Host容器用来定义虚拟主机，<font color="green">Engine从connector接收到请求进行分析后，
+<p>Host容器用来定义虚拟主机，<font color="#9E0152">Engine从connector接收到请求进行分析后，
 会将相关的属性参数传递给对应的(筛选方式是从请求首部的host字段和虚拟主机名称进行匹配)虚拟host进行处理。
 如果没有合适的虚拟主机，则传递给默认虚拟主机。因此每个容器中必须至少定义一个虚拟主机，
 且必须有一个虚拟主机和Engine容器中定义的默认虚拟主机名称相同。</font></p>
@@ -256,7 +256,7 @@ Server中可以多个Service元素，它的任务就是提供一个接口让客�
 
 <h4 id="Server-Service-Engine-Host-Context"><a href="#Server-Service-Engine-Host-Context" class="headerlink" title="Server/Service/Engine/Host/Context"></a>Server/Service/Engine/Host/Context</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Context</span> <span class="attr">docBase</span>=<span class="string">"/doc"</span> <span class="attr">path</span>=<span class="string">"/fom"</span> <span class="attr">reloadable</span>=<span class="string">"true"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>connector和containor是整个tomcat的核心，而<font color="green">context则是containor的核心，它是真正管理servlet的地方，
+<p>connector和containor是整个tomcat的核心，而<font color="#9E0152">context则是containor的核心，它是真正管理servlet的地方，
 它的配置影响了servlet的工作方式。每个context代表一个webapp，因此必须在虚拟主机容器Host中有一个唯一的name。</font></p>
 <p>context容器有很多属性，详细内容见<a href="http://tomcat.apache.org/tomcat-8.5-doc/config/context.html#Attributes" target="_blank" rel="noopener">官方手册</a>，常见属性如下：</p>
 <ul>

@@ -100,7 +100,7 @@
    
   
   <div class="tags">
-    <a href="/tags/线程安全/">线程安全</a>   <a href="/tags/可见性/">可见性</a>
+    <a href="/tags/线程安全/">线程安全</a>   <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>   <a href="/tags/可见性/">可见性</a>
   </div>
 
 
@@ -113,7 +113,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。<font color="red">同步的另一个重要目的即内存可见性。</font>我们不仅希望防止某个线程正在使用的对象状态
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。<font color="#9E0152">同步的另一个重要目的即内存可见性。</font>我们不仅希望防止某个线程正在使用的对象状态
 被另一个线程同时修改，而且希望当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。<font color="Gray">（后面介绍jvm内存模型时会提到java线程之间内存可见性的必要条件：
 满足Happens-Before规则）</font></p>
 <a id="more"></a>
@@ -129,9 +129,9 @@
 当发生上下文切换时，另一个线程也无法看到保存在高速缓存或寄存器中的修改，而同步会强制处理器把当前线程所做的修改同步到内存中。此外计算机为了执行效率，对处理器进行了非常精密的设计，
 它会对输入的指令进行优化排序甚至多指令同时执行，只要保证最后的结果与输入的指令效果一致即可，所以你无法根据输入的指令序列知道指令执行的顺序以及结束之前任一时刻的执行结果，
 同样的当一个线程观察另外一个线程时，它也无法知道另一线程的执行顺序或者任一时候正在做什么，而同步可以让一个线程可以看到另一个线程某一阶段的执行结果。）</font></p>
-<h4 id="1-1-使用锁进行同步"><a href="#1-1-使用锁进行同步" class="headerlink" title="1.1. 使用锁进行同步"></a>1.1. 使用锁进行同步</h4><p>同步可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。当线程A执行某个同步代码块时，线程B随后进入由<font color="red">同一个锁保护的同步代码块，</font>这种情况下可以保证，在锁被释放之前，
+<h4 id="1-1-使用锁进行同步"><a href="#1-1-使用锁进行同步" class="headerlink" title="1.1. 使用锁进行同步"></a>1.1. 使用锁进行同步</h4><p>同步可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。当线程A执行某个同步代码块时，线程B随后进入由<font color="#9E0152">同一个锁保护的同步代码块，</font>这种情况下可以保证，在锁被释放之前，
 A看到的变量值在B获得锁后同样可以由B看到。这也是为什么在访问某个共享且可变的变量时要求所有线程在同一个锁上同步，就是为了确保某个线程写入该变量的值对于其他线程来说都是可见的。</p>
-<h4 id="1-2-使用volatile变量"><a href="#1-2-使用volatile变量" class="headerlink" title="1.2. 使用volatile变量"></a>1.2. 使用volatile变量</h4><p><code>volatile</code>变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此读取volatile类型的变量时总会返回最新写入的值。<font color="LimeGreen">而且当把变量声明为volatile类型后，编译与运行时都会注意到这个变量是共享的，
+<h4 id="1-2-使用volatile变量"><a href="#1-2-使用volatile变量" class="headerlink" title="1.2. 使用volatile变量"></a>1.2. 使用volatile变量</h4><p><code>volatile</code>变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此读取volatile类型的变量时总会返回最新写入的值。<font color="#9E0152">而且当把变量声明为volatile类型后，编译与运行时都会注意到这个变量是共享的，
 因此不会将该变量上的操作与其他内存操作一起重排序。</font>但是volatile不具有原子性的语义，使用时需要注意，例如递增操作<code>++count</code>，除非你能确保只有一个线程对变量执行写操作。</p>
 <p>正确的使用volatile变量需要满足以下条件：<br>1.对变量的写入操作不依赖变量的当前值（读-改-写），或者你能确保只有单个线程更新变量的值。<br>2.该变量不会与其他状态变量一起纳入不变性条件中。<br>3.访问变量时不需要加锁。   </p>
 <h3 id="2-非原子的64位操作问题"><a href="#2-非原子的64位操作问题" class="headerlink" title="2. 非原子的64位操作问题"></a>2. 非原子的64位操作问题</h3><p>上面的示例中，当读线程查看ready时，可能会得到一个已经失效的值，除非在每次访问时都使用同步。当线程在没有同步的情况下读取变量时，可能会得到一个失效值，
@@ -143,7 +143,7 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
 <h3 id="3-线程封闭"><a href="#3-线程封闭" class="headerlink" title="3. 线程封闭"></a>3. 线程封闭</h3><p><code>swing</code>的可视化组件和数据模型对象都不是线程安全的，但<code>swing</code>通过将他们封闭到swing的事件分发线程中来实现线程安全性。<code>JDBC</code>规范并不要求<code>Connection</code>对象必须是线程安全的，
 但在典型的服务器应用程序中，大多数请求如<code>Servlet</code>或<code>EJB</code>调用等都是由单个线程来处理的，线程从连接池中获得一个Connection对象，然后用该对象来处理请求，使用完后返回连接池，
 并且在Connection对象返回之前，连接池不会再将它分配给其他线程，所以整个过程中Connection对象始终只由一个线程拥有。
-其实它们都基于一个想法：即<font color="LimeGreen">如果数据仅在单线程内访问，就不需要同步，称为线程封闭。</font>它是实现线程安全性的最简单方式之一。</p>
+其实它们都基于一个想法：即<font color="#9E0152">如果数据仅在单线程内访问，就不需要同步，称为线程封闭。</font>它是实现线程安全性的最简单方式之一。</p>
 <h4 id="3-1-Ad-hoc线程封闭"><a href="#3-1-Ad-hoc线程封闭" class="headerlink" title="3.1. Ad-hoc线程封闭"></a>3.1. Ad-hoc线程封闭</h4><p>指维护线程封闭性的职责完全由程序实现来承担，因为没有任何一种语言特性，能将对象封闭到目标线程上。在<code>volatile</code>变量上存在一种特殊的线程封闭。只要你能确保只有单个线程对共享的volatile变量执行写入操作，
 那么就可以安全地在这些共享的volatile变量上执行‘读-改-写’，这相当于将修改操作封闭在单线程中，且volatile语义保证了其他线程能看到最新的值。</p>
 <h4 id="3-2-栈封闭"><a href="#3-2-栈封闭" class="headerlink" title="3.2. 栈封闭"></a>3.2. 栈封闭</h4><p>局部变量固有的属性之一就是封闭在线程之中。</p>
@@ -155,7 +155,7 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;Connection&gt; connectionHolder = <span class="keyword">new</span> ThreadLocal&lt;Connection&gt;()&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Connection <span class="title">initialValue</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> DriverManager.getConnection(<span class="string">"DB_URL"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">getConnection</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> connectionHolder.get();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>当某个线程初次调用<code>ThreadLocal.get()</code>方法时，就会调用<code>init()</code>来获取初始值。你可以将<code>ThreadLocal&lt;T&gt;</code>视为包含了<code>Map&lt;Thread,T&gt;</code>对象，其中保存了特定于该线程的值，
-但<code>ThreadLocal</code>并非如此。<font color="red">这些特定于线程的值保存在Thread对象中，</font>当线程终止后，这些值会作为垃圾回收。</p>
+但<code>ThreadLocal</code>并非如此。<font color="#9E0152">这些特定于线程的值保存在Thread对象中，</font>当线程终止后，这些值会作为垃圾回收。</p>
 <h3 id="4-对象发布的逸出问题"><a href="#4-对象发布的逸出问题" class="headerlink" title="4. 对象发布的逸出问题"></a>4. 对象发布的逸出问题</h3><p>发布对象即让对象能够在当前作用域之外的代码中使用。发布对象最简单的方法是将对象的引用保存到一个公有的静态变量中，但是当发布某个对象时，可能会间接的发布其他对象。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThisEscape</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ThisEscape</span><span class="params">(EventSource source)</span></span>&#123;</span><br><span class="line">        source.registerListener()&#123;</span><br><span class="line">            <span class="keyword">new</span> EventListener()&#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(Event e)</span></span>&#123;</span><br><span class="line">                    doSomething(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>示例中当内部的<code>EventListener</code>实例发布时，在外部封装的<code>ThisEscape</code>实例也逸出了，因为在内部类的实例中包含了对<code>ThisEscape</code>实例的隐含引用<code>this</code>。当且仅当对象的构造函数返回时，
@@ -166,22 +166,22 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
 
 <p>如果想在构造函数注册一个事件监听器或启动线程，那么可以使用一个私有的构造函数和一个公共的工厂方法，从而避免不正确的构造过程。其实在构造函数中创建线程并没有错误，
 但最好不要立即启动它，而是通过一个start或者initialize方法来启动。</p>
-<h3 id="5-final域"><a href="#5-final域" class="headerlink" title="5. final域"></a>5. final域</h3><p>在java内存模型中，final域有着特殊的语义。final域能确保初始化过程的安全性，因此可以不受限制的访问不可变对象，并在共享这些对象时无须同步，因为<font color="LimeGreen">不可变对象一定是线程安全的。</font></p>
-<p>在<font color="red">“不可变的对象”</font>与<font color="red">“不可变的对象引用”</font>之间存在着差异。保存在不可变对象中的对象状态仍然可以更新，即通过将一个保存新状态的实例来“替换”原有的不可变对象。<font color="LimeGreen">因此在访问和更新多个相关变量出现的竞态条件时，
+<h3 id="5-final域"><a href="#5-final域" class="headerlink" title="5. final域"></a>5. final域</h3><p>在java内存模型中，final域有着特殊的语义。final域能确保初始化过程的安全性，因此可以不受限制的访问不可变对象，并在共享这些对象时无须同步，因为<font color="#9E0152">不可变对象一定是线程安全的。</font></p>
+<p>在<font color="#9E0152">“不可变的对象”</font>与<font color="#9E0152">“不可变的对象引用”</font>之间存在着差异。保存在不可变对象中的对象状态仍然可以更新，即通过将一个保存新状态的实例来“替换”原有的不可变对象。<font color="#9E0152">因此在访问和更新多个相关变量出现的竞态条件时，
 可以将这些变量全部保存在一个不可变的对象中，然后直接以替换不可变对象的方式来消除竞争。</font>另外，虽然fianl类型的域是不能修改的，但如果final域所引用的对象是可变的，
 那么这些被引用的对象照样是可以修改的。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;执行因式分解，并缓存结果。</span><br><span class="line">&#x2F;&#x2F;然后收到请求后通过判断请求的参数是否等于缓存的参数来决定是否直接读取缓存的结果</span><br><span class="line">public class Demo&#123;</span><br><span class="line">    private volatile Cache cache &#x3D; new Cache(null,null);</span><br><span class="line">    public BigInteger[] service(BigInteger param)&#123;</span><br><span class="line">        BigInteger[] factors &#x3D; cache.getFactors(param);</span><br><span class="line">        if(factors &#x3D;&#x3D; null)&#123;</span><br><span class="line">            factors &#x3D; factor(param);</span><br><span class="line">            cache &#x3D; new Cache(param,factors);</span><br><span class="line">        &#125;</span><br><span class="line">		return factors;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Cache&#123;</span><br><span class="line">    private final BigInteger lastNumber;</span><br><span class="line">    private final BigInteger[] lastFactors;</span><br><span class="line">    public Cache(BigInteger i,BigInteger[] factors)&#123;</span><br><span class="line">        lastNumber &#x3D; i;</span><br><span class="line">        lastFactors &#x3D; factors;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public BigInteger[] getFactors(BigInteger i)&#123;</span><br><span class="line">        if(lastNumber &#x3D;&#x3D; null || !lastNumber.equals(i))&#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            return Arrays.copyOf(lastFactors, lastFactors.length);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果是一个可变的变量就必须使用锁来确保原子性，而如果是一个不可变对象，那么当线程获得了该对象的引用后，就不必担心另一个线程会修改对象的状态。如果要更新这些变量，
 那么可以创建一个新的容器对象，其他使用原有对象的线程仍然会看到对象处于一致的状态。再将这个对象设置成volatile，那么当一个线程更新了对象状态时，其他线程就会立即看到新缓存的数据。
 比如示例中，利用final以及volatie，在没有显示地使用锁的情况下仍然保证对象是线程安全的。</p>
-<h3 id="6-安全发布"><a href="#6-安全发布" class="headerlink" title="6. 安全发布"></a>6. 安全发布</h3><p><font color="red">即使某个对象的引用对其他线程是可见的，也并不意味着对象状态对于使用该对象的线程来说一定是可见的。
+<h3 id="6-安全发布"><a href="#6-安全发布" class="headerlink" title="6. 安全发布"></a>6. 安全发布</h3><p><font color="#9E0152">即使某个对象的引用对其他线程是可见的，也并不意味着对象状态对于使用该对象的线程来说一定是可见的。
 要安全的发布一个对象，对象的引用以及对象的状态必须同时对其他线程可见。</font>
 <strong>可变对象</strong>必须通过安全的方式来发布，因为对象的初始化无法得到保证，除了发布对象的线程外，其他线程都可能看到尚未完全创建的对象以及对象包含域的失效值。
 并且在发布和使用该对象时都必须使用同步来确保对象状态呈现一致性，因为如果对象在构造后可以修改，那么安全发布只能确保发布当时的状态可见性。</p>
 <p>如果对象在发布后不会被修改，即<strong>事实不可变对象</strong>，那么对于在没有额外同步的情况下访问这些对象的线程来说，只要保证对象是被安全发布的就足够了。所有的安全发布机制都能确保，
 当对象的引用对所有访问的线程可见时，其状态对所有线程也是可见的，且如果对象的状态不再改变，那就足以保证所有的访问都是安全的。</p>
 <p>在发布<strong>不可变对象</strong>的引用时，不使用同步仍然可以安全的访问该对象。为了维持这种初始化安全性的保证，必须满足不可变的条件：状态不可修改，所有域都是final类型，
-以及正确的构造过程。<font color="red">但是，如果final类型的域所指向的是可变对象，
+以及正确的构造过程。<font color="#9E0152">但是，如果final类型的域所指向的是可变对象，
 那么在访问这些域所指向的对象的状态时仍然需要同步。</font></p>
 <p>一个正确构造的对象可以通过以下方式来安全地发布：<br>1.在静态初始化函数中初始化一个对象引用。<br>2.将对象的引用保存到volatile类型的域或者AtomicReferance对象中。<br>3.将对象的引用保存某个正确构造的对象的final类型域中。<br>4.将对象的引用保存到一个由锁保护的域中。</p>
 <p>方式1通常是最简单和最安全的方式，即使用静态的初始化器发布一个静态对象，比如<code>public static Holeder holder = new Holder(4);</code>因为静态初始化器由jvm在类的初始化阶段执行，
@@ -225,7 +225,7 @@ A看到的变量值在B获得锁后同样可以由B看到。这也是为什么�
         
   
   <div class="tags">
-    <a href="/tags/线程安全/">线程安全</a>   <a href="/tags/可见性/">可见性</a>
+    <a href="/tags/线程安全/">线程安全</a>   <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>   <a href="/tags/可见性/">可见性</a>
   </div>
 
 

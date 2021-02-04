@@ -133,7 +133,7 @@
 <code>HashSet</code>其实是个散列表集合，不过子类<code>LinkedHashSet</code>在其基础上维护了一个链表结构；
 <code>ArrayList</code>和<code>ArrayDeque</code>分别是数组实现的列表和队列；
 <code>LinkedList</code>则是使用链表同时实现了列表和队列，如果需要，也完全可以代替<code>Stack</code>当成栈使用。</p>
-<h3 id="3-SortedArrayList"><a href="#3-SortedArrayList" class="headerlink" title="3. SortedArrayList"></a>3. SortedArrayList</h3><p><font color="#57A9C8">线性数据结构有一个问题：即如果想从列表中寻找一个特定的元素，那么免不了要进行遍历，其时间复杂度将是O(N)。不过如果是有序的，那么便可以用二分法将查找的复杂度将为O(logN)。</font></p>
+<h3 id="3-SortedArrayList"><a href="#3-SortedArrayList" class="headerlink" title="3. SortedArrayList"></a>3. SortedArrayList</h3><p><font color="#9E0152">线性数据结构有一个问题：即如果想从列表中寻找一个特定的元素，那么免不了要进行遍历，其时间复杂度将是O(N)。不过如果是有序的，那么便可以用二分法将查找的复杂度将为O(logN)。</font></p>
 <p>上面类图中，只有<code>TreeSet</code>拥有排序的特性，但其限制了元素不可重复，其它类最多只是维护了插入的先后顺序，想按照大小排序则需要借助<code>Collections</code>工具自己手动排下序。因此，
 我们可以自己添加这样一个列表：每次添加或删除之后维持列表的有序。<br>至于实现，肯定不会基于<code>LinkedList</code>，因为它的元素没有下标，使用二分法每次要想获取中间元素，都要先进行遍历，这显然得不偿失，所以只能借助<code>ArrayList</code>了，但是<code>ArrayList</code>在设计上
 并没有考虑给让别人扩展，所以除了用二分法修改<code>indexOf(Object o)</code>和<code>add(E e)</code>两个方法外，其它代码基本都要复制一遍。</p>

@@ -98,6 +98,11 @@
 
    
    
+  
+  <div class="tags">
+    <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>   <a href="/tags/任务执行/">任务执行</a>   <a href="/tags/线程池/">线程池</a>
+  </div>
+
 
    
    <hr style="background-color: #ddd; height:1px; border:none;" /><br>
@@ -108,14 +113,14 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><font color="red">只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。</font></p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><font color="#9E0152">只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。</font></p>
 <p>如果将运行时间较长的与运行时间较短的任务混合在一起，那么除非线程池很大，否则将可能造成拥塞；如果提交的任务依赖于其他任务，那么除非线程池无线大，否则将可能造成死锁，称为<strong>饥饿死锁</strong>。</p>
 <p><font color="Gray">关于线程池Api的具体设置和使用想在以后介绍api源码时再做整理，这里笔记就不赘述了。</font></p>
 <a id="more"></a>
 
 <h3 id="1-饱和策略"><a href="#1-饱和策略" class="headerlink" title="1. 饱和策略"></a>1. 饱和策略</h3><p>通常<code>ThreadPoolExecutor</code>会使用一个有界队列来保存已提交的任务，当有界队列被填满后，饱和策略开始发挥作用，可以通过<code>setRejectedExecutionHandler</code>来设置。</p>
 <p>默认的饱和策略是中止，并抛出一个未检查的<code>RejectedExecutionException</code>，调用者可以捕获这个异常，然后根据需求编写自己的处理代码。</p>
-<h4 id="1-1-调用者运行策略"><a href="#1-1-调用者运行策略" class="headerlink" title="1.1. 调用者运行策略"></a>1.1. 调用者运行策略</h4><p>调用者运行策略实现了一种调节机制，该策略既不会抛弃任务，也不会抛出异常，<font color="LimeGreen">而是将任务回退到调用者，让调用者自己执行这个任务，从而降低新任务的流量。</font>因为执行任务需要一定的时间，
+<h4 id="1-1-调用者运行策略"><a href="#1-1-调用者运行策略" class="headerlink" title="1.1. 调用者运行策略"></a>1.1. 调用者运行策略</h4><p>调用者运行策略实现了一种调节机制，该策略既不会抛弃任务，也不会抛出异常，<font color="#9E0152">而是将任务回退到调用者，让调用者自己执行这个任务，从而降低新任务的流量。</font>因为执行任务需要一定的时间，
 因此调用线程至少在一段时间内不能提交任何任务，从而使得工作者线程有时间来消化已经提交的任务。例如对于WebServer，当线程池中的所有线程都被占用，并且工作队列被填满后，下一个任务在调用<code>execute</code>时在主线程中执行。在这期间，
 主线程不会调用<code>accept</code>，因此到达的请求将被保存在TCP层的队列中而不是在应用程序的队列中，如果持续过载，那么TCP层最终发现它的请求队列被填满，然后开始抛弃请求。这样当服务器过载时，
 这种过载会逐渐向外蔓延开来—从线程池到工作队列到应用程序再到TCP层，最终到达客户端，导致服务器在高负载下实现一种平缓的性能降低。</p>
@@ -161,6 +166,11 @@
 
 
         
+  
+  <div class="tags">
+    <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>   <a href="/tags/任务执行/">任务执行</a>   <a href="/tags/线程池/">线程池</a>
+  </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style">

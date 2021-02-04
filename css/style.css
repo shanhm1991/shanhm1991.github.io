@@ -640,14 +640,14 @@ footer .addthis iframe {
   word-wrap: break-word;
 }
 #sidebar .widget .title {
-  padding: 15px 20px;
+  padding: 15px 15px;
   font-size: 1em;
   border-bottom: 1px solid #ddd;
   font-weight: normal;
 }
 #sidebar .widget .entry {
   font-size: 0.9em;
-  padding: 15px 20px;
+  padding: 15px 15px;
 }
 #sidebar .widget ul,
 #sidebar .widget ol,
@@ -710,12 +710,15 @@ footer .addthis iframe {
   line-height: 1;
 }
 #sidebar .tagcloud .entry {
-  padding-right: 5px;
+  padding-right: 3px;
 }
 #sidebar .tagcloud a {
-  margin-right: 10px;
+  margin-right: 5px;
 }
-#sidebar font-size 10px {
+#sidebar min 12px {
+  font-size: 12px;
+}
+#sidebar min 12px font-max 12px {
   display: inline-block;
 }
 #sidebar .catlog {

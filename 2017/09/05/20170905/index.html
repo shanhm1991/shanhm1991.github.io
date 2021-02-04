@@ -6,7 +6,9 @@
   <title>java. Unsafe | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言">
+  <meta name="description" content="引言Unsafe位于sun.misc包下，主要提供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升Java运行效率、增强Java语言底层资源操作能力方面起到了很大的作用。
+但由于Unsafe类使Java语言拥有了类似C语言指针一样操作内存空间的能力，如果过度或者不正确地使用Unsafe类将会使得增加程序出错的风险，使得Java这种安全的语言变得不再安全，因此使用时需要慎重。
+这里并不打算作深入探讨，只是简单列举一些Unsafe中提供的常见api，方便在讨论其它内容时进行引用，对于其提供的api大致则可以按如下分类：">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -85,7 +87,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 26  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 2.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
    
    
   
@@ -111,8 +113,144 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Unsafe位于sun.misc包下，主要提供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升Java运行效率、增强Java语言底层资源操作能力方面起到了很大的作用。
+但由于Unsafe类使Java语言拥有了类似C语言指针一样操作内存空间的能力，如果过度或者不正确地使用Unsafe类将会使得增加程序出错的风险，使得Java这种安全的语言变得不再安全，因此使用时需要慎重。</p>
+<p>这里并不打算作深入探讨，只是简单列举一些Unsafe中提供的常见api，方便在讨论其它内容时进行引用，对于其提供的api大致则可以按如下分类：</p>
+<p><img src="/img/20170905/20170905.1.png" alt=""> </p>
+<a id="more"></a>
 
+<h3 id="1-初始化"><a href="#1-初始化" class="headerlink" title="1. 初始化"></a>1. 初始化</h3><figure class="highlight java"><figcaption><span class="caption">sun.misc.Unsafe</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Unsafe</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Unsafe theUnsafe;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@CallerSensitive</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Unsafe <span class="title">getUnsafe</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Class arg = Reflection.getCallerClass();</span><br><span class="line">        <span class="keyword">if</span> (!VM.isSystemDomainLoader(arg.getClassLoader())) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(<span class="string">"Unsafe"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> theUnsafe;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        registerNatives();</span><br><span class="line">        Reflection.registerMethodsToFilter(Unsafe.class, new String[]&#123;"getUnsafe"&#125;);</span><br><span class="line">        theUnsafe = <span class="keyword">new</span> Unsafe();</span><br><span class="line">		</span><br><span class="line">        <span class="comment">//初始化一些常见类型的便宜量，方便数组计算</span></span><br><span class="line">        ARRAY_BOOLEAN_BASE_OFFSET = theUnsafe.arrayBaseOffset(<span class="keyword">boolean</span>[]<span class="class">.<span class="keyword">class</span>)</span>; </span><br><span class="line">        ARRAY_BYTE_BASE_OFFSET = theUnsafe.arrayBaseOffset(<span class="keyword">byte</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_SHORT_BASE_OFFSET = theUnsafe.arrayBaseOffset(<span class="keyword">short</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_CHAR_BASE_OFFSET = theUnsafe.arrayBaseOffset(<span class="keyword">char</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_INT_BASE_OFFSET = theUnsafe.arrayBaseOffset(<span class="keyword">int</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_LONG_BASE_OFFSET = theUnsafe.arrayBaseOffset(<span class="keyword">long</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_FLOAT_BASE_OFFSET = theUnsafe.arrayBaseOffset(<span class="keyword">float</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_DOUBLE_BASE_OFFSET = theUnsafe.arrayBaseOffset(<span class="keyword">double</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_OBJECT_BASE_OFFSET = theUnsafe.arrayBaseOffset(Object[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_BOOLEAN_INDEX_SCALE = theUnsafe.arrayIndexScale(<span class="keyword">boolean</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_BYTE_INDEX_SCALE = theUnsafe.arrayIndexScale(<span class="keyword">byte</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_SHORT_INDEX_SCALE = theUnsafe.arrayIndexScale(<span class="keyword">short</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_CHAR_INDEX_SCALE = theUnsafe.arrayIndexScale(<span class="keyword">char</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_INT_INDEX_SCALE = theUnsafe.arrayIndexScale(<span class="keyword">int</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_LONG_INDEX_SCALE = theUnsafe.arrayIndexScale(<span class="keyword">long</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_FLOAT_INDEX_SCALE = theUnsafe.arrayIndexScale(<span class="keyword">float</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_DOUBLE_INDEX_SCALE = theUnsafe.arrayIndexScale(<span class="keyword">double</span>[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ARRAY_OBJECT_INDEX_SCALE = theUnsafe.arrayIndexScale(Object[]<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ADDRESS_SIZE = theUnsafe.addressSize();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从上面代码可以看出，Unsafe为单例，提供方法getUnsafe来获取，但是要求调用者必须为引导类加载器所加载，否则抛出SecurityException。那么，如果想使用Unsafe，可以尝试两个办法</p>
+<ol>
+<li><p>通过-Xbootclasspath/a将调用者所在的jar包路径追加到默认的bootstrap路径中，使得A被引导类加载器加载，从而通过校验。但实际上虚拟机为了安全，它是按照文件名识别加载jar包的，如rt.jar，如果文件名不被虚拟机识别，
+即使把jar添加了也没有用，并且Bootstrap只加载包名为java、javax、sun等开头的类，所以想让bootstrap加载自己的jar包其实很难做到。</p>
+</li>
+<li><p>通过反射获取</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Unsafe <span class="title">reflectGetUnsafe</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Field field = Unsafe.class.getDeclaredField("theUnsafe");</span><br><span class="line">      field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">      <span class="keyword">return</span> (Unsafe) field.get(<span class="keyword">null</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      log.error(e.getMessage(), e);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-API"><a href="#2-API" class="headerlink" title="2. API"></a>2. API</h3><h4 id="2-1-对象操作"><a href="#2-1-对象操作" class="headerlink" title="2.1. 对象操作"></a>2.1. 对象操作</h4><ul>
+<li>public native Object getObject(Object o, long offset);</li>
+</ul>
+<p>获取一个Java对象o中，偏移地址为offset的属性的值，此方法可以突破修饰符的抑制，也就是无视private、protected和default修饰符，类似的方法有getInt、getDouble等</p>
+<ul>
+<li>public native void putObject(Object o, long offset, Object x);</li>
+</ul>
+<p>设置一个Java对象o中，偏移地址为offset的属性的值为x，同样此方法可以突破修饰符的抑制，也就是无视private、protected和default修饰符，类似的方法有putInt、putDouble等</p>
+<ul>
+<li>public native Object getObjectVolatile(Object o, long offset);</li>
+</ul>
+<p>与getObject功能类似，不过附加了volatile语义，也就是强制从主存中获取属性值，类似的方法有getIntVolatile、getDoubleVolatile等，但是要求属性被volatile修饰，否则功能和getObject方法相同</p>
+<ul>
+<li>public native void putObjectVolatile(Object o, long offset, Object x);</li>
+</ul>
+<p>与putObject功能类似，不过附加了volatile语义，也就是设置值的时候强制更新到主存，从而保证变更对其他线程可见，类似的方法有putIntVolatile、putDoubleVolatile等，但是要求属性被volatile修饰，否则功能和putObject方法相同</p>
+<ul>
+<li>public native void putOrderedObject(Object o, long offset, Object x);</li>
+</ul>
+<p>设置一个Java对象o中，偏移地址为offset的属性的值为x，但不保证修改被其他线程立即看到，类似的方法有putOrderedInt和putOrderedLong</p>
+<ul>
+<li>public native long staticFieldOffset(Field f);</li>
+</ul>
+<p>获取静态属性在它的类的存储分配中的位置(偏移地址)，但是不要在这个偏移量上执行任何类型的算术运算，它只是一个被传递给不安全的堆内存访问器的cookie</p>
+<ul>
+<li>public native long objectFieldOffset(Field f);</li>
+</ul>
+<p>获取非静态属性在它的类的存储分配中的位置(偏移地址)，同样不要在这个偏移量上执行任何类型的算术运算</p>
+<ul>
+<li>public native Object staticFieldBase(Field f);</li>
+</ul>
+<p>获取静态属性的位置，配合staticFieldOffset方法使用。返回值相当于静态属性所在的Class对象的一个内存快照</p>
+<ul>
+<li>public native boolean shouldBeInitialized(Class&lt;?&gt; c);</li>
+</ul>
+<p>检测给定的类是否需要初始化，通常在获取一个类的静态属性时需要使用，此方法当且仅当ensureClassInitialized方法不生效的时候才返回false</p>
+<ul>
+<li>public native void ensureClassInitialized(Class&lt;?&gt; c);</li>
+</ul>
+<p>检测给定的类是否已经初始化，通常在获取一个类的静态属性时需要使用</p>
+<ul>
+<li>public native Class&lt;?&gt; defineClass(String name, byte[] b, int off, int len,ClassLoader loader,ProtectionDomain protectionDomain);</li>
+</ul>
+<p>定义一个类，返回类实例，此方法跳过JVM所有安全检查。默认情况下，ClassLoader(类加载器)和ProtectionDomain(保护域)实例应该来源于调用者。</p>
+<ul>
+<li>public native Class<?> defineAnonymousClass(Class<?> hostClass, byte[] data, Object[] cpPatches);</li>
+</ul>
+<p>根据给定的class模板定义匿名类，<a href="https://www.zhihu.com/question/51132462" target="_blank" rel="noopener">JVM crashes at libjvm.so</a></p>
+<ul>
+<li>public native Object allocateInstance(Class&lt;?&gt; cls) throws InstantiationException;</li>
+</ul>
+<p>通过Class对象创建一个类的实例，不需要调用其构造函数、初始化代码、JVM安全检查等等。同时，它抑制修饰符检测，也就是即使构造器是private修饰的也能通过此方法实例化。</p>
+<h4 id="2-2-内存操作"><a href="#2-2-内存操作" class="headerlink" title="2.2. 内存操作"></a>2.2. 内存操作</h4><ul>
+<li>public native int addressSize();</li>
+</ul>
+<p>获取本地指针的大小(单位是byte)，通常值为4或者8。常量ADDRESS_SIZE就是调用此方法</p>
+<ul>
+<li>public native int pageSize();</li>
+</ul>
+<p>获取本地内存的页数，值为2的幂次方</p>
+<ul>
+<li>public native long allocateMemory(long bytes);</li>
+</ul>
+<p>分配一块新的本地内存，通过bytes指定内存块的大小</p>
+<ul>
+<li>public native long reallocateMemory(long address, long bytes);</li>
+</ul>
+<p>通过指定的内存地址address重新调整本地内存块的大小，调整后的内存块大小通过bytes指定</p>
+<ul>
+<li>public native void setMemory(Object o, long offset, long bytes, byte value);</li>
+</ul>
+<p>将给定内存块中的所有字节设置为固定值(value通常是0)。内存块的地址由对象引用o和偏移地址offset共同决定，一般而言，对象引用o为null，offset就是绝对地址。第三个参数就是内存块的大小</p>
+<ul>
+<li>public native void freeMemory(long address);</li>
+</ul>
+<p>释放内存</p>
+<h4 id="2-3-线程调度"><a href="#2-3-线程调度" class="headerlink" title="2.3. 线程调度"></a>2.3. 线程调度</h4><ul>
+<li>public native void monitorEnter(Object o);</li>
+</ul>
+<p>锁定对象，必须通过monitorExit方法才能解锁。</p>
+<ul>
+<li>public native void monitorExit(Object o);</li>
+</ul>
+<p>解锁对象，前提是对象必须已经调用monitorEnter进行加锁，否则抛出IllegalMonitorStateException异常</p>
+<ul>
+<li>public native boolean tryMonitorEnter(Object o);</li>
+</ul>
+<p>尝试锁定对象，如果加锁成功返回true，否则返回false。同样必须通过monitorExit方法才能解锁</p>
+<ul>
+<li>public native void park(boolean isAbsolute, long time);</li>
+</ul>
+<p>阻塞当前线程直到unpark被调用，如果isAbsolute为true，time是相对于新纪元之后的毫秒，否则time表示纳秒</p>
+<ul>
+<li>public native void unpark(Object thread);</li>
+</ul>
+<p>释放被park创建的在一个线程上的阻塞。</p>
+<h4 id="2-4-内存屏障"><a href="#2-4-内存屏障" class="headerlink" title="2.4. 内存屏障"></a>2.4. 内存屏障</h4><ul>
+<li>public native void loadFence();</li>
+</ul>
+<p>在该方法之前的所有读操作，一定在load屏障之前执行完成</p>
+<ul>
+<li>public native void storeFence();</li>
+</ul>
+<p>在该方法之前的所有写操作，一定在store屏障之前执行完成</p>
+<ul>
+<li>public native void fullFence();</li>
+</ul>
+<p>在该方法之前的所有读写操作，一定在full屏障之前执行完成，这个内存屏障相当于上面两个(load屏障和store屏障)的合体功能</p>
+<h4 id="2-5-数组相关"><a href="#2-5-数组相关" class="headerlink" title="2.5. 数组相关"></a>2.5. 数组相关</h4><ul>
+<li>public native int arrayBaseOffset(Class&lt;?&gt; arrayClass);</li>
+</ul>
+<p>获取数组首元素的偏移地址</p>
+<ul>
+<li>public native int arrayIndexScale(Class&lt;?&gt; arrayClass);</li>
+</ul>
+<p>获取数组中元素偏移地址的增量，Unsafe中初始化了很多常见的类型值，如ARRAY_BOOLEAN_BASE_OFFSET等</p>
+<h4 id="2-6-CAS"><a href="#2-6-CAS" class="headerlink" title="2.6. CAS"></a>2.6. CAS</h4><ul>
+<li>public final native boolean compareAndSwapObject(Object o, long offset, Object expected, Object x);</li>
+</ul>
+<p>针对对象o进行CAS操作。即原子性地更新o中偏移地址为offset的属性的值为x，当且仅当属性的当前值为expected才会更新成功返回true，否则返回false，类似的方法有compareAndSwapInt和compareAndSwapLong，</p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li><a href="https://www.cnblogs.com/throwable/p/9139947.html" target="_blank" rel="noopener">https://www.cnblogs.com/throwable/p/9139947.html</a></li>
@@ -213,7 +351,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-初始化"><span class="toc-text">1. 初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-API"><span class="toc-text">2. API</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-对象操作"><span class="toc-text">2.1. 对象操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-内存操作"><span class="toc-text">2.2. 内存操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-线程调度"><span class="toc-text">2.3. 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-内存屏障"><span class="toc-text">2.4. 内存屏障</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-数组相关"><span class="toc-text">2.5. 数组相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-CAS"><span class="toc-text">2.6. CAS</span></a></li></ol></li></ol></li></ol>
 </div>
 
 

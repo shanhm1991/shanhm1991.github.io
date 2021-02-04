@@ -138,7 +138,10 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Unsafe位于sun.misc包下，主要提供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升Java运行效率、增强Java语言底层资源操作能力方面起到了很大的作用。
+但由于Unsafe类使Java语言拥有了类似C语言指针一样操作内存空间的能力，如果过度或者不正确地使用Unsafe类将会使得增加程序出错的风险，使得Java这种安全的语言变得不再安全，因此使用时需要慎重。</p>
+<p>这里并不打算作深入探讨，只是简单列举一些Unsafe中提供的常见api，方便在讨论其它内容时进行引用，对于其提供的api大致则可以按如下分类：</p>
+<p><img src="/img/20170905/20170905.1.png" alt=""> </p>
       
     </div>
 	
@@ -190,7 +193,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><font color="green">
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><font color="#9E0152">
 发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，
 希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
 java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离。</font>     
@@ -254,7 +257,7 @@ java使用异常来提供统一的错误报告模型，使得构件能够与客�
 包括暂时那些还不存在的类。<br>但有时即便使用了接口，对程序的约束还是太强。因为一旦指明了接口，它就要求你的代码必须使用特定的接口。而我们希望能编写更通用的代码，
 能够应用于”某种不具体的类型”，而不是一个具体的接口或者类。</p>
 <p>泛型实现了”参数化类型”的概念，使代码可以应用于多种类型。其最初的目的是希望类或方法能够具备最广泛的表达能力，
-通过解耦类或方法与所使用的类型直接的约束。<br><font color="green">
+通过解耦类或方法与所使用的类型直接的约束。<br><font color="#9E0152">
 java中对泛型并没有这样高的追求，它的目的只是用来告诉编译器类或方法希望使用的参数类型，以便编译器能够确保编译时参数都是期望的类型。
 实际上在编译之后参数的类型信息都会被擦除成边界类型，这样保证在运行时不会出现类型错误。
 </font></p>
@@ -588,7 +591,7 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/2-3%E6%A0%91/" style="font-size: 10px;">2-3树</a> <a href="/tags/AVL%E6%A0%91/" style="font-size: 10px;">AVL树</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B+树</a> <a href="/tags/B%E6%A0%91/" style="font-size: 10px;">B树</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/CallerSensitive/" style="font-size: 10px;">CallerSensitive</a> <a href="/tags/ClassLoader/" style="font-size: 10px;">ClassLoader</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/GC%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 13.33px;">GC垃圾回收</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 10px;">ThreadLocal</a> <a href="/tags/Unsafe/" style="font-size: 10px;">Unsafe</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/centos/" style="font-size: 13.33px;">centos</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class%E6%96%87%E4%BB%B6/" style="font-size: 10px;">class文件</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 13.33px;">java内存模型</a> <a href="/tags/jstack/" style="font-size: 10px;">jstack</a> <a href="/tags/mysql/" style="font-size: 13.33px;">mysql</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/poi/" style="font-size: 16.67px;">poi</a> <a href="/tags/tomcat/" style="font-size: 16.67px;">tomcat</a> <a href="/tags/ubuntu/" style="font-size: 20px;">ubuntu</a> <a href="/tags/%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/" style="font-size: 10px;">中文乱码</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E4%BB%BB%E5%8A%A1%E5%8F%96%E6%B6%88/" style="font-size: 10px;">任务取消</a> <a href="/tags/%E5%8E%9F%E5%AD%90%E6%80%A7/" style="font-size: 10px;">原子性</a> <a href="/tags/%E5%8F%AF%E8%A7%81%E6%80%A7/" style="font-size: 10px;">可见性</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E8%AE%BF%E9%97%AE/" style="font-size: 10px;">对象的创建与访问</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD/" style="font-size: 10px;">类加载</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 10px;">红黑树</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/" style="font-size: 13.33px;">线程安全</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" style="font-size: 10px;">运行时数据区</a>
+    <a href="/tags/2-3%E6%A0%91/" style="font-size: 10px;">2-3树</a> <a href="/tags/AVL%E6%A0%91/" style="font-size: 10px;">AVL树</a> <a href="/tags/AbstractQueuedSynchronizer/" style="font-size: 10px;">AbstractQueuedSynchronizer</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B+树</a> <a href="/tags/B%E6%A0%91/" style="font-size: 10px;">B树</a> <a href="/tags/CallerSensitive/" style="font-size: 10px;">CallerSensitive</a> <a href="/tags/ClassLoader/" style="font-size: 11.67px;">ClassLoader</a> <a href="/tags/ConcurrentHashMap/" style="font-size: 10px;">ConcurrentHashMap</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 10px;">ThreadLocal</a> <a href="/tags/Unsafe/" style="font-size: 10px;">Unsafe</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/centos/" style="font-size: 11.67px;">centos</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/java%E5%86%85%E5%AD%98/" style="font-size: 16.67px;">java内存</a> <a href="/tags/jstat/" style="font-size: 10px;">jstat</a> <a href="/tags/mysql/" style="font-size: 11.67px;">mysql</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/tomcat/" style="font-size: 13.33px;">tomcat</a> <a href="/tags/ubuntu/" style="font-size: 16.67px;">ubuntu</a> <a href="/tags/%E3%80%8Ajava%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E3%80%8B/" style="font-size: 20px;">《java并发编程实战》</a> <a href="/tags/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B/" style="font-size: 18.33px;">《深入理解java虚拟机》</a> <a href="/tags/%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/" style="font-size: 10px;">中文乱码</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C/" style="font-size: 13.33px;">任务执行</a> <a href="/tags/%E5%8E%9F%E5%AD%90%E6%80%A7/" style="font-size: 10px;">原子性</a> <a href="/tags/%E5%8F%AF%E8%A7%81%E6%80%A7/" style="font-size: 10px;">可见性</a> <a href="/tags/%E6%9D%A1%E4%BB%B6%E9%98%9F%E5%88%97/" style="font-size: 10px;">条件队列</a> <a href="/tags/%E6%AD%BB%E9%94%81/" style="font-size: 10px;">死锁</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 10px;">红黑树</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/" style="font-size: 15px;">线程安全</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 10px;">线程池</a> <a href="/tags/%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6/" style="font-size: 10px;">非阻塞同步机制</a>
   </div>
 </div>
 

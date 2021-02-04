@@ -99,7 +99,7 @@
    
   
   <div class="tags">
-    <a href="/tags/ReentrantLock/">ReentrantLock</a>
+    <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>   <a href="/tags/ReentrantLock/">ReentrantLock</a>
   </div>
 
 
@@ -116,7 +116,7 @@
 在java 6.0中，使用了与<code>ReentrantLock</code>类似的算法对内置锁进行了改进，有效地提高了内置锁的可伸缩性。</p>
 <a id="more"></a>
 
-<h3 id="1-Lock与ReentrantLock"><a href="#1-Lock与ReentrantLock" class="headerlink" title="1. Lock与ReentrantLock"></a>1. Lock与ReentrantLock</h3><p><font color="LimeGreen">Lock接口提供了一种无条件的、可轮询的、定时的以及可中断的锁获取操作，所有加锁和解锁的方法都是显示的。</font></p>
+<h3 id="1-Lock与ReentrantLock"><a href="#1-Lock与ReentrantLock" class="headerlink" title="1. Lock与ReentrantLock"></a>1. Lock与ReentrantLock</h3><p><font color="#9E0152">Lock接口提供了一种无条件的、可轮询的、定时的以及可中断的锁获取操作，所有加锁和解锁的方法都是显示的。</font></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> timeout,TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>ReentrantLock</code>实现了<code>Lock</code>接口，并提供了与<code>synchronized</code>相同的互斥性和内存可见性。<code>ReentrantLock</code>支持在<code>Lock</code>接口中定义的所有获取锁模式，并且为处理锁的不可用性问题提供了更高的灵活性。但对这种锁的使用应该更谨慎一些，
 必须在<code>finally</code>块中释放锁，否则，如果在被保护的代码中抛出了异常，那么这个锁永远都无法释放。</p>
@@ -129,10 +129,10 @@
 <p><code>tryLock</code>能够在带有时间限制的操作中实现独占的加锁行为。如示例中，试图在<code>Lock</code>保护的共享通信线路上发送一条消息，如果已经获取锁的线程不能在指定时间内完成，即等待的线程不能在指定时间内获取锁，那等待的线程就会失败。</p>
 <h4 id="1-3-可中断锁"><a href="#1-3-可中断锁" class="headerlink" title="1.3. 可中断锁"></a>1.3. 可中断锁</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">sendOnSharedLine</span><span class="params">(String message)</span> <span class="keyword">throws</span> InterruptedException</span>&#123;</span><br><span class="line">        lock.lockInterruptibly();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> cancellableSendOnSharedLine(meassage);</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>lockInterruptibly</code>方法能够在获得锁的同时保持对中断的响应，并且由于它包含在<code>Lock</code>中，无须自己创建其他类型的不可中断阻塞机制。另外定时的<code>tryLock</code>同样能响应中断，所以当需要实现一个可定时和可中断的锁获取操作时，可以使用<code>tryLock</code>。</p>
-<h3 id="2-公平性"><a href="#2-公平性" class="headerlink" title="2. 公平性"></a>2. 公平性</h3><p>ReentrantLock的构造函数中提供了两种公平性的选择：创建一个非公平的锁（默认）或者一个公平的锁。在公平的锁上，线程将按照它们发出请求的顺序来获得锁，但在非公平的锁上，则允许插队：<font color="LimeGreen">当一个线程请求非公平的锁时，
+<h3 id="2-公平性"><a href="#2-公平性" class="headerlink" title="2. 公平性"></a>2. 公平性</h3><p>ReentrantLock的构造函数中提供了两种公平性的选择：创建一个非公平的锁（默认）或者一个公平的锁。在公平的锁上，线程将按照它们发出请求的顺序来获得锁，但在非公平的锁上，则允许插队：<font color="#9E0152">当一个线程请求非公平的锁时，
 如果在发出请求的同时该锁的状态变为可用，那么这个线程将跳过队列中所有的等待线程并获得这个锁。</font>而在公平的锁中，如果另一个线程持有这个锁或者有其他线程在队列中等待这个锁，那么新发出请求的线程将被放入队列中。在非公平的锁中，
 只有当锁被某个线程持有时，新发出请求的线程才会被放入队列中。因此当执行加锁操作时，公平性将由于在挂起线程和恢复线程时存在的开销而极大地降低性能。</p>
-<p><font color="LimeGreen">非公平锁能提高性能的一个原因是：在恢复一个被挂起的线程与该线程真正开始运行之间存在着严重的延迟。</font>假设线程A持有一个锁，如果线程B请求这个锁，那么B将被挂起。当A释放锁时，B将会被唤醒并再次尝试获取锁。
+<p><font color="#9E0152">非公平锁能提高性能的一个原因是：在恢复一个被挂起的线程与该线程真正开始运行之间存在着严重的延迟。</font>假设线程A持有一个锁，如果线程B请求这个锁，那么B将被挂起。当A释放锁时，B将会被唤醒并再次尝试获取锁。
 与此同时，如果C也请求这个锁，那么C很可能在B被完全唤醒之前完成获取、使用以及释放这个锁。这样的情况下，C更早的获得了锁，而B获得锁的时刻也没有推迟。可以想象，越在竞争激烈的情况下，越能体现非公平锁的优势。</p>
 <h3 id="3-读写锁"><a href="#3-读写锁" class="headerlink" title="3. 读写锁"></a>3. 读写锁</h3><p><code>ReentrantLock</code>实现了一种标准的互斥锁，互斥通常是一种强硬和保守的加锁策略。在许多情况下，数据结构上的操作都是读操作，如果能够放宽需求，允许多个读操作的线程同时访问数据结构，那么将提升程序的性能。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReadWriteLock</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">Lock <span class="title">readLock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Lock <span class="title">writeLock</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -186,7 +186,7 @@
         
   
   <div class="tags">
-    <a href="/tags/ReentrantLock/">ReentrantLock</a>
+    <a href="/tags/《java并发编程实战》/">《java并发编程实战》</a>   <a href="/tags/ReentrantLock/">ReentrantLock</a>
   </div>
 
 
