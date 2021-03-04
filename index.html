@@ -229,7 +229,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/06/28/20190628/">借助poi解析Excel. 一. 实现readLine读取</a>
+       <a href="/2019/06/28/20190628/">poi解析Excel. 一. 实现readLine读取</a>
     </h1>
     
   
@@ -243,8 +243,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java中，一般读取文本时会使用<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上提供了<code>readLine()</code>来简化对文本行的读取。使得读取行数据时可以向流水线一样，每当取完一行后，它就自动准备好下一行并等待获取，直至全部获取结束。
-因此，希望也能够在poi的基础上提供一个类似<code>readLine()</code>的方法来读取Excel，并可以很方便地获取到行数据中的字段。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>一般读取文本时会想到<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上提供了<code>readLine()</code>来简化对文本行的读取。使得读取行数据时可以向流水线一样，每当取完一行后，它就自动准备好下一行并等待获取，直至全部获取结束。
+因此，这里希望也能够在poi的基础上提供一个类似<code>readLine()</code>的接口来读取Excel，并可以很方便地获取到行数据中的字段。</p>
       
     </div>
 	

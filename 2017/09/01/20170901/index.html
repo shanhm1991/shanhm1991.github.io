@@ -90,7 +90,7 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 7min</font>
+   <font style="color: #999;"> words: 2.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 7min</font>
    
    
   
@@ -132,13 +132,13 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
 <ul>
 <li><strong>ClassNotFoundException</strong>与<strong>NoClassDefFoundError</strong></li>
 </ul>
-<p>ClassNotFoundException与NoClassDefFoundError的区别如同检查异常与非检查异常，ClassNotFoundException一般发生在尝试动态加载类的情形，比如反射Class.forName，这时可能找不到指定名称的类，因此编译器要求作预备处理，
-实现者可以自行决策加载不到类时如果处理，发生这种情况通常可以通过改变程序本身之外的条件来恢复。NoClassDefFoundError则是类在编译的时候是存在的，运行的时候却找不到了，可能是编译完成之后又删除了依赖的class所致。
-可以简单概括下区别，加载阶段时从外部存储找不到需要的class时就出现ClassNotFoundException，连接阶段从内存找不到需要的class时就出现NoClassDefFoundError，前者可以调整外部存储来恢复程序，而后者则不行。</p>
+<p>ClassNotFoundException与NoClassDefFoundError的区别如同检查异常与非检查异常，ClassNotFoundException一般发生在尝试动态加载类的情况下，比如反射Class.forName，这时可能找不到指定名称的类，因此编译器要求作预备处理，
+实现者可以自行决策加载不到类时如何处理，这种情况一般可以通过改变程序本身之外的条件来恢复。
+发生NoClassDefFoundError是因为类在编译的时候是存在的（已经加载过了），但是运行的时候却找不到了，可能是编译完成之后又删除了依赖的class所致。<br>概括起来，加载阶段时从外部存储找不到需要的class时就会出现ClassNotFoundException，而连接阶段从内存找不到需要的class时就会出现NoClassDefFoundError，前者可以调整外部存储来恢复，而后者则不行。</p>
 <ul>
 <li><strong>InterruptedException</strong></li>
 </ul>
-<p>中断异常可以理解为一个中断请求，这在多线程协作时</p>
+<p>InterruptedException一般用于线程取消通知，这在多线程协作时非常有用，详细内容可以参考笔记：<a href="https://shanhm1991.github.io/2019/01/06/20190106/#2-%E4%B8%AD%E6%96%AD">任务的取消与关闭-中断</a></p>
 <h3 id="2-异常处理"><a href="#2-异常处理" class="headerlink" title="2. 异常处理"></a>2. 异常处理</h3><p>关于异常处理很简单：使用try-catch-finally捕获处理，或者通过throws进行声明。不过如果想妥善的处理好异常，最好遵从一些通用的原则，以下摘自《Effective Java》中的一些处理建议：</p>
 <ol>
 <li>只针对不正常的情况才使用异常</li>
@@ -182,7 +182,7 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun1</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"fun1"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun2</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException(<span class="string">"fun2"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, IOException</span>&#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		fun1();</span><br><span class="line">	&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">		fun2();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>比如上面的代码，调用者将丢失原本想捕获的fun1的异常，原因在于方法返回或抛出时，都会覆盖方法栈顶的值，而方法最后退出时只能返回一个栈顶的值。
-可以从字节码层面分析，具体参考相关笔记：<a href="https://shanhm1991.github.io/2019/02/01/20190201/#1-7-%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88">类文件结构：异常表</a></p>
+可以从字节码层面分析，具体参考相关笔记：<a href="https://shanhm1991.github.io/2019/02/01/20190201/#1-7-%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88">类文件结构-异常表</a></p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《Java编程思想》</li>
