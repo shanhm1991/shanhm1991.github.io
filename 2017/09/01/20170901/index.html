@@ -7,12 +7,11 @@
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言
-发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，
-希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
+发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
 java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离。     
-    另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。
-java使用异常来提供统一的错误报告模型，使得构件能够与客户端代码可靠的沟通问题。其目的在于通过少数代码来简化大型、可靠的程序的生成，
-并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。">
+
+另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。java使用异常来提供统一的错误报告模型，使得构件能够与客户端代码可靠的沟通问题。
+其目的在于通过少数代码来简化大型、可靠的程序的生成，并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -48,7 +47,7 @@ java使用异常来提供统一的错误报告模型，使得构件能够与客�
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  59 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  60 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -91,7 +90,7 @@ java使用异常来提供统一的错误报告模型，使得构件能够与客�
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
+   <font style="color: #999;"> words: 2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 7min</font>
    
    
   
@@ -113,84 +112,82 @@ java使用异常来提供统一的错误报告模型，使得构件能够与客�
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><font color="#9E0152">
-发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，
-希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
+发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
 java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离。</font>     
-    另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。
-java使用异常来提供统一的错误报告模型，使得构件能够与客户端代码可靠的沟通问题。其目的在于通过少数代码来简化大型、可靠的程序的生成，
-并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。 
+
+<p>另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。java使用异常来提供统一的错误报告模型，使得构件能够与客户端代码可靠的沟通问题。
+其目的在于通过少数代码来简化大型、可靠的程序的生成，并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。 </p>
 <a id="more"></a>
 
-<h3 id="1-java异常结构"><a href="#1-java异常结构" class="headerlink" title="1. java异常结构"></a>1. java异常结构</h3><p><img src="/img/20170901/20170901.1.jpg" alt=""></p>
-<p><code>Throwable</code>表示所有异常的超类，可以分为两组类型：<code>Error</code>表示编译时或系统错误，其不能被程序员通过代码处理；
-<code>Exception</code>是可以被抛出的异常，可以被Java异常处理机制使用，所以通常更关注的基本异常类型是<code>Exception</code>。</p>
+<h3 id="1-异常分类"><a href="#1-异常分类" class="headerlink" title="1. 异常分类"></a>1. 异常分类</h3><p><img src="/img/20170901/20170901.1.jpg" alt=""></p>
+<p><code>Throwable</code>为所有异常的超类，可以分为两组：<code>Error</code>表示编译时或系统错误，其不能被程序员通过代码处理；<code>Exception</code>是可以被抛出的异常，可以被Java异常处理机制使用，所以通常更加一些关注。</p>
 <ul>
 <li>非检查异常：</li>
 </ul>
-<p><code>Error</code>和<code>RuntimeException</code>以及它们的子类。在编译时，不会提示和发现这样的异常，也不要求在程序处理这些异常，
-当然也可以使用try-catch进行捕获。通常，发生这样的异常多半是代码本身问题，比如除0或者调用空对象等等。</p>
+<p><code>Error</code>和<code>RuntimeException</code>以及它们的子类。在编译时，不会提示和发现这样的异常，也不要求在程序处理这些异常，当然也可以使用try-catch进行捕获。通常，发生这样的异常多半是代码本身问题，</p>
 <ul>
 <li>检查异常：</li>
 </ul>
-<p>对于其它的<code>Exception</code>，javac强制要求程序员做预备处理工作。可以使用try-catch捕获处理，或者用throws声明抛出，否则编译不通过。
-这样的异常一般由于程序的运行环境导致，因为程序可能被运行在各种未知的环境下，
-因此需要为这样的异常做预处理，比如SQLException、IOException等。</p>
-<h3 id="2-处理建议"><a href="#2-处理建议" class="headerlink" title="2. 处理建议"></a>2. 处理建议</h3><p>关于异常处理很简单：使用try-catch-finally捕获处理，或者通过throws进行声明。不过如果想妥善的处理好异常，
-最好遵从一些通用的原则，以下是《Effective Java》中整理的一些处理建议：</p>
+<p>对于其它的<code>Exception</code>，编译器强制要求做一些预备处理工作，可以使用try-catch捕获处理，或者用throws声明抛出，否则编译不通过。这样的异常一般由于程序的运行环境导致。<br>与非检查异常的区别在于，通常情况下检查异常在运行时可以在不干预的情况下自行恢复，而非检查异常则不可能自行恢复，当然也可以使用try-catch作相关处理进行恢复，但不建议尝试从Error错误中恢复程序。</p>
+<ul>
+<li><strong>ClassNotFoundException</strong>与<strong>NoClassDefFoundError</strong></li>
+</ul>
+<p>ClassNotFoundException与NoClassDefFoundError的区别如同检查异常与非检查异常，ClassNotFoundException一般发生在尝试动态加载类的情形，比如反射Class.forName，这时可能找不到指定名称的类，因此编译器要求作预备处理，
+实现者可以自行决策加载不到类时如果处理，发生这种情况通常可以通过改变程序本身之外的条件来恢复。NoClassDefFoundError则是类在编译的时候是存在的，运行的时候却找不到了，可能是编译完成之后又删除了依赖的class所致。
+可以简单概括下区别，加载阶段时从外部存储找不到需要的class时就出现ClassNotFoundException，连接阶段从内存找不到需要的class时就出现NoClassDefFoundError，前者可以调整外部存储来恢复程序，而后者则不行。</p>
+<ul>
+<li><strong>InterruptedException</strong></li>
+</ul>
+<p>中断异常可以理解为一个中断请求，这在多线程协作时</p>
+<h3 id="2-异常处理"><a href="#2-异常处理" class="headerlink" title="2. 异常处理"></a>2. 异常处理</h3><p>关于异常处理很简单：使用try-catch-finally捕获处理，或者通过throws进行声明。不过如果想妥善的处理好异常，最好遵从一些通用的原则，以下摘自《Effective Java》中的一些处理建议：</p>
 <ol>
 <li>只针对不正常的情况才使用异常</li>
 </ol>
-<p>异常机制的设计初衷就是用于应对不正常的情况，所以很少有JVM会试图对它们进行性能优化。也就是说，
-把代码放在try-catch中返将阻止JVM对要执行的代码的优化，因此会降低运行性能。</p>
+<p>异常机制的设计初衷就是用于应对不正常的情况，所以很少有JVM会试图对它们进行性能优化。也就是说，把代码放在try-catch中返将阻止JVM对要执行的代码的优化，因此会降低运行性能。</p>
 <ol start="2">
 <li><p>对于可恢复的条件错误使用检查型异常，对于程序错误使用运行时异常</p>
 </li>
 <li><p>避免不必要的使用被检查的异常</p>
 </li>
 </ol>
-<p>过分使用被检查异常会使API用起来非常不方便，如果一个方法抛出被检查的异常，那么调用方必须catch或者throws声明抛出。
-无论怎样都给调用方增加了不可忽略的负担。<br>适用于”检查型异常”应该满足两个条件：即使正确使用API也不能阻止异常发生；如果产生异常，调用方能够进行处理。</p>
+<p>过分使用被检查异常会使API用起来非常不方便，如果一个方法抛出被检查的异常，那么调用方必须catch或者throws声明抛出。无论怎样都给调用方增加了不可忽略的负担。<br>适用于”检查型异常”应该满足两个条件：即使正确使用API也不能阻止异常发生；如果产生异常，调用方能够进行处理。</p>
 <ol start="4">
 <li>尽量使用标准的异常</li>
 </ol>
-<p>首先，代码重用，这样能让程序的可读性更好，以及让API更易于学习和使用；
-另外，异常类越少，意味着内存占用越小，转载这些类的时间开销也就越小。</p>
+<p>首先，代码重用，这样能让程序的可读性更好，以及让API更易于学习和使用；另外，异常类越少，意味着内存占用越小，转载这些类的时间开销也就越小。</p>
 <ol start="5">
 <li>抛出的异常要适合于相应的抽象</li>
 </ol>
-<p>如果一个方法抛出的异常与它执行的任务没有明显的关联关系，这种情形会让人不知所措。当一个方法传递一个由低层抽象抛出的异常时，
-往往会发生这种情况。这种情况发生时，不仅让人困惑，而且也”污染”了高层API。<br>为了避免这个问题，高层实现应该捕获低层的异常，同时抛出一个可以按照高层抽象进行介绍的异常，
-这种做法称为”异常转译(exception translation)”。</p>
+<p>如果一个方法抛出的异常与它执行的任务没有明显的关联关系，这种情形会让人不知所措。当一个方法传递一个由低层抽象抛出的异常时，往往会发生这种情况。这种情况发生时，不仅让人困惑，而且也”污染”了高层API。<br>为了避免这个问题，高层实现应该捕获低层的异常，同时抛出一个可以按照高层抽象进行介绍的异常，这种做法称为”异常转译(exception translation)”。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> listIterator(index).next();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchElementException exc) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span>+index);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ol start="6">
 <li>每个方法抛出的异常都应该有文档</li>
 </ol>
-<p>要单独声明被检查的异常，并利用Javadoc的@throws标记，准确地记录下每个异常被抛出的条件。<br>如果一个类中的许多方法处于同样的原因而抛出同一个异常，那么在该类的文档注释中对这个异常做文档，
-而不是为每个方法单独做文档。</p>
+<p>要单独声明被检查的异常，并利用Javadoc的@throws标记，准确地记录下每个异常被抛出的条件。    如果一个类中的许多方法处于同样的原因而抛出同一个异常，那么在该类的文档注释中对这个异常做文档，而不是为每个方法单独做文档。</p>
 <ol start="7">
 <li><p>在细节消息中包含失败 – 捕获消息</p>
 </li>
 <li><p>努力使失败保持原子性</p>
 </li>
 </ol>
-<p>一个失败的方法调用应该使对象保持在”它在被调用之前的状态”，就是说既然方法调用失败了，那就不用改变对象状态了。<br>通常的做法是，在改变对象状态之前，进行条件检测，如果失败则提前异常返回。 </p>
+<p>一个失败的方法调用应该使对象保持在”它在被调用之前的状态”，就是说既然方法调用失败了，那就不用改变对象状态了。通常的做法是，在改变对象状态之前，进行条件检测，如果失败则提前异常返回。 </p>
 <ol start="9">
 <li>不要忽略异常</li>
 </ol>
-<p>不要捕获了异常而什么事情也不做，如果不知道如果处理则应该声明抛出，通常只有在知道如何处理异常的的情况下才可以捕获。
-如果异常事实上不用处理，也应该日志记录一下异常信息。<br>不过有时，我们可能会遇到一些检查异常，不知道如何处理，但又不能忽略，同时也不想声明抛给调用者，那么一种做法是将其转化为运行时异常，
+<p>不要捕获了异常而什么事情也不做，如果不知道如果处理则应该声明抛出，通常只有在知道如何处理异常的的情况下才可以捕获。如果异常事实上不用处理，也应该日志记录一下异常信息。<br>有时，我们可能会遇到一些检查异常，不知道如何处理，但又不能忽略，同时也不想声明抛给调用者，那么一种做法是将其转化为运行时异常，
 即捕获异常后，抛出一个运行时异常，并在构造时带上异常信息。<br>通常在业务中，会在处理流程中选择一些节点，在这些节点中统一进行异常捕获处理，而在具体的处理中则直接向上声明抛出，以便保持代码结构清晰。</p>
-<h3 id="3-注意"><a href="#3-注意" class="headerlink" title="3. 注意"></a>3. 注意</h3><p>java的异常实现也是有缺陷的：<font color="#9E0152">如果在finally中抛出异常，则可能造成异常丢失。</font>
-fianlly应该仅仅用来释放资源最合适，不要在其中做一些其它的事情，尤其不要抛出异常或者进行return。 </p>
+<p><strong>注意fianlly</strong></p>
+<p>java的异常实现也是有缺陷的：<font color="#9E0152">如果在finally中抛出异常，则可能造成异常丢失。fianlly应该仅仅用来释放资源最合适，不要在其中做一些其它的事情，尤其不要抛出异常或者进行return。</font></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun1</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"fun1"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun2</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException(<span class="string">"fun2"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, IOException</span>&#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		fun1();</span><br><span class="line">	&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">		fun2();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>比如上面的代码，调用者将丢失原本想捕获的fun1的异常，原因是在方法返回或抛出时，栈顶的值被覆盖了。
-可以从字节码层面分析，参考之前的笔记<a href="https://shanhm1991.github.io/2019/02/01/20190201/#1-7-%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88">类文件结构：异常表</a></p>
-<h3 id="3-常见异常"><a href="#3-常见异常" class="headerlink" title="3. 常见异常"></a>3. 常见异常</h3><p><br><strong>参考：</strong></p>
+<p>比如上面的代码，调用者将丢失原本想捕获的fun1的异常，原因在于方法返回或抛出时，都会覆盖方法栈顶的值，而方法最后退出时只能返回一个栈顶的值。
+可以从字节码层面分析，具体参考相关笔记：<a href="https://shanhm1991.github.io/2019/02/01/20190201/#1-7-%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88">类文件结构：异常表</a></p>
+<p><br><strong>参考：</strong></p>
 <ol>
 <li>《Java编程思想》</li>
 <li>《Effective Java》</li>
+<li><a href="https://my.oschina.net/jasonultimate/blog/166932" target="_blank" rel="noopener">https://my.oschina.net/jasonultimate/blog/166932</a></li>
 </ol>
 
       
@@ -282,7 +279,7 @@ fianlly应该仅仅用来释放资源最合适，不要在其中做一些其它�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-java异常结构"><span class="toc-text">1. java异常结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-处理建议"><span class="toc-text">2. 处理建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-注意"><span class="toc-text">3. 注意</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-常见异常"><span class="toc-text">3. 常见异常</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-异常分类"><span class="toc-text">1. 异常分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-异常处理"><span class="toc-text">2. 异常处理</span></a></li></ol></li></ol>
 </div>
 
 
