@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>借助ThreadPool实现定时任务框架. 一. 实现 | Essay</title>
+  <title>借助ThreadPool实现定时任务. 一. 实现 | Essay</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="借助ThreadPool实现定时任务框架. 一. 实现"/>
+  <meta property="og:title" content="借助ThreadPool实现定时任务. 一. 实现"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -73,7 +73,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        借助ThreadPool实现定时任务框架. 一. 实现
+        借助ThreadPool实现定时任务. 一. 实现
     </h1>
     
     
@@ -85,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 2  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 360  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -113,8 +113,20 @@
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
 
+<ol>
+<li>与spring schedule一样，支持三种定时语义，cron：按时间计划表执行；fixedRate：任务开始后等待指定时间执行；fixedDelay：任务结束后等待指定时间执行</li>
+<li>支持动态关闭或启动定时任务，不需要重启服务，并且当定时任务关闭时支持自定义事件处理</li>
+<li>支持立即执行任务，即没有到达定时的执行时间，可以手动使其立即执行</li>
+<li>支持任务超时设置，即当任务执行超过指定时间后，可以主动中断任务</li>
+<li>支持任务冲突，给每个任务一个全局id，如果提交的任务id已经存在并且还没有结束，则提交失败</li>
+<li>支持动态修改定时计划以及其它配置，或者动态添加修改自定义配置</li>
+<li>支持定时批任务执行，即可以定时执行一批任务集合，并且当一次定时（批）任务执行完成时支持自定义事件处理，在事件中可以拿到当前批次任务结果（事实上也支持手动提交任务，就可以将其当成CompletionService使用）</li>
+<li>支持一定的界面运维功能，比如查看任务统计，正在执行的任务的堆栈，修改配置或日志级别等等</li>
+<li>支持xml配置，或者注解方式，尽量简化使用</li>
+</ol>
 <p><img src="/img/20190702/20190702.1.jpg" alt=""></p>
 <p><img src="/img/20190702/20190702.2.jpg" alt=""></p>
+<p><img src="/img/20190702/20190702.3.jpg" alt=""></p>
 
       
     </div>
