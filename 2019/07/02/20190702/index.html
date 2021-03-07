@@ -85,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 360  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 388  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -118,11 +118,12 @@
 <li>支持动态关闭或启动定时任务，不需要重启服务，并且当定时任务关闭时支持自定义事件处理</li>
 <li>支持立即执行任务，即没有到达定时的执行时间，可以手动使其立即执行</li>
 <li>支持任务超时设置，即当任务执行超过指定时间后，可以主动中断任务</li>
-<li>支持任务冲突，给每个任务一个全局id，如果提交的任务id已经存在并且还没有结束，则提交失败</li>
+<li>支持任务冲突，给每个任务一个全局id，如果提交的任务id已经存在并且还没有结束，则本次提交被忽略</li>
 <li>支持动态修改定时计划以及其它配置，或者动态添加修改自定义配置</li>
+<li>支持持久化，即定时计划或者其它配置修改后，下次启动修改依然生效</li>
 <li>支持定时批任务执行，即可以定时执行一批任务集合，并且当一次定时（批）任务执行完成时支持自定义事件处理，在事件中可以拿到当前批次任务结果（事实上也支持手动提交任务，就可以将其当成CompletionService使用）</li>
 <li>支持一定的界面运维功能，比如查看任务统计，正在执行的任务的堆栈，修改配置或日志级别等等</li>
-<li>支持xml配置，或者注解方式，尽量简化使用</li>
+<li>任务支持xml配置，或者注解方式</li>
 </ol>
 <p><img src="/img/20190702/20190702.1.jpg" alt=""></p>
 <p><img src="/img/20190702/20190702.2.jpg" alt=""></p>
