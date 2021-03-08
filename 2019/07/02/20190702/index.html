@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>借助ThreadPool实现定时任务. 一. 实现思路 | Essay</title>
+  <title>借助ThreadPool实现定时任务. 一. 详细设计 | Essay</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="借助ThreadPool实现定时任务. 一. 实现思路"/>
+  <meta property="og:title" content="借助ThreadPool实现定时任务. 一. 详细设计"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -73,7 +73,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        借助ThreadPool实现定时任务. 一. 实现思路
+        借助ThreadPool实现定时任务. 一. 详细设计
     </h1>
     
     
@@ -85,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 388  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 451  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -113,19 +113,20 @@
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
 
-<ol>
-<li>与spring schedule一样，支持三种定时语义，cron：按时间计划表执行；fixedRate：任务开始后等待指定时间执行；fixedDelay：任务结束后等待指定时间执行</li>
-<li>支持动态关闭或启动定时任务，不需要重启服务，并且当定时任务关闭时支持自定义事件处理</li>
-<li>支持立即执行任务，即没有到达定时的执行时间，可以手动使其立即执行</li>
-<li>支持任务超时设置，即当任务执行超过指定时间后，可以主动中断任务</li>
-<li>支持任务冲突，给每个任务一个全局id，如果提交的任务id已经存在并且还没有结束，则本次提交被忽略</li>
-<li>支持动态修改定时计划以及其它配置，或者动态添加修改自定义配置</li>
-<li>支持持久化，即定时计划或者其它配置修改后，下次启动修改依然生效</li>
-<li>支持定时批任务执行，即可以定时执行一批任务集合，并且当一次定时（批）任务执行完成时支持自定义事件处理，在事件中可以拿到当前批次任务结果（事实上也支持手动提交任务，就可以将其当成CompletionService使用）</li>
-<li>支持一定的界面运维功能，比如查看任务统计，正在执行的任务的堆栈，修改配置或日志级别等等</li>
-<li>任务支持xml配置，或者注解方式</li>
+
+<h3 id="1-支持功能"><a href="#1-支持功能" class="headerlink" title="1. 支持功能"></a>1. 支持功能</h3><ol>
+<li>支持三种定时语义(与spring schedule一样)，cron：按时间计划表执行；fixedRate：任务开始后等待指定时间执行；fixedDelay：任务结束后等待指定时间执行；</li>
+<li>支持动态关闭或启动定时任务，不需要重启服务，并可以自定义关闭时的事件处理；</li>
+<li>支持手动执行任务，即如果还没到设置的执行时间，可以手动使其立即执行，同时也可以手动提交任务（因为本身内部是就是利用的线程池）；</li>
+<li>支持任务超时设置，即当任务执行超过设置时间后，可以及时主动中断任务</li>
+<li>支持任务冲突，限制每个任务都必须有一个全局唯一的id，如果id已经存在对应的任务并且还没有结束，则id对应的当前任务会被忽略；</li>
+<li>支持实时修改定时计划等配置，以及其它自定义配置；</li>
+<li>支持持久化，即配置修改完之后如果重启，修改依然生效；</li>
+<li>支持批任务，即可以定时执行一批任务集合，并且可以定义批任务全部执行完成时的事件处理（当然上面单个任务同样也可以），在事件中可以拿到当前批任务结果（其实也支持手动提交，如果没有定时可以将其当成CompletionService）</li>
+<li>支持一些的简单的界面运维，比如查看任务统计或者正在执行的任务堆栈，下载已经完成任务结果数据，实时修改定时任务的配置或状态等等</li>
+<li>支持xml配置或者注解的使用方式，简单易用；</li>
 </ol>
-<p><img src="/img/20190702/20190702.1.jpg" alt=""></p>
+<h3 id="2-实现思路"><a href="#2-实现思路" class="headerlink" title="2. 实现思路"></a>2. 实现思路</h3><p><img src="/img/20190702/20190702.1.jpg" alt=""></p>
 <p><img src="/img/20190702/20190702.2.jpg" alt=""></p>
 <p><img src="/img/20190702/20190702.3.jpg" alt=""></p>
 
@@ -223,7 +224,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-支持功能"><span class="toc-text">1. 支持功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-实现思路"><span class="toc-text">2. 实现思路</span></a></li></ol></li></ol>
 </div>
 
 
