@@ -72,7 +72,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/07/04/20190704/">借助ThreadPool实现定时任务. 二. 使用示例</a>
+       <a href="/2019/07/04/20190704/">借助ThreadPool实现定时任务. 二. 使用文档</a>
     </h1>
     
   
@@ -86,7 +86,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>这里只简单说明下fom的模块结构和使用方式，至于具体的实现思路上文已经有过详细介绍</p>
       
     </div>
 	
@@ -138,7 +138,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>写这个工具最开始是为了处理各种离线数据文件的需求，涉及到定时处理或者批处理等等，当时也是因为条件有限所以就自己造了这样一个轮子，也由于是为了文件处理，所以就取名为fom。<br>fom中以Context为模块单位，其在内部维护了一个线程池和一个自定义的轮询线程来控制任务的执行计划，并自定义了一套状态转换机制。对于具体的任务则抽象为Task，其相当于在Callable的基础上定义了一个执行的方法模板，
+并加了一些限制，比如强制要求任务id。至于其它操作和功能都是在Context和Task这两个基础上进行，本质上还是围绕着线程池在实现。</p>
       
     </div>
 	
