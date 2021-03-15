@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>shell命令 | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="shell命令"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  63 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20180301" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-02-28T16:00:00.000Z"><a href="/2018/03/01/20180301/">2018-03-01</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        shell命令
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <font style="color: #999;"> words: 883  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 3min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/其它笔记/">其它笔记</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/sed/">sed</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+
+<h3 id="1-sed"><a href="#1-sed" class="headerlink" title="1. sed"></a>1. sed</h3><p>Stream Editor文本流编辑，一个非交互式的面向字符流的编辑器，它逐行处理内容，每次将当前处理的行存储到临时缓冲区（模式空间 pattern space），处理完成后并输出，接着处理下一行，直到文件结束。
+sed作为常见的文本处理工具之一，是一个非常有用且重要的命令，也是写自动化shell脚本的基础。</p>
+<p><strong>语法</strong></p>
+<p><code>sed [options] &#39;scripts&#39; inputfile</code></p>
+<p><strong>-options</strong></p>
+<ul>
+<li><p>-n ：只打印匹配行</p>
+</li>
+<li><p>-e ：直接在命令行模式上进行sed动作编辑，默认选项</p>
+</li>
+<li><p>-f ：执行指定文件中的sed动作</p>
+</li>
+<li><p>-r ：支持扩展表达式</p>
+</li>
+<li><p>-i ：直接修改文件内容</p>
+</li>
+</ul>
+<p><strong>常见动作</strong></p>
+<ul>
+<li>a ：在当前行的下面新增一行内容；</li>
+<li>c ：替换匹配行</li>
+<li>d ：删除匹配行</li>
+<li>i ：在当前行的上面新增一行内容；</li>
+<li>p ：打印</li>
+<li>s ：替换匹配文本</li>
+</ul>
+<h4 id="1-1-文本替换"><a href="#1-1-文本替换" class="headerlink" title="1.1. 文本替换"></a>1.1. 文本替换</h4><p><code>sed -i &#39;s/old/new/&#39; m.txt</code>：将每行的第一个old替换为new</p>
+<p><code>sed -i &#39;s/old/new/3&#39; m.txt</code>：将每行的第三个old替换为new</p>
+<p><code>sed -i &#39;s/old/new/g&#39; m.txt</code>：将所有的old替换为new</p>
+<p><code>sed -i &#39;4,7s/^/#/&#39; m.txt</code>：第4-7行注释掉</p>
+<p><code>sed -ri &#39;s/^( )+//&#39; a.txt</code>：删除行首的空格</p>
+<p>其中，替换操作里的分割符<code>/</code>可改为其他字符，如<code>#</code>或<code>$</code>，在遇到文件路径替换时会比较方便</p>
+<h4 id="1-2-文本行打印"><a href="#1-2-文本行打印" class="headerlink" title="1.2. 文本行打印"></a>1.2. 文本行打印</h4><p><code>sed -n &#39;4,7p&#39; m.txt</code>：打印第4-7行</p>
+<p><code>sed -n &#39;4,+10p&#39; m.txt</code>：输出第4行及其下面10行的内容</p>
+<p><code>sed -n &#39;p;n&#39; m.txt</code>：输出奇数行</p>
+<p><code>sed -n &#39;n;p&#39; m.txt</code>：输出偶数行</p>
+<p><code>sed -n &#39;$=&#39; m.txt</code>：输出文件的行数</p>
+<h4 id="1-3-文本行添加"><a href="#1-3-文本行添加" class="headerlink" title="1.3. 文本行添加"></a>1.3. 文本行添加</h4><p><code>sed -i &#39;2iXX&#39; m.txt</code>：在第2行上面添加文本行XX</p>
+<p><code>sed -i &#39;2aXX&#39; m.txt</code>：在第2行下面添加一行文本行XX</p>
+<p><code>sed -i &#39;4,7aXX&#39; m.txt</code>：在第4-7行的每一行下面添加文本行XX</p>
+<p>如果是多行文本，可以用换行符\n分割</p>
+<h4 id="1-4-文本行替换"><a href="#1-4-文本行替换" class="headerlink" title="1.4. 文本行替换"></a>1.4. 文本行替换</h4><p><code>sed -i &#39;2cXX&#39; m.txt</code>：在第2行替换为文本行XX</p>
+<h4 id="1-5-文本行删除"><a href="#1-5-文本行删除" class="headerlink" title="1.5. 文本行删除"></a>1.5. 文本行删除</h4><p><code>sed -i &#39;3,5d&#39; m.txt</code>：删除第3-5行</p>
+<p><code>sed -i &#39;/xml/d&#39; m.txt</code>：删除所有包含xml的行</p>
+<p><code>sed -i &#39;/xml/!d&#39; m.txt</code>：删除所有不包含xml的行</p>
+<p><code>sed -i &#39;$d&#39; m.txt</code>：删除最后一行</p>
+<p><code>sed -i &#39;/^$/d&#39; m.txt</code>：删除空行</p>
+<h4 id="1-6-sed脚本"><a href="#1-6-sed脚本" class="headerlink" title="1.6. sed脚本"></a>1.6. sed脚本</h4><p>对于一些复杂的操作可以存为脚本，然后通过<code>-f</code>调用，比如</p>
+<figure class="highlight shell"><figcaption><span class="caption">test.sed</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s/pang/&amp;jing/</span><br><span class="line">s/[0-9]//g</span><br></pre></td></tr></table></figure>
+
+<p><code>sed -f test.sed  m.txt</code>：执行脚本中的动作</p>
+<h3 id="2-awk"><a href="#2-awk" class="headerlink" title="2. awk"></a>2. awk</h3><p>awk是一个强大的文本分析工具，相对于sed，awk在对数据分析并生成报告时显得尤为强大，awk也是将文件逐行读入，然后将每行分隔切片再进行各种分析处理。其名称取自三位创始人的首字符（Alfred Aho、Peter Weinberger、Family Name）。</p>
+<p><strong>语法</strong></p>
+<p><code>awk [options] &#39;script&#39; var=value inputfile</code></p>
+<p><strong>-options</strong></p>
+<ul>
+<li><p>-F：指定解析分隔符（默认空格），可以是字符串或者正则表达式</p>
+</li>
+<li><p>-v：赋值一个自定义变量</p>
+</li>
+<li><p>-f：从文件中读取awk命令</p>
+</li>
+</ul>
+<h4 id="2-1-获取字段"><a href="#2-1-获取字段" class="headerlink" title="2.1. 获取字段"></a>2.1. 获取字段</h4><p><code>awk &#39;{print $2}&#39; m.txt</code>：获取以空格分隔后，每行的第二个字段</p>
+<p><code>awk -F &#39;_&#39; &#39;{print $2}&#39; m.txt</code>：获取以<code>_</code>分隔后，每行的第二个字段</p>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2018/03/03/20180303/">
+		    postgre命令
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2017/12/23/20171223/">
+		    windows安装mysql
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/其它笔记/">其它笔记</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/sed/">sed</a>
+  </div>
+
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-sed"><span class="toc-text">1. sed</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-文本替换"><span class="toc-text">1.1. 文本替换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-文本行打印"><span class="toc-text">1.2. 文本行打印</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-文本行添加"><span class="toc-text">1.3. 文本行添加</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-文本行替换"><span class="toc-text">1.4. 文本行替换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-文本行删除"><span class="toc-text">1.5. 文本行删除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-sed脚本"><span class="toc-text">1.6. sed脚本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-awk"><span class="toc-text">2. awk</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-获取字段"><span class="toc-text">2.1. 获取字段</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2021 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

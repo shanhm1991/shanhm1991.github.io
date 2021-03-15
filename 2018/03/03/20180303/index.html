@@ -1,0 +1,308 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>postgre命令 | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="postgre命令"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  63 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20180303" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-03-02T16:00:00.000Z"><a href="/2018/03/03/20180303/">2018-03-03</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        postgre命令
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <font style="color: #999;"> words: 249  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/其它笔记/">其它笔记</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/postgre/">postgre</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+
+<ul>
+<li>psql登录</li>
+</ul>
+<p><code>psql -h 192.168.141.13 -p 5432 -d postgres -U postgres</code></p>
+<ul>
+<li>查看版本</li>
+</ul>
+<p><code>select version();</code>    </p>
+<ul>
+<li>查看当前数据库</li>
+</ul>
+<p><code>select current_database();</code></p>
+<ul>
+<li>查询用户</li>
+</ul>
+<p><code>select * from pg_roles;</code></p>
+<ul>
+<li>查看权限</li>
+</ul>
+<p><code>select * from information_schema.table_privileges where grantee=&#39;cc&#39;;</code></p>
+<ul>
+<li>查看用户名密码</li>
+</ul>
+<p><code>select rolname,rolpassword from pg_authid;</code></p>
+<p><code>select usename,passwd from pg_shadow;</code></p>
+<ul>
+<li>创建用户并设置密码</li>
+</ul>
+<p><code>CREATE USER shanhm WITH PASSWORD &#39;shanhm&#39;;</code></p>
+<ul>
+<li>创建数据库并指定用户</li>
+</ul>
+<p><code>CREATE DATABASE shanhm OWNER shanhm;</code></p>
+<ul>
+<li>数据库赋权</li>
+</ul>
+<p><code>GRANT ALL PRIVILEGES ON DATABASE shanhm TO shanhm;</code></p>
+<ul>
+<li>备份数据库</li>
+</ul>
+<p><code>pg_dump -h ip -U user database &gt; file</code></p>
+<ul>
+<li>psql常用操作</li>
+</ul>
+<p><code>\l</code>                ：查看所有数据库</p>
+<p><code>\dt</code>                ：查看表</p>
+<p><code>\password username</code>：修改密码</p>
+<p><code>\password</code>         ：设置密码</p>
+<p><code>\?</code>                ：查看psql命令列表</p>
+<p><code>\c [database_name]</code>：连接其他数据库，切换数据库</p>
+<p><code>\conninfo</code>         ：列出当前数据库和连接的信息</p>
+<p><code>\d</code>                ：列出当前数据库的所有表格</p>
+<p><code>\d [table_name]</code>   ：列出某一张表格的结构</p>
+<p><code>\du</code>               ：列出所有用户</p>
+<p><code>\e</code>                ：打开文本编辑器</p>
+<p><code>help</code>                ：帮助</p>
+<p><code>\h</code>                ：查看SQL命令的解释，比如\h select</p>
+<p><code>\q</code>                ：退出</p>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2018/05/03/20180503/">
+		    vmware设置ubuntu静态ip
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2018/03/01/20180301/">
+		    shell命令
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/其它笔记/">其它笔记</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/postgre/">postgre</a>
+  </div>
+
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2021 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
