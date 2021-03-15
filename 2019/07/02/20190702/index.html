@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>借助ThreadPool实现定时任务. 一. 设计文档 | Essay</title>
+  <title>借助ThreadPool构建计划任务. 一. 设计文档 | Essay</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="引言写这个工具最开始是为了处理各种离线数据文件的需求，涉及到定时处理或者批处理等等，当时也是因为条件有限所以就自己造了这样一个轮子，也由于是为了文件处理，所以就取名为fom。fom中以Context为模块单位，其在内部维护了一个线程池和一个自定义的轮询线程来控制任务的执行计划，并自定义了一套状态转换机制。对于具体的任务则抽象为Task，其相当于在Callable的基础上定义了一个执行的方法模板，
@@ -12,7 +12,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="借助ThreadPool实现定时任务. 一. 设计文档"/>
+  <meta property="og:title" content="借助ThreadPool构建计划任务. 一. 设计文档"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -74,7 +74,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        借助ThreadPool实现定时任务. 一. 设计文档
+        借助ThreadPool构建计划任务. 一. 设计文档
     </h1>
     
     
@@ -240,7 +240,7 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2019/07/04/20190704/">
-		    借助ThreadPool实现定时任务. 二. 使用文档
+		    借助ThreadPool构建计划任务. 二. 使用文档
 		  </a>
 	  
 	  
