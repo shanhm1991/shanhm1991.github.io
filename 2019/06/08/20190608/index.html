@@ -44,7 +44,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  64 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  65 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -127,7 +127,7 @@
 <p>由于每个节点最多有两个儿子，因此针对需要重新平衡的节点，可以将需要旋转的情形分为4种：</p>
 <p><img src="/img/20190608/20190608.2.jpg" alt=""> </p>
 <p>1和2是对称的两种情形，需要调整的是左-左子树，或者右-右子树，通过一次<strong>单旋转</strong>即可恢复平衡；<br>3和4也是对称的，但需要调整的是左-右子树，或者右-左子树，由于较深的子树处于树结构的中间，这时仅用单旋转并不能解决问题，
-而是需要通过<strong>双旋转</strong>才能恢复平衡，<font color="#9E0152">思路就是将深度过深的树从内侧转移到外侧，这样就可以将情形3和4转化成情形1或2。</font></p>
+而是需要通过<strong>双旋转</strong>才能恢复平衡，<font color="#E51508">思路就是将深度过深的树从内侧转移到外侧，这样就可以将情形3和4转化成情形1或2。</font></p>
 <p>以情形4为例：可以先对右子树的k1-k2两个节点进行一次右旋转，然后再对K2-K3进行一次左旋转以达到重新平衡。</p>
 <p><img src="/img/20190608/20190608.3.jpg" alt=""> </p>
 <ul>
