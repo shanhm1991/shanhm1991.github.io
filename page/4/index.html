@@ -362,11 +362,9 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>XmlBeanDefinitionReader</code>在spring中主要扮演从资源文件中解析及注册<code>BeanDefinition</code>的角色，不过它是将解析的处理委托给了<code>BeanDefinitionDocumentReader</code>，注册处理则委托给了<code>BeanDefinitionRegistry</code>。     
-并且在解析开始时将自身以及<code>Resource</code>，<code>ReaderEventListener</code>等接口打包成<code>ReaderContext</code>交给了<code>BeanDefinitionDocumentReader</code>，以便在解析过程中的一些步骤节点可以回调<code>ReaderEventListener</code>中的事件接口，
-并在解析完成时，可以拿到<code>BeanDefinitionRegistry</code>进行注册。整体上看<code>XmlBeanDefinitionReader</code>就相当于一个组织者的角色，当最后注册完成时，它的使命也就结束了。</p>
-<p>如果忽略一些细节处理，解析的流程可以大体描述如下：</p>
-<p><img src="/img/20180601/20180601.1.png" alt=""> </p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>XmlBeanDefinitionReader</code>在spring中主要扮演从资源文件中解析及注册<code>BeanDefinition</code>的作用，不过它自身想当于一个组织者的角色，它将解析的工作委托给<code>BeanDefinitionDocumentReader</code>，注册工作则委托给<code>BeanDefinitionRegistry</code>。      
+并且，在真正开始解析时，它将自己以及<code>Resource</code>，<code>ReaderEventListener</code>等接口打包成<code>XmlReaderContext</code>交给<code>BeanDefinitionDocumentReader</code>，以便在解析过程中可以回调<code>ReaderEventListener</code>中的事件接口，以及在解析完成时，
+可以拿到<code>BeanDefinitionRegistry</code>进行注册。实际上当所有<code>BeanDefinition</code>注册完成时，它的使命也就结束了，剩下的就交给<code>BeanFactory</code>了。</p>
       
     </div>
 	
