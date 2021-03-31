@@ -715,10 +715,10 @@ footer .addthis iframe {
 #sidebar .tagcloud a {
   margin-right: 5px;
 }
-#sidebar min 12px {
-  font-size: 12px;
+#sidebar min 10px {
+  font-size: 10px;
 }
-#sidebar min 12px font-max 12px {
+#sidebar min 10px font-max 10px {
   display: inline-block;
 }
 #sidebar .catlog {
