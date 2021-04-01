@@ -3,20 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>ubuntu中rc.local不执行问题 | Essay</title>
+  <title>spring. 应用上下文（ApplicationContext） | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="首先排除脚本自身问题，可以手动点杠执行下试试，
-
-脚本确定没问题后，放到开机启动程序引用的路径下
-
-
-2.1. 查看系统的运行级别">
+  <meta name="description" content="引言">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="ubuntu中rc.local不执行问题"/>
+  <meta property="og:title" content="spring. 应用上下文（ApplicationContext）"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -65,20 +60,20 @@
 <div class="clearfix"></div>
 </header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20180515" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20180607" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-14T16:00:00.000Z"><a href="/2018/05/15/20180515/">2018-05-15</a></time>
+        <time class="dt-published" datetime="2018-06-06T16:00:00.000Z"><a href="/2018/06/07/20180607/">2018-06-07</a></time>
       
       
 
   
   
     <h1 class="p-name title" itemprop="headline name">
-        ubuntu中rc.local不执行问题
+        spring. 应用上下文（ApplicationContext）
     </h1>
     
     
@@ -90,12 +85,12 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 327  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 13  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
   <div class="categories">
-    <a href="/categories/问题笔记/">问题笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -103,7 +98,7 @@
    
   
   <div class="tags">
-    <a href="/tags/ubuntu/">ubuntu</a>
+    <a href="/tags/spring/">spring</a>   <a href="/tags/ApplicationContext/">ApplicationContext</a>
   </div>
 
 
@@ -116,27 +111,11 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <ol>
-<li><p>首先排除脚本自身问题，可以手动点杠执行下试试，</p>
-</li>
-<li><p>脚本确定没问题后，放到开机启动程序引用的路径下</p>
-</li>
-</ol>
-<p>2.1. 查看系统的运行级别</p>
-<a id="more"></a>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
 
-<p><img src="/img/20180515/20180515.1.jpg" alt=""> </p>
-<p>2.2. 到对应运行的rcX.d的目录找到指向rc.local的软连接，将rc.locad放到指向的地址，重启后发现问题解决。</p>
-<p><img src="/img/20180515/20180515.2.jpg" alt=""> </p>
-<p>文件如下：</p>
-<p><img src="/img/20180515/20180515.3.jpg" alt=""> </p>
-<p>刚开始我是照着参考文章在rc5.d目录下添加了一个<code>S99local -&gt; /etc/rc.d/ec.local</code>，然后发现问题并没有解决，我本来以为启动时它会遍历rc5.d下所有初始化文件，
-可能是我错了，它这些软链接名应该是在系统中注册好的。我安装的版本是ubuntu 16，默认软链接名是S14rc.local，于是我又将rc.local从/etc/rc.d中移到了/etc下面，发现问题终于解决。</p>
-<p>其实一开始rc.local文件就在/etc下面，只是我脚本写的有问题导致没执行，然后我看网上文章说要将它移到/etc/rc.d下面，我照做了发现还是不行，在浪费了很多时间后，
-直到遇到下面这篇文章才理解了问题的原因。</p>
-<p><br><strong>参考：</strong>   </p>
+<p><br><strong>参考：</strong>  </p>
 <ol>
-<li><a href="http://www.cnblogs.com/montya/archive/2011/09/09/2172001.html" target="_blank" rel="noopener">http://www.cnblogs.com/montya/archive/2011/09/09/2172001.html</a> </li>
+<li>《spring源码深度解析》 郝佳</li>
 </ol>
 
       
@@ -148,14 +127,14 @@
 	    
 	<nav id="pagination">
 	  
-		  <a class="alignleft prev" href="/2018/05/18/20180518/">
-		    ubuntu使用yum安装软件问题
+		  <a class="alignleft prev" href="/2018/09/04/20180904/">
+		    centos安装oracle11g
 		  </a>
 	  
 	  
 	  
-		  <a class="alignright next" href="/2018/05/10/20180510/">
-		    vmware设置centos静态ip
+		  <a class="alignright next" href="/2018/06/05/20180605/">
+		    spring. Bean加载（BeanFactory）
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -165,14 +144,14 @@
         
   
   <div class="categories">
-    <a href="/categories/问题笔记/">问题笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
         
   
   <div class="tags">
-    <a href="/tags/ubuntu/">ubuntu</a>
+    <a href="/tags/spring/">spring</a>   <a href="/tags/ApplicationContext/">ApplicationContext</a>
   </div>
 
 
@@ -233,7 +212,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
 </div>
 
 

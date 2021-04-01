@@ -44,7 +44,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  67 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  68 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -194,7 +194,7 @@ resources and is highly configurable in its actual XML parsing behavior.</p>
 
 <h5 id="BeanDefinition"><a href="#BeanDefinition" class="headerlink" title="BeanDefinition"></a>BeanDefinition</h5><p>在解析各种标签之前首先还要创建一个<code>BeanDefinition</code>来承载各种解析的属性，<code>BeanDefinition</code>是一个接口，其实现类结构如下：</p>
 <p><img src="/img/20180601/20180601.5.jpg" alt=""> </p>
-<p>通常情况下，使用<code>GenericBeanDefinition</code>作为默认实现，其提供了一站式服务，如果提前确定了父子关系则可以使用<code>ChildBeanDefinition</code>和<code>RootBeanDefinition</code></p>
+<p>通常解析的时候都先使用<code>GenericBeanDefinition</code>作为默认实现，在后面创建bean时会转换为<code>RootBeanDefinition</code></p>
 <blockquote>
 <p>In general, use this {@code GenericBeanDefinition} class for the purpose of
 registering user-visible bean definitions (which a post-processor might operate on,
