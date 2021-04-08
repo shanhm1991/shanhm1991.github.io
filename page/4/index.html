@@ -348,7 +348,7 @@
   
   
     <h1 class="title">
-       <a href="/2018/06/07/20180607/">spring. 应用上下文（ApplicationContext）</a>
+       <a href="/2018/06/07/20180607/">spring. BeanFactory扩展（应用上下文ApplicationContext）</a>
     </h1>
     
   
@@ -362,7 +362,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面介绍bean加载时都是站在<code>BeanFactory</code>的角度上进行的，相当于将spring纯粹当成一个bean容器工具来使用。其实spring另外提供了一套接口<code>ApplicationContext</code>，更加侧重于从应用上下文的角度来进行bean加载。
+当然，主要的加载实现还是委托给基础的<code>BeanFactory</code>，只是在此基础上做了一些扩展。</p>
       
     </div>
 	
