@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>spring. Aop | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
+所以可以使用面向切面（AOP）编程作为一个补充，Aop是横向的而OOP是纵向的。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="spring. Aop"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <h2><font style="color: #999;">articles:  69 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20180609" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-06-08T16:00:00.000Z"><a href="/2018/06/09/20180609/">2018-06-09</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        spring. Aop
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <font style="color: #999;"> words: 1.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/源码笔记/">源码笔记</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/spring/">spring</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
+所以可以使用面向切面（AOP）编程作为一个补充，Aop是横向的而OOP是纵向的。</p>
+<a id="more"></a>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>spring2.0以后，可以使用<code>@Aspect</code>非常容易地定义一个切面，不需要实现任何接口。<code>@Aspect</code>标注的pojo用来定义一个包含切点信息和增强横切逻辑的切面，然后spring会将这个切面织入匹配的目标bean中，
+而Aspect表达式具有强大的描述能力，下面写一个示例切面：用来给所有package下面所有名称以Bean结尾的类中所有方法打印一个输入输出日志</p>
+<figure class="highlight xml"><figcaption><span class="caption">pom.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.3.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-beans<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.3.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-context<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.3.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.aspectj<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aspectjweaver<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.9.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><figcaption><span class="caption">TestBean.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestBean</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">calculate</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        <span class="comment">//this.valid(i, j);</span></span><br><span class="line">        ((TestBean)AopContext.currentProxy()).valid(i, j);</span><br><span class="line">        <span class="keyword">return</span> i / j;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">valid</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        Assert.isTrue(i &gt; <span class="number">0</span> &amp;&amp; j &gt; <span class="number">0</span>, <span class="string">""</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><figcaption><span class="caption">LogAspect</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogAspect</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">private</span> ThreadLocal&lt;Long&gt; localTime = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@Pointcut</span>(<span class="string">"execution(* *..*Bean.*(..))"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">point</span><span class="params">()</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@Before</span>(<span class="string">"point()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint point)</span></span>&#123;</span><br><span class="line">        localTime.set(System.currentTimeMillis());</span><br><span class="line">        String method = point.getSignature().getName();</span><br><span class="line">        System.out.println(<span class="string">"aspect before: "</span> + method + Arrays.asList(point.getArgs()));</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@AfterReturning</span>(pointcut = <span class="string">"point()"</span>, returning = <span class="string">"result"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">(Object result)</span></span>&#123;</span><br><span class="line">        <span class="keyword">long</span> now = System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">"aspect: after: result="</span> + result + <span class="string">", cost="</span> + (now - localTime.get()) + <span class="string">"ms"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><figcaption><span class="caption">bean.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line marked"><span class="tag">    <span class="attr">xmlns:aop</span>=<span class="string">"http://www.springframework.org/schema/aop"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">                        http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line marked"><span class="tag"><span class="string">                        http://www.springframework.org/schema/aop</span></span></span><br><span class="line marked"><span class="tag"><span class="string">                        http://www.springframework.org/schema/aop/spring-aop.xsd"</span>&gt;</span></span><br><span class="line">                        </span><br><span class="line marked">    <span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span> <span class="attr">proxy-target-class</span>=<span class="string">"false"</span> <span class="attr">expose-proxy</span>=<span class="string">"true"</span>/&gt;</span>                   </span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testBean"</span> <span class="attr">class</span>=<span class="string">"test.aop.TestBean"</span> /&gt;</span></span><br><span class="line">	</span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"logAspect"</span> <span class="attr">class</span>=<span class="string">"test.aop.LogAspect"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><figcaption><span class="caption">App.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args )</span></span>&#123;</span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"bean.xml"</span>);</span><br><span class="line">        TestBean test = (TestBean)context.getBean(<span class="string">"testBean"</span>);</span><br><span class="line">        System.out.println(test.getClass());</span><br><span class="line">        test.calculate(<span class="number">4</span>, <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span>.<span class="title">aop</span>.<span class="title">TestBean</span>$$<span class="title">EnhancerBySpringCGLIB</span>$$385<span class="title">f50d3</span></span></span><br><span class="line">aspect before: calculate[4, 2]</span><br><span class="line">aspect: after: result=<span class="number">2</span>, cost=<span class="number">12</span>ms</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>其实从上一篇<a href="https://shanhm1991.github.io/2018/06/07/20180607/">spring. 应用上下文（ApplicationContext）</a>，最后的示例中已经能看到，可以利用接口<code>BeanPostProcessor</code>，借助动态代理来对目标bean进行增强，
+而目标bean可以使用注解进行简单的标识即可。</p>
+<p>下面来看下spring中的Aop是如何实现的，从示例中可以看到要使用Aop标签，需要添加对应的Namespace，那么一定存在对应的解析器[参考之前的<a href="https://shanhm1991.github.io/2018/06/03/20180603/">spring. BeanDefinition解析（自定义标签）</a>]，
+这里很容易地通过其标签确认其解析实现，其实这里的实现就是注册了一个<code>AnnotationAwareAspectJAutoProxyCreator</code>，如下：</p>
+<figure class="highlight java"><figcaption><span class="caption">org.springframework.aop.config.NamespaceHandlerSupport</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AopNamespaceHandler</span> <span class="keyword">extends</span> <span class="title">NamespaceHandlerSupport</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// In 2.0 XSD as well as in 2.1 XSD.</span></span><br><span class="line">        registerBeanDefinitionParser(<span class="string">"config"</span>, <span class="keyword">new</span> ConfigBeanDefinitionParser());</span><br><span class="line marked">        registerBeanDefinitionParser(<span class="string">"aspectj-autoproxy"</span>, <span class="keyword">new</span> AspectJAutoProxyBeanDefinitionParser());</span><br><span class="line">        registerBeanDefinitionDecorator(<span class="string">"scoped-proxy"</span>, <span class="keyword">new</span> ScopedProxyBeanDefinitionDecorator());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Only in 2.0 XSD: moved to context namespace as of 2.1</span></span><br><span class="line">        registerBeanDefinitionParser(<span class="string">"spring-configured"</span>, <span class="keyword">new</span> SpringConfiguredBeanDefinitionParser());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><figcaption><span class="caption">org.springframework.aop.config.AspectJAutoProxyBeanDefinitionParser</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AspectJAutoProxyBeanDefinitionParser</span> <span class="keyword">implements</span> <span class="title">BeanDefinitionParser</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BeanDefinition <span class="title">parse</span><span class="params">(Element element, ParserContext parserContext)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 注册AspectJAnnotationAutoProxyCreator</span></span><br><span class="line marked">        AopNamespaceUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(parserContext, element);</span><br><span class="line">        extendBeanDefinition(element, parserContext); <span class="comment">// 对于注解中子类的处理</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><figcaption><span class="caption">org.springframework.aop.config.AopNamespaceUtils</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">registerAspectJAnnotationAutoProxyCreatorIfNecessary</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        ParserContext parserContext, Element sourceElement)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 注册AspectJAnnotationAutoProxyCreator的BeanDefinition</span></span><br><span class="line">    BeanDefinition beanDefinition = AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(</span><br><span class="line">            parserContext.getRegistry(), parserContext.extractSource(sourceElement));</span><br><span class="line">			</span><br><span class="line">    <span class="comment">// 对于proxy-target-class以及expose-proxy的处理</span></span><br><span class="line">    useClassProxyingIfNecessary(parserContext.getRegistry(), sourceElement);</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 注册后事件通知</span></span><br><span class="line">    registerComponentIfNecessary(beanDefinition, parserContext);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先创建和注册<code>BeanDefinition</code>，这里使用的class为<code>AnnotationAwareAspectJAutoProxyCreator</code></p>
+<figure class="highlight java"><figcaption><span class="caption">org.springframework.aop.config.AopConfigUtils</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BeanDefinition <span class="title">registerAspectJAnnotationAutoProxyCreatorIfNecessary</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        BeanDefinitionRegistry registry, @Nullable Object source)</span> </span>&#123;</span><br><span class="line marked">    <span class="keyword">return</span> registerOrEscalateApcAsRequired(AnnotationAwareAspectJAutoProxyCreator<span class="class">.<span class="keyword">class</span>, <span class="title">registry</span>, <span class="title">source</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> BeanDefinition <span class="title">registerOrEscalateApcAsRequired</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        Class&lt;?&gt; cls, BeanDefinitionRegistry registry, @Nullable Object source)</span> </span>&#123;</span><br><span class="line">    Assert.notNull(registry, <span class="string">"BeanDefinitionRegistry must not be null"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果已经存在了自动代理创建器定义 并且与现在的一致，那么根据优先级决定使用哪个</span></span><br><span class="line">    <span class="keyword">if</span> (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) &#123;</span><br><span class="line">        BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);</span><br><span class="line">        <span class="keyword">if</span> (!cls.getName().equals(apcDefinition.getBeanClassName())) &#123;</span><br><span class="line">            <span class="keyword">int</span> currentPriority = findPriorityForClass(apcDefinition.getBeanClassName());</span><br><span class="line">            <span class="keyword">int</span> requiredPriority = findPriorityForClass(cls);</span><br><span class="line">            <span class="keyword">if</span> (currentPriority &lt; requiredPriority) &#123;</span><br><span class="line">                apcDefinition.setBeanClassName(cls.getName()); <span class="comment">// 改掉class</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注册新建的BeanDefinition</span></span><br><span class="line">    RootBeanDefinition beanDefinition = <span class="keyword">new</span> RootBeanDefinition(cls);</span><br><span class="line">    beanDefinition.setSource(source);</span><br><span class="line">    beanDefinition.getPropertyValues().add(<span class="string">"order"</span>, Ordered.HIGHEST_PRECEDENCE);</span><br><span class="line">    beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);</span><br><span class="line marked">    registry.registerBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME, beanDefinition);</span><br><span class="line">    <span class="keyword">return</span> beanDefinition;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另外，处理下proxy-target-class以及expose-proxy，其实就是在<code>BeanDefinition</code>的<code>propertyValues</code>中添加了两个属性</p>
+<ul>
+<li>proxy-target-class</li>
+</ul>
+<p>默认false，即默认使用JDK代理，如果目标类没有实现任何接口则使用CGLIB代理，如果希望强制使用CGLIB代理，设置为true即可。但是由于CGLIB代理基于继承的方式，因此需要注意下其不能代理final方法。</p>
+<ul>
+<li>expose-proxy</li>
+</ul>
+<p>有时候目标类的内部会进行自我调用，而导致被嵌套调用的方法不会被代理，对于这种情况可以将expose-proxy设置为true，并指定获取代理对象即可，如示例中所示。</p>
+<h4 id="AnnotationAwareAspectJAutoProxyCreator"><a href="#AnnotationAwareAspectJAutoProxyCreator" class="headerlink" title="AnnotationAwareAspectJAutoProxyCreator"></a>AnnotationAwareAspectJAutoProxyCreator</h4><p><img src="/img/20180601/20180601.12.jpg" alt=""> </p>
+<p><br><strong>参考：</strong>  </p>
+<ol>
+<li>《spring源码深度解析》 郝佳</li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2018/09/04/20180904/">
+		    centos安装oracle11g
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2018/06/07/20180607/">
+		    spring. 应用上下文（ApplicationContext）
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/源码笔记/">源码笔记</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/spring/">spring</a>
+  </div>
+
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#AnnotationAwareAspectJAutoProxyCreator"><span class="toc-text">AnnotationAwareAspectJAutoProxyCreator</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2021 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

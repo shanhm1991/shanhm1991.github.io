@@ -6,7 +6,7 @@
   <title>tomcat. 容器加载（Digester） | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言前文介绍过，Tomcat的容器结构通过server.xml来描述，那么看一下它在启动时是如何解析和加载的。">
+  <meta name="description" content="引言经过前面的介绍，知道Tomcat的容器结构可以通过server.xml来描述，那么看一下它是如何解析和加载的。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -42,7 +42,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  68 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  69 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -85,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 5.2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 26min</font>
+   <font style="color: #999;"> words: 5.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 25min</font>
    
    
   
@@ -111,28 +111,25 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前文介绍过，Tomcat的容器结构通过<code>server.xml</code>来描述，那么看一下它在启动时是如何解析和加载的。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>经过前面的介绍，知道Tomcat的容器结构可以通过<code>server.xml</code>来描述，那么看一下它是如何解析和加载的。</p>
 <a id="more"></a>
 
-<h3 id="1-Digester"><a href="#1-Digester" class="headerlink" title="1. Digester"></a>1. Digester</h3><p>在介绍<code>server.xml</code>的解析实现之前，先看一下解析时使用的工具<code>Digester</code>。</p>
-<p>一般解析xml文件有两种思路：</p>
+<h3 id="1-思路"><a href="#1-思路" class="headerlink" title="1. 思路"></a>1. 思路</h3><p>一般解析xml文件有两种思路：</p>
 <ol>
 <li>预加载DOM树</li>
 </ol>
 <p>即将整个xml读取到内存中，并构造一个DOM树，也叫对象模型集合，然后只需要操作这个树就可以了。
-对于DOM解析有两个实现：jdom和dom4j解析，两者思路差不多，只不过一个是官方出的，一个是社区出的，通常用dom4j比较多。</p>
+对于DOM解析有两个实现：jdom（官方）和dom4j（社区）解析，两者思路差不多，不过好像用dom4j的比较多。</p>
 <ol start="2">
 <li>事件机制SAX</li>
 </ol>
 <p>即一行一行的读取xml，每遇到一个节点，就产生对应的事件，在事件中可以获取节点属性进行处理。</p>
-<p>DOM的好处是xml的结构在内存中很清晰，能够维护元素与元素之间的关系，但是代价是内存消耗大。SAX不会在内存中保存解析数据，
-所以不怎么消耗内存，但同时也就不能保存元素之间的关系了。当解析下一个元素时，上一个元素的信息就丢弃了，
-因此在使用SAX进行解析时，每当遇到一个节点，要么立即处理要么丢弃。对于比较简单和固定的xml，可以使用if-else来处理，
-比如之前利用SAX实现过一个Excel的解析：<a href="https://shanhm1991.github.io/2019/06/29/20190629/">poi解析. 二. 利用SAX降低内存消耗</a><br>但是，当xml比较复杂而且要求解析时要求保持元素直接的嵌套关系的话，就需要一种更结构化的设计了。
-<font color="#E51508">Digester的思路是提前配置好各节点的处理规则及顺序，然后在解析时，每当遇到一个节点，
-就从规则容器中获取它对应的规则，并进行处理，这样让解析过程更加灵活。</font></p>
-<h4 id="1-1-Digester结构"><a href="#1-1-Digester结构" class="headerlink" title="1.1. Digester结构"></a>1.1. Digester结构</h4><p><img src="/img/20171105.1.jpg" alt=""></p>
-<p>Digester的大体结构如上面类图所示，就是维护了一些解析规则<code>Rule</code>，然后在具体xml解析时进行match和处理。</p>
+<p>DOM的好处是xml的结构在内存中很清晰，能够维护元素与元素之间的关系，但是代价是内存消耗大。SAX不会在内存中保存解析数据，所以不怎么消耗内存，但同时也就不能保存元素之间的关系。
+意味着当解析下一个元素时，上一个元素的信息就丢弃了，因此在使用SAX进行解析时，每当遇到一个节点，要么立即处理要么丢弃。
+之前实现的一个Excel的解析工具：<a href="https://shanhm1991.github.io/2019/06/29/20190629/">poi解析. 二. 利用SAX降低内存消耗</a>，可以比较好的体会两者之间的区别。    </p>
+<p>Tomcat中对于解析<code>server.xml</code>，设计了一种更结构化的工具<code>Digester</code>，其思路是提前配置好各节点的处理规则<code>Rule</code>及顺序，然后在解析时，每当遇到一个节点，
+就从规则容器中获取它对应的规则，这样让解析过程更加灵活，通过类图可以看得更清晰一些</p>
+<p><img src="/img/20171101/20171105.1.jpg" alt=""> </p>
 <h4 id="1-2-Digester实现"><a href="#1-2-Digester实现" class="headerlink" title="1.2. Digester实现"></a>1.2. Digester实现</h4><p>Digester对外提供<code>parse</code>解析接口，并将具体的解析操作委托给<code>XMLReader</code>，同时将<code>XMLReader</code>中的各种<code>Handler</code>处理设置成自己，
 然后在具体解析过程中回调自己的实现。<code>XMLReader</code>相当于定义了一套解析步骤，而Digester封装了它的访问并提供了具体的步骤实现。</p>
 <p>因此，在看Digester的具体步骤实现之前，首先得清楚<font color="#E51508">sax中DefaultHandler解析xml的步骤：
@@ -353,7 +350,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Digester"><span class="toc-text">1. Digester</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Digester结构"><span class="toc-text">1.1. Digester结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-Digester实现"><span class="toc-text">1.2. Digester实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-1-startDocument"><span class="toc-text">1.2.1. startDocument</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-2-startElement"><span class="toc-text">1.2.2. startElement</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-3-characters"><span class="toc-text">1.2.3. characters</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-4-endElement"><span class="toc-text">1.2.4. endElement</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-5-endDocument"><span class="toc-text">1.2.5. endDocument</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Rule实现"><span class="toc-text">3. Rule实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-ObjectCreateRule"><span class="toc-text">3.1. ObjectCreateRule</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-SetPropertiesRule"><span class="toc-text">3.2. SetPropertiesRule</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-SetNextRule"><span class="toc-text">3.3. SetNextRule</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-server-xml加载"><span class="toc-text">4. server.xml加载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Server"><span class="toc-text">Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Listener"><span class="toc-text">Server&#x2F;Listener</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service"><span class="toc-text">Server&#x2F;Service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Executor"><span class="toc-text">Server&#x2F;Service&#x2F;Executor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Connector"><span class="toc-text">Server&#x2F;Service&#x2F;Connector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine"><span class="toc-text">Server&#x2F;Service&#x2F;Engine</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine-Host"><span class="toc-text">Server&#x2F;Service&#x2F;Engine&#x2F;Host</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine-Host-Context"><span class="toc-text">Server&#x2F;Service&#x2F;Engine&#x2F;Host&#x2F;Context</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-思路"><span class="toc-text">1. 思路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-Digester实现"><span class="toc-text">1.2. Digester实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-1-startDocument"><span class="toc-text">1.2.1. startDocument</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-2-startElement"><span class="toc-text">1.2.2. startElement</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-3-characters"><span class="toc-text">1.2.3. characters</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-4-endElement"><span class="toc-text">1.2.4. endElement</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-5-endDocument"><span class="toc-text">1.2.5. endDocument</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Rule实现"><span class="toc-text">3. Rule实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-ObjectCreateRule"><span class="toc-text">3.1. ObjectCreateRule</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-SetPropertiesRule"><span class="toc-text">3.2. SetPropertiesRule</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-SetNextRule"><span class="toc-text">3.3. SetNextRule</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-server-xml加载"><span class="toc-text">4. server.xml加载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Server"><span class="toc-text">Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Listener"><span class="toc-text">Server&#x2F;Listener</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service"><span class="toc-text">Server&#x2F;Service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Executor"><span class="toc-text">Server&#x2F;Service&#x2F;Executor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Connector"><span class="toc-text">Server&#x2F;Service&#x2F;Connector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine"><span class="toc-text">Server&#x2F;Service&#x2F;Engine</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine-Host"><span class="toc-text">Server&#x2F;Service&#x2F;Engine&#x2F;Host</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server-Service-Engine-Host-Context"><span class="toc-text">Server&#x2F;Service&#x2F;Engine&#x2F;Host&#x2F;Context</span></a></li></ol></li></ol></li></ol>
 </div>
 
 
