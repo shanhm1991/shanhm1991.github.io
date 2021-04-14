@@ -85,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 515  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
+   <font style="color: #999;"> words: 512  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
    
    
   
@@ -128,9 +128,9 @@ which currently load JDBC drivers using <code>Class.forName()</code> will contin
 <figure class="highlight java"><figcaption><span class="caption">java.sql.DriverManager</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    loadInitialDrivers();</span><br><span class="line">    println(<span class="string">"JDBC DriverManager initialized"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ol start="2">
-<li>即创建<code>Connection</code></li>
+<li>创建<code>Connection</code></li>
 </ol>
-<p><code>Connection</code>是对连接的封装，不过一般连接都是可复用的，重复创建有一定的代价，因此一般会将<code>Connection</code>的创建交给连接池代理，连接池会将实际的创建委托给<code>DriverManager</code>，
+<p><code>Connection</code>是对连接的封装，由于连接都是可复用的，而且创建有一定的代价，所以一般会将<code>Connection</code>的创建交给连接池代理，连接池再将实际的创建委托给<code>DriverManager</code>，
 并对创建过的<code>Connection</code>进行缓存管理。</p>
 <ol start="3">
 <li>创建<code>Statement</code></li>
