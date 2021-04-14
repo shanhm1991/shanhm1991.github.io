@@ -85,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 13  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 515  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
    
    
   
@@ -112,6 +112,37 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+
+
+<h3 id="Jdbc"><a href="#Jdbc" class="headerlink" title="Jdbc"></a>Jdbc</h3><p>JDBC(Java Data Base Connectivitys)是java为关系型数据库驱动执行SQL提供的一套接口，其实就是制定了一个标准，具体可以分为下面几个步骤：</p>
+<ol>
+<li>加载数据库驱动，并注册到<code>DriverManager</code>中（对于注册动作要求数据库驱动自己完成）</li>
+</ol>
+<p>其中，Jdbc要求数据库厂商提供的<code>Driver</code>在加载自己的时候将自己注册到<code>DriverManager</code>中，这样当用户加载数据库驱动时，比如<code>Class.forName(xxx.Driver)</code>，其实也就完成了注册，
+不过从Jdbc4.0开始，可以省掉手动加载数据库驱动这个步骤了，当然如果手动加载也仍然有效</p>
+<blockquote>
+<p>Applications no longer need to explicitly load JDBC drivers using <code>Class.forName()</code>. Existing programs
+which currently load JDBC drivers using <code>Class.forName()</code> will continue to work withoutmodification.</p>
+</blockquote>
+<p>原因是<code>DriverManager</code>会在其静态域中尝试从类路径下面检测和加载各种<code>Driver</code></p>
+<figure class="highlight java"><figcaption><span class="caption">java.sql.DriverManager</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    loadInitialDrivers();</span><br><span class="line">    println(<span class="string">"JDBC DriverManager initialized"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>即创建<code>Connection</code></li>
+</ol>
+<p><code>Connection</code>是对连接的封装，不过一般连接都是可复用的，重复创建有一定的代价，因此一般会将<code>Connection</code>的创建交给连接池代理，连接池会将实际的创建委托给<code>DriverManager</code>，
+并对创建过的<code>Connection</code>进行缓存管理。</p>
+<ol start="3">
+<li>创建<code>Statement</code></li>
+</ol>
+<p><code>Statement</code>则是对执行SQL的封装，相当于sql执行器，当然它也是可以缓存复用的，如果下次sql相同，那么直接就可以使用之前创建的   </p>
+<ol start="4">
+<li>执行sql，获取结果</li>
+</ol>
+<p>如果是查询，会返回一个<code>ResultSet</code>，其中封装了返回的数据，可以遍历获取</p>
+<p>对于上面的过程，可以简单画一个示意图来表示：</p>
+<p><img src="/img/20180601/20180601.15.jpg" alt=""> </p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight java"><figcaption><span class="caption">TestJdbc.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestJdbc</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException, SQLException </span>&#123;</span><br><span class="line">        Class.forName(<span class="string">"oracle.jdbc.driver.OracleDriver"</span>); <span class="comment">// 可以省去</span></span><br><span class="line">        <span class="keyword">try</span>(Connection connection = </span><br><span class="line">                    DriverManager.getConnection(<span class="string">"jdbc:oracle:thin:@192.168.141.21:1521:orcl"</span>, <span class="string">"scott"</span>, <span class="string">"admin"</span>);</span><br><span class="line">                Statement  statement = connection.createStatement();)&#123;</span><br><span class="line">            String sql = <span class="string">"SELECT id, name FROM user"</span>;</span><br><span class="line">            <span class="keyword">try</span>(ResultSet rs = statement.executeQuery(sql);)&#123; </span><br><span class="line">                <span class="keyword">while</span>(rs.next())&#123;</span><br><span class="line">                    System.out.println(rs.getInt(<span class="string">"id"</span>));</span><br><span class="line">                    System.out.println(rs.getString(<span class="string">"name"</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 <p><br><strong>参考：</strong>  </p>
@@ -213,7 +244,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Jdbc"><span class="toc-text">Jdbc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li></ol></li></ol>
 </div>
 
 
