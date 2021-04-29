@@ -318,71 +318,6 @@
 
 
 
-  <article id="post-20210418.6" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2021-04-17T16:00:00.000Z"><a href="/2021/04/18/20210418.6/">2021-04-18</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2021/04/18/20210418.6/">炒. 菠菜鸡蛋</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h4 id="食材-amp-配料"><a href="#食材-amp-配料" class="headerlink" title="食材&amp;配料"></a>食材&amp;配料</h4><ol>
-<li><p>鸡蛋、菠菜</p>
-</li>
-<li><p>盐、蒜、葱、香油</p>
-</li>
-</ol>
-<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><ol>
-<li><p>鸡蛋打入碗中，加入少许盐，葱花调匀，菠菜去根洗净</p>
-</li>
-<li><p>锅内倒油，加入打好的鸡蛋，煎至大饼状捞出</p>
-</li>
-<li><p>锅内放入油、蒜末爆香，加入菠菜、炒好的鸡蛋爆炒，炒的过程中加入些盐</p>
-</li>
-<li><p>出锅前可以滴一些香油拌一下</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2021/04/18/20210418.6/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
   <article id="post-20210418.3" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -450,6 +385,71 @@
 
 
 
+  <article id="post-20210418.6" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-04-17T16:00:00.000Z"><a href="/2021/04/18/20210418.6/">2021-04-18</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2021/04/18/20210418.6/">炒. 菠菜鸡蛋</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h4 id="食材-amp-配料"><a href="#食材-amp-配料" class="headerlink" title="食材&amp;配料"></a>食材&amp;配料</h4><ol>
+<li><p>鸡蛋、菠菜</p>
+</li>
+<li><p>盐、蒜、葱、香油</p>
+</li>
+</ol>
+<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><ol>
+<li><p>鸡蛋打入碗中，加入少许盐，葱花调匀，菠菜去根洗净</p>
+</li>
+<li><p>锅内倒油，加入打好的鸡蛋，煎至大饼状捞出</p>
+</li>
+<li><p>锅内放入油、蒜末爆香，加入菠菜、炒好的鸡蛋爆炒，炒的过程中加入些盐</p>
+</li>
+<li><p>出锅前可以滴一些香油拌一下</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2021/04/18/20210418.6/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20190704" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -477,17 +477,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>上文已经详细介绍了fom的实现思路。这里主要参照前面的实现介绍几种使用方式</p>
-<p><strong>模块说明</strong></p>
-<ul>
-<li>fom-context: 可以理解成任务模块的上下文，负责创建和组织任务的执行；</li>
-<li>fom-task:    已提供的任务实现，基本与文件处理相关；</li>
-<li>fom-util:    没有上下文依赖的工具类，比如对Text/orc/Excel的读取，适配了统一的Reader，使Excel的读取可以像文本一样简单；</li>
-<li>fom-boot:    将fom的加载放到了springboot的启动过程中；</li>
-<li>fom-example: 一些示例</li>
-</ul>
-<p><strong>maven依赖</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.eto&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;fom-boot&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.0.2&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>接着上文的介绍，下面简单介绍下fom的使用方式。</p>
       
     </div>
 	
@@ -540,10 +530,13 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
-<p>git：<a href="https://github.com/shanhm1991/spring-fom.git" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom.git</a>  （代码在重构中，文档后面更新）</p>
+<p>git：<a href="https://github.com/shanhm1991/spring-fom" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom</a></p>
 </blockquote>
-<p>写这个工具最开始是为了处理各种离线数据文件的需求，涉及到定时处理或者批处理等等，当时也是因为条件有限所以就自己造了这样一个轮子，也由于是为了文件处理，所以就取名为fom。<br>fom中以Context为模块单位，其在内部维护了一个线程池和一个自定义的轮询线程来控制任务的执行计划，并自定义了一套状态转换机制。对于具体的任务则抽象为Task，其相当于在Callable的基础上定义了一个执行的方法模板，
-并加了一些限制，比如强制要求任务id。至于其它操作和功能都是在Context和Task这两个基础上进行，本质上还是围绕着线程池在实现。</p>
+<p>写这个工具最开始是为了处理各种各样的离线数据文件，其中涉及到一些定时任务，而使用现有的工具，比如spring-schedule，总免不了要做一些额外的工作，于是干脆自己尝试造了这样一个轮子，
+也是因为一开始设计是与文件有关，所以就取名为fom。</p>
+<p>概括起来，fom其实也比较简单，其几乎所有的流程逻辑都在<code>ScheduleContext</code>中，里面维护了一个定时线程和一个线程池，另外自定义了一套状态转换机制，每个<code>ScheduleContext</code>相当于一个独立的定时器，
+其生命周期（加载、启动、终止）完全基于spring的应用上下文。对于具体的任务则抽象为<code>Task</code>，其实就是在<code>Callable</code>的基础上定义了一套任务执行的模板，
+整个fom的功能设计，都是围绕<code>ScheduleContext</code>和<code>Task</code>实现的。 </p>
       
     </div>
 	
