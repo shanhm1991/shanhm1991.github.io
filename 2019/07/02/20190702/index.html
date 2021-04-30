@@ -197,6 +197,12 @@ git：https://github.com/shanhm1991/spring-fom
             <td>任务重启</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
+            <td>enableTaskResultStat</td>
+            <td>true</td>
+            <td>是否对任务结果进行缓存统计<br>默认会做一些任务结果统计，并在fom.html上统计出来<br> 不过如果自定义统计行为覆盖了原有方法，则此配置失效</td>
+            <td>立即生效</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
             <td>cancelTaskOnTimeout</td>
             <td>false</td>
             <td>是否中断已经超时的任务，默认不中断</td>
@@ -264,7 +270,7 @@ git：https://github.com/shanhm1991/spring-fom
 <li>支持<font color="#E51508">任务冲突检测</font>；<br>
 可以通过配置<code>enableTaskConflict</code>打开任务冲突检测，根据任务id;<br>
 即如果正在执行的任务中，已经存在当前任务的id，则当前任务被忽略，这个在文件处理时比较有用；</li>
-<li>支持一些简单的界面运维功能（比如任务状态及一些统计信息），需要打开开关<code>@EnableFom(enableFomView=true)</code></li>
+<li>支持一些简单的界面运维（比如任务状态及一些统计信息），不一定非是定时任务，但需要打开开关<code>enableFomView=true</code></li>
 </ol>
 <h3 id="3-概要设计"><a href="#3-概要设计" class="headerlink" title="3. 概要设计"></a>3. 概要设计</h3><h4 id="3-1-状态机制"><a href="#3-1-状态机制" class="headerlink" title="3.1. 状态机制"></a>3.1. 状态机制</h4><p>首先说下<code>ScheduleContext</code>中的几个状态转换规则，如下图：</p>
 <p><img src="/img/20190702/20190702.1.jpg" alt=""></p>
