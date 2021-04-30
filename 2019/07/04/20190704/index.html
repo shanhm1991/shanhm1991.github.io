@@ -85,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
+   <font style="color: #999;"> words: 2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 9min</font>
    
    
   
@@ -158,6 +158,15 @@
 <p>比如下面在spring中注入一个<code>ScheduleContext</code>，然后就可以在controller中注入，用来提交任务，并可以通过fom.html查看统计信息，不过由于<code>ScheduleContext</code>的构建过程依赖于spring，
 分成了多个阶段，在默认构造器中不会进行一些初始化设置，如果想自己new之后直接使用，需要通过有参构造器，比指定<code>needInit</code>为true</p>
 <figure class="highlight java"><figcaption><span class="caption">ExecConfiguration.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExecConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 直接在目标类标识@FomSchedule也一样的效果，只要把定时计划拿掉就可以当成线程池使用了，同样可以注入</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ScheduleContext&lt;Long&gt; <span class="title">testExecutor</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ScheduleContext&lt;&gt;(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-fom-html"><a href="#5-fom-html" class="headerlink" title="5. fom.html"></a>5. fom.html</h3><p>针对上面的示例，看一下在fom.html上支持的操作，首先对于<code>ScheduleContext</code>，除了查看统计信息外，可以支持动态修改配置和启停操作，以及日志级别修改（这里适配了log4j/log4j2/logback）</p>
+<p><img src="/img/20190702/20190702.6.jpg" alt=""></p>
+<p>对于成功的Task，可以查看耗时统计面板； </p>
+<p><img src="/img/20190702/20190702.7.jpg" alt=""></p>
+<p>对于正在运行的Task，可以查看当前的执行堆栈；</p>
+<p><img src="/img/20190702/20190702.8.jpg" alt=""></p>
+<p>对于等待中或者失败的人也可以查看相应的信息，这里就不再赘述。</p>
+
       
     </div>
 	
@@ -167,8 +176,8 @@
 	    
 	<nav id="pagination">
 	  
-		  <a class="alignleft prev" href="/2021/04/18/20210418.2/">
-		    炖. 排骨&amp;萝卜
+		  <a class="alignleft prev" href="/2021/04/18/20210418.4/">
+		    拌. 擂椒皮蛋
 		  </a>
 	  
 	  
@@ -252,7 +261,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-引入依赖"><span class="toc-text">1. 引入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-引入fom"><span class="toc-text">2. 引入fom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-定时任务-FomSchedul定义"><span class="toc-text">3. 定时任务 @FomSchedul定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-SingleScheduleTest"><span class="toc-text">3.1. SingleScheduleTest</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-MultiSchedulTest"><span class="toc-text">3.2. MultiSchedulTest</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-SchedulFactory"><span class="toc-text">3.3. SchedulFactory</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-ScheduleCompleter"><span class="toc-text">3.4. ScheduleCompleter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-ScheduleTerminator"><span class="toc-text">3.5. ScheduleTerminator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-TaskTimeoutHandler"><span class="toc-text">3.6. TaskTimeoutHandler</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-非定时场景"><span class="toc-text">4. 非定时场景</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-引入依赖"><span class="toc-text">1. 引入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-引入fom"><span class="toc-text">2. 引入fom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-定时任务-FomSchedul定义"><span class="toc-text">3. 定时任务 @FomSchedul定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-SingleScheduleTest"><span class="toc-text">3.1. SingleScheduleTest</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-MultiSchedulTest"><span class="toc-text">3.2. MultiSchedulTest</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-SchedulFactory"><span class="toc-text">3.3. SchedulFactory</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-ScheduleCompleter"><span class="toc-text">3.4. ScheduleCompleter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-ScheduleTerminator"><span class="toc-text">3.5. ScheduleTerminator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-TaskTimeoutHandler"><span class="toc-text">3.6. TaskTimeoutHandler</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-非定时场景"><span class="toc-text">4. 非定时场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-fom-html"><span class="toc-text">5. fom.html</span></a></li></ol></li></ol>
 </div>
 
 
