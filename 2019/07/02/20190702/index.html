@@ -92,7 +92,7 @@ git：https://github.com/shanhm1991/spring-fom
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.8k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
+   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
    
    
   
@@ -299,7 +299,8 @@ git：https://github.com/shanhm1991/spring-fom
 <p>此时忽略一切外部中断请求，直至所有任务结束，线程池关闭后由定时线程将状态切换为<code>STOPPED</code>；</p>
 <h4 id="3-2-定时线程"><a href="#3-2-定时线程" class="headerlink" title="3.2. 定时线程"></a>3.2. 定时线程</h4><p>下面介绍下<code>ScheduleContext</code>中定时线程的执行流程，可以简要概括成下图：</p>
 <p><img src="/img/20190702/20190702.5.jpg" alt=""> </p>
-<h3 id="4-详细设计"><a href="#4-详细设计" class="headerlink" title="4. 详细设计"></a>4. 详细设计</h3><p>根据上面定时线程和状态转换的介绍，其实已经可以联想到大部分功能的实现了，下面画一些尽量详细的流程图，主要是为了后面复查代码实现方便（实际上与现有实现有些出入，后面再更新） </p>
+<h3 id="4-详细设计"><a href="#4-详细设计" class="headerlink" title="4. 详细设计"></a>4. 详细设计</h3><p>根据上面的介绍，其实已经可以大概想到大部分功能的实现了，下面介绍详细实现，通过详细的流程图来进行说明，其中一些关键的配置和判断可以参考上面的配置和具体的代码实现，
+其实主要也是为了方便后面进行代码复查（实际实现与下图已经有些出入，后面有时间再更新）</p>
 <p><img src="/img/20190702/20190702.2.jpg" alt=""></p>
 <p>其中，对于图中的<code>completeLatch.await(taskOverTime)</code>可以细化如下</p>
 <p><img src="/img/20190702/20190702.3.jpg" alt=""></p>
