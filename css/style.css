@@ -762,7 +762,7 @@ footer .addthis iframe {
   text-shadow: 0 0 1px #fff;
 }
 .entry .gist {
-  background: #eee;
+  background: #f0f0f0;
   border: 1px solid #ddd;
   margin-top: 15px;
   padding: 7px 15px;
@@ -774,7 +774,7 @@ footer .addthis iframe {
 }
 .entry .gist .gist-file {
   border: none;
-  font-family: inherit;
+  font-family: Microsoft-YaHei;
   margin: 0;
   font-size: 0.9em;
 }
@@ -801,7 +801,7 @@ footer .addthis iframe {
   color: #258fb8;
 }
 figure.highlight {
-  background: #eee;
+  background: #f0f0f0;
   margin-top: 10px;
   padding: 0px;
   border-radius: 2px;
@@ -842,7 +842,7 @@ table {
   width: 768px;
   padding-left: 5px;
   border-left: 1px solid #fff;
-  color: #666;
+  color: #000;
 }
 .nine {
   display: inline-block;
@@ -866,7 +866,7 @@ pre .doctype,
 pre .pi,
 pre .lisp .string,
 pre .javadoc {
-  color: #93a1a1;
+  color: #317152;
   font-style: Roboto-Regular;
 }
 pre .keyword,
@@ -877,7 +877,10 @@ pre .css .tag,
 pre .request,
 pre .status,
 pre .nginx .title {
-  color: #859900;
+  font-family: Microsoft-YaHei;
+  font-weight: bold;
+  color: #7f0055;
+  font-size: xx-small;
 }
 pre .number,
 pre .command,
@@ -887,7 +890,7 @@ pre .phpdoc,
 pre .tex .formula,
 pre .regexp,
 pre .hexcolor {
-  color: #2aa198;
+  color: #2a00ff;
 }
 pre .title,
 pre .localvars,
@@ -898,7 +901,7 @@ pre .identifier,
 pre .vhdl,
 pre .literal,
 pre .id {
-  color: #268bd2;
+  color: #e33e12;
 }
 pre .attribute,
 pre .variable,
@@ -908,7 +911,7 @@ pre .constant,
 pre .class .title,
 pre .parent,
 pre .haskell .type {
-  color: #b58900;
+  color: #7042b7;
 }
 pre .preprocessor,
 pre .preprocessor .keyword,
