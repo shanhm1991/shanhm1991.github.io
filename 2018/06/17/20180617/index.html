@@ -67,7 +67,7 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <h2><font style="color: #999;">articles:  79 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  80 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -189,7 +189,7 @@
 <p>为了方便厘清下面具体的实现，这里画两个简单UMl图进行辅助：</p>
 <p><img src="/img/20180601/20180601.20.jpg" alt=""> </p>
 <ul>
-<li><p><code>TransactionDefinition</code>：事务的基础信息<br>String getName()：事务名称<br>int getIsolationLevel()：事务隔离级别<br>int getPropagationBehavior()：事务传播行为<br>int getTimeout()：事务超时时间<br>boolean isReadOnly()：事务是否只读     </p>
+<li><p><code>TransactionDefinition</code>：事务的属性定义<br>String getName()：事务名称<br>int getIsolationLevel()：事务隔离级别<br>int getPropagationBehavior()：事务传播行为<br>int getTimeout()：事务超时时间<br>boolean isReadOnly()：事务是否只读     </p>
 </li>
 <li><p><code>TransactionStatus</code>：事务的状态信息<br>isNewTransaction()：当前事务否是新事务<br>hasSavepoint()：当前事务是否有保存点<br>setRollbackOnly()：设置当前事务应该回滚<br>isRollbackOnly(()：返回当前事务是否应该回滚<br>flush()：用于刷新底层会话中的修改到数据库，一般用于刷新如Hibernate/JPA的会话，可能对如JDBC类型的事务无任何影响<br>isCompleted():当前事务否已经完成     </p>
 </li>
@@ -349,7 +349,7 @@ spring会通过<code>TransactionInfo</code>实例中的信息进行回滚等操�
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2018/06/19/20180619/">
-		    spring. mvc
+		    spring. Mvc
 		  </a>
 	  
 	  
