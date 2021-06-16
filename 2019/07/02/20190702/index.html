@@ -92,7 +92,7 @@ git：https://github.com/shanhm1991/spring-fom
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
+   <font style="color: #999;"> words: 1.8k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
    
    
   
@@ -256,21 +256,18 @@ git：https://github.com/shanhm1991/spring-fom
 <ol>
 <li>支持最基本的定时任务，以及三种定时语义（cron/fixedRate/fixedDelay）；</li>
 <li>支持<font color="#E51508">定时多任务</font>执行；<br>
-可以通过接口<code>ScheduleFactory</code>来创建批量任务，或者通过<code>@Scheduled</code>来指定多个任务方法；<br>
-可以通过接口<code>ScheduleCompleter</code>自定义多任务全部完成时的处理；</li>
-<li>支持动态（启动/停止）定时任务，即<font color="#E51508">可以在运行时不重启应用的情况下启动或关掉定时任务</font>；<br>
-可以通过接口<code>ScheduleTerminator</code>自定义定时器关闭时的处理；</li>
-<li>支持手动干预定时任务的执行计划，比如<font color="#E51508">当任务在等待下次执行时机时，可以手动使其立即执行</font>；
-如果任务当前正在执行，</li>
-<li>支持<font color="#E51508">动态修改任务配置</font>（包括定时计划），并可以进行持久化，即重启后修改依然有效；</li>
+实现接口<code>ScheduleFactory</code>来可以创建批任务，或者通过<code>@Scheduled</code>来指定多个任务方法；<br>实现接口<code>ScheduleCompleter</code>可以定义任务全部完成时的处理；</li>
+<li>支持动态（启动/停止）定时任务，即<font color="#E51508">可以在不重启应用的情况下启动或关掉指定的定时任务</font>；<br>
+实现接口<code>ScheduleTerminator</code>可以自定义定时器关闭时的处理；</li>
+<li>支持手动干预定时任务的执行计划。比如当定时任务未到执行时机时，可以手动使其立即执行；<br>
+如果当前任务正在执行则有两种策略，直接忽略或者等执行完成后立即在重新执行一次； </li>
+<li>支持<font color="#E51508">动态修改任务配置</font>（包括定时计划），并支持持久化，即重启后修改依然有效；</li>
 <li>支持<font color="#E51508">任务超时检测和处理</font>；<br>
-可以通过接口<code>TaskTimeoutHandler</code>自定义超时任务的处理；<br>
-对于多任务则可以通过配置<code>detectTimeoutOnEachTask</code>决定是否针对每个任务单独检测超时；<br>
-另外，可以通过配置<code>cancelTaskOnTimeout</code>决定是否取消超时的任务（时机在<code>TaskTimeoutHandler</code>处理之后）；</li>
+实现接口<code>TaskTimeoutHandler</code>可以自定义任务超时的处理；<br>
+如果多任务则可以通过<code>detectTimeoutOnEachTask</code>配置是否针对每个任务单独检测超时；另外，可以通过<code>cancelTaskOnTimeout</code>配置是否取消超时的任务（基于Interrupt中断）；</li>
 <li>支持<font color="#E51508">任务冲突检测</font>；<br>
-可以通过配置<code>enableTaskConflict</code>打开任务冲突检测，根据任务id;<br>
-即如果正在执行的任务中，已经存在当前任务的id，则当前任务被忽略，这个在文件处理时比较有用；</li>
-<li>支持一些简单的界面运维（比如任务状态及一些统计信息），不一定非是定时任务，但需要打开开关<code>enableFomView=true</code></li>
+可以通过配置<code>enableTaskConflict</code>打开任务冲突检测，根据任务id;即如果正在执行的任务中，已经 存在当前任务的id，则当前任务被忽略，这个在文件处理时比较有用；</li>
+<li>提供简单的界面运维，比如查看任务统计和状态，修改配置，另外提供了对任务日志级别的动态修改，并在实现中适配了log4j/log4j2/logback</li>
 </ol>
 <h3 id="3-概要设计"><a href="#3-概要设计" class="headerlink" title="3. 概要设计"></a>3. 概要设计</h3><h4 id="3-1-状态机制"><a href="#3-1-状态机制" class="headerlink" title="3.1. 状态机制"></a>3.1. 状态机制</h4><p>首先说下<code>ScheduleContext</code>中的几个状态转换规则，如下图：</p>
 <p><img src="/img/20190702/20190702.1.jpg" alt=""></p>
@@ -299,11 +296,7 @@ git：https://github.com/shanhm1991/spring-fom
 <p>此时忽略一切外部中断请求，直至所有任务结束，线程池关闭后由定时线程将状态切换为<code>STOPPED</code>；</p>
 <h4 id="3-2-定时线程"><a href="#3-2-定时线程" class="headerlink" title="3.2. 定时线程"></a>3.2. 定时线程</h4><p>下面介绍下<code>ScheduleContext</code>中定时线程的执行流程，可以简要概括成下图：</p>
 <p><img src="/img/20190702/20190702.5.jpg" alt=""> </p>
-<h3 id="4-详细设计"><a href="#4-详细设计" class="headerlink" title="4. 详细设计"></a>4. 详细设计</h3><p>根据上面的介绍，其实已经可以大概想到大部分功能的实现了，下面介绍详细实现，通过详细的流程图来进行说明，其中一些关键的配置和判断可以参考上面的配置和具体的代码实现，
-其实主要也是为了方便后面进行代码复查（实际实现与下图已经有些出入，后面有时间再更新）</p>
-<p><img src="/img/20190702/20190702.2.jpg" alt=""></p>
-<p>其中，对于图中的<code>completeLatch.await(taskOverTime)</code>可以细化如下</p>
-<p><img src="/img/20190702/20190702.3.jpg" alt=""></p>
+<h3 id="4-详细设计"><a href="#4-详细设计" class="headerlink" title="4. 详细设计"></a>4. 详细设计</h3><p>根据上面的介绍，其实已经可以大概想到大部分功能的实现了，由于详细设计已与一开始的实现有所区别，后面有时间再整理</p>
 
       
     </div>
