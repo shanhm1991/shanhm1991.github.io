@@ -6,8 +6,19 @@
   <title>输入输出系统（I/O） | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言I/O功能模块通常简称为I/O接口，也叫适配器，指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件。为了保证处理器和不同外设之间高效和可靠的交互，
-CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶段：I/O接口与外设之间的数据传送，以及CPU与I/O接口之间的数据传送。">
+  <meta name="description" content="引言I/O功能模块通常简称为：I/O接口，也叫适配器，指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件。为了保证处理器和不同外设之间高效和可靠的交互，
+CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶段：I/O接口与外设之间的数据传送，以及CPU与I/O接口之间的数据传送。
+下图展示了CPU、I/O接口和外围设备之间的连接关系。其中外围设备自身带有设备控制器，它是控制外围设备进行操作的控制部件，它通过I/O接口接收来自CPU传送的各种信息，
+并根据设备的不同要求将这些信息传送到设备，或者从设备中读出信息传送到I/O接口。
+ 
+一个标准的I/O接口可以连接一个或多个设备，其结构也如图中所示，通常包括如下功能：
+
+控制：接口模块根据指令信息来控制外围设备的动作，比如启动或者关闭；
+缓冲：接口模块在外围设备和计算机其他部件之间作为一个缓冲器，以补偿各种设备在速度上的差异；
+状态：接口模块监视外围设备的工作状态并保存，比如准备就绪或者忙，供CPU询问外围设备状态时用；
+转换：接口模块可以完成数据转换，保证数据能在外围设备和CPU之间正确的传送；
+整理：接口模块可以完成一些特别功能，当需要时可以修改字计数器或者当前内存地址寄存器；
+程序中断：当外围设备向CPU请求某种动作时，接口模块会产生一个中断请求信号到CPU;">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -86,7 +97,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 242  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 965  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 3min</font>
    
    
   
@@ -112,16 +123,43 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>I/O功能模块通常简称为I/O接口，也叫适配器，<font style="color:red;">指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件</font>。为了保证处理器和不同外设之间高效和可靠的交互，
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>I/O功能模块通常简称为：I/O接口，也叫适配器，<font style="color:red;">指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件</font>。为了保证处理器和不同外设之间高效和可靠的交互，
 CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶段：I/O接口与外设之间的数据传送，以及CPU与I/O接口之间的数据传送。</p>
+<p>下图展示了CPU、I/O接口和外围设备之间的连接关系。其中外围设备自身带有设备控制器，它是控制外围设备进行操作的控制部件，它通过I/O接口接收来自CPU传送的各种信息，
+并根据设备的不同要求将这些信息传送到设备，或者从设备中读出信息传送到I/O接口。</p>
 <p><img src="/img/20180202/20180202.6.jpg" alt=""> </p>
-<a id="more"></a>
+<p>一个标准的I/O接口可以连接一个或多个设备，其结构也如图中所示，通常包括如下功能：</p>
+<ul>
+<li>控制：接口模块根据指令信息来控制外围设备的动作，比如启动或者关闭；</li>
+<li>缓冲：接口模块在外围设备和计算机其他部件之间作为一个缓冲器，以补偿各种设备在速度上的差异；</li>
+<li>状态：接口模块监视外围设备的工作状态并保存，比如准备就绪或者忙，供CPU询问外围设备状态时用；</li>
+<li>转换：接口模块可以完成数据转换，保证数据能在外围设备和CPU之间正确的传送；</li>
+<li>整理：接口模块可以完成一些特别功能，当需要时可以修改字计数器或者当前内存地址寄存器；</li>
+<li>程序中断：当外围设备向CPU请求某种动作时，接口模块会产生一个中断请求信号到CPU;<a id="more"></a>
 
-
-<p>为了与CPU交互信息的方便，在I/O接口内一般会设置一些可以被CPU直接访问的寄存器，称为端口。
+</li>
+</ul>
+<h3 id="传输过程"><a href="#传输过程" class="headerlink" title="传输过程"></a>传输过程</h3><p>为了与CPU交互信息的方便，在I/O接口内一般会设置一些可以被CPU直接访问的寄存器，称为端口。
 例如接收来自CPU等主控设备的控制命令的寄存器称为<font style="font-weight:bold; color:red;">命令口</font>，
 向CPU报告I/O设备工作状态的寄存器称为<font style="font-weight:bold; color:red;">状态口</font>，
 在外设和总线间交换数据的缓存寄存器称为<font style="font-weight:bold; color:red;">数据口</font>。</p>
+<p><img src="/img/20180202/20180202.7.jpg" alt=""> </p>
+<p>为了便于CPU访问端口，也需要对端口编排地址，有两种方式，一种是统一编址，即将接口中的控制寄存器、状态寄存器以及数据寄存器与内存单元一样看待，将它们联合在一起编址，
+这样CPU就可以直接使用访问内存的指令其访问I/O设备端口了。另一种是I/O独立编址，即内存地址和I/O设备地址是分开的。</p>
+<p>由于接口与CPU的速度大致相当，如果从读写接口内寄存器的角度看，CPU读写端口与读写内存是相似的，只不过相对于内存，端口的数据是动态变化的，因此访问端口需要确保信息的有效性。</p>
+<p>对于输入过程：</p>
+<ol>
+<li>CPU将一个地址值放到地址总线上，选择某一输入设备；</li>
+<li>CPU等候输入设备的数据成为有效；</li>
+<li>CPU从数据总线读入数据，并放入对应的寄存器中；</li>
+</ol>
+<p>对于输出过程：</p>
+<ol>
+<li>CPU将一个地址值放到地址总线上，选择某一输出设备；</li>
+<li>CPU将数据放到数据总线上；</li>
+<li>输出设备认为数据有效，将数据取走；</li>
+</ol>
+<h3 id="传输方式"><a href="#传输方式" class="headerlink" title="传输方式"></a>传输方式</h3><p>根据上面的传输过程可以知道，问题的关键在于：<font style="color:red;">如何知道数据是有效的</font>。</p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《计算机组成原理》</li>
@@ -221,7 +259,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#传输过程"><span class="toc-text">传输过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#传输方式"><span class="toc-text">传输方式</span></a></li></ol></li></ol>
 </div>
 
 
