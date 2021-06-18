@@ -6,7 +6,9 @@
   <title>Linux I/O模型 | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言操作系统负责对计算机资源进行管理，并对上层应用提供支持。对于io操作也是如此，标准的IO操作一般是由操作系统将数据从外围设备拷贝到内核缓存，再由内核缓存拷贝到用户进程缓存中">
+  <meta name="description" content="引言操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
+为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为内核空间，
+一部分为用户空间。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -85,7 +87,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 91  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 2.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
    
    
   
@@ -111,9 +113,70 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。对于io操作也是如此，标准的IO操作一般是由操作系统将数据从外围设备拷贝到内核缓存，再由内核缓存拷贝到用户进程缓存中</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
+为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为<font style="font-weight:bold; color:red;">内核空间</font>，
+一部分为<font style="font-weight:bold; color:red;">用户空间</font>。</p>
 <a id="more"></a>
 
+<h3 id="1-磁盘IO"><a href="#1-磁盘IO" class="headerlink" title="1. 磁盘IO"></a>1. 磁盘IO</h3><h4 id="1-1-缓存IO"><a href="#1-1-缓存IO" class="headerlink" title="1.1. 缓存IO"></a>1.1. 缓存IO</h4><p>大多数文件系统的默认IO操作都是缓存IO，所以一般也称为标准I/O操作。以读操作为例，应用程序需要走read系统调用，这样数据会先拷贝到操作系统的内核空间，
+然后再从内核空间拷贝到应用进程空间。反之写操作，需要走write调用，也是类似的。</p>
+<p><img src="/img/20180202/20180202.8.jpg" alt=""> </p>
+<p>其好处是可以减少对磁盘设备的I/O操作，但是由于读写操作都先要经过内核缓存，然后再从缓存复制到用户空间，所以多了一次内存复制操作。</p>
+<h4 id="1-2-直接IO"><a href="#1-2-直接IO" class="headerlink" title="1.2. 直接IO"></a>1.2. 直接IO</h4><p>直接IO是相对缓存IO来说的，在Linux中打开文件，如果不指定flags为O_DIRECT，那么就是使用缓存I/O来对文件进行读写操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * pathname：指定要打开的文件路径</span></span><br><span class="line"><span class="comment"> * flags：指定打开文件的标志</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>O_DIRECT (Since Linux 2.4.10)<br>       Try to minimize cache effects of the I/O to and from this file.  In general this
+       will degrade performance, but it is useful in special situations, such  as  when
+       applications do their own caching.  File I/O is done directly to/from user space
+       buffers.  The I/O is synchronous, that is, at the completion  of  a  read(2)  or
+       write(2), data is guaranteed to have been transferred.  </p>
+</blockquote>
+<p>意思是，为了写文件或者读文件的I/O高度缓存开销的最小化。一般情况下，该标志会降低性能，但是，在特殊情况下，还是有作用的，例如当应用程序使用自己的高速缓存的时候。
+文件I/O直接接触到用户内存。I/O操作是同步的，也就是说，一旦read(2)或者write(2)完成，数据可以保证传输完毕。</p>
+<p>一般的在数据库服务中，会更倾向于选择自己的缓存机制，因为它们往往比操作系统更了解磁盘中存放的数据，从而可以提供一种更加有效的缓存机制来提高数据库中数据的存取性能。</p>
+<h4 id="1-3-内存映射IO"><a href="#1-3-内存映射IO" class="headerlink" title="1.3. 内存映射IO"></a>1.3. 内存映射IO</h4><p>操作系统一般都会采用虚拟内存（参考笔记：<a href="https://shanhm1991.github.io/2018/02/02/20180202/">计算机 存储系统</a>），比如对于32位操作系统，应用进程可以拥有3G的空间，
+但是对于同时存在的进程，如何让每个进程都感觉自己拥有整个的内存空间，而且互相不影响呢？</font>其实每个进程都有自己的内存映射表，
+维护着虚地址与内存物理地址的映射关系，进程在实际运行时，可能只需对少部分地址进行映射，即只占用实际物理内存的一部分，这样对于CPU而言，当发生进程切换时，
+只需要切换进程对应的地址映射表，就能访问到对应的进程空间了。</p>
+<p><font style="color:red;">内存映射就是将文件的磁盘空间映射到一块虚拟内存地址上，之后对这段区域的读写完全是对内存的操作，而不再调用read/write操作，
+然后数据在内存中的修改会引起脏页回写，从而保证数据更新到磁盘</font>，当然后面会写磁盘的时候还是同步IO操作。</p>
+<p>对应的，Linux提供了相关的系统调用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * addr：指定映射的起始地址, 通常设为NULL, 由系统指定</span></span><br><span class="line"><span class="comment"> * len： 映射到内存的文件长度</span></span><br><span class="line"><span class="comment"> * prot：映射区的保护方式</span></span><br><span class="line"><span class="comment"> *       PROT_EXEC: 映射区可被执行</span></span><br><span class="line"><span class="comment"> *       PROT_READ: 映射区可被读取</span></span><br><span class="line"><span class="comment"> *       PROT_WRITE: 映射区可被写入</span></span><br><span class="line"><span class="comment"> * flags：映射区的特性</span></span><br><span class="line"><span class="comment"> *        MAP_SHARED：写入映射区的数据会复制回文件, 且允许其他映射该文件的进程共享</span></span><br><span class="line"><span class="comment"> *        MAP_PRIVATE：对映射区的写入操作会产生一个映射区的复制(copy-on-write), 对此区域所做的修改不会写回原文件</span></span><br><span class="line"><span class="comment"> * fd：   由open返回的文件描述符，代表要映射的文件</span></span><br><span class="line"><span class="comment"> * offset：以文件开始处的偏移量，必须是分页大小的整数倍，通常为0，表示从文件头开始映射</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">mmap</span> <span class="params">( <span class="keyword">void</span> * addr , <span class="keyword">size_t</span> len , <span class="keyword">int</span> prot , <span class="keyword">int</span> flags ,<span class="keyword">int</span> fd , <span class="keyword">off_t</span> offset )</span></span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 解除映射，成功返回0，否则返回－1</span></span><br><span class="line"><span class="comment"> * start：指向的映射内存</span></span><br><span class="line"><span class="comment"> * length：表示欲取消的内存大小</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *start,<span class="keyword">size_t</span> length)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-网络I-O"><a href="#2-网络I-O" class="headerlink" title="2. 网络I/O"></a>2. 网络I/O</h3><p>对于网络I/O，由于网络上数据分组到达的延时比较高，因此需要考虑如何降低对应用进程的阻塞影响。在具体讨论之前，需要先搞清楚同步和阻塞的概念：</p>
+<ul>
+<li><p><font style="font-weight:bold; color:red;">同步与异步</font>：描述的是用户线程的处理方式，同步指用户线程发起IO请求后需要等待或者轮询，直到内核IO操作完成后才能继续执行；
+而异步是指用户线程发起IO请求后仍然继续执行，当内核IO操作完成后会通知用户线程，或者调用用户线程注册的回调函数。</p>
+</li>
+<li><p><font style="font-weight:bold; color:red;">阻塞与非阻塞</font>：描述是内核IO的处理方式，阻塞是内核等待IO操作需要彻底完成后才返回；
+而非阻塞是指IO操作被调用后立即返回给用户一个状态值，无需等到IO操作彻底完成。</p>
+</li>
+</ul>
+<p>对于具体的I/O操作可以抽象成对Socket流的读写，分为两个阶段：</p>
+<ol>
+<li>数据准备：等待网络上的数据分组到达，然后复制到内核缓冲区</li>
+<li>数据拷贝：将数据从内核缓冲区复制到应用进程空间</li>
+</ol>
+<h4 id="2-1-阻塞IO"><a href="#2-1-阻塞IO" class="headerlink" title="2.1. 阻塞IO"></a>2.1. 阻塞IO</h4><p>这种处理比较简单，即用户进程走recv系统调用，然后交给内核并进行等待，内核完成操作后再返回给进程，而进程在等待期间将一直处于阻塞状态，而这里的等待包括了上面两个阶段。</p>
+<p>其优点是可以及时返回数据，无延迟，而且简单省事，而缺点则是进程一直在等待，程序性能降低。</p>
+<h4 id="2-2-非阻塞IO"><a href="#2-2-非阻塞IO" class="headerlink" title="2.2. 非阻塞IO"></a>2.2. 非阻塞IO</h4><p>即内核在进程发出调用后会立即响应一个状态，但这个状态可能是数据还没准备好，因此需要进程自己处理轮询检测状态。   </p>
+<p>其优点是进程可以在等待期间去做一些其它事情，而缺点是数据接收可能延迟。</p>
+<h4 id="2-3-多路复用IO"><a href="#2-3-多路复用IO" class="headerlink" title="2.3. 多路复用IO"></a>2.3. 多路复用IO</h4><p>这种方式相当于内核为进程提供了一个状态的轮询服务，进程将对应的socket流注册到轮询服务，这样由操作系统统一负责对多个sockect。站在进程的角度，这种方式依然是阻塞的，
+区别在于之前是直接阻塞在socket上，而现在是阻塞在轮询服务上。</p>
+<p>其优点是可以节约计算机资源，这样一个进程就可以用来同时服务多个socket请求了。</p>
+<p>具体的，Linux提供了三种轮询服务：</p>
+<ul>
+<li><font style="font-weight:bold; color:red;">select</font>：select系统调用允许程序同时在多个底层文件描述符上，等待输入的到达或输出完成。以数组形式组织文件描述符，64位机器默认2048个。
+当有数据准备好时，无法感知具体是哪个流OK了，所以需要一个一个的遍历，函数的时间复杂度为O(n)。</li>
+<li><font style="font-weight:bold; color:red;">poll</font>：以链表形式存储文件描述符，没有长度限制。本质与select相同，函数的时间复杂度也为O(n)。</li>
+<li><font style="font-weight:bold; color:red;">epoll</font>：基于事件驱动的，如果某个流准备好了，会以事件通知，知道具体是哪个流，因此不需要遍历，函数的时间复杂度为O(1)。</li>
+</ul>
+<h4 id="2-4-信号驱动式IO"><a href="#2-4-信号驱动式IO" class="headerlink" title="2.4. 信号驱动式IO"></a>2.4. 信号驱动式IO</h4><p>这种方式是先注册一个信号处理函数，然后进程继续运行，当数据准备好的时候，内核向应用程序发送一个信号，进程对信号进行捕捉，并且调用信号处理函数来获取数据报。</p>
+<p>其在数据准备阶段是不阻塞的，当数据准备完成之后，会主动通知进程数据已经准备完成，对用户进程做一个回调，但数据拷贝阶段仍是阻塞的，等待数据拷贝。</p>
+<h4 id="2-5-异步IO"><a href="#2-5-异步IO" class="headerlink" title="2.5. 异步IO"></a>2.5. 异步IO</h4><p>进程进行aio_read系统调用之后，无论内核数据是否准备好，都直接返回，然后进程去做别的事情。等到socket数据准备好了，内核直接复制数据给进程空间，然后从向进程发送通知。</p>
+<p>其在整个阶段都是非阻塞的，直接由内核完成后通知进程。</p>
+<!--more-->
 
 
 <p><br><strong>参考：</strong></p>
@@ -215,7 +278,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-磁盘IO"><span class="toc-text">1. 磁盘IO</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-缓存IO"><span class="toc-text">1.1. 缓存IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-直接IO"><span class="toc-text">1.2. 直接IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-内存映射IO"><span class="toc-text">1.3. 内存映射IO</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-网络I-O"><span class="toc-text">2. 网络I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-阻塞IO"><span class="toc-text">2.1. 阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-非阻塞IO"><span class="toc-text">2.2. 非阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-多路复用IO"><span class="toc-text">2.3. 多路复用IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-信号驱动式IO"><span class="toc-text">2.4. 信号驱动式IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-异步IO"><span class="toc-text">2.5. 异步IO</span></a></li></ol></li></ol></li></ol>
 </div>
 
 

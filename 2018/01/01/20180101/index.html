@@ -6,17 +6,7 @@
   <title>java IO | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言任何计算机程序都需要处理的问题概括起来核心有两点，即运算处理(cpu)和输入输出(input/output)。如果从应用程序的角度看，要提升程序的性能，主要是在操作系统提供的基础之上，
-尽量提高cpu的利用率以及减少不必要的io操作。一般讨论io操作，主要涉及的是内存、磁盘、网络(网卡)，事实上除了cpu自身的缓存之外，其与其它所有设备之间的交互都是输入输出，比如键盘、屏幕(显卡)，
-当然它们都通过统一的数据总线与cpu进行交互。
-这里简单介绍一下总线的概念，计算机中主要有三条总线：
-
-数据总线：即CPU与内存或其他设备之间的数据通道，其决定了CPU和外界的数据传送速度。每条传输线一次只能传输1位二进制数据，比如32位系统，其一次只能传输32位二进制数据，
-数据总线即数据线数量之和。
-地址总线：CPU通过地址总线来指定存储单元，其决定了CPU所能访问的最大内存空间，比如32位系统最大寻址为4G，即2的32次方。
-控制总线：CPU通过控制总线对外部设备进行控制，其决定了CPU能连接控制的设备总数。
-
-类似的，也就更容易理解什么叫网络带宽了，百科上的解释是指在单位时间内能传输的数据量，这样解释没什么问题，但不太形象，其实带宽就是指有多少条线路，即一次传输最大能传送的二进制位数。">
+  <meta name="description" content="引言">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -95,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 590  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
+   <font style="color: #999;"> words: 2  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -121,27 +111,9 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>任何计算机程序都需要处理的问题概括起来核心有两点，即运算处理(cpu)和输入输出(input/output)。如果从应用程序的角度看，要提升程序的性能，主要是在操作系统提供的基础之上，
-尽量提高cpu的利用率以及减少不必要的io操作。<br>一般讨论io操作，主要涉及的是<strong>内存</strong>、<strong>磁盘</strong>、<strong>网络</strong>(网卡)，事实上除了cpu自身的缓存之外，其与其它所有设备之间的交互都是输入输出，比如键盘、屏幕(显卡)，
-当然它们都通过统一的数据总线与cpu进行交互。</p>
-<p>这里简单介绍一下总线的概念，计算机中主要有三条总线：</p>
-<ul>
-<li>数据总线：即CPU与内存或其他设备之间的数据通道，其决定了CPU和外界的数据传送速度。每条传输线一次只能传输1位二进制数据，比如32位系统，其一次只能传输32位二进制数据，
-数据总线即数据线数量之和。</li>
-<li>地址总线：CPU通过地址总线来指定存储单元，其决定了CPU所能访问的最大内存空间，比如32位系统最大寻址为4G，即2的32次方。</li>
-<li>控制总线：CPU通过控制总线对外部设备进行控制，其决定了CPU能连接控制的设备总数。</li>
-</ul>
-<p>类似的，也就更容易理解什么叫网络<strong>带宽</strong>了，百科上的解释是指在单位时间内能传输的数据量，这样解释没什么问题，但不太形象，其实带宽就是指有多少条线路，即一次传输最大能传送的二进制位数。</p>
-<a id="more"></a>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
 
-<h3 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h3><p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。对于io操作也是如此，标准的IO操作一般是由操作系统将数据从外围设备拷贝到内核缓存，再由内核缓存拷贝到用户进程缓存中</p>
-<p>针对输入输出的对象，  </p>
-<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><h3 id="Java-I-O"><a href="#Java-I-O" class="headerlink" title="Java I/O"></a>Java I/O</h3><p><a href="https://blog.csdn.net/MiracleWW/article/details/114747638" target="_blank" rel="noopener">https://blog.csdn.net/MiracleWW/article/details/114747638</a></p>
-<p><a href="https://blog.csdn.net/zhanglh046/article/details/115439677" target="_blank" rel="noopener">https://blog.csdn.net/zhanglh046/article/details/115439677</a></p>
-<p><a href="https://www.cnblogs.com/sunsky303/p/8962628.html" target="_blank" rel="noopener">https://www.cnblogs.com/sunsky303/p/8962628.html</a></p>
-<p><a href="https://blog.csdn.net/u011635492/article/details/80575844" target="_blank" rel="noopener">https://blog.csdn.net/u011635492/article/details/80575844</a></p>
-<p><a href="https://www.jianshu.com/p/486b0965c296" target="_blank" rel="noopener">https://www.jianshu.com/p/486b0965c296</a></p>
-<p><a href="https://blog.csdn.net/github_37882837/article/details/90672881" target="_blank" rel="noopener">https://blog.csdn.net/github_37882837/article/details/90672881</a></p>
+
 
       
     </div>
@@ -237,7 +209,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IO模型"><span class="toc-text">IO模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java-I-O"><span class="toc-text">Java I&#x2F;O</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
 </div>
 
 
