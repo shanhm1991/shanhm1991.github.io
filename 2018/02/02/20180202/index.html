@@ -85,12 +85,12 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 2.8k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 10min</font>
+   <font style="color: #999;"> words: 2.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 10min</font>
    
    
   
   <div class="categories">
-    <a href="/categories/操作系统/">操作系统</a>
+    <a href="/categories/Linux笔记/">Linux笔记</a>
   </div>
 
 
@@ -178,7 +178,8 @@
 比如一些sql语句不合理的情况。</p>
 <p><font style="color:red;">识别RAM内存瓶颈</font>：通过虚拟内存机制，可以将RAM移到SWAP磁盘上，这样会出现虚拟内存的页导出和页导入现象，页导出并不能说明RAM瓶颈，
 虚拟内存系统经常会进行页导出，但经常出现页导入操作就表明服务器需要更多的内存了，页导入需要从SWAP复制回RAM，导致服务器速度变慢。即如果si和so长期非零的话，则可能存在内存瓶颈。</p>
-<p>也可以通过<code>free</code>查看内存和交换区的统计情况</p>
+<p><code>wa</code>表示CPU用于等待IO的时间，如果内存够大，可以修改文件<code>/proc/sys/vm/swappiness</code>中的值，它表示实际内存区和交换区进行数据交换的倾向性大小，默认60，设置小一点，
+以便降低数据交换次数。但如果交换区Swap本身就使用的很少，说明修改也没有意义，可能进程本身就是偏IO类型的任务，对于内存和交换区的使用统计情况可以通过<code>free</code>查看：</p>
 <figure class="highlight java"><figcaption><span class="caption">root@ubuntu:~# free -m</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:           <span class="number">7966</span>         <span class="number">462</span>        <span class="number">6094</span>          <span class="number">58</span>        <span class="number">1408</span>        <span class="number">7116</span></span><br><span class="line">Swap:          <span class="number">2044</span>           <span class="number">0</span>        <span class="number">2044</span></span><br></pre></td></tr></table></figure>
 
 <p><br><strong>参考：</strong></p>
@@ -213,7 +214,7 @@
         
   
   <div class="categories">
-    <a href="/categories/操作系统/">操作系统</a>
+    <a href="/categories/Linux笔记/">Linux笔记</a>
   </div>
 
 
