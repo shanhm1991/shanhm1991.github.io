@@ -85,7 +85,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.5k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 5min</font>
+   <font style="color: #999;"> words: 2.8k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 10min</font>
    
    
   
@@ -96,6 +96,11 @@
 
    
    
+  
+  <div class="tags">
+    <a href="/tags/vmstat/">vmstat</a>
+  </div>
+
 
    
    <hr style="background-color: #ddd; height:1px; border:none;" /><br>
@@ -147,9 +152,39 @@
 其中的每个表项指向一个页表。</p>
 <p>另外，由于页表本身存储在主存中，因而即使逻辑页已经在主存中，CPU也至少要访问两次主存才能获取一次数据，为了避免主存访问次数的增多，可以对页表本身实行二级缓存，
 把页表中活跃的部分放在高速缓存中，这个专门用于页表缓存的高速缓存通常称为转换后援缓冲器（TLB），也称为快表，而保存在主存中的完成页表则称为慢表，其目的是加快地址变换。</p>
+<h4 id="Linux（vmstat）"><a href="#Linux（vmstat）" class="headerlink" title="Linux（vmstat）"></a>Linux（vmstat）</h4><p>在Linux内存管理中，主要是通过调页Paging和交换Swapping来完成内存调度。调页算法是将内存中最近不常使用的页面换到磁盘上，把活动页面保留在内存中供进程使用。
+分页(Page)写入磁盘的过程被称作Page-Out，分页(Page)从磁盘重新回到内存的过程被称作Page-In。</p>
+<p>当系统内核发现可运行内存变少时，就会通过Page-Out来释放一部分物理内存。如果Page-out频繁不断的发生，系统效能会急剧下降。
+这时的系统已经运行非常慢或进入暂停状态，这种状态也被称为thrashing(颠簸)。</p>
+<p>对应的，Linux提供了一些运维命令来检测系统的状态，<strong>vmstat：</strong></p>
+<p>语法：<br>vmstat [-a] [-n] [-S unit] [delay [ count]]<br>vmstat [-s] [-n] [-S unit]<br>vmstat [-m] [-n] [delay [ count]]<br>vmstat [-d] [-n] [delay [ count]]<br>vmstat [-p disk partition] [-n] [delay [ count]]<br>vmstat [-f]<br>vmstat [-V]    </p>
+<p>选项：<br>-V：显示vmstat版本<br>-S：使用指定单位显示，比如k 、K 、m 、M<br>-f：显示从系统启动至今fork的数量<br>delay：刷新时间间隔，默认只显示一次<br>count：刷新次数<br>-a：显示活跃和非活跃内存<br>-m：显示slabinfo<br>-n：只在开始时显示一次字段名称<br>-s：显示内存相关统计信息及多种系统活动数量<br>-d：显示磁盘相关统计信息<br>-p：显示指定磁盘分区统计信息    </p>
+<p>示例：</p>
+<figure class="highlight java"><figcaption><span class="caption">root@ubuntu:~# vmstat -S M 5</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> <span class="number">1</span>  <span class="number">0</span>      <span class="number">0</span>   <span class="number">6095</span>    <span class="number">343</span>   <span class="number">1065</span>    <span class="number">0</span>    <span class="number">0</span>     <span class="number">3</span>     <span class="number">8</span>  <span class="number">134</span>   <span class="number">16</span>  <span class="number">0</span>  <span class="number">0</span> <span class="number">100</span>  <span class="number">0</span>  <span class="number">0</span></span><br><span class="line"> <span class="number">0</span>  <span class="number">0</span>      <span class="number">0</span>   <span class="number">6095</span>    <span class="number">343</span>   <span class="number">1065</span>    <span class="number">0</span>    <span class="number">0</span>     <span class="number">0</span>     <span class="number">0</span>  <span class="number">128</span>  <span class="number">305</span>  <span class="number">0</span>  <span class="number">0</span> <span class="number">100</span>  <span class="number">0</span>  <span class="number">0</span></span><br><span class="line"> <span class="number">0</span>  <span class="number">0</span>      <span class="number">0</span>   <span class="number">6095</span>    <span class="number">343</span>   <span class="number">1065</span>    <span class="number">0</span>    <span class="number">0</span>     <span class="number">0</span>     <span class="number">0</span>  <span class="number">127</span>  <span class="number">308</span>  <span class="number">0</span>  <span class="number">0</span> <span class="number">100</span>  <span class="number">0</span>  <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Procs（进程）：<br><code>r</code>: 运行队列中进程数量（可以判断是否需要增加CPU，如果长期大于1的话）<br><code>b</code>: 等待IO的进程数量</li>
+<li>memory（内存）：<br><code>swpd</code>: 使用虚拟内存大小（如果swpd不为0，但是si，so长期为0的话，这种情况不会影响系统性能）<br><code>free</code>: 空闲物理内存大小<br><code>buff</code>: 缓存文件元数据（inode 等）和来自原始块设备的数据<br><code>cache</code>: 缓存文件数据块和内存映射信息（即调用mmap()映射的文件）<br>（如果cache的值大，说明cache的文件数多，如果频繁访问的文件都能被cache处，那么磁盘的读IO bi会非常小。）</li>
+<li>Swap：<br><code>si</code>: 每秒从交换区写到内存的大小，由磁盘调入内存<br><code>so</code>: 每秒写入交换区的内存大小，由内存调入磁盘<br>（如果这si和so长期大于，系统性能会受到影响，磁盘IO和CPU都会被消耗。有时看空闲内存(free)很少的或接近于0时，就认为内存不够用了，其实不能光看这一点，还要结合si和so，
+<font style="color:red;">如果free很少，但是si和so也很少，那么不用担心，系统性能这时不会受到影响</font>）</li>
+<li>IO：<br><code>bi</code>: 每秒读取的块数<br><code>bo</code>: 每秒写入的块数<br>（随机磁盘读写的时候，bi和bo越大，CPU花在IO等待上的值也会越大）</li>
+<li>system：<br><code>in</code>: 每秒中断数，包括时钟中断。<br><code>cs</code>: 每秒上下文切换数。<br>（in和cs越大，说明由内核消耗的CPU时间越多，相应的花在进程上的时间就越少）</li>
+<li>cpu：<br><code>us</code>: 即user time，用户进程执行时间百分比（us值高说明用户进程消耗的CPU时间多，但如果长期超过50%，则可以考虑优化程序）<br><code>sy</code>: 即system time，内核执行时间百分比（sy值高说明内核消耗的CPU资源多，这并不是良性表现，应该检查原因）<br><code>id</code>: 空闲时间百分比<br><code>wa</code>: CPU等待IO时间，wa值高说明磁盘IO繁忙<br><code>st</code>: 即stolen，偷取时间，与虚拟机相关    </li>
+</ul>
+<p><strong>总结：</strong></p>
+<p><font style="color:red;">识别CPU瓶颈</font>：当<code>us</code> ＋ <code>sy</code>接近于100时，表示CPU正接近于满负荷工作，但CPU满负荷工作并不能说明什么，Linux总会试图让CPU尽可能的繁忙，
+以便任务的吞吐量最大化，最能确定CPU瓶颈的还是<code>r</code>，即队列中等待运行的进程数。</p>
+<p>如果<code>r</code>长期大于CPU个数（可以通过<code>cat /proc/cpuinfo|grep processor|wc -l</code>查看CPU数），且<code>id</code>很低，则说明cpu的负荷很重，一般出现这种情况，应用程序的问题会比较大一些，
+比如一些sql语句不合理的情况。</p>
+<p><font style="color:red;">识别RAM内存瓶颈</font>：通过虚拟内存机制，可以将RAM移到SWAP磁盘上，这样会出现虚拟内存的页导出和页导入现象，页导出并不能说明RAM瓶颈，
+虚拟内存系统经常会进行页导出，但经常出现页导入操作就表明服务器需要更多的内存了，页导入需要从SWAP复制回RAM，导致服务器速度变慢。即如果si和so长期非零的话，则可能存在内存瓶颈。</p>
+<p>也可以通过<code>free</code>查看内存和交换区的统计情况</p>
+<figure class="highlight java"><figcaption><span class="caption">root@ubuntu:~# free -m</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:           <span class="number">7966</span>         <span class="number">462</span>        <span class="number">6094</span>          <span class="number">58</span>        <span class="number">1408</span>        <span class="number">7116</span></span><br><span class="line">Swap:          <span class="number">2044</span>           <span class="number">0</span>        <span class="number">2044</span></span><br></pre></td></tr></table></figure>
+
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《计算机组成原理》</li>
+<li><a href="https://access.redhat.com/solutions/1160343" target="_blank" rel="noopener">https://access.redhat.com/solutions/1160343</a></li>
 </ol>
 
       
@@ -183,6 +218,11 @@
 
 
         
+  
+  <div class="tags">
+    <a href="/tags/vmstat/">vmstat</a>
+  </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style">
@@ -241,7 +281,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#存储器层次"><span class="toc-text">存储器层次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#虚存储器"><span class="toc-text">虚存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#页式虚拟存储器"><span class="toc-text">页式虚拟存储器</span></a></li></ol></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#存储器层次"><span class="toc-text">存储器层次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#虚存储器"><span class="toc-text">虚存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#页式虚拟存储器"><span class="toc-text">页式虚拟存储器</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux（vmstat）"><span class="toc-text">Linux（vmstat）</span></a></li></ol></li></ol></li></ol>
 </div>
 
 
