@@ -97,7 +97,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.5k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 5min</font>
+   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 7min</font>
    
    
   
@@ -139,7 +139,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 
 </li>
 </ul>
-<h3 id="传输过程"><a href="#传输过程" class="headerlink" title="传输过程"></a>传输过程</h3><p>为了与CPU交互信息的方便，在I/O接口内一般会设置一些可以被CPU直接访问的寄存器，称为端口。
+<h3 id="1-传输过程"><a href="#1-传输过程" class="headerlink" title="1. 传输过程"></a>1. 传输过程</h3><p>为了与CPU交互信息的方便，在I/O接口内一般会设置一些可以被CPU直接访问的寄存器，称为端口。
 例如接收来自CPU等主控设备的控制命令的寄存器称为<font style="font-weight:bold; color:red;">命令口</font>，
 向CPU报告I/O设备工作状态的寄存器称为<font style="font-weight:bold; color:red;">状态口</font>，
 在外设和总线间交换数据的缓存寄存器称为<font style="font-weight:bold; color:red;">数据口</font>。</p>
@@ -159,8 +159,13 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 <li>CPU将数据放到数据总线上；</li>
 <li>输出设备认为数据有效，将数据取走；</li>
 </ol>
-<h3 id="传输方式"><a href="#传输方式" class="headerlink" title="传输方式"></a>传输方式</h3><p>根据上面的传输过程可以知道，问题的关键在于：<font style="color:red;">如何知道数据是有效的</font>。</p>
-<h3 id="Linux（iostat）"><a href="#Linux（iostat）" class="headerlink" title="Linux（iostat）"></a>Linux（iostat）</h3><p>示例：</p>
+<h3 id="2-传输方式"><a href="#2-传输方式" class="headerlink" title="2. 传输方式"></a>2. 传输方式</h3><p>根据传输过程，传输方式涉及到CPU与I/O接口，以及I/O接口与外设之间的不同处理，这里只简单讨论下CPU与I/O接口之间的方式，但不管那边的处理方式，都有一个等待数据变成有效的过程，
+问题是<font style="color:red;">如何知道数据是有效的</font></p>
+<h4 id="2-1-简单I-O方式"><a href="#2-1-简单I-O方式" class="headerlink" title="2.1. 简单I/O方式"></a>2.1. 简单I/O方式</h4><p>简单地假设外设始终处于就绪状态，数据传送时，将不作任何的状态检测。当然，只有当I/O接口与外设之间采用无条件传送时，CPU与I/O接口直接才能采用无条件传送方式。
+当简单外设作为输入设备时，可采用三态缓冲器与数据总线相连，作为输出设备时，一般采用锁存器。</p>
+<h4 id="2-2-程序轮询方式"><a href="#2-2-程序轮询方式" class="headerlink" title="2.2. 程序轮询方式"></a>2.2. 程序轮询方式</h4><h4 id="2-3-程序中断方式"><a href="#2-3-程序中断方式" class="headerlink" title="2.3. 程序中断方式"></a>2.3. 程序中断方式</h4><h4 id="2-4-DMA方式"><a href="#2-4-DMA方式" class="headerlink" title="2.4. DMA方式"></a>2.4. DMA方式</h4><h4 id="2-5-通道和输入-输出处理器"><a href="#2-5-通道和输入-输出处理器" class="headerlink" title="2.5. 通道和输入/输出处理器"></a>2.5. 通道和输入/输出处理器</h4><h3 id="Linux（iostat）"><a href="#Linux（iostat）" class="headerlink" title="Linux（iostat）"></a>Linux（iostat）</h3><p>Linux上可以通过命令<code>iostat</code>来系统设备的IO负载情况，其首次运行时显示自系统启动开始的各项统计信息，之后的运行将显示自上次运行该命令以后的统计信息。
+一般用来查看磁盘的活动统计情况，但是它只能对系统的整体情况进行分析，而不能针对某个进程分析（可以通过命令<code>iotop</code>）。</p>
+<p>示例：</p>
 <figure class="highlight java"><figcaption><span class="caption">root@ubuntu:~# iostat -p -x</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Linux <span class="number">4.4</span><span class="number">.0</span>-<span class="number">62</span>-generic (ubuntu) 	<span class="number">06</span>/<span class="number">18</span>/<span class="number">2021</span> 	_x86_64_	(<span class="number">4</span> CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           <span class="number">0.06</span>    <span class="number">0.00</span>    <span class="number">0.10</span>    <span class="number">0.01</span>    <span class="number">0.00</span>   <span class="number">99.84</span></span><br><span class="line"></span><br><span class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">sda               <span class="number">0.00</span>     <span class="number">0.44</span>    <span class="number">0.28</span>    <span class="number">0.34</span>     <span class="number">2.67</span>     <span class="number">8.16</span>    <span class="number">34.95</span>     <span class="number">0.00</span>    <span class="number">1.20</span>    <span class="number">0.31</span>    <span class="number">1.96</span>   <span class="number">0.45</span>   <span class="number">0.03</span></span><br><span class="line">sda1              <span class="number">0.00</span>     <span class="number">0.44</span>    <span class="number">0.28</span>    <span class="number">0.34</span>     <span class="number">2.66</span>     <span class="number">8.16</span>    <span class="number">34.93</span>     <span class="number">0.00</span>    <span class="number">1.21</span>    <span class="number">0.31</span>    <span class="number">1.96</span>   <span class="number">0.45</span>   <span class="number">0.03</span></span><br><span class="line">sda2              <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">2.00</span>     <span class="number">0.00</span>    <span class="number">2.00</span>    <span class="number">2.00</span>    <span class="number">0.00</span>   <span class="number">2.00</span>   <span class="number">0.00</span></span><br><span class="line">sda5              <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.01</span>     <span class="number">0.00</span>    <span class="number">88.16</span>     <span class="number">0.00</span>    <span class="number">0.72</span>    <span class="number">0.72</span>    <span class="number">0.00</span>   <span class="number">0.24</span>   <span class="number">0.00</span></span><br></pre></td></tr></table></figure>
 
 <p>%user：  CPU处在用户模式下的时间百分比<br>%nice：  CPU处在带NICE值的用户模式下的时间百分比<br>%system：CPU处在系统模式下的时间百分比<br>%iowait：CPU等待输入输出完成时间的百分比<br>%steal： 管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比<br>%idle：  CPU空闲时间百分比     </p>
@@ -266,7 +271,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#传输过程"><span class="toc-text">传输过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#传输方式"><span class="toc-text">传输方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux（iostat）"><span class="toc-text">Linux（iostat）</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-传输过程"><span class="toc-text">1. 传输过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-传输方式"><span class="toc-text">2. 传输方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-简单I-O方式"><span class="toc-text">2.1. 简单I&#x2F;O方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-程序轮询方式"><span class="toc-text">2.2. 程序轮询方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-程序中断方式"><span class="toc-text">2.3. 程序中断方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-DMA方式"><span class="toc-text">2.4. DMA方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-通道和输入-输出处理器"><span class="toc-text">2.5. 通道和输入&#x2F;输出处理器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux（iostat）"><span class="toc-text">Linux（iostat）</span></a></li></ol></li></ol>
 </div>
 
 
