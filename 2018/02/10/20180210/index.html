@@ -54,7 +54,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
-  <span style="color:#ADA5A0; height:20px;line-height:30px;">学习需要的不是一腔热血，而是长期的计划，要系统的理解和思考，不能人云亦云，断章取义...</span>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">不人云亦云，不断章取义</span>
   <h2><font style="color: #999;">articles:  85 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
@@ -98,7 +98,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 7min</font>
+   <font style="color: #999;"> words: 2.6k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 9min</font>
    
    
   
@@ -164,7 +164,28 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 问题是<font style="color:red;">如何知道数据是有效的</font></p>
 <h4 id="2-1-简单I-O方式"><a href="#2-1-简单I-O方式" class="headerlink" title="2.1. 简单I/O方式"></a>2.1. 简单I/O方式</h4><p>简单地假设外设始终处于就绪状态，数据传送时，将不作任何的状态检测。当然，只有当I/O接口与外设之间采用无条件传送时，CPU与I/O接口直接才能采用无条件传送方式。
 当简单外设作为输入设备时，可采用三态缓冲器与数据总线相连，作为输出设备时，一般采用锁存器。</p>
-<h4 id="2-2-程序轮询方式"><a href="#2-2-程序轮询方式" class="headerlink" title="2.2. 程序轮询方式"></a>2.2. 程序轮询方式</h4><h4 id="2-3-程序中断方式"><a href="#2-3-程序中断方式" class="headerlink" title="2.3. 程序中断方式"></a>2.3. 程序中断方式</h4><h4 id="2-4-DMA方式"><a href="#2-4-DMA方式" class="headerlink" title="2.4. DMA方式"></a>2.4. DMA方式</h4><h4 id="2-5-通道和输入-输出处理器"><a href="#2-5-通道和输入-输出处理器" class="headerlink" title="2.5. 通道和输入/输出处理器"></a>2.5. 通道和输入/输出处理器</h4><h3 id="Linux（iostat）"><a href="#Linux（iostat）" class="headerlink" title="Linux（iostat）"></a>Linux（iostat）</h3><p>Linux上可以通过命令<code>iostat</code>来系统设备的IO负载情况，其首次运行时显示自系统启动开始的各项统计信息，之后的运行将显示自上次运行该命令以后的统计信息。
+<h4 id="2-2-程序轮询方式"><a href="#2-2-程序轮询方式" class="headerlink" title="2.2. 程序轮询方式"></a>2.2. 程序轮询方式</h4><p>一般外设每传送完一次数据总有进行一段时间的处理或准备才能传送下一次数据，因此在数据传送之前，CPU需要通过接口对目标设备的状态进行查询。如果外设已经准备好了则传数据，
+如果未准备好则要不断地查询并等待，直到外设准备好信息交互。</p>
+<p>程序轮询方式是一种简单的输入输出方式，数据在CPU和外设之间的传送完全交给计算机程序控制，其优点是CPU的操作和外设的操作能够同步，而且软硬件结构都比较简单。</p>
+<p><img src="/img/20180202/20180202.9.jpg" alt=""> </p>
+<ol>
+<li>接到总线上的每个设备都预先给定了设备地址码。CPU执行I/O指令时需要把指令中的设备地址送到总线上，用以指示CPU要选择的设备。每个设备接口都包含一个设备选择电路，
+用来判断总线上呼叫的是不是本设备，如果是则进入工作状态，否则不予理睬。</li>
+<li>CPU将读指令发送到控制寄存器，询问状态</li>
+<li>I/O控制器此时将状态寄存器置为未就绪</li>
+<li>设备开始工作，读取数据，然后返回给I/O控制器，并且向I/O控制器报告设备的状态，比如是否已经读取完了</li>
+<li>I/O控制器将数据拷贝到数据寄存器</li>
+<li>I/O控制器更新状态寄存器为就绪，之前未就绪状态下CPU一直轮询访问</li>
+<li>检测到就绪状态后，CPU从接口数据寄存器将数据拷贝到自己的寄存器中，并重置接口状态寄存器的状态</li>
+<li>CPU将寄存器中读取的数据送到主存中</li>
+</ol>
+<h4 id="2-3-程序中断方式"><a href="#2-3-程序中断方式" class="headerlink" title="2.3. 程序中断方式"></a>2.3. 程序中断方式</h4><p>中断是一种程序切换的方式，当外部发生某些随机事件需要及时处理时，无论CPU正在执行哪一条指令，都可以通过中断响应的方式暂停当前程序的执行，转而执行另一段中断服务程序。
+在高优先级的中断服务程序执行完毕后，再返回之前的程序从被中断的地方继续执行，但是有几个问题需要考虑</p>
+<p>尽管外界中断请求是随机的，但CPU只有在当前一条指令执行完毕后，执行公共操作时才受理中断请求，这样才不至于干扰当前指令的执行。通常外界的中断请求信号存放在接口的中断锁存器中，
+每当一条执行执行结束时，CPU便检测中断请求信号</p>
+<p>为了在中断服务程序执行完毕后，能正确地返回到原主程序中被中断的断点继续执行，必须将程序计数器PC的内容，以及当前执行指令结束后CPU的状态，包括寄存器的内容和一些状态标志位，
+都保存到堆栈中。</p>
+<h4 id="2-4-DMA方式"><a href="#2-4-DMA方式" class="headerlink" title="2.4. DMA方式"></a>2.4. DMA方式</h4><h4 id="2-5-通道和输入-输出处理器"><a href="#2-5-通道和输入-输出处理器" class="headerlink" title="2.5. 通道和输入/输出处理器"></a>2.5. 通道和输入/输出处理器</h4><h3 id="Linux（iostat）"><a href="#Linux（iostat）" class="headerlink" title="Linux（iostat）"></a>Linux（iostat）</h3><p>Linux上可以通过命令<code>iostat</code>来系统设备的IO负载情况，其首次运行时显示自系统启动开始的各项统计信息，之后的运行将显示自上次运行该命令以后的统计信息。
 一般用来查看磁盘的活动统计情况，但是它只能对系统的整体情况进行分析，而不能针对某个进程分析（可以通过命令<code>iotop</code>）。</p>
 <p>示例：</p>
 <figure class="highlight java"><figcaption><span class="caption">root@ubuntu:~# iostat -p -x</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Linux <span class="number">4.4</span><span class="number">.0</span>-<span class="number">62</span>-generic (ubuntu) 	<span class="number">06</span>/<span class="number">18</span>/<span class="number">2021</span> 	_x86_64_	(<span class="number">4</span> CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           <span class="number">0.06</span>    <span class="number">0.00</span>    <span class="number">0.10</span>    <span class="number">0.01</span>    <span class="number">0.00</span>   <span class="number">99.84</span></span><br><span class="line"></span><br><span class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">sda               <span class="number">0.00</span>     <span class="number">0.44</span>    <span class="number">0.28</span>    <span class="number">0.34</span>     <span class="number">2.67</span>     <span class="number">8.16</span>    <span class="number">34.95</span>     <span class="number">0.00</span>    <span class="number">1.20</span>    <span class="number">0.31</span>    <span class="number">1.96</span>   <span class="number">0.45</span>   <span class="number">0.03</span></span><br><span class="line">sda1              <span class="number">0.00</span>     <span class="number">0.44</span>    <span class="number">0.28</span>    <span class="number">0.34</span>     <span class="number">2.66</span>     <span class="number">8.16</span>    <span class="number">34.93</span>     <span class="number">0.00</span>    <span class="number">1.21</span>    <span class="number">0.31</span>    <span class="number">1.96</span>   <span class="number">0.45</span>   <span class="number">0.03</span></span><br><span class="line">sda2              <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">2.00</span>     <span class="number">0.00</span>    <span class="number">2.00</span>    <span class="number">2.00</span>    <span class="number">0.00</span>   <span class="number">2.00</span>   <span class="number">0.00</span></span><br><span class="line">sda5              <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.01</span>     <span class="number">0.00</span>    <span class="number">88.16</span>     <span class="number">0.00</span>    <span class="number">0.72</span>    <span class="number">0.72</span>    <span class="number">0.00</span>   <span class="number">0.24</span>   <span class="number">0.00</span></span><br></pre></td></tr></table></figure>
