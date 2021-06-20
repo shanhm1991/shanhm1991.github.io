@@ -45,7 +45,7 @@
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">不人云亦云，不断章取义</span>
-  <h2><font style="color: #999;">articles:  85 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  86 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -189,12 +189,10 @@
 <p>其在数据准备阶段是不阻塞的，当数据准备完成之后，会主动通知进程数据已经准备完成，对用户进程做一个回调，但数据拷贝阶段仍是阻塞的，等待数据拷贝。</p>
 <h4 id="2-5-异步IO"><a href="#2-5-异步IO" class="headerlink" title="2.5. 异步IO"></a>2.5. 异步IO</h4><p>进程进行aio_read系统调用之后，无论内核数据是否准备好，都直接返回，然后进程去做别的事情。等到socket数据准备好了，内核直接复制数据给进程空间，然后再向进程发送通知。</p>
 <p>其在整个阶段都是非阻塞的，直接由内核完成后通知进程。</p>
-<!--more-->
-
-
-<p><br><strong>参考：</strong></p>
+<h4 id="2-6-Linux零拷贝-sendfile"><a href="#2-6-Linux零拷贝-sendfile" class="headerlink" title="2.6 Linux零拷贝 sendfile"></a>2.6 Linux零拷贝 sendfile</h4><p><br><strong>参考：</strong></p>
 <ol>
 <li>《计算机组成原理》</li>
+<li><a href="https://blog.csdn.net/u010649766/article/details/80339988" target="_blank" rel="noopener">https://blog.csdn.net/u010649766/article/details/80339988</a> </li>
 </ol>
 
       
@@ -291,7 +289,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-磁盘IO"><span class="toc-text">1. 磁盘IO</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-缓存IO"><span class="toc-text">1.1. 缓存IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-直接IO"><span class="toc-text">1.2. 直接IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-内存映射IO"><span class="toc-text">1.3. 内存映射IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令：iostat"><span class="toc-text">命令：iostat</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-网络I-O"><span class="toc-text">2. 网络I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-阻塞IO"><span class="toc-text">2.1. 阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-非阻塞IO"><span class="toc-text">2.2. 非阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-多路复用IO"><span class="toc-text">2.3. 多路复用IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-信号驱动式IO"><span class="toc-text">2.4. 信号驱动式IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-异步IO"><span class="toc-text">2.5. 异步IO</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-磁盘IO"><span class="toc-text">1. 磁盘IO</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-缓存IO"><span class="toc-text">1.1. 缓存IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-直接IO"><span class="toc-text">1.2. 直接IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-内存映射IO"><span class="toc-text">1.3. 内存映射IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令：iostat"><span class="toc-text">命令：iostat</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-网络I-O"><span class="toc-text">2. 网络I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-阻塞IO"><span class="toc-text">2.1. 阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-非阻塞IO"><span class="toc-text">2.2. 非阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-多路复用IO"><span class="toc-text">2.3. 多路复用IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-信号驱动式IO"><span class="toc-text">2.4. 信号驱动式IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-异步IO"><span class="toc-text">2.5. 异步IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-Linux零拷贝-sendfile"><span class="toc-text">2.6 Linux零拷贝 sendfile</span></a></li></ol></li></ol></li></ol>
 </div>
 
 
