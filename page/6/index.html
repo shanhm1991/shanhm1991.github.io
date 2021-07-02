@@ -195,7 +195,13 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java中，任务执行的主要抽象是<code>Executor</code>。虽然它是一个简单的接口，但却为灵活且强大的异步任务执行框架提供了基础，它提供了一种标准的方法将任务的提交过程与执行过程解耦开来。</p>
+<figure class="highlight java"><figcaption><span class="caption">java.util.concurrent.Executor</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Executor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">excute</span><span class="params">(Runnable command)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>ExecutorService</code>在<code>Executor</code>的基础上提供了对执行服务生命周期的管理，<code>ThreadPoolExecutor</code>作为具体的实现，提供了对线程<code>Thread</code>以及任务<code>Runnable</code>的管理，
+其基本思路是利用阻塞队列对任务进行管理，将任务的提交与执行解耦，调用者只负责提交任务到队列，然后自己管理的线程负责从队列中获取并执行任务。
+<code>ThreadPoolExecutor</code>最主要的职责就是负责在何时以怎样的方式创建线程，然后又在怎样的时机让线程结束。</p>
+<p><img src="/img/20180401/20180401.7.jpg" alt=""> </p>
       
     </div>
 	
