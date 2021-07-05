@@ -129,7 +129,7 @@
   
   
     <h1 class="title">
-       <a href="/2018/04/05/20180405/">JUC. FutureTask（TODO）</a>
+       <a href="/2018/04/05/20180405/">JUC. FutureTask（doing）</a>
     </h1>
     
   
@@ -143,7 +143,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><img src="/img/20180401/20180401.12.jpg" alt=""> </p>
       
     </div>
 	
@@ -200,7 +200,7 @@
 
 <p><code>ExecutorService</code>在<code>Executor</code>的基础上提供了对执行服务生命周期的管理，<code>ThreadPoolExecutor</code>作为具体实现，提供了对线程<code>Thread</code>以及任务<code>Runnable</code>的管理，
 其基本思路是利用阻塞队列对任务进行管理，调用者只负责提交任务到队列，然后自己管理的线程负责从队列中获取并执行任务。
-<code>ThreadPoolExecutor</code>最主要的职责就是负责在何时以怎样的方式创建线程，然后又在怎样的时机让线程结束。</p>
+<code>ThreadPoolExecutor</code>最主要的职责就是负责在何时以怎样的方式创建线程，然后又在怎样的时机让线程结束，其主要目的就是希望在实现任务异步执行的同时能尽量复用线程，避免无节制的频繁创建造成对系统资源的开销</p>
 <p><img src="/img/20180401/20180401.7.jpg" alt=""> </p>
       
     </div>
