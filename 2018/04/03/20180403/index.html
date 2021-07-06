@@ -95,7 +95,7 @@ ThreadPoolExecutor最主要的职责就是负责在何时以怎样的方式创�
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 5.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 23min</font>
+   <font style="color: #999;"> words: 5.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 22min</font>
    
    
   
@@ -215,10 +215,6 @@ ThreadPoolExecutor最主要的职责就是负责在何时以怎样的方式创�
 <figure class="highlight java"><figcaption><span class="caption">java.util.concurrent.ThreadPoolExecutor</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getActiveCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock mainLock = <span class="keyword">this</span>.mainLock;</span><br><span class="line">    mainLock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (Worker w : workers)</span><br><span class="line">            <span class="keyword">if</span> (w.isLocked())</span><br><span class="line">                ++n;</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        mainLock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><br><strong>参考：</strong></p>
-<ol>
-<li><a href="https://www.jianshu.com/p/ba42949fc926" target="_blank" rel="noopener">https://www.jianshu.com/p/ba42949fc926</a></li>
-<li><a href="https://cloud.tencent.com/developer/article/1124439" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1124439</a></li>
-</ol>
 
       
     </div>
@@ -230,7 +226,7 @@ ThreadPoolExecutor最主要的职责就是负责在何时以怎样的方式创�
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2018/04/05/20180405/">
-		    JUC. FutureTask（doing）
+		    JUC. FutureTask
 		  </a>
 	  
 	  
@@ -258,20 +254,23 @@ ThreadPoolExecutor最主要的职责就是负责在何时以怎样的方式创�
 
 
         
-  <div class="addthis addthis_toolbox addthis_default_style">
+  <div class="addthis addthis_toolbox addthis_default_style ">
     
     
       <a class="addthis_button_tweet"></a>
     
-    
-      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
-    
-    
-    <a class="addthis_counter addthis_pill_style"></a>
-  </div>
-  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
 
-        
+    
+	
+    
+	
+    
+
+    <a class="addthis_counter addthis_pill_style"></a>
+	
+  </div>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+ 		        
       
       <div class="clearfix"></div>
     </footer>
