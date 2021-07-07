@@ -3,15 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>JUC. ThreadLocal（doing） | Essay</title>
+  <title>JUC. ThreadLocal | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言">
+  <meta name="description" content="引言ThreadLocal从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值，其非常适用在一些需要线程上下文变量的场景中，比如连接池或事务。
+那么如何让一个变量在各个线程中拥有不同的值，并且互不影响呢？其思路就是，让每个线程各自持有一个私有的ThreadLocalMap，然后用一个共享的key来保存各自的值，而这个key就是ThreadLocal，这样每个ThreadLocal也就对应一个本地变量，
+只是设计者在这里将具体map的get/put/remove操作封装成了ThreadLocal的接口来对外提供，从而让开发更加简洁方便">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="JUC. ThreadLocal（doing）"/>
+  <meta property="og:title" content="JUC. ThreadLocal"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -74,7 +76,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        JUC. ThreadLocal（doing）
+        JUC. ThreadLocal
     </h1>
     
     
@@ -86,7 +88,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 9  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 408  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -112,11 +114,23 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值，其非常适用在一些需要线程上下文变量的场景中，比如连接池或事务。</p>
+<p>那么如何让一个变量在各个线程中拥有不同的值，并且互不影响呢？其思路就是，让每个线程各自持有一个私有的ThreadLocalMap，然后用一个共享的key来保存各自的值，而这个key就是ThreadLocal，这样每个ThreadLocal也就对应一个本地变量，
+只是设计者在这里将具体map的get/put/remove操作封装成了ThreadLocal的接口来对外提供，从而让开发更加简洁方便</p>
+<a id="more"></a>
+
+<h3 id="1-结构"><a href="#1-结构" class="headerlink" title="1. 结构"></a>1. 结构</h3><figure class="highlight java"><figcaption><span class="caption">java.lang.ThreadLocal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">extends</span> <span class="title">WeakReference</span>&lt;<span class="title">ThreadLocal</span>&lt;?&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">    Object value;</span><br><span class="line"></span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">        <span class="keyword">super</span>(k);</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-接口"><a href="#2-接口" class="headerlink" title="2. 接口"></a>2. 接口</h3><h4 id="2-1-set"><a href="#2-1-set" class="headerlink" title="2.1. set"></a>2.1. set</h4><figure class="highlight java"><figcaption><span class="caption">java.lang.ThreadLocal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    ThreadLocalMap map = getMap(t);</span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>)</span><br><span class="line">        map.set(<span class="keyword">this</span>, value);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        createMap(t, value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ThreadLocalMap <span class="title">getMap</span><span class="params">(Thread t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">createMap</span><span class="params">(Thread t, T firstValue)</span> </span>&#123;</span><br><span class="line">    t.threadLocals = <span class="keyword">new</span> ThreadLocalMap(<span class="keyword">this</span>, firstValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-get"><a href="#2-2-get" class="headerlink" title="2.2. get"></a>2.2. get</h4><figure class="highlight java"><figcaption><span class="caption">java.lang.ThreadLocal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    ThreadLocalMap map = getMap(t);</span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>) &#123;</span><br><span class="line">        ThreadLocalMap.Entry e = map.getEntry(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">            T result = (T)e.value;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> setInitialValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> T <span class="title">setInitialValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    T value = initialValue();</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    ThreadLocalMap map = getMap(t);</span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>)</span><br><span class="line">        map.set(<span class="keyword">this</span>, value);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        createMap(t, value);</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> T <span class="title">initialValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-remove"><a href="#2-3-remove" class="headerlink" title="2.3. remove"></a>2.3. remove</h4><figure class="highlight java"><figcaption><span class="caption">java.lang.ThreadLocal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ThreadLocalMap m = getMap(Thread.currentThread());</span><br><span class="line">    <span class="keyword">if</span> (m != <span class="keyword">null</span>)</span><br><span class="line">        m.remove(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><br><strong>参考：</strong></p>
 <ol>
 <li><a href="https://juejin.cn/post/6844903552477822989" target="_blank" rel="noopener">https://juejin.cn/post/6844903552477822989</a></li>
+<li><a href="https://www.zhihu.com/question/341005993" target="_blank" rel="noopener">https://www.zhihu.com/question/341005993</a></li>
 </ol>
 
       
@@ -216,7 +230,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-结构"><span class="toc-text">1. 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-接口"><span class="toc-text">2. 接口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-set"><span class="toc-text">2.1. set</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-get"><span class="toc-text">2.2. get</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-remove"><span class="toc-text">2.3. remove</span></a></li></ol></li></ol></li></ol>
 </div>
 
 
