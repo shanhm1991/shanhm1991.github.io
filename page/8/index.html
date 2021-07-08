@@ -415,9 +415,10 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值，其非常适用在一些需要线程上下文变量的场景中，比如连接池或事务。</p>
-<p>那么如何让一个变量在各个线程中拥有不同的值，并且互不影响呢？其思路是，<font style="color:red;">让每个线程各自持有一个私有的ThreadLocalMap，然后用一个共享的key来保存各自的值，而这个key就是ThreadLocal</font>，
-这样每个ThreadLocal也就对应一个本地变量，只是设计者在这里将具体map的get/put/remove操作封装成了ThreadLocal的接口来对外提供，从而让开发更加简洁方便</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值并且互不影响，其非常适合用来作为线程上下文变量，
+比如在一些连接池或者事务的场景中。至于其思路，则是<font style="color:red;">让每个线程各自持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是ThreadLocal，
+因此每个ThreadLocal也就对应一个本地变量</font>。当然，如果这个本地变量本身就是一个线程共享的对象，那么使用<code>ThreadLocal</code>也就没有意义。
+另外，这里设计者将具体的map操作都封装在了ThreadLocal中，然后提供统一的get/set接口，好让开发更加简洁方便</p>
       
     </div>
 	
