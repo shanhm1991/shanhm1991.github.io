@@ -6,8 +6,8 @@
   <title>java 类 &amp; Class对象/反射 | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言可以将Class对象理解成实例对象的元数据，在类加载成功之后，其便以Class对象的形式保存在内存中。有了元数据的基础，便可以进行对象创建，以及方法调用或者属性修改，
-并且可以跳过访问权限的设计，同时也不要求在编译期间指定类型信息，也就是java中的反射机制">
+  <meta name="description" content="引言在类加载成功之后，其便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及属性修改。
+那么，对于运行时获取的类型信息，即编译时不存在的类型，便可以通过反射来创建实例，而且可以跳过访问权限的限制访问属性和方法。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -87,7 +87,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 124  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 548  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -98,6 +98,11 @@
 
    
    
+  
+  <div class="tags">
+    <a href="/tags/class/">class</a>
+  </div>
+
 
    
    <hr style="background-color: #ddd; height:1px; border:none;" /><br>
@@ -108,11 +113,26 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>可以将Class对象理解成实例对象的元数据，在类加载成功之后，其便以Class对象的形式保存在内存中。有了元数据的基础，便可以进行对象创建，以及方法调用或者属性修改，
-并且可以跳过访问权限的设计，同时也不要求在编译期间指定类型信息，也就是java中的反射机制</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在类加载成功之后，其便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及属性修改。
+那么，对于运行时获取的类型信息，即编译时不存在的类型，便可以通过反射来创建实例，而且可以跳过访问权限的限制访问属性和方法。</p>
 <a id="more"></a>
 
-<h3 id="1-Class"><a href="#1-Class" class="headerlink" title="1. Class"></a>1. Class</h3><h3 id="2-反射"><a href="#2-反射" class="headerlink" title="2. 反射"></a>2. 反射</h3><h4 id="2-1-Constructor"><a href="#2-1-Constructor" class="headerlink" title="2.1. Constructor"></a>2.1. Constructor</h4><h4 id="2-2-Field"><a href="#2-2-Field" class="headerlink" title="2.2. Field"></a>2.2. Field</h4><h4 id="2-3-Method"><a href="#2-3-Method" class="headerlink" title="2.3. Method"></a>2.3. Method</h4><p><br><strong>参考：</strong></p>
+<h3 id="1-Class"><a href="#1-Class" class="headerlink" title="1. Class"></a>1. Class</h3><p>Class对象被用来描述某种类型，但是类型有很多种，那么如何区分描述的是哪种类型？所以觉得这里可以将Class对象理解成一个类型属性的容器，其中包括了构造器<code>Constructor</code>，字段<code>Field</code>，
+方法<code>Method</code>，注解等信息，而至于是哪种类型，则可以通过泛型来表示</p>
+<ul>
+<li>关于Class对象的获取</li>
+</ul>
+<ol>
+<li><p>如果在编译期间类型已知，则可以直接通过类型字面量获取，比如<code>Class&lt;Object&gt; clazz = Object.class;</code>，不过<font color="#E51508">使用类型字面量的方式并不会触发Class对象的初始化，
+它被延迟到首次对静态域，或者静态方法的引用（构造器也是静态调用）</font></p>
+</li>
+<li><p>如果已经存在类型对应的实例，则可以直接通过实例调用<code>Object</code>提供的<code>getClass()</code>方法，因为在使用类型信息创建对象时，会在对象头中（直接指针的方式）保留指向类型信息的引用</p>
+</li>
+<li><p>如果上面信息都没有，那么可以通过类的全限定名由类加载器进行加载，Class提供了接口<code>Class.forName(&quot;&quot;)</code>，由其帮忙调用加载器进行加载，当然也可以自己主动指定加载器。
+但是，这里的加载就会立即进行初始化了（如果没有加载过）。另外，对于加载器而言，它无法知道加载的是那种具体的类型信息，只知道是某种确定的类型，因此只能用Class&lt;?&gt;来接收</p>
+</li>
+</ol>
+<h3 id="2-反射"><a href="#2-反射" class="headerlink" title="2. 反射"></a>2. 反射</h3><h4 id="2-1-Constructor"><a href="#2-1-Constructor" class="headerlink" title="2.1. Constructor"></a>2.1. Constructor</h4><h4 id="2-2-Field"><a href="#2-2-Field" class="headerlink" title="2.2. Field"></a>2.2. Field</h4><h4 id="2-3-Method"><a href="#2-3-Method" class="headerlink" title="2.3. Method"></a>2.3. Method</h4><p><br><strong>参考：</strong></p>
 
       
     </div>
@@ -145,6 +165,11 @@
 
 
         
+  
+  <div class="tags">
+    <a href="/tags/class/">class</a>
+  </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style ">
