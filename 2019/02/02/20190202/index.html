@@ -6,11 +6,7 @@
   <title>《深入理解java虚拟机》. 笔记八（类加载） | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言关于虚拟机的类加载机制，即把描述类的字节数据加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。与那些编译时需要链接的语言不同，java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，
-但是为java应用程序提供了高度的灵活性，期动态扩展的语言特性就是依赖运行期动态加载和链接这个特点来实现的。
-如果编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过java预定义或自定义的加载器，
-让一个本地的应用程序可以在运行时从网络或其他地方加载一个二进制流作为程序代码的一部分。这种组装应用程序的方式已广泛应用于java程序之中，
-从最基础的Applet、JSP到相对复杂的OSGI。">
+  <meta name="description" content="引言">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -94,7 +90,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 6.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 28min</font>
+   <font style="color: #999;"> words: 5.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 25min</font>
    
    
   
@@ -120,30 +116,14 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>关于虚拟机的类加载机制，即把描述类的字节数据加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。<br>与那些编译时需要链接的语言不同，java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，
-但是为java应用程序提供了高度的灵活性，期动态扩展的语言特性就是依赖运行期动态加载和链接这个特点来实现的。</p>
-<p>如果编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过java预定义或自定义的加载器，
-让一个本地的应用程序可以在运行时从网络或其他地方加载一个二进制流作为程序代码的一部分。这种组装应用程序的方式已广泛应用于java程序之中，
-从最基础的Applet、JSP到相对复杂的OSGI。</p>
-<a id="more"></a>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
 
-<h3 id="1-类加载过程"><a href="#1-类加载过程" class="headerlink" title="1. 类加载过程"></a>1. 类加载过程</h3><h4 id="1-1-加载"><a href="#1-1-加载" class="headerlink" title="1.1. 加载"></a>1.1. 加载</h4><p>类加载阶段，即将虚拟机外部的class文件（二进制字节流）按照虚拟机所需的格式存储到方法区，具体需要完成3件事件：</p>
-<ol>
-<li>通过一个类的全限定名获取定义该类的二进制字节流</li>
-<li>将字节流代表的静态存储结构转换为方法区的运行时数据结构</li>
-<li>在方法区中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口</li>
-</ol>
-<h4 id="1-2-验证"><a href="#1-2-验证" class="headerlink" title="1.2. 验证"></a>1.2. 验证</h4><p>验证是连接阶段的第一步，目的是保证Class文件的字节流包含的信息符合当前虚拟机的要求，保证输入的字节流能被正确解析并存储于方法区。
-主要包括4个阶段：</p>
-<ol>
-<li>文件格式验证，验证字节流是否符合Class文件的格式规范，并且能当前被虚拟机处理。</li>
-<li>元数据验证，对类的元数据信息进行语义分析，保证不存在不符合Java语言规范的元数据。</li>
-<li>字节码验证，最复杂的阶段，通过数据流和控制流分析程序语义是否合法，对类的方法体进行校验，保证被校验方法运行时不会危害虚拟机。</li>
-<li>符号引用验证，虚拟机将符号引用转换为直接引用的时候，对常量池中各种符号引用进行校验。</li>
-</ol>
-<h4 id="1-3-准备"><a href="#1-3-准备" class="headerlink" title="1.3. 准备"></a>1.3. 准备</h4><p>准备阶段即<font color="#E51508">正式为类变量（即static修饰的变量，不包括实例变量）分配内存并设置类变量初始值的阶段，这些内存在方法区进行分配。
-但是这里设置的初始值一般是数据类型的零值，除非变量使用<code>final</code>修饰。
-</font>  </p>
+
+
+
+
+
+
 <h4 id="1-4-解析"><a href="#1-4-解析" class="headerlink" title="1.4. 解析"></a>1.4. 解析</h4><p>解析就是虚拟机<font color="#E51508">将常量池内的符号引用替换为直接引用的过程</font>，所以可以理解为对符合引用的解析。<br><strong>符号引用</strong>即以一组符号来描述所引用的目标，符号可以上任何形式的字面量，只要使用时能无歧义地定位到目标即可。<br><strong>直接引用</strong>可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄，总之引用的目标必定已经在内存中存在。</p>
 <p>虚拟机规范并未对什么时候进行解析阶段有规定，只要求了在执行<code>anewarray</code>、<code>checkcast</code>、<code>getfield</code>、<code>getstatic</code>、<code>instanceof</code>、
 <code>invokedynamic</code>、<code>invokeinterface</code>、<code>invokespecial</code>、<code>invokeestatic</code>、<code>involevirtual</code>、<code>ldc</code>、<code>ldc_w</code>、<code>multianewarray</code>、<code>new</code>、
@@ -410,7 +390,7 @@ JDBC驱动程序管理器确保使用正确的驱动程序来访问每个数据�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-类加载过程"><span class="toc-text">1. 类加载过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-加载"><span class="toc-text">1.1. 加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-验证"><span class="toc-text">1.2. 验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-准备"><span class="toc-text">1.3. 准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-解析"><span class="toc-text">1.4. 解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-初始化"><span class="toc-text">1.5. 初始化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-类加载器"><span class="toc-text">2. 类加载器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-双亲委派模式"><span class="toc-text">2.1. 双亲委派模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-ClassLoader"><span class="toc-text">2.2. ClassLoader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-Launcher"><span class="toc-text">2.3. Launcher</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-1-ExtClassLoader"><span class="toc-text">2.3.1. ExtClassLoader</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-2-AppClassLoader"><span class="toc-text">2.3.2. AppClassLoader</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-3-ContextClassLoader"><span class="toc-text">2.3.3. ContextClassLoader</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-示例"><span class="toc-text">3. 示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-DriverManager"><span class="toc-text">3.1. DriverManager</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-解析"><span class="toc-text">1.4. 解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-初始化"><span class="toc-text">1.5. 初始化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-类加载器"><span class="toc-text">2. 类加载器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-双亲委派模式"><span class="toc-text">2.1. 双亲委派模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-ClassLoader"><span class="toc-text">2.2. ClassLoader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-Launcher"><span class="toc-text">2.3. Launcher</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-1-ExtClassLoader"><span class="toc-text">2.3.1. ExtClassLoader</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-2-AppClassLoader"><span class="toc-text">2.3.2. AppClassLoader</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-3-ContextClassLoader"><span class="toc-text">2.3.3. ContextClassLoader</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-示例"><span class="toc-text">3. 示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-DriverManager"><span class="toc-text">3.1. DriverManager</span></a></li></ol></li></ol></li></ol>
 </div>
 
 

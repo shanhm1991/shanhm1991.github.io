@@ -3,15 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>java 类 &amp; 加载（doing） | Essay</title>
+  <title>java 类 &amp; 加载 | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言">
+  <meta name="description" content="引言关于类加载机制，即把描述类的字节数据（比如class文件）加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。与那些编译时需要链接的语言不同，
+java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，但是为java应用程序提供了高度的灵活性，
+java能够动态扩展的语言特性就是依赖运行期动态加载和动态连接这些特点来实现的
+比如编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过java预定义或自定义的加载器，让一个本地应用程序在运行时从网络或其它地方加载一个二进制流作为程序代码的一部分。
+这种组装应用程序的方式已广泛应用于java程序之中，从最基础的Applet、JSP到相对复杂的OSGI。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="java 类 &amp; 加载（doing）"/>
+  <meta property="og:title" content="java 类 &amp; 加载"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -74,7 +78,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        java 类 &amp; 加载（doing）
+        java 类 &amp; 加载
     </h1>
     
     
@@ -86,7 +90,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 4  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 1.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 5min</font>
    
    
   
@@ -107,9 +111,62 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>关于类加载机制，即把描述类的字节数据（比如class文件）加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。与那些编译时需要链接的语言不同，
+java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，但是为java应用程序提供了高度的灵活性，
+<font color="#E51508">java能够动态扩展的语言特性就是依赖运行期动态加载和动态连接这些特点来实现的</font></p>
+<p>比如编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过java预定义或自定义的加载器，让一个本地应用程序在运行时从网络或其它地方加载一个二进制流作为程序代码的一部分。
+这种组装应用程序的方式已广泛应用于java程序之中，从最基础的Applet、JSP到相对复杂的OSGI。</p>
+<a id="more"></a>
 
-<p><br><strong>参考：</strong></p>
+<h3 id="1-类加载时机"><a href="#1-类加载时机" class="headerlink" title="1. 类加载时机"></a>1. 类加载时机</h3><p>在虚拟机规范中，严格定义了只有以下5种情况，才对类进行初始化：</p>
+<ol>
+<li>遇到<code>new</code>，<code>getstatic</code>，<code>putstatic</code>，<code>invokestatic</code>这4条指令时，即当实例化对象、读取或设置静态字段、以及调用类静态方法时；</li>
+<li>使用<code>java.lang.reflect</code>包的方法对类进行反射调用时；</li>
+<li>初始化一个类时，其父类没有初始化时；</li>
+<li>虚拟机启动时，main方法所在的主类；</li>
+<li>当使用JDK1.7的动态语言支持时，如果一个<code>java.lang.invoke.MethodHandle</code>实例最后的解析结果是REF_getstatic，REF_putstatic，REF_invokestatic的方法句柄，则初始化这些句柄所对应的类</li>
+</ol>
+<p>但是其中，对应静态字段的引用，在某些情况下并不会触发类的初始化，比如下面定义的两个类</p>
+<figure class="highlight java"><figcaption><span class="caption">SurperClass</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SurperClass</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String str = <span class="string">"str"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"SurperClass init"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><figcaption><span class="caption">SubClass</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubClass</span> <span class="keyword">extends</span> <span class="title">SurperClass</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"SubClass init"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>如果执行<code>Object obj = SubClass.obj;</code>，那么只会初始化<code>SurperClass</code>，因为对于静态字段，只有直接定义这个字段的类才会被初始化</p>
+</li>
+<li><p>如果执行<code>String str = SubClass.str;</code>，那么都不会初始化，因为在编译阶段通过常量传播优化，已经将常量的值存储到了目标类的常量池中，因此在实际执行时并没有符号引用执行<code>SurperClass</code></p>
+</li>
+<li><p>如果执行<code>SurperClass[] array = new SurperClass[10];</code>，则也不会初始化，这里实际初始化的是一个由虚拟机自动生成的数组类，其直接继承与<code>java.lang.Object</code>的子类，并通过指令newarray触发</p>
+</li>
+</ul>
+<h3 id="2-类加载过程"><a href="#2-类加载过程" class="headerlink" title="2. 类加载过程"></a>2. 类加载过程</h3><p>类从被加载到虚拟机内存开始，到卸载出内存为止，其整个生命周期包括：加载、验证、准备、解析、初始化、使用、卸载，7个阶段。其中验证、准备、解析可以统称为连接</p>
+<p><img src="/img/20170819/20170819.1.jpg" alt=""></p>
+<p>对于整个加载过程，可以如上图所示，但是对于解析，其在某些情况下可以在初始化阶段之后进行，这样做是为了支持java语言的运行时绑定。另外，上图只是表示这些阶段开始的先后顺序，
+实际情况可能是交叉混合进行的，比如在一个阶段的执行过程中激活调用了另一个阶段。</p>
+<h4 id="2-1-加载"><a href="#2-1-加载" class="headerlink" title="2.1. 加载"></a>2.1. 加载</h4><p>类加载阶段，即将虚拟机外部的class文件（二进制字节流）按照虚拟机所需的格式存储到方法区，具体需要完成3件事件：</p>
+<ol>
+<li>通过一个类的全限定名获取定义该类的二进制字节流</li>
+<li>将字节流代表的静态存储结构转换为方法区的运行时数据结构</li>
+<li>在方法区中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口</li>
+</ol>
+<h4 id="1-2-验证"><a href="#1-2-验证" class="headerlink" title="1.2. 验证"></a>1.2. 验证</h4><p>验证是连接阶段的第一步，目的是保证Class文件的字节流包含的信息符合当前虚拟机的要求，保证输入的字节流能被正确解析并存储于方法区。
+主要包括4个阶段：</p>
+<ol>
+<li>文件格式验证，验证字节流是否符合Class文件的格式规范，并且能当前被虚拟机处理。</li>
+<li>元数据验证，对类的元数据信息进行语义分析，保证不存在不符合Java语言规范的元数据。</li>
+<li>字节码验证，最复杂的阶段，通过数据流和控制流分析程序语义是否合法，对类的方法体进行校验，保证被校验方法运行时不会危害虚拟机。</li>
+<li>符号引用验证，虚拟机将符号引用转换为直接引用的时候，对常量池中各种符号引用进行校验。</li>
+</ol>
+<h4 id="1-3-准备"><a href="#1-3-准备" class="headerlink" title="1.3. 准备"></a>1.3. 准备</h4><p>准备阶段即<font color="#E51508">正式为类变量（即static修饰的变量，不包括实例变量）分配内存并设置类变量初始值的阶段，这些内存在方法区进行分配。
+但是这里设置的初始值一般是数据类型的零值，除非变量使用<code>final</code>修饰。
+</font>  </p>
+<h3 id="3-类加载器"><a href="#3-类加载器" class="headerlink" title="3. 类加载器"></a>3. 类加载器</h3><p><br><strong>参考：</strong></p>
+<ol>
+<li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
+<li><a href="https://blog.csdn.net/javazejian/article/details/73413292" target="_blank" rel="noopener">https://blog.csdn.net/javazejian/article/details/73413292</a></li>
+<li><a href="https://www.jianshu.com/p/a4dc755652ff" target="_blank" rel="noopener">https://www.jianshu.com/p/a4dc755652ff</a> </li>
+<li><a href="https://www.yiibai.com/jdbc/jdbc-introduction.html" target="_blank" rel="noopener">https://www.yiibai.com/jdbc/jdbc-introduction.html</a> </li>
+</ol>
 
       
     </div>
@@ -203,7 +260,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-类加载时机"><span class="toc-text">1. 类加载时机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-类加载过程"><span class="toc-text">2. 类加载过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-加载"><span class="toc-text">2.1. 加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-验证"><span class="toc-text">1.2. 验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-准备"><span class="toc-text">1.3. 准备</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-类加载器"><span class="toc-text">3. 类加载器</span></a></li></ol></li></ol>
 </div>
 
 
