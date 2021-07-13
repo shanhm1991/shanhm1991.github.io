@@ -43,7 +43,7 @@
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">不人云亦云，不断章取义</span>
-  <h2><font style="color: #999;">articles:  89 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  92 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -151,7 +151,10 @@
 </ul>
 <p><font color="#E51508">另一部分是类型指针</font>，即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例，
 但并不是所有的虚拟机实现都必须在对象数据上保留类型指针，即查找对象的元数据信息并不一定要经过对象本身。另外，如果对象是一个java数组，
-那么在对象头中还必须有一块用于记录数组长度的数据，因为虚拟机可以通过普通java对象的元数据信息确定java对象的大小，但从数组的元数据中却无法确定数组的大小</p>
+那么在对象头中还必须有一块用于记录数组长度的数据，因为虚拟机可以通过普通java对象的元数据信息确定java对象的大小，但从数组的元数据中却无法确定数组的大小。
+因此在创建数组时需要给定类型和大小，比如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String[] array = (String[]) Array.newInstance(Class.forName(<span class="string">"java.lang.String"</span>), <span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><strong>实例数据：</strong>是对象真正存储的有效信息，也是程序代码中定义的各种类型的字段内容。无论是从父类继承下来的，还是在子类中定义的，都需要记录起来。
 这部分的存储顺序会受到虚拟机分配策略参数和字段在java源码中定义顺序的影响。</li>
