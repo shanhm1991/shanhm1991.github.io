@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>java synchronized（TODO） | Essay</title>
+  <title>java synchronized（锁）（TODO） | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言">
+  <meta name="description" content="引言synchronized是java中用来实现线程同步操作的关键字，其目的是在多线程并发场景下保证对共享资源操作的线程安全。这里只是简单分析一下其实现机制，至于具体的使用方法则不再赘述。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="java synchronized（TODO）"/>
+  <meta property="og:title" content="java synchronized（锁）（TODO）"/>
   <meta property="og:site_name" content="Essay"/>
 
   
@@ -74,7 +74,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        java synchronized（TODO）
+        java synchronized（锁）（TODO）
     </h1>
     
     
@@ -86,7 +86,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 13  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 210  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -112,11 +112,64 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>synchronized</code>是java中用来实现线程同步操作的关键字，其目的是在多线程并发场景下保证对共享资源操作的线程安全。这里只是简单分析一下其实现机制，至于具体的使用方法则不再赘述。</p>
+<a id="more"></a>
 
 
-
-<p><a href="http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/" target="_blank" rel="noopener">http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/</a></p>
+<h3 id="锁升级"><a href="#锁升级" class="headerlink" title="锁升级"></a>锁升级</h3><p>32位对象头信息：
+    <table width=100% cellpadding=10px>
+        <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3); background: #DBDBDB;">
+            <td width=15% rowspan=2>锁状态</td>
+            <td colspan=2 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">25 bit</td>
+            <td width=15% rowspan=2 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">4 bit</td>
+            <td width=15% style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">1 bit</td>
+            <td width=15% style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">2 bit</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3); background: #DBDBDB;">
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">23 bit</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">2 bit</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">是否偏向锁</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">锁标志位</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3);">
+            <td>无锁</td>
+            <td colspan=2 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">对象的HashCode</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">分代年龄</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">0</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">01</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3);">
+            <td><font color="#E51508">偏向锁</font></td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">线程ID</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">Epoch</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">分代年龄</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">1</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">01</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3);">
+            <td><font color="#E51508">轻量级锁</font></td>
+            <td colspan=4 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">指向栈中锁记录的指针</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">00</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3);">
+            <td><font color="#E51508">重量级锁</font></td>
+            <td colspan=4 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">指向重量级锁的指针</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">10</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3);">
+            <td>GC标记</td>
+            <td colspan=4 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">空</td>
+            <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">11</td>
+        </tr>
+    </table></p>
+<h3 id="synchronized实现"><a href="#synchronized实现" class="headerlink" title="synchronized实现"></a>synchronized实现</h3><p><br><strong>参考：</strong> </p>
+<ol>
+<li><a href="http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/" target="_blank" rel="noopener">http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/29866981" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/29866981</a></li>
+<li><a href="https://www.jianshu.com/p/c3313dcf2c23" target="_blank" rel="noopener">https://www.jianshu.com/p/c3313dcf2c23</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/90508284" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/90508284</a></li>
+<li><a href="https://blog.csdn.net/zqz_zqz/article/details/70233767" target="_blank" rel="noopener">https://blog.csdn.net/zqz_zqz/article/details/70233767</a></li>
+</ol>
 
       
     </div>
@@ -215,7 +268,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#锁升级"><span class="toc-text">锁升级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized实现"><span class="toc-text">synchronized实现</span></a></li></ol></li></ol>
 </div>
 
 
