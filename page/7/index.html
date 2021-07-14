@@ -142,7 +142,9 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>准备知识:</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Java在操作系统的基础上对I/O操作提供了更高级的Api封装，可以对这些Api进行一些粗略的分类，比如从数据格式的角度可以分为基于字节操作的<code>InputStream</code>和<code>OutputStream</code>，以及基于字符操作的<code>Reader</code>和<code>Writer</code>，
+从数据传输方式的角度可以分为基于磁盘操作的<code>File</code>和基于网络操作的<code>Socket</code>，其实在Java中，<font color="#E51508">I/O主要考虑的就是以怎样的方式将怎样格式的数据进行传输的问题</font>，然后从这两个方向考虑如何提高I/O操作的效率</p>
+<p>这里无法去对每个I/O相关的Api进行分析，只是从文件读写的场景出发，简单讨论一下常见的使用。另外，如果想对I/O有更好的理解，最好先有如下准备知识：</p>
 <ul>
 <li><a href="https://shanhm1991.github.io/2018/02/10/20180210/">计算机 输入输出系统（I/O）</a></li>
 <li><a href="https://shanhm1991.github.io/2018/03/10/20180310/">Linux I/O模型</a>
