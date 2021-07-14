@@ -88,7 +88,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 3.5k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 13min</font>
+   <font style="color: #999;"> words: 4.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 14min</font>
    
    
   
@@ -119,6 +119,22 @@
 一部分为<font style="font-weight:bold; color:red;">用户空间</font>。</p>
 <a id="more"></a>
 
+<p>Linux中所有的I/O设备都被模型化为文件，而所有的输入输出都被当作对相应文件的读写操作。这种将设备统一映射为文件的方式，允许Linux内核引出一个简单、低级的应用接口，称为Unix I/O，
+使得所有的输入输出都能以一种统一的方式执行。</p>
+<p>一个进程通过调用内核打开相应的文件，告诉内核它想访问某个I/O设备，内核返回一个非负整数，称为<strong>描述符</strong>。后续对此文件的所有操作通过这个描述符进行，
+内核会记录有关这个打开文件的所有信息，而应用进程只需记住这个描述符。其中，Linux内核用三个相关的数据结构来表示打开的文件：</p>
+<ul>
+<li><p><strong>描述符表：</strong>每个进程都有它独立的描述符表，它的表项是由进程打开的文件描述符来索引的，每个打开的描述符表项指向文件表中的一个表项</p>
+</li>
+<li><p><strong>文件表：</strong>打开文件的集合由一张文件表来表示，所有的进程共享这张表。每个文件表的表项组成包括当前文件的位置、引用计数（指向当前表项的描述符数目）、
+以及一个指向v-node表中对应表项的指针。关闭一个描述符会减少相应的文件表表项中的引用计数，内核不会删除这个文件表表项，直到它的引用计数为零</p>
+</li>
+<li><p><strong>v-node表：</strong>与文件表一样，所有进程共享v-node表。每个表项包含stat结构中的大多数信息，包括st_mode和st_size成员</p>
+</li>
+</ul>
+<p><img src="/img/20180202/20180202.12.jpg" alt=""> </p>
+<p>多个描述符也可以通过不同的文件表项来引用同一个文件，例如以同一个filename调用open函数两次，就会发生这种情况。另外，Linux shell创建的每个进程开始时都有三个打开的文件：
+标准输入（STDIN_FILENO=0）、标准输出（STDOUT_FILENO=1）和标准错误（STDERR_FILENO=2）</p>
 <h3 id="1-磁盘IO"><a href="#1-磁盘IO" class="headerlink" title="1. 磁盘IO"></a>1. 磁盘IO</h3><h4 id="1-1-缓存IO"><a href="#1-1-缓存IO" class="headerlink" title="1.1. 缓存IO"></a>1.1. 缓存IO</h4><p>大多数文件系统的默认IO操作都是缓存IO，所以一般也称为标准I/O操作。以读操作为例，应用程序需要走read系统调用，这样数据会先拷贝到操作系统的内核缓存，
 然后再从内核拷贝到应用进程空间。反之写操作，需要走write调用，也是类似的。</p>
 <p><img src="/img/20180202/20180202.8.jpg" alt=""> </p>
@@ -158,7 +174,7 @@
 <p>Device：    监测设备名称<br>rrqm/s：    每秒需要读取需求的数量<br>wrqm/s：    每秒需要写入需求的数量<br>r/s：     每秒实际读取需求的数量<br>w/s：     每秒实际写入需求的数量<br>rsec/s：    每秒读取区段的数量<br>wsec/s：    每秒写入区段的数量<br>rkB/s：    每秒实际读取的大小，单位为KB<br>wkB/s：    每秒实际写入的大小，单位为KB<br>avgrq-sz：    平均每次设备I/O操作的数据大小<br><font style="color:red;">avgqu-sz</font>：    平均I/O等待队列长度<br>await：    平均每次设备I/O操作的等待时间 (毫秒)<br><font style="color:red;">svctm</font>：    平均每次设备I/O操作的服务时间 (毫秒)<br>%util：    被I/O需求消耗的CPU百分比     </p>
 <p><code>await</code>就是应用进程每次等待I/O操作的时间，一般取决于服务时间<code>svctm</code>以及I/O队列的长度<code>avgqu-sz</code>和I/O请求的发出模式。如果是操作时间<code>svctm</code>过长，一般跟磁盘的性能有关，
 可以考虑更换更快的磁盘。如果<code>avgqu-sz</code>过高，说明I/O负荷较重，但由于它是算的平均值，不能反映瞬间的I/O洪水。</p>
-<h3 id="2-网络I-O"><a href="#2-网络I-O" class="headerlink" title="2. 网络I/O"></a>2. 网络I/O</h3><p>对于网络I/O，由于网络上数据分组到达的延时比较高，因此需要考虑如何降低对应用进程的阻塞影响。在具体讨论之前，需要先搞清楚同步和阻塞的概念：</p>
+<h3 id="2-网络I-O"><a href="#2-网络I-O" class="headerlink" title="2. 网络I/O"></a>2. 网络I/O</h3><p>对于网络I/O，由于网络上数据分组到达的延时比较高，因此主要考虑的是如何降低网络延迟对应用进程的阻塞影响。在具体讨论之前，需要先搞清楚同步和阻塞的概念：</p>
 <ul>
 <li><p><font style="font-weight:bold; color:red;">同步与异步</font>：描述的是用户线程的处理方式，同步指用户线程发起IO请求后需要等待或者轮询，直到内核IO操作完成后才能继续执行；
 而异步是指用户线程发起IO请求后仍然继续执行，当内核IO操作完成后会通知用户线程，或者调用用户线程注册的回调函数。</p>
@@ -167,7 +183,7 @@
 而非阻塞是指IO操作被调用后立即返回给用户一个状态值，无需等到IO操作彻底完成。</p>
 </li>
 </ul>
-<p>对于具体的I/O操作可以抽象成对Socket流的读写，分为两个阶段：</p>
+<p>对于网络I/O操作，可以抽象成对Socket流的读写，分为两个阶段：</p>
 <ol>
 <li>数据准备：等待网络上的数据分组到达，然后复制到内核缓冲区</li>
 <li>数据拷贝：将数据从内核缓冲区复制到应用进程空间</li>
@@ -201,6 +217,7 @@
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《计算机组成原理》</li>
+<li>《深入理解计算机系统》</li>
 <li><a href="https://blog.csdn.net/u010649766/article/details/80339988" target="_blank" rel="noopener">https://blog.csdn.net/u010649766/article/details/80339988</a> </li>
 </ol>
 
