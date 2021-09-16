@@ -41,7 +41,7 @@
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">不人云亦云，不断章取义</span>
-  <h2><font style="color: #999;">articles:  92 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  94 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -60,6 +60,170 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20190103" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-02T16:00:00.000Z"><a href="/2019/01/03/20190103/">2019-01-03</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/03/20190103/">《java并发编程实战》三 线程安全类的设计</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在设计线程安全类的过程中，需要包含以下三个基本要素：<br>1.找出构成对象状态的所有变量；<br>2.找出约束状态变量的不变性条件；<br>3.建立对象状态的并发访问管理策略；</p>
+<p>对象封装它拥有的状态，并拥有这些状态的所有权或者说控制权，它决定采用何种加锁协议来维持变量状态的完整性，然而，如果发布了某个可变对象的引用，那么就不再拥有独占的控制权，
+最多是共享控制权。一般对于从构造器或者从方法中传递进来的对象，类并不拥有这些对象，除非这些方法是被专门设计来转移传递进来的对象的所有权，例如容器。
+容器通常表现出一种所有权分离的形式，其中容器拥有其自身的状态，而客户代码则拥有容器中各个对象的状态。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/03/20190103/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190102" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-01T16:00:00.000Z"><a href="/2019/01/02/20190102/">2019-01-02</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/02/20190102/">《java并发编程实战》二 线程安全之可见性以及对象发布</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>要编写正确的并发程序，关键在于：在访问共享的可变状态时需要进行正确的管理。<font color="#E51508">同步的另一个重要目的即内存可见性。</font>我们不仅希望防止某个线程正在使用的对象状态
+被另一个线程同时修改，而且希望当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。<font color="Gray">（后面介绍jvm内存模型时会提到java线程之间内存可见性的必要条件：
+满足Happens-Before规则）</font></p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/02/20190102/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190101" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-12-31T16:00:00.000Z"><a href="/2019/01/01/20190101/">2019-01-01</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/01/20190101/">《java并发编程实战》一 线程安全之原子性</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><font color="#E51508">如果当多个线程访问某个类时，这个类始终都能表现正确的行为，
+则可以称这个类是线程安全的。</font>所以一个对象是否需要考虑线程安全，取决于它是否被多个线程访问，以及是否存在多种状态。
+反之如果一个对象是无状态的，既它不包含任何域，也不包含任何对其他类中域的引用，那么它一定是线程安全的。</p>  
+一般在线程安全的类中会封装必要的同步机制来保证原子性操作，即让操作不可分割，以便使各个线程依次串行访问。
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/01/20190101/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20181004" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -460,165 +624,6 @@
 
 
 
-  <article id="post-20180611" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-10T16:00:00.000Z"><a href="/2018/06/11/20180611/">2018-06-11</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/06/11/20180611/">spring 静态Aop</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>静态代理是指在虚拟机载入字节码文件时动态织入切面行为，相对于动态代理具有更高的效率，因为动态代理调用的过程中，还需要一个动态创建代理类并代理目标对象的步骤，而静态代理在启动时便完成了字节码增强，
-当系统调用目标类时将与调用正常的类没有区别，它以一种更底层、更松耦合的方式改变了一个类的行为。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/06/11/20180611/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180609" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-08T16:00:00.000Z"><a href="/2018/06/09/20180609/">2018-06-09</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/06/09/20180609/">spring Aop</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
-所以可以使用面向切面（AOP）编程作为一个补充，Aop是横向的而OOP是纵向的。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/06/09/20180609/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180607" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-06T16:00:00.000Z"><a href="/2018/06/07/20180607/">2018-06-07</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/06/07/20180607/">spring 应用上下文（ApplicationContext）</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面介绍bean加载时都是站在<code>BeanFactory</code>的角度上进行的，相当于将spring纯粹当成一个bean容器工具来使用。其实spring另外提供了一套接口<code>ApplicationContext</code>，更加侧重于将<code>BeanFactory</code>放在一个上下文中来使用，
-这样方便在其基础上做一些扩展。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/06/07/20180607/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
 
 <nav id="pagination">
   
@@ -653,17 +658,15 @@
   
     <li><a href="/categories/开源代码/">开源代码</a><small>14</small></li>
   
-    <li><a href="/categories/数据库/">数据库</a><small>1</small></li>
-  
     <li><a href="/categories/数据结构/">数据结构</a><small>7</small></li>
+  
+    <li><a href="/categories/日常笔记/">日常笔记</a><small>11</small></li>
   
     <li><a href="/categories/素年锦食/">素年锦食</a><small>5</small></li>
   
     <li><a href="/categories/设计模式/">设计模式</a><small>6</small></li>
   
     <li><a href="/categories/读书笔记/">读书笔记</a><small>18</small></li>
-  
-    <li><a href="/categories/问题笔记/">问题笔记</a><small>8</small></li>
   
   </ul>
 </div>
@@ -673,7 +676,7 @@
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 11.67px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.67px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.67px;">CAS</a> <a href="/tags/Collection/" style="font-size: 15px;">Collection</a> <a href="/tags/Comparable/" style="font-size: 10px;">Comparable</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 16.67px;">I/O</a> <a href="/tags/IOC/" style="font-size: 13.33px;">IOC</a> <a href="/tags/Instrumentation/" style="font-size: 10px;">Instrumentation</a> <a href="/tags/JUC/" style="font-size: 18.33px;">JUC</a> <a href="/tags/Jdbc/" style="font-size: 10px;">Jdbc</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/Tomcat/" style="font-size: 13.33px;">Tomcat</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/awk/" style="font-size: 10px;">awk</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 15px;">class</a> <a href="/tags/fom/" style="font-size: 11.67px;">fom</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/java%E5%86%85%E5%AD%98/" style="font-size: 15px;">java内存</a> <a href="/tags/jstat/" style="font-size: 10px;">jstat</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/sed/" style="font-size: 10px;">sed</a> <a href="/tags/servlet/" style="font-size: 11.67px;">servlet</a> <a href="/tags/spring/" style="font-size: 20px;">spring</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">事务</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%9D%A1%E4%BB%B6%E9%98%9F%E5%88%97/" style="font-size: 10px;">条件队列</a> <a href="/tags/%E7%BC%96%E8%A7%A3%E7%A0%81/" style="font-size: 10px;">编解码</a>
+    <a href="/tags/AQS/" style="font-size: 11.67px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.67px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.67px;">CAS</a> <a href="/tags/Collection/" style="font-size: 15px;">Collection</a> <a href="/tags/Comparable/" style="font-size: 10px;">Comparable</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 16.67px;">I/O</a> <a href="/tags/IOC/" style="font-size: 13.33px;">IOC</a> <a href="/tags/Instrumentation/" style="font-size: 10px;">Instrumentation</a> <a href="/tags/JUC/" style="font-size: 18.33px;">JUC</a> <a href="/tags/Jdbc/" style="font-size: 10px;">Jdbc</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/Tomcat/" style="font-size: 13.33px;">Tomcat</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/awk/" style="font-size: 10px;">awk</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 15px;">class</a> <a href="/tags/fom/" style="font-size: 11.67px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/java%E5%86%85%E5%AD%98/" style="font-size: 15px;">java内存</a> <a href="/tags/jstat/" style="font-size: 10px;">jstat</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/sed/" style="font-size: 10px;">sed</a> <a href="/tags/servlet/" style="font-size: 11.67px;">servlet</a> <a href="/tags/spring/" style="font-size: 20px;">spring</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">事务</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%9D%A1%E4%BB%B6%E9%98%9F%E5%88%97/" style="font-size: 10px;">条件队列</a> <a href="/tags/%E7%BC%96%E8%A7%A3%E7%A0%81/" style="font-size: 10px;">编解码</a>
   </div>
 </div>
 
@@ -681,7 +684,7 @@
   
   <div class="widget tag">
     <h3 class="title">Achives</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">2017-06</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">2017-06</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 

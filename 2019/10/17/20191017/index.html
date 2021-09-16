@@ -1,0 +1,505 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>git 常用操作 | Essay</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="引言">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="git 常用操作"/>
+  <meta property="og:site_name" content="Essay"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Essay" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Essay</a></h1>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">不人云亦云，不断章取义</span>
+  <h2><font style="color: #999;">articles:  94 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20191017" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-10-16T16:00:00.000Z"><a href="/2019/10/17/20191017/">2019-10-17</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        git 常用操作
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <font style="color: #999;"> words: 3.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 12min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/日常笔记/">日常笔记</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><a id="more"></a>
+
+<h3 id="1-本地"><a href="#1-本地" class="headerlink" title="1. 本地"></a>1. 本地</h3><h4 id="1-1-基础"><a href="#1-1-基础" class="headerlink" title="1.1. 基础"></a>1.1. 基础</h4><ol>
+<li>git commit</li>
+</ol>
+<p><img src="/img/20191017/20191017.1.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git commit</span><br><span class="line">git commit</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>git branch</li>
+</ol>
+<p>Git分支非常轻量，它们只是简单地指向某个提交纪录而已。所以创建再多的分支也不会造成存储上的开销，并且按逻辑分解工作到不同的分支要比维护那些特别臃肿的分支简单得多。
+如果要切换分支，可以直接使用<code>git checkout 分支名</code></p>
+<p><img src="/img/20191017/20191017.2.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch bugFix</span><br><span class="line">git checkout bugFix</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>git merge</li>
+</ol>
+<p>使用merge在Git中合并两个分支时会产生一个特殊的提交记录，它有两个父节点。如果要合并的记录继承自当前节点，则Git什么都不用做，只要简单地移动到要合并的记录即可</p>
+<p><img src="/img/20191017/20191017.3.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch -b bugFix</span><br><span class="line">git commit</span><br><span class="line">git checkout main</span><br><span class="line">git commit</span><br><span class="line">git merge bugFix</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>git rebase</li>
+</ol>
+<p>第二种合并分支的方法是<code>git rebase</code>，Rebase实际上是取出一系列的提交记录，然后在另外一个分支逐个的放进去。Rebase的优势在于可以创造更线性的提交历史，让代码库的提交历史变得更清晰。<br>rebase其实是将后面分支（如果不指定则默认当前分支）上的记录追加到前面分支的下面，同样如果要合并的分支记录继承自当前节点，则也只要移动下指向即可，
+比如下面如果将main分支rebase到新的bugFix上<code>git rebase bugFix main</code></p>
+<p><img src="/img/20191017/20191017.4.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch -b bugFix</span><br><span class="line">git commit</span><br><span class="line">git checkout main</span><br><span class="line">git commit</span><br><span class="line">git checkout bugFix</span><br><span class="line">git rebase main</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-高级"><a href="#1-2-高级" class="headerlink" title="1.2. 高级"></a>1.2. 高级</h4><ol>
+<li>分离Head</li>
+</ol>
+<p>HEAD是一个对当前检出记录的符号引用，也就是指向正在其基础上进行工作的提交记录，HEAD默认是指向当前分支上最近一次提交记录，即指向分支名，但是也可以使其指向具体的提交记录</p>
+<p><img src="/img/20191017/20191017.5.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout c4</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>相对引用 ^</li>
+</ol>
+<p>如果要指向具体的提交记录需要记住提交记录对应的MD5值，不是很方便，于是git提供了相对引用，使用<code>^</code>可以指向当前的父记录，<code>^^</code>则指向上上次提交，依次类推</p>
+<p><img src="/img/20191017/20191017.6.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout bugFix^</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>相对引用 ~</li>
+</ol>
+<p>如果要指向的记录相距比较远的话，则使用^也不是很方便，所以可以使用<code>~</code>来指定偏移量。另外，除了移动Head之外，分支也是可以移动的，比如使用<code>git branch -f main HEAD~3</code></p>
+<p><img src="/img/20191017/20191017.7.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git branch -f main c6</span><br><span class="line">git checkout HEAD~1</span><br><span class="line">git branch -f bugFix HEAD~1</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>撤销变更</li>
+</ol>
+<p>撤销变更有两种方法:<code>git reset</code>可以使当前指向之前的提交记录，其之后的修改仿佛没有发生一样，其实所做的变更依然还在，只是处于暂存区状态。
+<code>git revert</code>会在当前记录的基础上撤销修改，然后向前引入一个新的变更，提交记录依然存在，可以再次提交分享给别人。</p>
+<p><img src="/img/20191017/20191017.8.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git reset HEAD~1</span><br><span class="line">git checkout pushed</span><br><span class="line">git revert HEAD</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-修改提交树"><a href="#1-3-修改提交树" class="headerlink" title="1.3. 修改提交树"></a>1.3. 修改提交树</h4><ol>
+<li>git cherry-pick</li>
+</ol>
+<p>如果希望将其它分支上特定的提交记录复制到当前分支下面，那么可以使用cherry-pick，非常方便直接  </p>
+<p><img src="/img/20191017/20191017.9.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick c3 c4 c7</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>交互式rebase</li>
+</ol>
+<p>如果不清楚提交记录对应的哈希值，那么利用交互式的rebase，可以从一系列的提交记录中找到想要的记录。通过<code>-i</code>选项打开rebase UI界面，然后可以<br>调整提交记录的顺序（通过鼠标拖放来完成）；<br>删除你不想要的提交（通过切换 pick 的状态来完成，关闭就意味着你不想要这个提交记录）；    </p>
+<p><img src="/img/20191017/20191017.10.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i overHere</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-4-技巧"><a href="#1-4-技巧" class="headerlink" title="1.4. 技巧"></a>1.4. 技巧</h4><ol>
+<li>场景：解决某个Bug，为了便于调试而在代码中添加了一些调试命令以及一些打印信息，这些调试和打印语句都在它们各自的提交记录里。
+现在要将bugFix分支里的工作合并回main分支，那么肯定不希望合并调试和打印的提交</li>
+</ol>
+<p><img src="/img/20191017/20191017.11.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution1</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout main</span><br><span class="line">git cherry-pick bugFix</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><figcaption><span class="caption">solution2</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i main</span><br><span class="line">git branch -f main bugFix</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>场景：假设之前在newImage分支上进行了一次提交，然后又基于它创建了caption分支，然后又提交了一次。但是此时却希望对某个以前的提交记录进行一些小小的调整，
+尽管那个提交记录并不是最新的了。<br>此时可以先用<code>git rebase -i</code>将提交重新排序，将想要修改的提交记录挪到最前；<br>然后用<code>git commit --amend</code>来进行一些小修改；<br>接着再用<code>git rebase -i</code>调回原来的顺序；<br>最后调整下main指向即可</li>
+</ol>
+<p><img src="/img/20191017/20191017.12.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i main</span><br><span class="line">git commit --amend`</span><br><span class="line">git rebase -i HEAD~2</span><br><span class="line">git branch -f main caption</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>对于上面的场景同样使用cherry-pick，它可以将提交树上任何地方的提交记录取过来追加到HEAD上（只要不是HEAD上游的提交）</li>
+</ol>
+<p><img src="/img/20191017/20191017.13.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout main</span><br><span class="line">git cherry-pick c2</span><br><span class="line">git commit --amend`</span><br><span class="line">git cherry-pick c3</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>git tag</li>
+</ol>
+<p>分支很容易被人改变，当有新的提交时，它就会移动。如果希望永久的指向某个提交记录，那么可以使用tag</p>
+<p><img src="/img/20191017/20191017.14.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git tag v1 side~1</span><br><span class="line">git tag v0 c1</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>git describe</li>
+</ol>
+<p>标签在代码库中起着“锚点”作用，Git为此专门设计了describe命令用来描述离指定记录（默认HEAD）最近的tag，通常用来查看tag之后，某次提交记录之前发生了多少次修改。
+其输出如<code>&lt;tag&gt;_&lt;numCommits&gt;_g&lt;hash&gt;</code>，tag表示离ref最近的标签，numCommits表示ref与tag之间有多少提交记录，hash表示所给定ref记录的哈希值前几位</p>
+<h4 id="1-5-进阶"><a href="#1-5-进阶" class="headerlink" title="1.5. 进阶"></a>1.5. 进阶</h4><ol>
+<li>多次rebase</li>
+</ol>
+<p>假设现在有很多分支，希望都rebase到main上面，但是要求得到它们有序的提交历史</p>
+<p><img src="/img/20191017/20191017.15.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git rebase main bugFix</span><br><span class="line">git rebase bugFix side</span><br><span class="line">git rebase side another</span><br><span class="line">git rebase another main</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>两个父节点</li>
+</ol>
+<p>操作符<code>^</code>与<code>~</code>符一样，后面也可以跟一个数字，其含义是指定合并提交记录的某个父提交。Git默认选择合并提交的是“第一个”父提交，在操作符<code>^</code>后跟一个数字可以改变这一默认行为</p>
+<p><img src="/img/20191017/20191017.16.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch bugWork main^^2^</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>多分支</li>
+</ol>
+<p>假设有主分支main，然后上面有多次提交，现在希望将这些提交做不同的调整，分别添加到各个分支上</p>
+<p><img src="/img/20191017/20191017.17.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git checkout one</span><br><span class="line">git cherry-pick c4 c3 c2</span><br><span class="line">git checkout two</span><br><span class="line">git cherry-pick c5 c4 c3 c2</span><br><span class="line">git branch -f three c2</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-远程"><a href="#2-远程" class="headerlink" title="2. 远程"></a>2. 远程</h3><h4 id="2-1-基础"><a href="#2-1-基础" class="headerlink" title="2.1. 基础"></a>2.1. 基础</h4><ol>
+<li>git clone</li>
+</ol>
+<p>git clone命令的作用是在本地创建一个远程仓库的拷贝</p>
+<p><img src="/img/20191017/20191017.18.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>远程分支</li>
+</ol>
+<p>git clone会在本地建一个分支，一般是origin/master（远程仓库名/分支名，这里简写成o/main）。叫作远程分支，其目的是为了反映远程仓库(上次通信时)的状态。因此，它有一个特别的属性，
+即在检出时会自动分离HEAD，这样即便发生修改提交，远程分支也不会发生变化，只有在远程仓库中相应的分支发生更新时才会变化。</p>
+<p><img src="/img/20191017/20191017.19.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git commit</span><br><span class="line">git checkout o/main</span><br><span class="line">git commit</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>git fetch</li>
+</ol>
+<p><code>git fetch</code>会从远程仓库下载本地仓库中缺失的提交记录，并更新远程分支(o/main)，使其指向最新的提交记录。但它并不会修改本地仓库的状态，即main分支，也不会修改你磁盘上的文件。
+因此，执行完git fetch，并没有将本地仓库与远程仓库完成同步，只是将所需的所有数据都下载了下来</p>
+<p><img src="/img/20191017/20191017.20.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>git pull</li>
+</ol>
+<p><code>git pull</code>相当于先<code>git fetch</code>更新了远程分支，然后再<code>git merge o/main</code>，即将远程分支的提交合并到本地分支。有种很常见的场景，即git pull的时候会发生冲突，
+那么只想以远程的提交为准，而丢弃本地修改的话，那么可以在<code>git fetch</code>之后进行<code>git branch -f</code>手动指定，而忽略本地已做的变更</p>
+<p><img src="/img/20191017/20191017.21.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>合并</li>
+</ol>
+<p>这里用fakeTeamwork模拟下其它人修改了远程分支，然后自己本地提交修改，并拉取远程分支的提交记录进行合并</p>
+<p><img src="/img/20191017/20191017.22.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone</span><br><span class="line">git fakeTeamwork 2 (模拟其他人提交了两次修改到远程分支上)</span><br><span class="line">git commit</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>git pushed</li>
+</ol>
+<p>git push负责将本地变更上传到指定的远程仓库，并在远程仓库上合并提交记录，一旦git push完成, 别人将可以看到自己的提交记录。<br>git push不带任何参数时的行为与push.default的配置有关，其默认值取决于Git的版本，在项目中进行推送之前，最好检查一下这个配置。</p>
+<p><img src="/img/20191017/20191017.23.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git commit</span><br><span class="line">git commit</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>先更新后提交</li>
+</ol>
+<p>有种很常见的场景，即拉取远程分支之后，做了一些修改，然后再提交之前，别人修改提交了远程分支，这时将会阻止直接push操作，而要求先进行更新</p>
+<p><img src="/img/20191017/20191017.24.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone</span><br><span class="line">git fakeTeamwork</span><br><span class="line">git commit</span><br><span class="line">git pull --rebase</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>锁定分支</li>
+</ol>
+<p>有时分支被锁定了，需要一些Pull Request流程来合并修改，如果直接commit并push，将会收到信息：<br>! [远程服务器拒绝] main -&gt; main (TF402455: 不允许推送(push)这个分支; 你必须使用pull request来更新这个分支.)</p>
+<p>此时应该新建一个分支，然后push这个分支后并申请pull requests，如果此时已经将修改提交到了main分支上，则需要新建分支后将main分支reset与远程保持一致</p>
+<p><img src="/img/20191017/20191017.25.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard o/main</span><br><span class="line">git checkout -b feature c2</span><br><span class="line">git push origin feature</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-高级"><a href="#2-2-高级" class="headerlink" title="2.2. 高级"></a>2.2. 高级</h4><ol>
+<li>推送主分支</li>
+</ol>
+<p>现有三个特性分支side1、side2和side3，然后需要将这三分支按顺序推送到远程仓库，而且远程仓库已经被更新过了，所以还要把远程的提交记录合并过来</p>
+<p><img src="/img/20191017/20191017.26.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git fetch</span><br><span class="line">git rebase o/main side1</span><br><span class="line">git rebase side1 side2</span><br><span class="line">git rebase side2 side3</span><br><span class="line">git rebase side3 main</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>合并远程分支</li>
+</ol>
+<p>对于上面的场景也可以使用merge的方式实现</p>
+<p><img src="/img/20191017/20191017.27.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br><span class="line">git merge side1</span><br><span class="line">git merge side2</span><br><span class="line">git merge side3</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>远程跟踪分支</li>
+</ol>
+<p>之前pull或push时，好像本地分支main与远程分支o/main总是可以自动的关联，其实这种关联是由分支的“remote tracking”属性决定的，main被设定为跟踪o/main，
+这意味着为main分支指定了推送的目的地以及拉取后合并的目标。<br>当然这个属性在git clone时就由git帮忙自动设置好了，当克隆时, git会为远程仓库中的每个分支在本地仓库中创建一个远程分支（比如 o/main）,然后再创建一个跟踪远程仓库中活动分支的本地分支。
+这也是为什么在克隆时会看到如下输出：<br><code>local branch &quot;main&quot; set to track remote branch &quot;o/main&quot;</code>   </p>
+<p>有时可能希望自己设置这个属性，那么有两种办法：<br>第一种就是通过远程分支检出一个新的分支：<code>git checkout -b totallyNotMain o/main</code>，那么可以创建一个totallyNotMain分支来跟踪远程分支 o/main<br>第二种是使用命令<code>git branch -u</code>，比如<code>git branch -u o/main foo</code>，就可以让foo跟踪o/main，如果当前就是foo分支，则可以省略foo</p>
+<p><img src="/img/20191017/20191017.28.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b side o/main</span><br><span class="line">git commit</span><br><span class="line">git pull --rebase</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>git push 参数</li>
+</ol>
+<p>现在知道git push是通过当前检出分支的属性来确定远程仓库以及要push的目的地的，这是未指定参数时的默认行为，那么为push指定参数：<code>git push &lt;remote&gt; &lt;place&gt;</code></p>
+<p>比如<code>git push origin main</code>，意思是切到本地仓库中的main分支，获取所有的提交，再到远程仓库origin中找到main分支，将远程仓库中没有的提交记录都添加上去，
+place参数用来告诉git提交记录来自于main，并推送到远程仓库中的main，它实际就是要同步的两个仓库的位置。</p>
+<p>当HEAD与分支分离后，即HEAD没有指向具体的分支，这时直接push是无法成功的，那么可以通过参数指定提交的分支</p>
+<p><img src="/img/20191017/20191017.29.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git push origin main</span><br><span class="line">git push origin foo</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>git push 参数2</li>
+</ol>
+<p>如果push时，要指定的来源和去向分支不同，那么可以通过<code>git push origin &lt;source&gt;:&lt;destination&gt;</code>，并且，如果要推送的目标分支不存在，那么git会在远程仓库中根据提供的名称创建分支</p>
+<p><img src="/img/20191017/20191017.30.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git push origin main^:foo</span><br><span class="line">git push origin foo:main</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>git fetch 参数</li>
+</ol>
+<p>git fetch的参数与git push相似，概念也相同，只是方向相反。<br>比如<code>git fetch origin foo</code>，git会到远程仓库的foo分支上，然后获取所有本地不存在的提交，放到本地的o/foo上。类似的如果指定<code>&lt;source&gt;:&lt;destination&gt;</code>，指远程分支，
+而destination表示本地分支</p>
+<p>要注意的是，在指定之后，fetch将不会再更新本地的远程分支</p>
+<p><img src="/img/20191017/20191017.31.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin main~1:foo</span><br><span class="line">git fetch origin foo:main</span><br><span class="line">git checkout foo</span><br><span class="line">git merge main</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>缺省source参数</li>
+</ol>
+<p>对于上面的参数<code>&lt;source&gt;:&lt;destination&gt;</code>，在git push或git fetch时可以不指定任何source，仅保留冒号和destination部分，那么<br><code>git push origin :side</code> 相当于删除远程分支<br><code>git fetch origin :bugFix</code> 相当于本地创建分支</p>
+<p><img src="/img/20191017/20191017.32.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git pull origin bar:foo</span><br><span class="line">git pull origin main:side</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>git pull 参数</li>
+</ol>
+<p>git pull可以理解为用同样的参数执行git fetch，然后再进行merge。比如<code>git pull origin foo</code>，相当于<code>git fetch origin foo</code>，然后再<code>git merge o/foo</code></p>
+<p><img src="/img/20191017/20191017.33.jpg" alt=""> </p>
+<figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git push origin :foo</span><br><span class="line">git fetch origin :bar</span><br></pre></td></tr></table></figure>
+
+<p><br><strong>参考：</strong></p>
+<ol>
+<li><a href="https://learngitbranching.js.org/?locale=zh_CN" target="_blank" rel="noopener">https://learngitbranching.js.org/?locale=zh_CN</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+	  
+	  
+		  <a class="alignright next" href="/2019/09/25/20190925/">
+		    postgre 常用操作
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/日常笔记/">日常笔记</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style ">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+
+    
+	
+    
+	
+    
+
+    <a class="addthis_counter addthis_pill_style"></a>
+	
+  </div>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+ 		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-本地"><span class="toc-text">1. 本地</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-基础"><span class="toc-text">1.1. 基础</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-高级"><span class="toc-text">1.2. 高级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-修改提交树"><span class="toc-text">1.3. 修改提交树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-技巧"><span class="toc-text">1.4. 技巧</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-进阶"><span class="toc-text">1.5. 进阶</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-远程"><span class="toc-text">2. 远程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-基础"><span class="toc-text">2.1. 基础</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-高级"><span class="toc-text">2.2. 高级</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2021 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

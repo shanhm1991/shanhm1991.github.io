@@ -6,7 +6,7 @@
   <title>java 枚举 | Essay</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言枚举enum可以将一组具名的值得有限集合创建为一种新的类型，而这些具名的值可以作为常规的程序组件使用，这是一种非常有用的功能。下图可以比较好的概括枚举类相关的内容">
+  <meta name="description" content="引言枚举enum可以将一组具名的值得有限集合创建为一种新的类型，而这些具名的值可以作为常规的程序组件使用，这是一种非常有用的功能。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -43,7 +43,7 @@
 <div class="alignleft">
   <h1><a href="/">Essay</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">不人云亦云，不断章取义</span>
-  <h2><font style="color: #999;">articles:  92 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  94 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -107,8 +107,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>枚举enum可以将一组具名的值得有限集合创建为一种新的类型，而这些具名的值可以作为常规的程序组件使用，这是一种非常有用的功能。下图可以比较好的概括枚举类相关的内容</p>
-<p><img src="/img/20170823/20170823.1.png" alt=""> </p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>枚举enum可以将一组具名的值得有限集合创建为一种新的类型，而这些具名的值可以作为常规的程序组件使用，这是一种非常有用的功能。</p>
 <a id="more"></a>
 
 <h3 id="1-枚举类实现"><a href="#1-枚举类实现" class="headerlink" title="1. 枚举类实现"></a>1. 枚举类实现</h3><p>首先，enum是由class实现的，所以它可以实现很多class的内容，包括属性和方法，这也是enum可以作为一个类来使用的基础，其实它也是继承Enum实现的</p>
@@ -124,6 +123,7 @@
 <p><strong>使用接口组织枚举</strong>：由于enum本身是继承实现的，所以不能再继承其它类，但是可以实现接口，这样当存在多个枚举类并存在一定关系时，可以使用接口来进行归类组织，比如列举食物下面的水果和蔬菜</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Food</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">enum</span> Fruit&#123;</span><br><span class="line">        APPLE, PEACH, ORANGE;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">enum</span> Vegetables&#123;</span><br><span class="line">        TOMATO, CARROT, POTATO;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>然后就可以统一通过<code>static import Food*</code>进行引入</p>
 <p><strong>添加自定义方法</strong>：如果是共同的方法，则直接定义，与普通类一样，如果要为每个枚举实例赋予不同的行为，可以先定义一个abstract方法，然后再在实例中定义方法体。至于属性与构造器同样都可以自定义，与普通类无异。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Color &#123;</span><br><span class="line">	</span><br><span class="line">    RED &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">calculate</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> arg + <span class="keyword">this</span>.ordinal();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, </span><br><span class="line"></span><br><span class="line">    GREEN &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">calculate</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> arg - <span class="keyword">this</span>.ordinal();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, </span><br><span class="line"></span><br><span class="line">    BLUE &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">calculate</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> arg * <span class="keyword">this</span>.ordinal();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">calculate</span><span class="params">(<span class="keyword">int</span> arg)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
