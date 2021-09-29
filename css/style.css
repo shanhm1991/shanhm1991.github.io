@@ -374,7 +374,7 @@ blockquote {
   font-style: ormal;
   font-family: "Georgia", serif;
   font-size: 1em;
-  padding: 0 20px 10px;
+  padding: 0 0 2px 6px;
   text-align: left;
 }
 blockquote footer {

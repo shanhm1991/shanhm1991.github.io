@@ -60,6 +60,117 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20190704" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-07-03T16:00:00.000Z"><a href="/2019/07/04/20190704/">2019-07-04</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/07/04/20190704/">基于ThreadPool/spring构建计划任务 使用文档</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>接着上文的介绍，下面简单介绍下fom的使用方式。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/07/04/20190704/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190702" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-07-01T16:00:00.000Z"><a href="/2019/07/02/20190702/">2019-07-02</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/07/02/20190702/">基于ThreadPool/spring构建计划任务 设计文档</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p><a href="https://github.com/shanhm1991/spring-fom" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom</a></p>
+</blockquote>
+<p>写这个工具最开始是为了处理各种各样的离线数据文件，其中涉及到一些定时任务，而使用现有的工具，比如spring-schedule，总免不了要做一些额外的工作，于是干脆自己尝试造了这样一个轮子，
+也是因为一开始设计是与文件有关，所以就取名为fom。</p>
+<p>概括起来，fom其实也比较简单，其几乎所有的流程逻辑都在<code>ScheduleContext</code>中，里面维护了一个定时线程和一个线程池，另外自定义了一套状态转换机制，每个<code>ScheduleContext</code>相当于一个独立的定时器，
+其生命周期（加载、启动、终止）完全基于spring的应用上下文。对于具体的任务则抽象为<code>Task</code>，其实就是在<code>Callable</code>的基础上定义了一套任务执行的模板，
+整个fom的功能设计，都是围绕<code>ScheduleContext</code>和<code>Task</code>实现的。 </p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/07/02/20190702/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20191017" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -87,7 +198,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文记录了在gitlearn网站上的学习笔记，主要也是为了能记下一些git的常用操作（其实网站对git机制也解释的非常简单易懂），不至于有时忘记了又到网上到处找答案</p>
       
     </div>
 	
@@ -204,117 +315,6 @@
 	
     <footer>
       
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190704" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-07-03T16:00:00.000Z"><a href="/2019/07/04/20190704/">2019-07-04</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/07/04/20190704/">基于ThreadPool/spring构建计划任务 使用文档</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>接着上文的介绍，下面简单介绍下fom的使用方式。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/07/04/20190704/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190702" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-07-01T16:00:00.000Z"><a href="/2019/07/02/20190702/">2019-07-02</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/07/02/20190702/">基于ThreadPool/spring构建计划任务 设计文档</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
-<p>git：<a href="https://github.com/shanhm1991/spring-fom" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom</a></p>
-</blockquote>
-<p>写这个工具最开始是为了处理各种各样的离线数据文件，其中涉及到一些定时任务，而使用现有的工具，比如spring-schedule，总免不了要做一些额外的工作，于是干脆自己尝试造了这样一个轮子，
-也是因为一开始设计是与文件有关，所以就取名为fom。</p>
-<p>概括起来，fom其实也比较简单，其几乎所有的流程逻辑都在<code>ScheduleContext</code>中，里面维护了一个定时线程和一个线程池，另外自定义了一套状态转换机制，每个<code>ScheduleContext</code>相当于一个独立的定时器，
-其生命周期（加载、启动、终止）完全基于spring的应用上下文。对于具体的任务则抽象为<code>Task</code>，其实就是在<code>Callable</code>的基础上定义了一套任务执行的模板，
-整个fom的功能设计，都是围绕<code>ScheduleContext</code>和<code>Task</code>实现的。 </p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/07/02/20190702/#more" class="more-link">more</a>
-          </div>
         
         
       

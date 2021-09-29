@@ -6,7 +6,7 @@
   <title>java 字符串 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言String是Java中使用最频繁的对象之一，它本质上是维护了一个char或byte数组，并提供了基于这个数组的一些操作。">
+  <meta name="description" content="引言String是Java中使用最频繁的对象之一，其本质上是维护了一个char或byte数组，并提供了基于这个数组的一些操作">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -116,7 +116,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>String是Java中使用最频繁的对象之一，它本质上是维护了一个char或byte数组，并提供了基于这个数组的一些操作。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>String是Java中使用最频繁的对象之一，其本质上是维护了一个char或byte数组，并提供了基于这个数组的一些操作</p>
 <a id="more"></a>
 
 <h3 id="1-final不可变"><a href="#1-final不可变" class="headerlink" title="1. final不可变"></a>1. final不可变</h3><figure class="highlight java"><figcaption><span class="caption">java.lang.String</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span> </span></span><br><span class="line"><span class="class"></span></span><br><span class="line">    private final char value[]; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> hash; <span class="comment">// Default to 0</span></span><br><span class="line">	</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
