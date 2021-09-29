@@ -148,8 +148,8 @@ a:hover {
   margin-left: 30px;
 }
 article {
-  -webkit-box-shadow: 1px 2px 3px #ddd;
-  box-shadow: 1px 2px 3px #ddd;
+  -webkit-box-shadow: 1px 2px 3px rgba(221,221,221,0.8);
+  box-shadow: 1px 2px 3px rgba(221,221,221,0.8);
   background: #fff;
 }
 article.page {
@@ -159,7 +159,7 @@ article.page .icon {
   display: none;
 }
 article.post .icon:before {
-  content: '\f016';
+  content: '\f044';
 }
 article.photo .icon:before {
   content: '\f030';
