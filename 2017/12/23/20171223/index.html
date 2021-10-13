@@ -6,9 +6,10 @@
   <title>windows安装mysql | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="概述环境：win7_x64版本：mysql-5.7.18问题：
+  <meta name="description" content="环境：win7_x64版本：mysql-5.7.18    
 
 ERROR 1045 (28000): Access denied for user ‘root’@’localhost’解决：跳过密码登录mysql，修改root密码后重新登录
+
 sql执行错误#3167解决：set global show_compatibility_56=on;">
   
   
@@ -89,7 +90,7 @@ sql执行错误#3167解决：set global show_compatibility_56=on;">
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 372  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 363  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -110,14 +111,18 @@ sql执行错误#3167解决：set global show_compatibility_56=on;">
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>环境：win7_x64<br>版本：mysql-5.7.18<br>问题：</p>
+        <p>环境：win7_x64<br>版本：mysql-5.7.18    </p>
 <ol>
-<li>ERROR 1045 (28000): Access denied for user ‘root’@’localhost’<br>解决：跳过密码登录mysql，修改root密码后重新登录</li>
-<li>sql执行错误#3167<br>解决：set global show_compatibility_56=on;<a id="more"></a>
-
+<li><p>ERROR 1045 (28000): Access denied for user ‘root’@’localhost’<br>解决：跳过密码登录mysql，修改root密码后重新登录</p>
+</li>
+<li><p>sql执行错误#3167<br>解决：set global show_compatibility_56=on;</p>
 </li>
 </ol>
-<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p>先说下场景：官网下载mysql-5.7.18-winx64包，解压，设置好环境变量，执行install等命令安装完毕，都正常未发现什么问题。<br>但是使用客户端连接数据库时报错：ERROR 1045 (28000): Access denied for user ‘root’@’localhost’ …    </p>
+<a id="more"></a>
+
+<br>
+
+<p>场景：官网下载mysql-5.7.18-winx64包，解压，设置好环境变量，执行install等命令安装完毕，都正常未发现什么问题。<br>但是使用客户端连接数据库时报错：ERROR 1045 (28000): Access denied for user ‘root’@’localhost’ …    </p>
 <ol>
 <li>在mysql的home目录下找my.ini文件，如果没有可以自己新建，基本配置差不多，主要在最下面添加一行：skip-grant-tables</li>
 </ol>
@@ -240,7 +245,7 @@ sql执行错误#3167解决：set global show_compatibility_56=on;">
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过程"><span class="toc-text">过程</span></a></li></ol>
+
 </div>
 
 

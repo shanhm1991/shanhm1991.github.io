@@ -6,7 +6,7 @@
   <title>计算机 输入输出系统（I/O） | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言I/O功能模块通常简称为：I/O接口，也叫适配器，指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件。为了保证处理器和不同外设之间高效和可靠的交互，
+  <meta name="description" content="I/O功能模块通常简称为：I/O接口，也叫适配器，指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件。为了保证处理器和不同外设之间高效和可靠的交互，
 CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶段：I/O接口与外设之间的数据传送，以及CPU与I/O接口之间的数据传送。
 下图展示了CPU、I/O接口和外围设备之间的连接关系。其中外围设备自身带有设备控制器，它是控制外围设备进行操作的控制部件，它通过I/O接口接收来自CPU传送的各种信息，
 并根据设备的不同要求将这些信息传送到设备，或者从设备中读出信息传送到I/O接口。
@@ -124,7 +124,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>I/O功能模块通常简称为：I/O接口，也叫适配器，<font style="color:red;">指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件</font>。为了保证处理器和不同外设之间高效和可靠的交互，
+        <p>I/O功能模块通常简称为：I/O接口，也叫适配器，<font style="color:red;">指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件</font>。为了保证处理器和不同外设之间高效和可靠的交互，
 CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶段：I/O接口与外设之间的数据传送，以及CPU与I/O接口之间的数据传送。</p>
 <p>下图展示了CPU、I/O接口和外围设备之间的连接关系。其中外围设备自身带有设备控制器，它是控制外围设备进行操作的控制部件，它通过I/O接口接收来自CPU传送的各种信息，
 并根据设备的不同要求将这些信息传送到设备，或者从设备中读出信息传送到I/O接口。</p>
@@ -136,10 +136,10 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 <li>状态：接口模块监视外围设备的工作状态并保存，比如准备就绪或者忙，供CPU询问外围设备状态时用；</li>
 <li>转换：接口模块可以完成数据转换，保证数据能在外围设备和CPU之间正确的传送；</li>
 <li>整理：接口模块可以完成一些特别功能，当需要时可以修改字计数器或者当前内存地址寄存器；</li>
-<li>程序中断：当外围设备向CPU请求某种动作时，接口模块会产生一个中断请求信号到CPU;<a id="more"></a>
-
-</li>
+<li>程序中断：当外围设备向CPU请求某种动作时，接口模块会产生一个中断请求信号到CPU;</li>
 </ul>
+<a id="more"></a>
+
 <h3 id="1-传输过程"><a href="#1-传输过程" class="headerlink" title="1. 传输过程"></a>1. 传输过程</h3><p>为了与CPU交互信息的方便，在I/O接口内一般会设置一些可以被CPU直接访问的寄存器，称为端口。
 例如接收来自CPU等主控设备的控制命令的寄存器称为<font style="font-weight:bold; color:red;">命令口</font>，
 向CPU报告I/O设备工作状态的寄存器称为<font style="font-weight:bold; color:red;">状态口</font>，
@@ -317,7 +317,7 @@ DMA通知CPU可以使用内存，并把总线控制权还给CPU。<br>但是这�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-传输过程"><span class="toc-text">1. 传输过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-传输方式"><span class="toc-text">2. 传输方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-简单I-O方式"><span class="toc-text">2.1. 简单I&#x2F;O方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-程序轮询方式"><span class="toc-text">2.2. 程序轮询方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-程序中断方式"><span class="toc-text">2.3. 程序中断方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-DMA方式"><span class="toc-text">2.4. DMA方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-通道和输入-输出处理器"><span class="toc-text">2.5. 通道和输入&#x2F;输出处理器</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-传输过程"><span class="toc-text">1. 传输过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-传输方式"><span class="toc-text">2. 传输方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-简单I-O方式"><span class="toc-text">2.1. 简单I&#x2F;O方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-程序轮询方式"><span class="toc-text">2.2. 程序轮询方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-程序中断方式"><span class="toc-text">2.3. 程序中断方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-DMA方式"><span class="toc-text">2.4. DMA方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-通道和输入-输出处理器"><span class="toc-text">2.5. 通道和输入&#x2F;输出处理器</span></a></li></ol></li></ol>
 </div>
 
 

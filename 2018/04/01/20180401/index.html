@@ -6,7 +6,7 @@
   <title>JUC AbstractQueuedSynchronizer | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
+  <meta name="description" content="队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
 确保状态的改变是安全的。通过内置的FIFO（First In First Out）队列来完成资源获取线程的排队工作。
 AQS同步与synchronized同步是采用的两种不同的机制：synchronized在编译后，会在同步块的前后分别添加monitorenter和monitorexit两个字节码指令，这两个指令需要关联一个监视对象，当线程执行monitorenter指令时，
 需要首先获得获得监视对象的锁，即进入同步块的凭证，才能进入同步块，当线程离开同步块时，执行monitorexit指令，释放对象锁。AQS同步中，使用一个int类型的变量state来表示当前同步块的状态。以独占式同步为例，state的有效值为0和1，其中0表示当前同步块中没有线程，1表示同步块中已经有线程在执行。
@@ -122,7 +122,7 @@ AQS同步与synchronized同步是采用的两种不同的机制：synchronized�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
+        <p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
 确保状态的改变是安全的。通过内置的FIFO（First In First Out）队列来完成资源获取线程的排队工作。</p>
 <p>AQS同步与synchronized同步是采用的两种不同的机制：<br>synchronized在编译后，会在同步块的前后分别添加monitorenter和monitorexit两个字节码指令，这两个指令需要关联一个监视对象，当线程执行monitorenter指令时，
 需要首先获得获得监视对象的锁，即进入同步块的凭证，才能进入同步块，当线程离开同步块时，执行monitorexit指令，释放对象锁。<br>AQS同步中，使用一个int类型的变量state来表示当前同步块的状态。以独占式同步为例，state的有效值为0和1，其中0表示当前同步块中没有线程，1表示同步块中已经有线程在执行。
@@ -404,7 +404,7 @@ AQS同步与synchronized同步是采用的两种不同的机制：synchronized�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-提供方法"><span class="toc-text">1. 提供方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-CAS操作-amp-unsafe支持"><span class="toc-text">2. CAS操作 &amp; unsafe支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-同步队列"><span class="toc-text">3. 同步队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-主要实现"><span class="toc-text">4. 主要实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-独占锁的获取和释放"><span class="toc-text">4.1. 独占锁的获取和释放</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-共享锁获取和释放"><span class="toc-text">4.2. 共享锁获取和释放</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-中断"><span class="toc-text">4.3. 中断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-超时"><span class="toc-text">4.4. 超时</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-提供方法"><span class="toc-text">1. 提供方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-CAS操作-amp-unsafe支持"><span class="toc-text">2. CAS操作 &amp; unsafe支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-同步队列"><span class="toc-text">3. 同步队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-主要实现"><span class="toc-text">4. 主要实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-独占锁的获取和释放"><span class="toc-text">4.1. 独占锁的获取和释放</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-共享锁获取和释放"><span class="toc-text">4.2. 共享锁获取和释放</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-中断"><span class="toc-text">4.3. 中断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-超时"><span class="toc-text">4.4. 超时</span></a></li></ol></li></ol>
 </div>
 
 

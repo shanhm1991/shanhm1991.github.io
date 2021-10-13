@@ -6,7 +6,7 @@
   <title>借助poi解析Excel 二 借助SAX降低内存 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言继续上文，Excel的数据存在Xml中，所以解析Excel也就是解析xml。对于文本文件，可以通过换行符来确定一行的结束。而对于xml，其描述数据的单位是节点，并且可以嵌套，
+  <meta name="description" content="继续上文，Excel的数据存在Xml中，所以解析Excel也就是解析xml。对于文本文件，可以通过换行符来确定一行的结束。而对于xml，其描述数据的单位是节点，并且可以嵌套，
 因此读取时就是以节点结束来进行确定，不过除非事先知道xml的节点规则，即节点结构或相互之间的关系，否则无法正确读取。Excel中的Xml规则即由Excel规范来描述，
 而poi正是在这个规范的基础上提供了一套基于事件解析的api。">
   
@@ -114,7 +114,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>继续上文，Excel的数据存在Xml中，所以解析Excel也就是解析xml。对于文本文件，可以通过换行符来确定一行的结束。而对于xml，其描述数据的单位是节点，并且可以嵌套，
+        <p>继续上文，Excel的数据存在Xml中，所以解析Excel也就是解析xml。对于文本文件，可以通过换行符来确定一行的结束。而对于xml，其描述数据的单位是节点，并且可以嵌套，
 因此读取时就是以节点结束来进行确定，不过除非事先知道xml的节点规则，即节点结构或相互之间的关系，否则无法正确读取。Excel中的Xml规则即由Excel规范来描述，
 而poi正是在这个规范的基础上提供了一套基于事件解析的api。</p>
 <a id="more"></a>
@@ -241,7 +241,7 @@ SAXParser再将xml流读取拆成一个个事件，并调用处理实现。</fon
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-实现"><span class="toc-text">1. 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-xlsx实现"><span class="toc-text">1.1. xlsx实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-xls实现"><span class="toc-text">1.2. xls实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-存在问题"><span class="toc-text">2. 存在问题</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-实现"><span class="toc-text">1. 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-xlsx实现"><span class="toc-text">1.1. xlsx实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-xls实现"><span class="toc-text">1.2. xls实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-存在问题"><span class="toc-text">2. 存在问题</span></a></li></ol>
 </div>
 
 

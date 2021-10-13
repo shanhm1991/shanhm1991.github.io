@@ -6,7 +6,7 @@
   <title>spring Jdbc（事务） | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言事务一般指数据库事务，是由一系列对系统中数据进行访问或更新操作组成的一个执行单元。主要是当发生并发操作时，事务可以起到一个隔离作用，即避免各个操作相互影响，
+  <meta name="description" content="事务一般指数据库事务，是由一系列对系统中数据进行访问或更新操作组成的一个执行单元。主要是当发生并发操作时，事务可以起到一个隔离作用，即避免各个操作相互影响，
 另外为数据库提供了一个从失败中恢复到正常状态的方法，同时保证了数据库即使在异常状态下仍能保持数据的一致性。
 以上可以概括成事务的四个特性，简称ACID
 
@@ -120,7 +120,7 @@
    
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -141,7 +141,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>事务一般指数据库事务，是由一系列对系统中数据进行访问或更新操作组成的一个执行单元。主要是当发生并发操作时，事务可以起到一个隔离作用，即避免各个操作相互影响，
+        <p>事务一般指数据库事务，是由一系列对系统中数据进行访问或更新操作组成的一个执行单元。主要是当发生并发操作时，事务可以起到一个隔离作用，即避免各个操作相互影响，
 另外为数据库提供了一个从失败中恢复到正常状态的方法，同时保证了数据库即使在异常状态下仍能保持数据的一致性。</p>
 <p>以上可以概括成事务的四个特性，简称ACID</p>
 <ul>
@@ -370,7 +370,7 @@ spring会通过<code>TransactionInfo</code>实例中的信息进行回滚等操�
         
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -441,7 +441,7 @@ spring会通过<code>TransactionInfo</code>实例中的信息进行回滚等操�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例-Transactional"><span class="toc-text">示例 @Transactional</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-解析事务"><span class="toc-text">1. 解析事务</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#InfrastructureAdvisorAutoProxyCreator"><span class="toc-text">InfrastructureAdvisorAutoProxyCreator</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-getAdvicesAndAdvisorsForBean"><span class="toc-text">1.1 getAdvicesAndAdvisorsForBean</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-1-1-findCandidateAdvisors"><span class="toc-text">1.1.1. findCandidateAdvisors</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-1-2-findAdvisorsThatCanApply"><span class="toc-text">1.1.2. findAdvisorsThatCanApply</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-createProxy"><span class="toc-text">1.2. createProxy</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-执行事务-TransactionInterceptor"><span class="toc-text">2. 执行事务 TransactionInterceptor</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-determineTransactionManager"><span class="toc-text">2.1. determineTransactionManager</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-createTransactionIfNecessary"><span class="toc-text">2.2. createTransactionIfNecessary</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-getTransaction"><span class="toc-text">2.2.1. getTransaction</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-1-doGetTransaction"><span class="toc-text">2.2.1.1. doGetTransaction</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-2-doBegin"><span class="toc-text">2.2.1.2. doBegin</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-3-prepareSynchronization"><span class="toc-text">2.2.1.3. prepareSynchronization</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-4-handleExistingTransaction"><span class="toc-text">2.2.1.4. handleExistingTransaction</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-2-prepareTransactionInfo"><span class="toc-text">2.2.2. prepareTransactionInfo</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-completeTransactionAfterThrowing"><span class="toc-text">2.3. completeTransactionAfterThrowing</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-3-1-rollback"><span class="toc-text">2.3.1. rollback</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-commitTransactionAfterReturning"><span class="toc-text">2.4. commitTransactionAfterReturning</span></a></li></ol></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例-Transactional"><span class="toc-text">示例 @Transactional</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-解析事务"><span class="toc-text">1. 解析事务</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#InfrastructureAdvisorAutoProxyCreator"><span class="toc-text">InfrastructureAdvisorAutoProxyCreator</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-getAdvicesAndAdvisorsForBean"><span class="toc-text">1.1 getAdvicesAndAdvisorsForBean</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-1-1-findCandidateAdvisors"><span class="toc-text">1.1.1. findCandidateAdvisors</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-1-2-findAdvisorsThatCanApply"><span class="toc-text">1.1.2. findAdvisorsThatCanApply</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-createProxy"><span class="toc-text">1.2. createProxy</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-执行事务-TransactionInterceptor"><span class="toc-text">2. 执行事务 TransactionInterceptor</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-determineTransactionManager"><span class="toc-text">2.1. determineTransactionManager</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-createTransactionIfNecessary"><span class="toc-text">2.2. createTransactionIfNecessary</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-getTransaction"><span class="toc-text">2.2.1. getTransaction</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-1-doGetTransaction"><span class="toc-text">2.2.1.1. doGetTransaction</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-2-doBegin"><span class="toc-text">2.2.1.2. doBegin</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-3-prepareSynchronization"><span class="toc-text">2.2.1.3. prepareSynchronization</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-4-handleExistingTransaction"><span class="toc-text">2.2.1.4. handleExistingTransaction</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-2-prepareTransactionInfo"><span class="toc-text">2.2.2. prepareTransactionInfo</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-completeTransactionAfterThrowing"><span class="toc-text">2.3. completeTransactionAfterThrowing</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-3-1-rollback"><span class="toc-text">2.3.1. rollback</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-commitTransactionAfterReturning"><span class="toc-text">2.4. commitTransactionAfterReturning</span></a></li></ol></li></ol></li></ol>
 </div>
 
 

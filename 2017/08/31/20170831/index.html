@@ -6,7 +6,7 @@
   <title>java 泛型 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言一般的类和方法，只能使用具体的类型，如果要编写可以应用于多种类型的代码，这种刻板的限制对代码的限制就会很大。
+  <meta name="description" content="一般的类和方法，只能使用具体的类型，如果要编写可以应用于多种类型的代码，这种刻板的限制对代码的限制就会很大。
 
 在面向对象编程语言中，多态算是一种泛化机制。可以将方法的参数类型设为基类，那么该方法就可以接受从这个基类导出的任何类作为参数。
 但程序还是会受到继承的限制，比如java中就是单继承体系。如果将方法的参数设为一个接口，那么限制会松很多，任何实现了该接口的类都能满足该方法，
@@ -124,7 +124,7 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>一般的类和方法，只能使用具体的类型，如果要编写可以应用于多种类型的代码，这种刻板的限制对代码的限制就会很大。</p>
+        <p>一般的类和方法，只能使用具体的类型，如果要编写可以应用于多种类型的代码，这种刻板的限制对代码的限制就会很大。</p>
 <font color="#E51508">
 在面向对象编程语言中，多态算是一种泛化机制。可以将方法的参数类型设为基类，那么该方法就可以接受从这个基类导出的任何类作为参数。
 但程序还是会受到继承的限制，比如java中就是单继承体系。如果将方法的参数设为一个接口，那么限制会松很多，任何实现了该接口的类都能满足该方法，
@@ -352,7 +352,7 @@ from how the equals() method takes in an Object as parameter, not just the same 
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-泛型类-接口"><span class="toc-text">1. 泛型类&#x2F;接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-泛型方法"><span class="toc-text">2. 泛型方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-边界符"><span class="toc-text">3. 边界符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-类型擦除"><span class="toc-text">4. 类型擦除</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-类型检测"><span class="toc-text">4.1. 类型检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-实例创建"><span class="toc-text">4.2. 实例创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-泛型数组"><span class="toc-text">4.3. 泛型数组</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-通配符"><span class="toc-text">5. 通配符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-extends"><span class="toc-text">5.1. extends</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-super"><span class="toc-text">5.2. super</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-自限定类型Comparable"><span class="toc-text">6. 自限定类型Comparable</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-泛型类-接口"><span class="toc-text">1. 泛型类&#x2F;接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-泛型方法"><span class="toc-text">2. 泛型方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-边界符"><span class="toc-text">3. 边界符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-类型擦除"><span class="toc-text">4. 类型擦除</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-类型检测"><span class="toc-text">4.1. 类型检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-实例创建"><span class="toc-text">4.2. 实例创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-泛型数组"><span class="toc-text">4.3. 泛型数组</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-通配符"><span class="toc-text">5. 通配符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-extends"><span class="toc-text">5.1. extends</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-super"><span class="toc-text">5.2. super</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-自限定类型Comparable"><span class="toc-text">6. 自限定类型Comparable</span></a></li></ol>
 </div>
 
 

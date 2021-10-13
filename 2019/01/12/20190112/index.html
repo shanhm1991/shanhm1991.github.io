@@ -6,7 +6,7 @@
   <title>《java并发编程实战》十二 java内存模型 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言假设一个线程为变量赋值：variable = 3；内存模型需要解决一个问题：“在什么条件下，读取variable的线程将看到这个值为3？”这看上去理所当然，但是如果缺少内存同步，那么将会有许多因素使得线程无法立即看到，甚至永远也看不到另一个线程的操作结果。例如：     
+  <meta name="description" content="假设一个线程为变量赋值：variable = 3；内存模型需要解决一个问题：“在什么条件下，读取variable的线程将看到这个值为3？”这看上去理所当然，但是如果缺少内存同步，那么将会有许多因素使得线程无法立即看到，甚至永远也看不到另一个线程的操作结果。例如：     
 
 在编译器中生成的指令顺序，可以与源代码中的顺序不同，此外编译器还会将变量保存在寄存器而不是内存中；
 处理器可以采用乱序或并行等方式来执行指令；
@@ -123,7 +123,7 @@ JVM规定了一组最小保证，这组保证规定了对变量的写入操作�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>假设一个线程为变量赋值：variable = 3；<br>内存模型需要解决一个问题：“在什么条件下，读取variable的线程将看到这个值为3？”<br>这看上去理所当然，但是如果缺少内存同步，那么将会有许多因素使得线程无法立即看到，甚至永远也看不到另一个线程的操作结果。例如：     </p>
+        <p>假设一个线程为变量赋值：variable = 3；<br>内存模型需要解决一个问题：“在什么条件下，读取variable的线程将看到这个值为3？”<br>这看上去理所当然，但是如果缺少内存同步，那么将会有许多因素使得线程无法立即看到，甚至永远也看不到另一个线程的操作结果。例如：     </p>
 <ul>
 <li>在编译器中生成的指令顺序，可以与源代码中的顺序不同，此外编译器还会将变量保存在寄存器而不是内存中；</li>
 <li>处理器可以采用乱序或并行等方式来执行指令；</li>
@@ -316,7 +316,7 @@ JVM也如此。<font color="#E51508">在支持共享内存的多处理器中，�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-平台的内存模型"><span class="toc-text">1. 平台的内存模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-重排序"><span class="toc-text">2. 重排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Java内存模型（JMM）"><span class="toc-text">3. Java内存模型（JMM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-借助同步"><span class="toc-text">4. 借助同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-对象发布问题"><span class="toc-text">5. 对象发布问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-示例：发布一个单例"><span class="toc-text">5.1. 示例：发布一个单例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-初始化安全性"><span class="toc-text">5.2. 初始化安全性</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-平台的内存模型"><span class="toc-text">1. 平台的内存模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-重排序"><span class="toc-text">2. 重排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Java内存模型（JMM）"><span class="toc-text">3. Java内存模型（JMM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-借助同步"><span class="toc-text">4. 借助同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-对象发布问题"><span class="toc-text">5. 对象发布问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-示例：发布一个单例"><span class="toc-text">5.1. 示例：发布一个单例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-初始化安全性"><span class="toc-text">5.2. 初始化安全性</span></a></li></ol></li></ol>
 </div>
 
 

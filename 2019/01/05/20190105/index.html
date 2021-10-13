@@ -6,7 +6,7 @@
   <title>《java并发编程实战》五 任务的执行 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言任务通常是一些抽象且离散的工作单元。通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，并提供一种自然的并行工作结构来提升并发性。
+  <meta name="description" content="任务通常是一些抽象且离散的工作单元。通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，并提供一种自然的并行工作结构来提升并发性。
 在正常的负载下，服务器应用程序应该同时表现出良好的吞吐量和快速的响应性。应用程序提供商希望程序支持尽可能多的用户，从而降低每个用户的服务成本，而用户则希望获得尽快的响应。当负荷过载时，应用程序的性能应该是逐渐降低，而不是直接失败。
 理想情况下，可以找出清晰的任务边界，各个任务之间是相互独立的，即任务不依赖于其他任务的状态、结果或边界效应。独立性有助于并发，因为如果存在足够多的处理资源，那么这些独立的任务就可以并行执行，
 这也为调度与负载均衡等的实现提供了更好的灵活性。">
@@ -110,7 +110,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>任务通常是一些抽象且离散的工作单元。通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，并提供一种自然的并行工作结构来提升并发性。</p>
+        <p>任务通常是一些抽象且离散的工作单元。通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，并提供一种自然的并行工作结构来提升并发性。</p>
 <p>在正常的负载下，服务器应用程序应该同时表现出良好的吞吐量和快速的响应性。应用程序提供商希望程序支持尽可能多的用户，从而降低每个用户的服务成本，而用户则希望获得尽快的响应。当负荷过载时，应用程序的性能应该是逐渐降低，而不是直接失败。</p>
 <p>理想情况下，可以找出清晰的任务边界，各个任务之间是相互独立的，即任务不依赖于其他任务的状态、结果或边界效应。<font color="#E51508">独立性有助于并发，因为如果存在足够多的处理资源，那么这些独立的任务就可以并行执行，
 这也为调度与负载均衡等的实现提供了更好的灵活性。</font>  </p>
@@ -215,7 +215,7 @@
 	  
 	  
 		  <a class="alignright next" href="/2019/01/04/20190104/">
-		    《java并发编程实战》四 线程安全性的委托以及常见的线程安全容器和工具
+		    《java并发编程实战》四 线程安全性委托
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -291,7 +291,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-示例：处理请求"><span class="toc-text">1. 示例：处理请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-串行地执行任务"><span class="toc-text">1.1. 串行地执行任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-改进：创建线程执行"><span class="toc-text">1.2. 改进：创建线程执行</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Executor"><span class="toc-text">2. Executor</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-示例改进：基于Executor执行任务"><span class="toc-text">2.1. 示例改进：基于Executor执行任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Executor的生命周期"><span class="toc-text">2.2. Executor的生命周期</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ExecutorService"><span class="toc-text">3. ExecutorService</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-示例改进：解决Executor的关闭问题"><span class="toc-text">3.1. 示例改进：解决Executor的关闭问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-关于延迟任务与周期任务"><span class="toc-text">4. 关于延迟任务与周期任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-示例：页面渲染"><span class="toc-text">5. 示例：页面渲染</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-串行地渲染"><span class="toc-text">5.1. 串行地渲染</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-改进：使用Future实现渲染"><span class="toc-text">5.2. 改进：使用Future实现渲染</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-改进：利用CompletionService实现渲染"><span class="toc-text">5.3. 改进：利用CompletionService实现渲染</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-示例-限时任务-：旅行预订门户网站"><span class="toc-text">6. 示例(限时任务)：旅行预订门户网站</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-示例：处理请求"><span class="toc-text">1. 示例：处理请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-串行地执行任务"><span class="toc-text">1.1. 串行地执行任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-改进：创建线程执行"><span class="toc-text">1.2. 改进：创建线程执行</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Executor"><span class="toc-text">2. Executor</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-示例改进：基于Executor执行任务"><span class="toc-text">2.1. 示例改进：基于Executor执行任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Executor的生命周期"><span class="toc-text">2.2. Executor的生命周期</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ExecutorService"><span class="toc-text">3. ExecutorService</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-示例改进：解决Executor的关闭问题"><span class="toc-text">3.1. 示例改进：解决Executor的关闭问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-关于延迟任务与周期任务"><span class="toc-text">4. 关于延迟任务与周期任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-示例：页面渲染"><span class="toc-text">5. 示例：页面渲染</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-串行地渲染"><span class="toc-text">5.1. 串行地渲染</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-改进：使用Future实现渲染"><span class="toc-text">5.2. 改进：使用Future实现渲染</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-改进：利用CompletionService实现渲染"><span class="toc-text">5.3. 改进：利用CompletionService实现渲染</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-示例-限时任务-：旅行预订门户网站"><span class="toc-text">6. 示例(限时任务)：旅行预订门户网站</span></a></li></ol>
 </div>
 
 

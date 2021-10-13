@@ -6,7 +6,7 @@
   <title>《java并发编程实战》九 显式锁的使用 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言java 5.0之前，在协调共享对象的访问时可以使用的机制有synchronized和volatile。java 5.0新增了一种新的机制：ReentrantLock。它的作用并不是用来替代内置锁，而是当内置加锁机制不适用时，作为一种可选择的高级功能。
+  <meta name="description" content="java 5.0之前，在协调共享对象的访问时可以使用的机制有synchronized和volatile。java 5.0新增了一种新的机制：ReentrantLock。它的作用并不是用来替代内置锁，而是当内置加锁机制不适用时，作为一种可选择的高级功能。
 在java 6.0中，使用了与ReentrantLock类似的算法对内置锁进行了改进，有效地提高了内置锁的可伸缩性。">
   
   
@@ -113,7 +113,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java 5.0之前，在协调共享对象的访问时可以使用的机制有<code>synchronized</code>和<code>volatile</code>。java 5.0新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置加锁机制不适用时，作为一种可选择的高级功能。
+        <p>java 5.0之前，在协调共享对象的访问时可以使用的机制有<code>synchronized</code>和<code>volatile</code>。java 5.0新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置加锁机制不适用时，作为一种可选择的高级功能。
 在java 6.0中，使用了与<code>ReentrantLock</code>类似的算法对内置锁进行了改进，有效地提高了内置锁的可伸缩性。</p>
 <a id="more"></a>
 
@@ -251,7 +251,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Lock与ReentrantLock"><span class="toc-text">1. Lock与ReentrantLock</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-轮询锁"><span class="toc-text">1.1. 轮询锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-定时锁"><span class="toc-text">1.2. 定时锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-可中断锁"><span class="toc-text">1.3. 可中断锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-公平性"><span class="toc-text">2. 公平性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-读写锁"><span class="toc-text">3. 读写锁</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Lock与ReentrantLock"><span class="toc-text">1. Lock与ReentrantLock</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-轮询锁"><span class="toc-text">1.1. 轮询锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-定时锁"><span class="toc-text">1.2. 定时锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-可中断锁"><span class="toc-text">1.3. 可中断锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-公平性"><span class="toc-text">2. 公平性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-读写锁"><span class="toc-text">3. 读写锁</span></a></li></ol>
 </div>
 
 

@@ -6,7 +6,7 @@
   <title>spring Aop | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
+  <meta name="description" content="使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
 所以可以使用面向切面（AOP）编程作为一个补充，Aop是横向的而OOP是纵向的。">
   
   
@@ -96,7 +96,7 @@
    
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -117,7 +117,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
+        <p>使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
 所以可以使用面向切面（AOP）编程作为一个补充，Aop是横向的而OOP是纵向的。</p>
 <a id="more"></a>
 
@@ -273,7 +273,7 @@
         
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -344,7 +344,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例-Aspect"><span class="toc-text">示例 @Aspect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AnnotationAwareAspectJAutoProxyCreator"><span class="toc-text">AnnotationAwareAspectJAutoProxyCreator</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#getAdvicesAndAdvisorsForBean"><span class="toc-text">getAdvicesAndAdvisorsForBean</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#findCandidateAdvisors"><span class="toc-text">findCandidateAdvisors</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#findAdvisorsThatCanApply"><span class="toc-text">findAdvisorsThatCanApply</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-DeclareParents"><span class="toc-text">示例 @DeclareParents</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#createProxy"><span class="toc-text">createProxy</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#JdkDynamicAopProxy"><span class="toc-text">JdkDynamicAopProxy</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CglibAopProxy"><span class="toc-text">CglibAopProxy</span></a></li></ol></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例-Aspect"><span class="toc-text">示例 @Aspect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AnnotationAwareAspectJAutoProxyCreator"><span class="toc-text">AnnotationAwareAspectJAutoProxyCreator</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#getAdvicesAndAdvisorsForBean"><span class="toc-text">getAdvicesAndAdvisorsForBean</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#findCandidateAdvisors"><span class="toc-text">findCandidateAdvisors</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#findAdvisorsThatCanApply"><span class="toc-text">findAdvisorsThatCanApply</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-DeclareParents"><span class="toc-text">示例 @DeclareParents</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#createProxy"><span class="toc-text">createProxy</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#JdkDynamicAopProxy"><span class="toc-text">JdkDynamicAopProxy</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CglibAopProxy"><span class="toc-text">CglibAopProxy</span></a></li></ol></li></ol></li></ol>
 </div>
 
 

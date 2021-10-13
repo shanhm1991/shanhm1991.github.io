@@ -6,7 +6,7 @@
   <title>《深入理解java虚拟机》三 运行时内存异常 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言在java虚拟机规范的描述中，除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生OutOfMemoryError异常的可能">
+  <meta name="description" content="在java虚拟机规范的描述中，除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生OutOfMemoryError异常的可能">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -116,7 +116,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在java虚拟机规范的描述中，除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生<code>OutOfMemoryError</code>异常的可能</p>
+        <p>在java虚拟机规范的描述中，除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生<code>OutOfMemoryError</code>异常的可能</p>
 <a id="more"></a>
 
 <h3 id="1-java堆溢出"><a href="#1-java堆溢出" class="headerlink" title="1. java堆溢出"></a>1. java堆溢出</h3><p>java堆用于存储对象实例，只要不断的创建对象，并且保证GC Roots到对象之间有可达路径来避免垃圾回收机制清除这些对象，
@@ -296,7 +296,7 @@ str2返回false是因为java这个字符串在执行StringBuilder.toString()之�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-java堆溢出"><span class="toc-text">1. java堆溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-虚拟机栈和本地方法栈溢出"><span class="toc-text">2. 虚拟机栈和本地方法栈溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-方法区和运行时常量池溢出"><span class="toc-text">3. 方法区和运行时常量池溢出</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-常量池"><span class="toc-text">3.1 常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-方法区"><span class="toc-text">3.2 方法区</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-本机直接内存溢出"><span class="toc-text">4. 本机直接内存溢出</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-java堆溢出"><span class="toc-text">1. java堆溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-虚拟机栈和本地方法栈溢出"><span class="toc-text">2. 虚拟机栈和本地方法栈溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-方法区和运行时常量池溢出"><span class="toc-text">3. 方法区和运行时常量池溢出</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-常量池"><span class="toc-text">3.1 常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-方法区"><span class="toc-text">3.2 方法区</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-本机直接内存溢出"><span class="toc-text">4. 本机直接内存溢出</span></a></li></ol>
 </div>
 
 

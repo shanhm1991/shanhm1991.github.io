@@ -6,12 +6,9 @@
   <title>ubuntu中rc.local不执行问题 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="首先排除脚本自身问题，可以手动点杠执行下试试，
+  <meta name="description" content="首先排除脚本自身问题，可以手动执行下试试，
 
-脚本确定没问题后，放到开机启动程序引用的路径下
-
-
-2.1. 查看系统的运行级别">
+脚本确定没问题后，放到开机启动程序引用的路径下">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -91,7 +88,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 327  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 325  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -113,14 +110,14 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <ol>
-<li><p>首先排除脚本自身问题，可以手动点杠执行下试试，</p>
+<li><p>首先排除脚本自身问题，可以手动执行下试试，</p>
 </li>
 <li><p>脚本确定没问题后，放到开机启动程序引用的路径下</p>
 </li>
 </ol>
-<p>2.1. 查看系统的运行级别</p>
 <a id="more"></a>
 
+<p>2.1. 查看系统的运行级别</p>
 <p><img src="/img/20180515/20180515.1.jpg" alt=""> </p>
 <p>2.2. 到对应运行的rcX.d的目录找到指向rc.local的软连接，将rc.locad放到指向的地址，重启后发现问题解决。</p>
 <p><img src="/img/20180515/20180515.2.jpg" alt=""> </p>

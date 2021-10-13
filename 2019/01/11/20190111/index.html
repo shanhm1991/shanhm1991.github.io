@@ -6,7 +6,7 @@
   <title>《java并发编程实战》十一 非阻塞同步机制 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言非阻塞算法可以使多个线程在竞争相同的数据时不会发生阻塞，因此它能在粒度更细的层次上进行协调，并且极大地减少调度开销。在基于锁的算法中，
+  <meta name="description" content="非阻塞算法可以使多个线程在竞争相同的数据时不会发生阻塞，因此它能在粒度更细的层次上进行协调，并且极大地减少调度开销。在基于锁的算法中，
 如果一个线程在休眠或者自旋时持有锁，那么其他线程都无法执行下去，而非阻塞算法不会受到单个线程失败的影响。">
   
   
@@ -113,7 +113,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>非阻塞算法可以使多个线程在竞争相同的数据时不会发生阻塞，因此它能在粒度更细的层次上进行协调，并且极大地减少调度开销。在基于锁的算法中，
+        <p>非阻塞算法可以使多个线程在竞争相同的数据时不会发生阻塞，因此它能在粒度更细的层次上进行协调，并且极大地减少调度开销。在基于锁的算法中，
 如果一个线程在休眠或者自旋时持有锁，那么其他线程都无法执行下去，而非阻塞算法不会受到单个线程失败的影响。</p>
 <a id="more"></a>
 
@@ -274,7 +274,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-锁的劣势"><span class="toc-text">1. 锁的劣势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-CAS"><span class="toc-text">2. CAS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-示例：用CAS实现计数器"><span class="toc-text">3. 示例：用CAS实现计数器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-JVM对CAS的支持"><span class="toc-text">4. JVM对CAS的支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-利用CAS代替锁解决状态依赖问题"><span class="toc-text">5. 利用CAS代替锁解决状态依赖问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-CAS与锁的性能比较"><span class="toc-text">6. CAS与锁的性能比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-设计非阻塞的栈"><span class="toc-text">7. 设计非阻塞的栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-设计非阻塞的链表"><span class="toc-text">8. 设计非阻塞的链表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-ABA问题"><span class="toc-text">9. ABA问题</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-锁的劣势"><span class="toc-text">1. 锁的劣势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-CAS"><span class="toc-text">2. CAS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-示例：用CAS实现计数器"><span class="toc-text">3. 示例：用CAS实现计数器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-JVM对CAS的支持"><span class="toc-text">4. JVM对CAS的支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-利用CAS代替锁解决状态依赖问题"><span class="toc-text">5. 利用CAS代替锁解决状态依赖问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-CAS与锁的性能比较"><span class="toc-text">6. CAS与锁的性能比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-设计非阻塞的栈"><span class="toc-text">7. 设计非阻塞的栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-设计非阻塞的链表"><span class="toc-text">8. 设计非阻塞的链表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-ABA问题"><span class="toc-text">9. ABA问题</span></a></li></ol>
 </div>
 
 

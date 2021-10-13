@@ -6,7 +6,7 @@
   <title>数据结构 B树 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言前面讨论2-3树时已经提到过，B树就是一颗平衡M叉树，其插入删除操作都可以与2-3树作类似处理。这里也不过多赘述，可以简单讨论下其实际意义：之前讨论过的各种二叉树都有一个共同假设：即数据全部存储在内存中，因此讨论时只需关心在找到目标之前需要比较多少次数。但是当数据量大到内存放不下，需要借助磁盘来保存时，
+  <meta name="description" content="前面讨论2-3树时已经提到过，B树就是一颗平衡M叉树，其插入删除操作都可以与2-3树作类似处理。这里也不过多赘述，可以简单讨论下其实际意义：之前讨论过的各种二叉树都有一个共同假设：即数据全部存储在内存中，因此讨论时只需关心在找到目标之前需要比较多少次数。但是当数据量大到内存放不下，需要借助磁盘来保存时，
 就需要另外考虑磁盘访问问题了，而且磁盘访问相对内存操作肯定要慢得多，因此，这时更应该关心是如何减少磁盘访问操作。思路是将数据（有序）分为N批，并用M叉平衡树来组织，即访问磁盘时每批返回至多M-1项数据，那么当访问某项数据时，至多需要访问磁盘的次数为：logN，底数为M。
 
 数据结构. 2-3树">
@@ -110,7 +110,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面讨论2-3树时已经提到过，B树就是一颗平衡M叉树，其插入删除操作都可以与2-3树作类似处理。这里也不过多赘述，可以简单讨论下其实际意义：<br>之前讨论过的各种二叉树都有一个共同假设：即数据全部存储在内存中，因此讨论时只需关心在找到目标之前需要比较多少次数。但是当数据量大到内存放不下，需要借助磁盘来保存时，
+        <p>前面讨论2-3树时已经提到过，B树就是一颗平衡M叉树，其插入删除操作都可以与2-3树作类似处理。这里也不过多赘述，可以简单讨论下其实际意义：<br>之前讨论过的各种二叉树都有一个共同假设：即数据全部存储在内存中，因此讨论时只需关心在找到目标之前需要比较多少次数。但是当数据量大到内存放不下，需要借助磁盘来保存时，
 就需要另外考虑磁盘访问问题了，而且磁盘访问相对内存操作肯定要慢得多，因此，这时更应该关心是如何减少磁盘访问操作。<br>思路是将数据（有序）分为N批，并用M叉平衡树来组织，即访问磁盘时每批返回至多M-1项数据，那么当访问某项数据时，至多需要访问磁盘的次数为：logN，底数为M。</p>
 <ul>
 <li><a href="https://shanhm1991.github.io/2019/06/11/20190611/">数据结构. 2-3树</a><a id="more"></a>
@@ -275,7 +275,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-定义"><span class="toc-text">1. 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-分析实现"><span class="toc-text">2. 分析实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-插入"><span class="toc-text">2.1. 插入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-删除"><span class="toc-text">2.2. 删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-java实现"><span class="toc-text">3. java实现</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-定义"><span class="toc-text">1. 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-分析实现"><span class="toc-text">2. 分析实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-插入"><span class="toc-text">2.1. 插入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-删除"><span class="toc-text">2.2. 删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-java实现"><span class="toc-text">3. java实现</span></a></li></ol>
 </div>
 
 

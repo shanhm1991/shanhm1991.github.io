@@ -6,7 +6,7 @@
   <title>spring Jdbc（Mybatis） | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言Spring的jdbc模块中处理除了提供了JdbcTemplate等封装工具，还提供了对各种第三方持久层框架的封装，比如Mybatis，Hibernate，帮助开发者可以更高效率的进行业务开发，这里主要分析下spring中如何对mybatis实现的封装。
+  <meta name="description" content="Spring的jdbc模块中处理除了提供了JdbcTemplate等封装工具，还提供了对各种第三方持久层框架的封装，比如Mybatis，Hibernate，帮助开发者可以更高效率的进行业务开发，这里主要分析下spring中如何对mybatis实现的封装。
 关于Mybatis，可以参考相关笔记:[Mybatis]">
   
   
@@ -96,7 +96,7 @@
    
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -117,7 +117,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Spring的jdbc模块中处理除了提供了<code>JdbcTemplate</code>等封装工具，还提供了对各种第三方持久层框架的封装，比如Mybatis，Hibernate，帮助开发者可以更高效率的进行业务开发，这里主要分析下spring中如何对mybatis实现的封装。
+        <p>Spring的jdbc模块中处理除了提供了<code>JdbcTemplate</code>等封装工具，还提供了对各种第三方持久层框架的封装，比如Mybatis，Hibernate，帮助开发者可以更高效率的进行业务开发，这里主要分析下spring中如何对mybatis实现的封装。
 关于Mybatis，可以参考相关笔记:[<a href="">Mybatis</a>]</p>
 <a id="more"></a>
 
@@ -215,7 +215,7 @@
         
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -286,7 +286,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SqlSessionFactoryBean"><span class="toc-text">SqlSessionFactoryBean</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#SqlSessionTemplate"><span class="toc-text">SqlSessionTemplate</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#MapperFactoryBean"><span class="toc-text">MapperFactoryBean</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MapperScannerConfigurer"><span class="toc-text">MapperScannerConfigurer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ClassPathMapperScanner"><span class="toc-text">ClassPathMapperScanner</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MapperScannerRegistrar"><span class="toc-text">MapperScannerRegistrar</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SqlSessionFactoryBean"><span class="toc-text">SqlSessionFactoryBean</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#SqlSessionTemplate"><span class="toc-text">SqlSessionTemplate</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#MapperFactoryBean"><span class="toc-text">MapperFactoryBean</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MapperScannerConfigurer"><span class="toc-text">MapperScannerConfigurer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ClassPathMapperScanner"><span class="toc-text">ClassPathMapperScanner</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MapperScannerRegistrar"><span class="toc-text">MapperScannerRegistrar</span></a></li></ol>
 </div>
 
 

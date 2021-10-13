@@ -6,7 +6,7 @@
   <title>spring Mvc | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言对于web应用，spring提供了springmvc。其基于Servlet实现，通过DispatchServlet来封装核心功能，对请求进行分派，并提供可配的处理程序映射、试图解析等。">
+  <meta name="description" content="对于web应用，spring提供了springmvc。其基于Servlet实现，通过DispatchServlet来封装核心功能，对请求进行分派，并提供可配的处理程序映射、试图解析等。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -95,7 +95,7 @@
    
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -116,7 +116,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>对于web应用，spring提供了springmvc。其基于Servlet实现，通过<code>DispatchServlet</code>来封装核心功能，对请求进行分派，并提供可配的处理程序映射、试图解析等。</p>
+        <p>对于web应用，spring提供了springmvc。其基于Servlet实现，通过<code>DispatchServlet</code>来封装核心功能，对请求进行分派，并提供可配的处理程序映射、试图解析等。</p>
 <a id="more"></a>
 
 <h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>下面通过springmvc搭建一个简单的web应用程序，只需引入spring-webmvc依赖即可</p>
@@ -257,7 +257,7 @@
         
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -328,7 +328,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ContextLoaderListener"><span class="toc-text">ContextLoaderListener</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DispatcherServlet"><span class="toc-text">DispatcherServlet</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#初始化"><span class="toc-text">初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#MultipartResolver"><span class="toc-text">MultipartResolver</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#HandlerAdapters"><span class="toc-text">HandlerAdapters</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#请求处理"><span class="toc-text">请求处理</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-processRequest"><span class="toc-text">1. processRequest</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-doService"><span class="toc-text">2. doService</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-doDispatch"><span class="toc-text">3. doDispatch</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-1-getHandler"><span class="toc-text">3.1. getHandler</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-getHandlerAdapter"><span class="toc-text">3.2. getHandlerAdapter</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-3-handle"><span class="toc-text">3.3. handle</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-4-processDispatchResult"><span class="toc-text">3.4. processDispatchResult</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-5-interceptor"><span class="toc-text">3.5. interceptor</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ContextLoaderListener"><span class="toc-text">ContextLoaderListener</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DispatcherServlet"><span class="toc-text">DispatcherServlet</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#初始化"><span class="toc-text">初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#MultipartResolver"><span class="toc-text">MultipartResolver</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#HandlerAdapters"><span class="toc-text">HandlerAdapters</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#请求处理"><span class="toc-text">请求处理</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-processRequest"><span class="toc-text">1. processRequest</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-doService"><span class="toc-text">2. doService</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-doDispatch"><span class="toc-text">3. doDispatch</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-1-getHandler"><span class="toc-text">3.1. getHandler</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-getHandlerAdapter"><span class="toc-text">3.2. getHandlerAdapter</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-3-handle"><span class="toc-text">3.3. handle</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-4-processDispatchResult"><span class="toc-text">3.4. processDispatchResult</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-5-interceptor"><span class="toc-text">3.5. interceptor</span></a></li></ol></li></ol></li></ol></li></ol>
 </div>
 
 

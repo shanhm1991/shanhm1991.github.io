@@ -6,7 +6,7 @@
   <title>spring Jdbc（JdbcTemplate） | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言Spring在前面的基础上，提供了JDBC模块，其中包括了对jdbc和datasource等的封装，这里先简单梳理下其中的JdbcTemplate，它是一个对JDBC使用的封装，提供了一套的模板，
+  <meta name="description" content="Spring在前面的基础上，提供了JDBC模块，其中包括了对jdbc和datasource等的封装，这里先简单梳理下其中的JdbcTemplate，它是一个对JDBC使用的封装，提供了一套的模板，
 能让我们写持久层代码时减少多余的代码，简化JDBC代码，使代码看起来更简洁。">
   
   
@@ -96,7 +96,7 @@
    
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -117,10 +117,9 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Spring在前面的基础上，提供了JDBC模块，其中包括了对jdbc和datasource等的封装，这里先简单梳理下其中的<code>JdbcTemplate</code>，它是一个对JDBC使用的封装，提供了一套的模板，
+        <p>Spring在前面的基础上，提供了JDBC模块，其中包括了对jdbc和datasource等的封装，这里先简单梳理下其中的<code>JdbcTemplate</code>，它是一个对JDBC使用的封装，提供了一套的模板，
 能让我们写持久层代码时减少多余的代码，简化JDBC代码，使代码看起来更简洁。</p>
 <a id="more"></a>
-
 
 <h3 id="Jdbc"><a href="#Jdbc" class="headerlink" title="Jdbc"></a>Jdbc</h3><p>JDBC(Java Data Base Connectivitys)是java为关系型数据库驱动执行SQL提供的一套接口，其实就是制定了一个标准，具体可以分为下面几个步骤：</p>
 <ol>
@@ -242,7 +241,7 @@ which currently load JDBC drivers using <code>Class.forName()</code> will contin
         
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -313,7 +312,7 @@ which currently load JDBC drivers using <code>Class.forName()</code> will contin
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Jdbc"><span class="toc-text">Jdbc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JdbcTemplate"><span class="toc-text">JdbcTemplate</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-1"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#update"><span class="toc-text">update</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#query"><span class="toc-text">query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#queryForObject"><span class="toc-text">queryForObject</span></a></li></ol></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Jdbc"><span class="toc-text">Jdbc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JdbcTemplate"><span class="toc-text">JdbcTemplate</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-1"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#update"><span class="toc-text">update</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#query"><span class="toc-text">query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#queryForObject"><span class="toc-text">queryForObject</span></a></li></ol></li></ol></li></ol>
 </div>
 
 

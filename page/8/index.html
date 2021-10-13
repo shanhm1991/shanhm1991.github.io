@@ -87,7 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>有时，一个对象会由不同的部件组成，一些情况下，在某些部件没有恰当的值之前，对象不能作为一个完整的产品使用，甚至有时候，一个对象的组成部件必须按照某个顺序赋值才有意义。<br>建造者模式利用导演者对象以及具体建造者对象，将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
+        <p>有时，一个对象会由不同的部件组成，一些情况下，在某些部件没有恰当的值之前，对象不能作为一个完整的产品使用，甚至有时候，一个对象的组成部件必须按照某个顺序赋值才有意义。<br>建造者模式利用导演者对象以及具体建造者对象，将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
       
     </div>
 	
@@ -139,7 +139,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>工厂模式负责将大量拥有共同接口的类实例化，它可以动态决定将哪一个类实例化。</p>
+        <p>工厂模式负责将大量拥有共同接口的类实例化，它可以动态决定将哪一个类实例化</p>
       
     </div>
 	
@@ -191,7 +191,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>单例模式的意思就是确保某个类的实例在系统中只有一个，可以简单概括为以下三点：</p>
+        <p>单例模式的意思就是确保某个类的实例在系统中只有一个，可以简单概括为以下三点：</p>
 <ol>
 <li>只能有一个类实例；</li>
 <li>类必须自行创建这个实例；</li>
@@ -247,7 +247,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>设计模式的主要目标在于保证程序的高可用及高扩展性，在实际开发中不应该过多地纠结使用哪种设计模式，而是应该多体会设计模式的原则，换言之，只要遵循一定的原则，
+        <p>设计模式的主要目标在于保证程序的高可用及高扩展性，在实际开发中不应该过多地纠结使用哪种设计模式，而是应该多体会设计模式的原则，换言之，只要遵循一定的原则，
 这些所谓的模式完全可能在无意识的状态下自发出现在产品代码中。其实这些设计模式也都不是谁突然间硬想出来的，而是从大量实践中总结出来的比较好的组织代码结构的方式。  </p>
 <p>好的设计能够有效避免或者延缓程序<font color="#E51508">架构的腐化</font>，通常，很多程序结构一开始也许设计得还可以，但随着业务功能的不断扩展和变化，
 可能就不得不在结构上做出一些妥协让步，慢慢地也就失去了结构。<br>另外，在设计过程中也要注意避免<font color="#E51508">过度设计</font>，即为不可能发生的变动付出过多的复杂度代价。总之不要滥用设计模式，不要觉得一个地方有可能会变动，
@@ -304,16 +304,14 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3>
+        <a id="more"></a>
+
+
       
     </div>
 	
     <footer>
       
-        
-          <div class="alignleft">
-            <a href="/2017/09/12/20170912/#more" class="more-link">more</a>
-          </div>
         
         
       
@@ -356,7 +354,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java容器中一般最常用的就是List、Set、Map，<a href="https://shanhm1991.github.io/2017/09/10/20170910/">List</a>的实现前面已经介绍过，本文主要讨论下Map的几个实现，至于Set则比较简单，
+        <p>java容器中一般最常用的就是List、Set、Map，<a href="https://shanhm1991.github.io/2017/09/10/20170910/">List</a>的实现前面已经介绍过，本文主要讨论下Map的几个实现，至于Set则比较简单，
 它们仅仅是依赖Map做了层封装而已。</p>
 <p>在讨论之前，还是先看下Map的实现结构</p>
 <p><img src="/img/20170911/20170911.1.png" alt=""></p>
@@ -411,7 +409,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>根据实现的接口可以将java容器分为Collection和Map两部分，其中还可以按照是否线程安全来继续划分，大部分线程安全的实现在JDK1.5之后新增的concurrent包中。<br>本文先讨论Collection中比较基础的两个List实现<code>ArrayList</code>和<code>LinkedList</code>，前者通过数组，后者通过链表。<font color="#E51508">数组的好处在于有位置索引，可以按下标任意访问，
+        <p>根据实现的接口可以将java容器分为Collection和Map两部分，其中还可以按照是否线程安全来继续划分，大部分线程安全的实现在JDK1.5之后新增的concurrent包中。<br>本文先讨论Collection中比较基础的两个List实现<code>ArrayList</code>和<code>LinkedList</code>，前者通过数组，后者通过链表。<font color="#E51508">数组的好处在于有位置索引，可以按下标任意访问，
 并且由于数组在内存上的连续性，因此访问会更快，但前提是元素必须排列紧凑， 这样在进行插入删除时就免不了要进行移动，而且由于数组长度不可变，在添加元素时可能需要扩容和复制处理。
 链表可以弥补数组在插入删除上的缺陷，但代价是牺牲查询的效率，尤其是按位置索引访问时，它只能选择从头或者从尾开始依次遍历。</font></p>
 <p>在讨论之前先整体看下Collection的体系结构，可以看到其实有很多的实现类，它们分别用来应付各种不同的场景，具体后面有机会再讨论</p>
@@ -467,7 +465,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值并且互不影响，其非常适合用来作为线程上下文变量，
+        <p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值并且互不影响，其非常适合用来作为线程上下文变量，
 比如在一些连接池或者事务的场景中。至于其思路，则是<font style="color:red;">让每个线程各自持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是ThreadLocal，
 因此每个ThreadLocal也就对应一个本地变量</font>。当然，如果这个本地变量本身就是一个线程共享的对象，那么使用<code>ThreadLocal</code>也就没有意义。
 另外，这里设计者将具体的map操作都封装在了ThreadLocal中，然后提供统一的get/set接口，好让开发更加简洁方便</p>
@@ -522,7 +520,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Unsafe位于sun.misc包下，主要提供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升Java运行效率、增强Java语言底层资源操作能力方面起到了很大的作用。
+        <p>Unsafe位于sun.misc包下，主要提供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升Java运行效率、增强Java语言底层资源操作能力方面起到了很大的作用。
 但由于Unsafe类使Java语言拥有了类似C语言指针一样操作内存空间的能力，如果过度或者不正确地使用Unsafe类将会使得增加程序出错的风险，使得Java这种安全的语言变得不再安全，因此使用时需要慎重。</p>
 <p>这里并不打算作深入探讨，只是简单列举一些Unsafe中提供的常见api，方便在讨论其它内容时进行引用，对于其提供的api大致则可以按如下分类：</p>
 <p><img src="/img/20170905/20170905.1.png" alt=""> </p>
@@ -577,7 +575,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><font color="#E51508">
+        <font color="#E51508">
 发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
 java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离。</font>     
 
@@ -639,11 +637,11 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
   
     <li><a href="/categories/代码笔记/">代码笔记</a><small>5</small></li>
   
-    <li><a href="/categories/开源笔记/">开源笔记</a><small>14</small></li>
-  
     <li><a href="/categories/数据结构/">数据结构</a><small>7</small></li>
   
     <li><a href="/categories/日常笔记/">日常笔记</a><small>11</small></li>
+  
+    <li><a href="/categories/源码笔记/">源码笔记</a><small>14</small></li>
   
     <li><a href="/categories/设计模式/">设计模式</a><small>6</small></li>
   
@@ -665,7 +663,7 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
   
   <div class="widget tag">
     <h3 class="title">Achives</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">9</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">9</span></li></ul>
   </div>
 
 

@@ -6,7 +6,7 @@
   <title>《java并发编程实战》七 线程池的使用 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。
+  <meta name="description" content="只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。
 如果将运行时间较长的与运行时间较短的任务混合在一起，那么除非线程池很大，否则将可能造成拥塞；如果提交的任务依赖于其他任务，那么除非线程池无线大，否则将可能造成死锁，称为饥饿死锁。
 关于线程池Api的具体设置和使用想在以后介绍api源码时再做整理，这里笔记就不赘述了。">
   
@@ -109,7 +109,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><font color="#E51508">只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。</font></p>
+        <p><font color="#E51508">只有当任务都是同类型并且相互独立时，线程池的性能才能达到最佳。</font></p>
 <p>如果将运行时间较长的与运行时间较短的任务混合在一起，那么除非线程池很大，否则将可能造成拥塞；如果提交的任务依赖于其他任务，那么除非线程池无线大，否则将可能造成死锁，称为<strong>饥饿死锁</strong>。</p>
 <p><font color="Gray">关于线程池Api的具体设置和使用想在以后介绍api源码时再做整理，这里笔记就不赘述了。</font></p>
 <a id="more"></a>
@@ -223,7 +223,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-饱和策略"><span class="toc-text">1. 饱和策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-调用者运行策略"><span class="toc-text">1.1. 调用者运行策略</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-扩展ThreadPoolExecutor"><span class="toc-text">2. 扩展ThreadPoolExecutor</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-示例：添加统计信息"><span class="toc-text">2.1. 示例：添加统计信息</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-饱和策略"><span class="toc-text">1. 饱和策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-调用者运行策略"><span class="toc-text">1.1. 调用者运行策略</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-扩展ThreadPoolExecutor"><span class="toc-text">2. 扩展ThreadPoolExecutor</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-示例：添加统计信息"><span class="toc-text">2.1. 示例：添加统计信息</span></a></li></ol></li></ol>
 </div>
 
 

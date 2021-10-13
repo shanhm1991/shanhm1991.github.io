@@ -6,7 +6,7 @@
   <title>JUC FutureTask | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言前面整理线程池时说过Executor是执行任务的抽象，而Runnable是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成FutureTask，它是实现了接口RunnableFuture，
+  <meta name="description" content="前面整理线程池时说过Executor是执行任务的抽象，而Runnable是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成FutureTask，它是实现了接口RunnableFuture，
 相当于是Runnable和Future的一个整合，但在实现中它又依赖于Callable，可以这样理解，它以Runnable的身份对外提供执行调用，然后在执行过程再委托给依赖的Callable处理，
 另外它以Future的身份提供一些接口服务，如此，可以画出如下UML">
   
@@ -118,7 +118,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面整理线程池时说过<code>Executor</code>是执行任务的抽象，而<code>Runnable</code>是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成<code>FutureTask</code>，它是实现了接口<code>RunnableFuture</code>，
+        <p>前面整理线程池时说过<code>Executor</code>是执行任务的抽象，而<code>Runnable</code>是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成<code>FutureTask</code>，它是实现了接口<code>RunnableFuture</code>，
 相当于是<code>Runnable</code>和<code>Future</code>的一个整合，但在实现中它又依赖于<code>Callable</code>，可以这样理解，它以<code>Runnable</code>的身份对外提供执行调用，然后在执行过程再委托给依赖的<code>Callable</code>处理，
 另外它以<code>Future</code>的身份提供一些接口服务，如此，可以画出如下UML</p>
 <p><img src="/img/20180401/20180401.12.jpg" alt=""> </p>
@@ -254,7 +254,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-属性"><span class="toc-text">1. 属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-state-状态"><span class="toc-text">1.1. state 状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-waiters"><span class="toc-text">1.2. waiters</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-构造器"><span class="toc-text">2. 构造器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-接口"><span class="toc-text">3. 接口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-run"><span class="toc-text">3.1. run</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-get"><span class="toc-text">3.2. get</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-cancel"><span class="toc-text">3.3. cancel</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-属性"><span class="toc-text">1. 属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-state-状态"><span class="toc-text">1.1. state 状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-waiters"><span class="toc-text">1.2. waiters</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-构造器"><span class="toc-text">2. 构造器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-接口"><span class="toc-text">3. 接口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-run"><span class="toc-text">3.1. run</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-get"><span class="toc-text">3.2. get</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-cancel"><span class="toc-text">3.3. cancel</span></a></li></ol></li></ol>
 </div>
 
 

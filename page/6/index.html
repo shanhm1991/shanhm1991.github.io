@@ -60,62 +60,6 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article id="post-20180503" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-02T16:00:00.000Z"><a href="/2018/05/03/20180503/">2018-05-03</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/05/03/20180503/">vmware设置ubuntu静态ip</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>vmware版本：14.1.1<br>ubuntu版本：16.0.4<br>问题：</p>
-<ol>
-<li>以nat方式设置ubuntu的静态ip</li>
-<li>域名无法解析</li>
-<li>ssh无法登录
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/05/03/20180503/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
   <article id="post-20180405" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -143,7 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面整理线程池时说过<code>Executor</code>是执行任务的抽象，而<code>Runnable</code>是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成<code>FutureTask</code>，它是实现了接口<code>RunnableFuture</code>，
+        <p>前面整理线程池时说过<code>Executor</code>是执行任务的抽象，而<code>Runnable</code>是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成<code>FutureTask</code>，它是实现了接口<code>RunnableFuture</code>，
 相当于是<code>Runnable</code>和<code>Future</code>的一个整合，但在实现中它又依赖于<code>Callable</code>，可以这样理解，它以<code>Runnable</code>的身份对外提供执行调用，然后在执行过程再委托给依赖的<code>Callable</code>处理，
 另外它以<code>Future</code>的身份提供一些接口服务，如此，可以画出如下UML</p>
 <p><img src="/img/20180401/20180401.12.jpg" alt=""> </p>
@@ -198,7 +142,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>Executor</code>是java中任务执行的主要抽象，虽然它是一个简单的接口，但却为灵活而强大的异步任务执行框架提供了基础，它提供了一种标准的方法将任务的提交过程与执行过程解耦开来。</p>
+        <p><code>Executor</code>是java中任务执行的主要抽象，虽然它是一个简单的接口，但却为灵活而强大的异步任务执行框架提供了基础，它提供了一种标准的方法将任务的提交过程与执行过程解耦开来。</p>
 <figure class="highlight java"><figcaption><span class="caption">java.util.concurrent.Executor</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Executor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">excute</span><span class="params">(Runnable command)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><code>ExecutorService</code>在<code>Executor</code>的基础上提供了对执行服务生命周期的管理，<code>ThreadPoolExecutor</code>作为具体实现，提供了对线程<code>Thread</code>以及任务<code>Runnable</code>的管理，
@@ -256,7 +200,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
+        <p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
 确保状态的改变是安全的。通过内置的FIFO（First In First Out）队列来完成资源获取线程的排队工作。</p>
 <p>AQS同步与synchronized同步是采用的两种不同的机制：<br>synchronized在编译后，会在同步块的前后分别添加monitorenter和monitorexit两个字节码指令，这两个指令需要关联一个监视对象，当线程执行monitorenter指令时，
 需要首先获得获得监视对象的锁，即进入同步块的凭证，才能进入同步块，当线程离开同步块时，执行monitorexit指令，释放对象锁。<br>AQS同步中，使用一个int类型的变量state来表示当前同步块的状态。以独占式同步为例，state的有效值为0和1，其中0表示当前同步块中没有线程，1表示同步块中已经有线程在执行。
@@ -314,7 +258,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>内容需要C++源码部分的梳理，后面整理好了再回来</p>
+        <p>内容需要C++源码部分的梳理，后面整理好了再回来</p>
       
     </div>
 	
@@ -366,7 +310,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
+        <p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
 为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为<font style="font-weight:bold; color:red;">内核空间</font>，
 一部分为<font style="font-weight:bold; color:red;">用户空间</font>。</p>
       
@@ -377,6 +321,58 @@
         
           <div class="alignleft">
             <a href="/2018/03/10/20180310/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20180305" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-03-04T16:00:00.000Z"><a href="/2018/03/05/20180305/">2018-03-05</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/03/05/20180305/">vim 常用操作</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>…</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/03/05/20180305/#more" class="more-link">more</a>
           </div>
         
         
@@ -406,7 +402,7 @@
   
   
     <h1 class="title">
-       <a href="/2018/03/01/20180301/">常用命令</a>
+       <a href="/2018/03/01/20180301/">shell 常用操作</a>
     </h1>
     
   
@@ -420,7 +416,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <p>…</p>
       
     </div>
 	
@@ -472,7 +468,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2>
+        <p>…</p>
       
     </div>
 	
@@ -524,7 +520,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>I/O功能模块通常简称为：I/O接口，也叫适配器，<font style="color:red;">指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件</font>。为了保证处理器和不同外设之间高效和可靠的交互，
+        <p>I/O功能模块通常简称为：I/O接口，也叫适配器，<font style="color:red;">指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件</font>。为了保证处理器和不同外设之间高效和可靠的交互，
 CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶段：I/O接口与外设之间的数据传送，以及CPU与I/O接口之间的数据传送。</p>
 <p>下图展示了CPU、I/O接口和外围设备之间的连接关系。其中外围设备自身带有设备控制器，它是控制外围设备进行操作的控制部件，它通过I/O接口接收来自CPU传送的各种信息，
 并根据设备的不同要求将这些信息传送到设备，或者从设备中读出信息传送到I/O接口。</p>
@@ -536,7 +532,8 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 <li>状态：接口模块监视外围设备的工作状态并保存，比如准备就绪或者忙，供CPU询问外围设备状态时用；</li>
 <li>转换：接口模块可以完成数据转换，保证数据能在外围设备和CPU之间正确的传送；</li>
 <li>整理：接口模块可以完成一些特别功能，当需要时可以修改字计数器或者当前内存地址寄存器；</li>
-<li>程序中断：当外围设备向CPU请求某种动作时，接口模块会产生一个中断请求信号到CPU;
+<li>程序中断：当外围设备向CPU请求某种动作时，接口模块会产生一个中断请求信号到CPU;</li>
+</ul>
       
     </div>
 	
@@ -588,11 +585,12 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>总线是构成计算机系统的互联机构，是多个系统部件之间进行数据传输的公共通道。借助于总线，各部件之间实现地址、数据、控制信息的互换。一个单处理器系统中的总线，可以分为三类：</p>
+        <p>总线是构成计算机系统的互联机构，是多个系统部件之间进行数据传输的公共通道。借助于总线，各部件之间实现地址、数据、控制信息的互换。一个单处理器系统中的总线，可以分为三类：</p>
 <ul>
 <li>内部总线：CPU内部连接各寄存器及运算部件之间的总线；</li>
 <li>系统总线：CPU同计算机的其他高速功能部件，如存储器、通道等互相连接的总线，称为系统总线；</li>
-<li>I/O总线：低速I/O设备之间互相连接的总线；
+<li>I/O总线：低速I/O设备之间互相连接的总线；</li>
+</ul>
       
     </div>
 	
@@ -649,11 +647,11 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
   
     <li><a href="/categories/代码笔记/">代码笔记</a><small>5</small></li>
   
-    <li><a href="/categories/开源笔记/">开源笔记</a><small>14</small></li>
-  
     <li><a href="/categories/数据结构/">数据结构</a><small>7</small></li>
   
     <li><a href="/categories/日常笔记/">日常笔记</a><small>11</small></li>
+  
+    <li><a href="/categories/源码笔记/">源码笔记</a><small>14</small></li>
   
     <li><a href="/categories/设计模式/">设计模式</a><small>6</small></li>
   
@@ -675,7 +673,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
   
   <div class="widget tag">
     <h3 class="title">Achives</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">9</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">9</span></li></ul>
   </div>
 
 

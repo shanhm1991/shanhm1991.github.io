@@ -6,7 +6,7 @@
   <title>《深入理解java虚拟机》一 运行时数据区 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言java虚拟机在执行java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。">
+  <meta name="description" content="java虚拟机在执行java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -116,7 +116,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java虚拟机在执行java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。</p>
+        <p>java虚拟机在执行java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。</p>
 <a id="more"></a>
 
 <p><img src="/img/20190115/20190115.1.jpg" alt=""></p>
@@ -257,7 +257,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-程序计数器"><span class="toc-text">1. 程序计数器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-java虚拟机栈"><span class="toc-text">2. java虚拟机栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-本地方法栈"><span class="toc-text">3. 本地方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-java堆"><span class="toc-text">4. java堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-方法区"><span class="toc-text">5. 方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-运行时常量池"><span class="toc-text">5.1. 运行时常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-永久代问题"><span class="toc-text">5.2. 永久代问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-直接内存"><span class="toc-text">6. 直接内存</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-程序计数器"><span class="toc-text">1. 程序计数器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-java虚拟机栈"><span class="toc-text">2. java虚拟机栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-本地方法栈"><span class="toc-text">3. 本地方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-java堆"><span class="toc-text">4. java堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-方法区"><span class="toc-text">5. 方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-运行时常量池"><span class="toc-text">5.1. 运行时常量池</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-永久代问题"><span class="toc-text">5.2. 永久代问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-直接内存"><span class="toc-text">6. 直接内存</span></a></li></ol>
 </div>
 
 

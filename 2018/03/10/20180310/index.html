@@ -6,7 +6,7 @@
   <title>Linux I/O模型 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
+  <meta name="description" content="操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
 为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为内核空间，
 一部分为用户空间。">
   
@@ -114,7 +114,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
+        <p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
 为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为<font style="font-weight:bold; color:red;">内核空间</font>，
 一部分为<font style="font-weight:bold; color:red;">用户空间</font>。</p>
 <a id="more"></a>
@@ -236,8 +236,8 @@
 	  
 	  
 	  
-		  <a class="alignright next" href="/2018/03/01/20180301/">
-		    常用命令
+		  <a class="alignright next" href="/2018/03/05/20180305/">
+		    vim 常用操作
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -318,7 +318,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-磁盘IO"><span class="toc-text">1. 磁盘IO</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-缓存IO"><span class="toc-text">1.1. 缓存IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-直接IO"><span class="toc-text">1.2. 直接IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-内存映射IO"><span class="toc-text">1.3. 内存映射IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令：iostat"><span class="toc-text">命令：iostat</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-网络I-O"><span class="toc-text">2. 网络I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-阻塞IO"><span class="toc-text">2.1. 阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-非阻塞IO"><span class="toc-text">2.2. 非阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-多路复用IO"><span class="toc-text">2.3. 多路复用IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-信号驱动式IO"><span class="toc-text">2.4. 信号驱动式IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-异步IO"><span class="toc-text">2.5. 异步IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-Linux零拷贝-sendfile"><span class="toc-text">2.6 Linux零拷贝 sendfile</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-磁盘IO"><span class="toc-text">1. 磁盘IO</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-缓存IO"><span class="toc-text">1.1. 缓存IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-直接IO"><span class="toc-text">1.2. 直接IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-内存映射IO"><span class="toc-text">1.3. 内存映射IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令：iostat"><span class="toc-text">命令：iostat</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-网络I-O"><span class="toc-text">2. 网络I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-阻塞IO"><span class="toc-text">2.1. 阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-非阻塞IO"><span class="toc-text">2.2. 非阻塞IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-多路复用IO"><span class="toc-text">2.3. 多路复用IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-信号驱动式IO"><span class="toc-text">2.4. 信号驱动式IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-异步IO"><span class="toc-text">2.5. 异步IO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-6-Linux零拷贝-sendfile"><span class="toc-text">2.6 Linux零拷贝 sendfile</span></a></li></ol></li></ol>
 </div>
 
 

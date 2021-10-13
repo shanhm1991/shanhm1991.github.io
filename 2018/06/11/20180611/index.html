@@ -6,7 +6,7 @@
   <title>spring 静态Aop | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言静态代理是指在虚拟机载入字节码文件时动态织入切面行为，相对于动态代理具有更高的效率，因为动态代理调用的过程中，还需要一个动态创建代理类并代理目标对象的步骤，而静态代理在启动时便完成了字节码增强，
+  <meta name="description" content="静态代理是指在虚拟机载入字节码文件时动态织入切面行为，相对于动态代理具有更高的效率，因为动态代理调用的过程中，还需要一个动态创建代理类并代理目标对象的步骤，而静态代理在启动时便完成了字节码增强，
 当系统调用目标类时将与调用正常的类没有区别，它以一种更底层、更松耦合的方式改变了一个类的行为。">
   
   
@@ -96,7 +96,7 @@
    
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -117,7 +117,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>静态代理是指在虚拟机载入字节码文件时动态织入切面行为，相对于动态代理具有更高的效率，因为动态代理调用的过程中，还需要一个动态创建代理类并代理目标对象的步骤，而静态代理在启动时便完成了字节码增强，
+        <p>静态代理是指在虚拟机载入字节码文件时动态织入切面行为，相对于动态代理具有更高的效率，因为动态代理调用的过程中，还需要一个动态创建代理类并代理目标对象的步骤，而静态代理在启动时便完成了字节码增强，
 当系统调用目标类时将与调用正常的类没有区别，它以一种更底层、更松耦合的方式改变了一个类的行为。</p>
 <a id="more"></a>
 
@@ -241,7 +241,7 @@
         
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -312,7 +312,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Instrumentation"><span class="toc-text">Instrumentation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectJ"><span class="toc-text">AspectJ</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-1"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-静态Aop"><span class="toc-text">spring 静态Aop</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-2"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LoadTimeWeaverBeanDefinitionParser"><span class="toc-text">LoadTimeWeaverBeanDefinitionParser</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#AbstractApplicationContext"><span class="toc-text">AbstractApplicationContext</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#LoadTimeWeaverAwareProcessor"><span class="toc-text">LoadTimeWeaverAwareProcessor</span></a></li></ol></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Instrumentation"><span class="toc-text">Instrumentation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectJ"><span class="toc-text">AspectJ</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-1"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-静态Aop"><span class="toc-text">spring 静态Aop</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例-2"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LoadTimeWeaverBeanDefinitionParser"><span class="toc-text">LoadTimeWeaverBeanDefinitionParser</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#AbstractApplicationContext"><span class="toc-text">AbstractApplicationContext</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#LoadTimeWeaverAwareProcessor"><span class="toc-text">LoadTimeWeaverAwareProcessor</span></a></li></ol></li></ol></li></ol>
 </div>
 
 

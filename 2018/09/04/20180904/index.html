@@ -6,7 +6,8 @@
   <title>centos安装oracle11g | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="概括vmware版本：14.1.1oracle版本：Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit问题：    
+  <meta name="description" content="vmware版本：14.1.1oracle版本：Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit    
+问题：    
 
 安装vnc    
 用vnc安装oracle  
@@ -112,15 +113,16 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>vmware版本：14.1.1<br>oracle版本：Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit<br>问题：    </p>
+        <p>vmware版本：14.1.1<br>oracle版本：Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit    </p>
+<p>问题：    </p>
 <ol>
 <li>安装vnc    </li>
 <li>用vnc安装oracle  </li>
 <li>监听服务启动</li>
-<li>客户端连接<a id="more"></a>
-
-</li>
+<li>客户端连接</li>
 </ol>
+<a id="more"></a>
+
 <h3 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h3><ol>
 <li>安装依赖，创建用户和目录，参考<a href="http://www.cnblogs.com/gaojun/archive/2012/11/22/2783257.html" target="_blank" rel="noopener">http://www.cnblogs.com/gaojun/archive/2012/11/22/2783257.html</a></li>
 </ol>
@@ -364,7 +366,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概括"><span class="toc-text">概括</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-准备"><span class="toc-text">1. 准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-安装"><span class="toc-text">2. 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-安装VNC"><span class="toc-text">2.1. 安装VNC</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-1-VNC乱码问题"><span class="toc-text">2.2.1 VNC乱码问题</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-VNC安装oracle"><span class="toc-text">2.2 VNC安装oracle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-配置监听和创建数据库实例"><span class="toc-text">2.3. 配置监听和创建数据库实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-启动服务"><span class="toc-text">3. 启动服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-ORA-01078"><span class="toc-text">3.1. ORA-01078</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-ORA-00845"><span class="toc-text">3.2. ORA-00845</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-ORA-01102"><span class="toc-text">3.3. ORA-01102</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-乱码问题"><span class="toc-text">3.4. 乱码问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-客户端连接"><span class="toc-text">4. 客户端连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-总结"><span class="toc-text">5. 总结</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-准备"><span class="toc-text">1. 准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-安装"><span class="toc-text">2. 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-安装VNC"><span class="toc-text">2.1. 安装VNC</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-1-VNC乱码问题"><span class="toc-text">2.2.1 VNC乱码问题</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-VNC安装oracle"><span class="toc-text">2.2 VNC安装oracle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-配置监听和创建数据库实例"><span class="toc-text">2.3. 配置监听和创建数据库实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-启动服务"><span class="toc-text">3. 启动服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-ORA-01078"><span class="toc-text">3.1. ORA-01078</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-ORA-00845"><span class="toc-text">3.2. ORA-00845</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-ORA-01102"><span class="toc-text">3.3. ORA-01102</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-乱码问题"><span class="toc-text">3.4. 乱码问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-客户端连接"><span class="toc-text">4. 客户端连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-总结"><span class="toc-text">5. 总结</span></a></li></ol>
 </div>
 
 

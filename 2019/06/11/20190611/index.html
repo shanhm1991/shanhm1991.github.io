@@ -6,7 +6,7 @@
   <title>数据结构 2-3树 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足H = log(N+1)，
+  <meta name="description" content="前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足H = log(N+1)，
 但实际在大部分情形下，无论其如何旋转调整都无法做到，毕竟对于每个节点，其最多只能有一个元素，两个子节点。既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在一个节点只有单个子树的情况，取而代之的是节点是二叉还是三叉（如果一个节点只有单个子树，
 就使其成为三叉节点），这也就是2-3树的字面意思：即同时拥有二叉节点和三叉节点的树， 这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，
 并使树的节点达到一个绝对平衡的状态。
@@ -114,7 +114,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足H = log(N+1)，
+        <p>前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足H = log(N+1)，
 但实际在大部分情形下，无论其如何旋转调整都无法做到，毕竟对于每个节点，其最多只能有一个元素，两个子节点。<br>既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在一个节点只有单个子树的情况，取而代之的是节点是二叉还是三叉（如果一个节点只有单个子树，
 就使其成为三叉节点），这也就是2-3树的字面意思：即同时拥有二叉节点和三叉节点的树， 这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，
 并使树的节点达到一个绝对平衡的状态。</p>
@@ -267,7 +267,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-定义"><span class="toc-text">1. 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-分析实现"><span class="toc-text">2. 分析实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-插入"><span class="toc-text">2.1 插入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-删除"><span class="toc-text">2.2 删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3树与红黑树"><span class="toc-text">3. 2-3树与红黑树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-3树与B树"><span class="toc-text">4. 2-3树与B树</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-定义"><span class="toc-text">1. 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-分析实现"><span class="toc-text">2. 分析实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-插入"><span class="toc-text">2.1 插入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-删除"><span class="toc-text">2.2 删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3树与红黑树"><span class="toc-text">3. 2-3树与红黑树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-3树与B树"><span class="toc-text">4. 2-3树与B树</span></a></li></ol>
 </div>
 
 

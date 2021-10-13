@@ -6,7 +6,7 @@
   <title>spring Bean加载（BeanFactory） | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言之前梳理了BeanDefinition的解析注册，接下来就是如何利用BeanDefinition生产bean了，不过bean加载的实现过程要比BeanDefinition的解析注册复杂得多，
+  <meta name="description" content="之前梳理了BeanDefinition的解析注册，接下来就是如何利用BeanDefinition生产bean了，不过bean加载的实现过程要比BeanDefinition的解析注册复杂得多，
 下面还是以之前示例中的User user = (User)beanFactory.getBean(&amp;quot;test&amp;quot;)作为入口进行分析，并配合一些简单的流程图进行说明，抓住主要矛盾，主要梳理出一些关键的步骤，以及对循环依赖问题的处理。">
   
   
@@ -96,7 +96,7 @@
    
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -117,7 +117,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>之前梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了，不过bean加载的实现过程要比<code>BeanDefinition</code>的解析注册复杂得多，
+        <p>之前梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了，不过bean加载的实现过程要比<code>BeanDefinition</code>的解析注册复杂得多，
 下面还是以之前示例中的<code>User user = (User)beanFactory.getBean(&quot;test&quot;)</code>作为入口进行分析，并配合一些简单的流程图进行说明，抓住主要矛盾，主要梳理出一些关键的步骤，以及对循环依赖问题的处理。</p>
 <a id="more"></a>
 
@@ -247,7 +247,7 @@
         
   
   <div class="categories">
-    <a href="/categories/开源笔记/">开源笔记</a>
+    <a href="/categories/源码笔记/">源码笔记</a>
   </div>
 
 
@@ -318,7 +318,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-getBean"><span class="toc-text">1. getBean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FactoryBean"><span class="toc-text">FactoryBean</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-getSingleton"><span class="toc-text">1.1. getSingleton</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-1-getObjectForBeanInstance"><span class="toc-text">1.1.1. getObjectForBeanInstance</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-createBean"><span class="toc-text">1.2. createBean</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-1-prepareMethodOverrides"><span class="toc-text">1.2.1. prepareMethodOverrides</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-2-resolveBeforeInstantiation"><span class="toc-text">1.2.2. resolveBeforeInstantiation</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-3-doCreateBean"><span class="toc-text">1.2.3. doCreateBean</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-2-3-1-createBeanInstance"><span class="toc-text">1.2.3.1. createBeanInstance</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-2-3-2-addSingletonFactory"><span class="toc-text">1.2.3.2. addSingletonFactory</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-2-3-2-populateBean"><span class="toc-text">1.2.3.2. populateBean</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-2-3-3-initializeBean"><span class="toc-text">1.2.3.3. initializeBean</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-getSingleton"><span class="toc-text">1.3 getSingleton</span></a></li></ol></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-getBean"><span class="toc-text">1. getBean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FactoryBean"><span class="toc-text">FactoryBean</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-getSingleton"><span class="toc-text">1.1. getSingleton</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-1-getObjectForBeanInstance"><span class="toc-text">1.1.1. getObjectForBeanInstance</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-createBean"><span class="toc-text">1.2. createBean</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-1-prepareMethodOverrides"><span class="toc-text">1.2.1. prepareMethodOverrides</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-2-resolveBeforeInstantiation"><span class="toc-text">1.2.2. resolveBeforeInstantiation</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-3-doCreateBean"><span class="toc-text">1.2.3. doCreateBean</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-2-3-1-createBeanInstance"><span class="toc-text">1.2.3.1. createBeanInstance</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-2-3-2-addSingletonFactory"><span class="toc-text">1.2.3.2. addSingletonFactory</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-2-3-2-populateBean"><span class="toc-text">1.2.3.2. populateBean</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-2-3-3-initializeBean"><span class="toc-text">1.2.3.3. initializeBean</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-getSingleton"><span class="toc-text">1.3 getSingleton</span></a></li></ol></li></ol>
 </div>
 
 

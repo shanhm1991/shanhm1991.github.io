@@ -6,7 +6,7 @@
   <title>借助poi解析Excel 一 实现readLine读取 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言一般读取文本时会使用BufferedReader，它在InputStreamReader的基础上进行了装饰，提供readLine()来简化文本行的读取。使得行数据的读取可以像流水线一样，每当读取完一行后，
+  <meta name="description" content="一般读取文本时会使用BufferedReader，它在InputStreamReader的基础上进行了装饰，提供readLine()来简化文本行的读取。使得行数据的读取可以像流水线一样，每当读取完一行后，
 它就自动准备好下一行并等待获取，直至全部读取结束。所以这里也希望能够在poi的基础上提供一个类似readLine()的接口来读取Excel，并可以比较方便地获取行数据中的字段。">
   
   
@@ -113,7 +113,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>一般读取文本时会使用<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上进行了装饰，提供<code>readLine()</code>来简化文本行的读取。使得行数据的读取可以像流水线一样，每当读取完一行后，
+        <p>一般读取文本时会使用<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上进行了装饰，提供<code>readLine()</code>来简化文本行的读取。使得行数据的读取可以像流水线一样，每当读取完一行后，
 它就自动准备好下一行并等待获取，直至全部读取结束。所以这里也<font color="#E51508">希望能够在poi的基础上提供一个类似<code>readLine()</code>的接口来读取Excel，并可以比较方便地获取行数据中的字段。</font></p>
 <a id="more"></a>
 
@@ -277,7 +277,7 @@ SAX其实是java针对xml标准提供的基于事件解析的api，之所以能�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-csv文本解析"><span class="toc-text">1. csv文本解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Excel解析"><span class="toc-text">2. Excel解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-要考虑的问题"><span class="toc-text">2.1. 要考虑的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-1-保留Excel的结构信息"><span class="toc-text">2.1.1. 保留Excel的结构信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-数据过滤"><span class="toc-text">2.1.2. 数据过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-3-Excel类型识别"><span class="toc-text">2.1.3. Excel类型识别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-4-顺序读取"><span class="toc-text">2.1.4. 顺序读取</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-实现"><span class="toc-text">2.2. 实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-示例"><span class="toc-text">3. 示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-存在问题：内存消耗"><span class="toc-text">4. 存在问题：内存消耗</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-csv文本解析"><span class="toc-text">1. csv文本解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Excel解析"><span class="toc-text">2. Excel解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-要考虑的问题"><span class="toc-text">2.1. 要考虑的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-1-保留Excel的结构信息"><span class="toc-text">2.1.1. 保留Excel的结构信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-数据过滤"><span class="toc-text">2.1.2. 数据过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-3-Excel类型识别"><span class="toc-text">2.1.3. Excel类型识别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-4-顺序读取"><span class="toc-text">2.1.4. 顺序读取</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-实现"><span class="toc-text">2.2. 实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-示例"><span class="toc-text">3. 示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-存在问题：内存消耗"><span class="toc-text">4. 存在问题：内存消耗</span></a></li></ol>
 </div>
 
 

@@ -6,7 +6,7 @@
   <title>《深入理解java虚拟机》九 内存模型 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="引言多任务处理在现代计算机操作系统中是一项必备的功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大了，
+  <meta name="description" content="多任务处理在现代计算机操作系统中是一项必备的功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大了，
 更重要的原因是计算机的运算速度与它的存储和通信子系统速度的差距太大，大量的时间都花费在磁盘I/O，网络通信或者数据库访问上，
 因此处理器在大部分时间里都处于等待其他资源的状态。那么让计算机并发执行若干个运算任务则可以更充分地利用计算机处理器的效能，
 但复杂性在于绝大多数的运算任务都不可能只靠处理器计算就能完成，处理器至少要与内存交互，如读取运算数据、存储运算结果等，
@@ -104,7 +104,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 4.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 14min</font>
+   <font style="color: #999;"> words: 4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 14min</font>
    
    
   
@@ -130,7 +130,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>多任务处理在现代计算机操作系统中是一项必备的功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大了，
+        <p>多任务处理在现代计算机操作系统中是一项必备的功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大了，
 更重要的原因是计算机的运算速度与它的存储和通信子系统速度的差距太大，大量的时间都花费在磁盘I/O，网络通信或者数据库访问上，
 因此处理器在大部分时间里都处于等待其他资源的状态。<br>那么让计算机并发执行若干个运算任务则可以更充分地利用计算机处理器的效能，
 但复杂性在于绝大多数的运算任务都不可能只靠处理器计算就能完成，处理器至少要与内存交互，如读取运算数据、存储运算结果等，
@@ -391,7 +391,7 @@ java程序中天然的有序性可以总结为：如果在本线程内观察，�
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Java内存模型"><span class="toc-text">1. Java内存模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-内存间交互操作"><span class="toc-text">2. 内存间交互操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-对volatile变量的特殊规则"><span class="toc-text">2.1. 对volatile变量的特殊规则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-原子性、可见性、有序性"><span class="toc-text">3. 原子性、可见性、有序性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-先行发生规则"><span class="toc-text">4. 先行发生规则</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Java内存模型"><span class="toc-text">1. Java内存模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-内存间交互操作"><span class="toc-text">2. 内存间交互操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-对volatile变量的特殊规则"><span class="toc-text">2.1. 对volatile变量的特殊规则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-原子性、可见性、有序性"><span class="toc-text">3. 原子性、可见性、有序性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-先行发生规则"><span class="toc-text">4. 先行发生规则</span></a></li></ol>
 </div>
 
 

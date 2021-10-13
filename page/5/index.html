@@ -60,59 +60,6 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article id="post-20180611" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-10T16:00:00.000Z"><a href="/2018/06/11/20180611/">2018-06-11</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/06/11/20180611/">spring 静态Aop</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>静态代理是指在虚拟机载入字节码文件时动态织入切面行为，相对于动态代理具有更高的效率，因为动态代理调用的过程中，还需要一个动态创建代理类并代理目标对象的步骤，而静态代理在启动时便完成了字节码增强，
-当系统调用目标类时将与调用正常的类没有区别，它以一种更底层、更松耦合的方式改变了一个类的行为。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/06/11/20180611/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
   <article id="post-20180609" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -140,7 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
+        <p>使用面向对象（OOP）编程有一些弊端，当需要为多个不具有继承关系的对象引入同一个公共行为时（例如日志、安全检测等），只能在每个对象里引用公共行为，这样程序中就产生了大量重复的代码，不便于维护，
 所以可以使用面向切面（AOP）编程作为一个补充，Aop是横向的而OOP是纵向的。</p>
       
     </div>
@@ -193,7 +140,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前面介绍bean加载时都是站在<code>BeanFactory</code>的角度上进行的，相当于将spring纯粹当成一个bean容器工具来使用。其实spring另外提供了一套接口<code>ApplicationContext</code>，更加侧重于将<code>BeanFactory</code>放在一个上下文中来使用，
+        <p>前面介绍bean加载时都是站在<code>BeanFactory</code>的角度上进行的，相当于将spring纯粹当成一个bean容器工具来使用。其实spring另外提供了一套接口<code>ApplicationContext</code>，更加侧重于将<code>BeanFactory</code>放在一个上下文中来使用，
 这样方便在其基础上做一些扩展。</p>
       
     </div>
@@ -246,7 +193,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>之前梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了，不过bean加载的实现过程要比<code>BeanDefinition</code>的解析注册复杂得多，
+        <p>之前梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了，不过bean加载的实现过程要比<code>BeanDefinition</code>的解析注册复杂得多，
 下面还是以之前示例中的<code>User user = (User)beanFactory.getBean(&quot;test&quot;)</code>作为入口进行分析，并配合一些简单的流程图进行说明，抓住主要矛盾，主要梳理出一些关键的步骤，以及对循环依赖问题的处理。</p>
       
     </div>
@@ -299,7 +246,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>之前梳理了<code>XmlBeanDefinitionReader</code>解析配置文件的过程，但是主要是针对默认标签的解析，所以本文主要介绍下其对于自定义标签的解析策略。</p>
+        <p>之前梳理了<code>XmlBeanDefinitionReader</code>解析配置文件的过程，但是主要是针对默认标签的解析，所以本文主要介绍下其对于自定义标签的解析策略。</p>
       
     </div>
 	
@@ -351,7 +298,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>spring从xml中解析及注册<code>BeanDefinition</code>的过程主要由<code>XmlBeanDefinitionReader</code>主导，其相当于一个组织者的角色，将解析的工作委托给<code>BeanDefinitionDocumentReader</code>，注册工作则分配给<code>BeanDefinitionRegistry</code>。      
+        <p>spring从xml中解析及注册<code>BeanDefinition</code>的过程主要由<code>XmlBeanDefinitionReader</code>主导，其相当于一个组织者的角色，将解析的工作委托给<code>BeanDefinitionDocumentReader</code>，注册工作则分配给<code>BeanDefinitionRegistry</code>。      
 并且，在真正开始解析前，它将自己以及<code>Resource</code>，<code>ReaderEventListener</code>等接口打包成<code>XmlReaderContext</code>交给<code>BeanDefinitionDocumentReader</code>，以便在解析过程中可以回调<code>ReaderEventListener</code>中的事件接口，以及在解析完成时，
 可以拿到<code>BeanDefinitionRegistry</code>进行注册。实际上当所有<code>BeanDefinition</code>注册完成时，它的使命也就结束了，剩下的就交给<code>BeanFactory</code>了。</p>
       
@@ -405,11 +352,13 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>ubuntu版本：16.04<br>MySQL版本：8.0.11<br>问题：   </p>
+        <p>ubuntu版本：16.04<br>MySQL版本：8.0.11  </p>
+<p>问题：</p>
 <ol>
 <li>安装mysql及配置</li>
 <li>root无法登录</li>
-<li>客户端认证失败
+<li>客户端认证失败</li>
+</ol>
       
     </div>
 	
@@ -461,7 +410,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>结论：ubuntu不支持用yum来管理软件安装的，只是自己太无知。</p>
+        <p>结论：ubuntu本身不支持用yum来管理软件安装的，是自己无知</p>
       
     </div>
 	
@@ -514,12 +463,11 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <ol>
-<li><p>首先排除脚本自身问题，可以手动点杠执行下试试，</p>
+<li><p>首先排除脚本自身问题，可以手动执行下试试，</p>
 </li>
 <li><p>脚本确定没问题后，放到开机启动程序引用的路径下</p>
 </li>
 </ol>
-<p>2.1. 查看系统的运行级别</p>
       
     </div>
 	
@@ -571,10 +519,11 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>vmware版本：14.1.1<br>centos版本：7<br>问题：   </p>
-<ol>
+        <p>vmware版本：14.1.1<br>centos版本：7    </p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
 <li>安装centos并将ip改为静态</li>
-<li>解决上网和ssh登录问题
+<li>解决上网和ssh登录问题</li>
+</ol>
       
     </div>
 	
@@ -583,6 +532,63 @@
         
           <div class="alignleft">
             <a href="/2018/05/10/20180510/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20180503" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-05-02T16:00:00.000Z"><a href="/2018/05/03/20180503/">2018-05-03</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/05/03/20180503/">vmware设置ubuntu静态ip</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>vmware版本：14.1.1<br>ubuntu版本：16.0.4  </p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
+<li>以nat方式设置ubuntu的静态ip</li>
+<li>域名无法解析</li>
+<li>ssh无法登录</li>
+</ol>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/05/03/20180503/#more" class="more-link">more</a>
           </div>
         
         
@@ -631,11 +637,11 @@
   
     <li><a href="/categories/代码笔记/">代码笔记</a><small>5</small></li>
   
-    <li><a href="/categories/开源笔记/">开源笔记</a><small>14</small></li>
-  
     <li><a href="/categories/数据结构/">数据结构</a><small>7</small></li>
   
     <li><a href="/categories/日常笔记/">日常笔记</a><small>11</small></li>
+  
+    <li><a href="/categories/源码笔记/">源码笔记</a><small>14</small></li>
   
     <li><a href="/categories/设计模式/">设计模式</a><small>6</small></li>
   
@@ -657,7 +663,7 @@
   
   <div class="widget tag">
     <h3 class="title">Achives</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">9</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">9</span></li></ul>
   </div>
 
 
