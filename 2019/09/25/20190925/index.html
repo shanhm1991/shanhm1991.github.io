@@ -6,7 +6,8 @@
   <title>postgre 常用操作 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="…">
+  <meta name="description" content="本文主要是将日常对pg的使用做了一些笔记，其实主要就是几个命令psql、pg_dump、pg_restore，实际使用时完全可以查看文档就行，常用的自然会记得，但是好记性不如烂笔头，
+这里记录一下也是为了减轻自己一些不必要的记忆负担，毕竟脑瓜子内存有限不如直接记到电脑硬盘，用到时翻一下也很快">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -86,7 +87,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 11min</font>
+   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
    
    
   
@@ -112,73 +113,115 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>…</p>
+        <p>本文主要是将日常对pg的使用做了一些笔记，其实主要就是几个命令<code>psql</code>、<code>pg_dump</code>、<code>pg_restore</code>，实际使用时完全可以查看文档就行，常用的自然会记得，但是好记性不如烂笔头，
+这里记录一下也是为了减轻自己一些不必要的记忆负担，毕竟脑瓜子内存有限不如直接记到电脑硬盘，用到时翻一下也很快</p>
 <a id="more"></a>
 
-<h3 id="1-psql"><a href="#1-psql" class="headerlink" title="1. psql"></a>1. psql</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">psql is the PostgreSQL interactive terminal.</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  psql [OPTION]... [DBNAME [USERNAME]]</span><br><span class="line"></span><br><span class="line">General options:</span><br><span class="line">  -c, --command&#x3D;COMMAND    run only single command (SQL or internal) and exit</span><br><span class="line">  -d, --dbname&#x3D;DBNAME      database name to connect to (default: &quot;root&quot;)</span><br><span class="line">  -f, --file&#x3D;FILENAME      execute commands from file, then exit</span><br><span class="line">  -l, --list               list available databases, then exit</span><br><span class="line">  -v, --set&#x3D;, --variable&#x3D;NAME&#x3D;VALUE</span><br><span class="line">                           set psql variable NAME to VALUE</span><br><span class="line">                           (e.g., -v ON_ERROR_STOP&#x3D;1)</span><br><span class="line">  -V, --version            output version information, then exit</span><br><span class="line">  -X, --no-psqlrc          do not read startup file (~&#x2F;.psqlrc)</span><br><span class="line">  -1 (&quot;one&quot;), --single-transaction</span><br><span class="line">                           execute as a single transaction (if non-interactive)</span><br><span class="line">  -?, --help[&#x3D;options]     show this help, then exit</span><br><span class="line">      --help&#x3D;commands      list backslash commands, then exit</span><br><span class="line">      --help&#x3D;variables     list special variables, then exit</span><br><span class="line"></span><br><span class="line">Input and output options:</span><br><span class="line">  -a, --echo-all           echo all input from script</span><br><span class="line">  -b, --echo-errors        echo failed commands</span><br><span class="line">  -e, --echo-queries       echo commands sent to server</span><br><span class="line">  -E, --echo-hidden        display queries that internal commands generate</span><br><span class="line">  -L, --log-file&#x3D;FILENAME  send session log to file</span><br><span class="line">  -n, --no-readline        disable enhanced command line editing (readline)</span><br><span class="line">  -o, --output&#x3D;FILENAME    send query results to file (or |pipe)</span><br><span class="line">  -q, --quiet              run quietly (no messages, only query output)</span><br><span class="line">  -s, --single-step        single-step mode (confirm each query)</span><br><span class="line">  -S, --single-line        single-line mode (end of line terminates SQL command)</span><br><span class="line"></span><br><span class="line">Output format options:</span><br><span class="line">  -A, --no-align           unaligned table output mode</span><br><span class="line">      --csv                CSV (Comma-Separated Values) table output mode</span><br><span class="line">  -F, --field-separator&#x3D;STRING</span><br><span class="line">                           field separator for unaligned output (default: &quot;|&quot;)</span><br><span class="line">  -H, --html               HTML table output mode</span><br><span class="line">  -P, --pset&#x3D;VAR[&#x3D;ARG]     set printing option VAR to ARG (see \pset command)</span><br><span class="line">  -R, --record-separator&#x3D;STRING</span><br><span class="line">                           record separator for unaligned output (default: newline)</span><br><span class="line">  -t, --tuples-only        print rows only</span><br><span class="line">  -T, --table-attr&#x3D;TEXT    set HTML table tag attributes (e.g., width, border)</span><br><span class="line">  -x, --expanded           turn on expanded table output</span><br><span class="line">  -z, --field-separator-zero</span><br><span class="line">                           set field separator for unaligned output to zero byte</span><br><span class="line">  -0, --record-separator-zero</span><br><span class="line">                           set record separator for unaligned output to zero byte</span><br><span class="line"></span><br><span class="line">Connection options:</span><br><span class="line">  -h, --host&#x3D;HOSTNAME      database server host or socket directory (default: &quot;&#x2F;var&#x2F;run&#x2F;postgresql&quot;)</span><br><span class="line">  -p, --port&#x3D;PORT          database server port (default: &quot;5433&quot;)</span><br><span class="line">  -U, --username&#x3D;USERNAME  database user name (default: &quot;root&quot;)</span><br><span class="line">  -w, --no-password        never prompt for password</span><br><span class="line">  -W, --password           force password prompt (should happen automatically)</span><br></pre></td></tr></table></figure>
+<h3 id="1-创建数据库"><a href="#1-创建数据库" class="headerlink" title="1. 创建数据库"></a>1. 创建数据库</h3><ol>
+<li>获取当前pg的data目录</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pgdata&#x3D;&#96;su - postgres -c &quot;echo $PGDATA&quot;&#96;</span><br></pre></td></tr></table></figure>
 
-<p><strong>psql登录示例：</strong></p>
-<p><code>psql -h 192.168.141.13 -p 5432 -d postgres -U postgres -W</code>  </p>
-<p><code>psql &quot;host=192.168.141.13 port=5432 user=postgres password=postgres dbname=postgres&quot;</code></p>
-<p><code>psql &quot;host=192.168.141.13 port=5432 user=postgres password=postgres dbname=postgres&quot; -c &quot;select * from test;&quot;</code></p>
-<p><code>psql &quot;host=192.168.141.13 port=5432 user=postgres password=postgres dbname=postgres&quot; -f test.sql</code></p>
-<p><strong>psql常用操作：</strong>
+<ol start="2">
+<li>检查当前pg的home目录</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pghome&#x3D;&#96;su - postgres -c &quot;echo $PGHOME&quot;&#96;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>检测当前pg状态</li>
+</ol>
+<p>如果正常则会输出<code>server is running</code>，所以就检测是否有此行信息，对其进行计数0或1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - postgres -c &quot;$pghome&#x2F;bin&#x2F;pg_ctl status -w -D $pgdata|grep &#39;server is running&#39;|wc -l&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>检查库实例是否已经存在</li>
+</ol>
+<p>根据库名进行查询计数，并拼接一个dbcount=，最后拿到结果后解析出0或1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PGPASSWORD&#x3D;postgres psql -d postgres -U postgres -c &quot;select &#39;dbcount&#x3D;&#39;||count(1) from pg_database where datname&#x3D;&#39;test&#39;; &quot;| grep &quot;dbcount&#x3D;&quot; | awk -F&#x3D; &#39;&#123;print $2&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>检查用户是否已经存在</li>
+</ol>
+<p>同样根据用户名进行查询计数，并拼接一个rolecount=，最后拿到结果后解析出0或1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PGPASSWORD&#x3D;postgres psql -d postgres -U postgres -c &quot;select &#39;rolecount&#x3D;&#39;||count(1) from pg_roles where rolname&#x3D;&#39;test&#39;; &quot;| grep &quot;rolecount&#x3D;&quot; | awk -F&#x3D; &#39;&#123;print $2&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>创建用户</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PGPASSWORD&#x3D;postgres psql -d postgres -U postgres -c &quot;create user test password &#39;test&#39;;&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>创建库实例</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PGPASSWORD&#x3D;postgres psql -d postgres -U postgres -c &quot;create database test owner test;&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>用户赋权</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PGPASSWORD&#x3D;postgres psql -d postgres -U postgres -c &quot;grant postgres to test;&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-删除数据库"><a href="#2-删除数据库" class="headerlink" title="2. 删除数据库"></a>2. 删除数据库</h3><p><code>drop database [database_name];</code></p>
+<p>当前用户需要有删除权限，另外如果有连接在使用数据库则需要先关闭，可以如下：</p>
+<p><code>select pg_terminate_backend(pid) from pg_stat_activity where datname = &#39;[database_name]&#39;;</code></p>
+<br>
+
+<h3 id="3-登录执行"><a href="#3-登录执行" class="headerlink" title="3. 登录执行"></a>3. 登录执行</h3><p>其实上面的步骤已经是登录postgres执行的sql操作，但有时执行的sql比较长时，那么指定执行的sql文件会更方便一些，比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PGPASSWORD&#x3D;postgres psql -d postgres -U postgres -f test.sql</span><br></pre></td></tr></table></figure>
+
+<p>另外整一些pg常用的操作和sql：</p>
+<p><strong>常用操作：</strong>
     <table>
+        <tr>
+            <td><code>\?</code></td>
+            <td>：psql命令列表</td>
+        </tr>
+        <tr>
+            <td><code>\conninfo</code></td>
+            <td>：当前连接信息</td>
+        </tr>
+        <tr>
+            <td><code>\c [database_name]</code></td>
+            <td>：切换数据库</td>
+        </tr>
+        <tr>
+            <td><code>\password [user_name]</code></td>
+            <td>：修改用户密码（缺省则默认当前用户）</td>
+        </tr>
+        <tr>
+            <td><code>\q</code></td>
+            <td>：退出</td>
+        </tr>
         <tr>
             <td><code>\l</code></td>
             <td>：查看所有数据库</td>
         </tr>
         <tr>
+            <td><code>\du</code></td>
+            <td>：查看所有用户</td>
+        </tr>
+        <tr>
+            <td><code>\df</code></td>
+            <td>：查看所有存储过程（函数）</td>
+        </tr>
+        <tr>
+            <td><code>\df [func_name]</code></td>
+            <td>：查看指定函数</td>
+        </tr>
+        <tr>
+            <td><code>\di</code></td>
+            <td>：查看所有索引</td>
+        </tr>
+        <tr>
             <td><code>\dt</code></td>
-            <td>：查看表</td>
-        </tr>
-        <tr>
-            <td><code>\password username</code></td>
-            <td>：修改密码</td>
-        </tr>
-        <tr>
-            <td><code>\password</code></td>
-            <td>：设置密码</td>
-        </tr>
-        <tr>
-            <td><code>\?</code></td>
-            <td>：查看psql命令列表</td>
-        </tr>
-        <tr>
-            <td><code>\c [database_name]</code></td>
-            <td>：连接其他数据库，切换数据库</td>
-        </tr>
-        <tr>
-            <td><code>\conninfo</code></td>
-            <td>：列出当前数据库和连接的信息</td>
-        </tr>
-        <tr>
-            <td><code>\d</code></td>
-            <td>：列出当前数据库的所有表</td>
+            <td>：查看所有表（\d 查看表和序列）</td>
         </tr>
         <tr>
             <td><code>\d [table_name]</code></td>
-            <td>：列出某一张表格的结构</td>
-        </tr>
-        <tr>
-            <td><code>\du</code></td>
-            <td>：列出所有用户</td>
+            <td>：查看指定表结构</td>
         </tr>
         <tr>
             <td><code>\e</code></td>
-            <td>：打开文本编辑器</td>
-        </tr>
-        <tr>
-            <td><code>help</code></td>
-            <td>：帮助</td>
-        </tr>
-        <tr>
-            <td><code>\h</code></td>
-            <td>：查看SQL命令的解释，比如\h select</td>
-        </tr>
-        <tr>
-            <td><code>\q</code></td>
-            <td>：退出</td>
+            <td>：以文本方式编辑sql，关闭时执行</td>
         </tr>
     </table></p>
 <p><strong>常用sql：</strong>
@@ -216,18 +259,57 @@
             <td><code>GRANT ALL PRIVILEGES ON DATABASE shanhm TO shanhm;</code></td>
         </tr>
     </table></p>
-<h3 id="2-pg-dump"><a href="#2-pg-dump" class="headerlink" title="2. pg_dump"></a>2. pg_dump</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">pg_dump dumps a database as a text file or to other formats.</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  pg_dump [OPTION]... [DBNAME]</span><br><span class="line"></span><br><span class="line">General options:</span><br><span class="line">  -f, --file&#x3D;FILENAME          output file or directory name</span><br><span class="line">  -F, --format&#x3D;c|d|t|p         output file format (custom, directory, tar,</span><br><span class="line">                               plain text (default))</span><br><span class="line">  -j, --jobs&#x3D;NUM               use this many parallel jobs to dump</span><br><span class="line">  -v, --verbose                verbose mode</span><br><span class="line">  -V, --version                output version information, then exit</span><br><span class="line">  -Z, --compress&#x3D;0-9           compression level for compressed formats</span><br><span class="line">  --lock-wait-timeout&#x3D;TIMEOUT  fail after waiting TIMEOUT for a table lock</span><br><span class="line">  --no-sync                    do not wait for changes to be written safely to disk</span><br><span class="line">  -?, --help                   show this help, then exit</span><br><span class="line"></span><br><span class="line">Options controlling the output content:</span><br><span class="line">  -a, --data-only              dump only the data, not the schema</span><br><span class="line">  -b, --blobs                  include large objects in dump</span><br><span class="line">  -B, --no-blobs               exclude large objects in dump</span><br><span class="line">  -c, --clean                  clean (drop) database objects before recreating</span><br><span class="line">  -C, --create                 include commands to create database in dump</span><br><span class="line">  -E, --encoding&#x3D;ENCODING      dump the data in encoding ENCODING</span><br><span class="line">  -n, --schema&#x3D;PATTERN         dump the specified schema(s) only</span><br><span class="line">  -N, --exclude-schema&#x3D;PATTERN do NOT dump the specified schema(s)</span><br><span class="line">  -O, --no-owner               skip restoration of object ownership in</span><br><span class="line">                               plain-text format</span><br><span class="line">  -s, --schema-only            dump only the schema, no data</span><br><span class="line">  -S, --superuser&#x3D;NAME         superuser user name to use in plain-text format</span><br><span class="line">  -t, --table&#x3D;PATTERN          dump the specified table(s) only</span><br><span class="line">  -T, --exclude-table&#x3D;PATTERN  do NOT dump the specified table(s)</span><br><span class="line">  -x, --no-privileges          do not dump privileges (grant&#x2F;revoke)</span><br><span class="line">  --binary-upgrade             for use by upgrade utilities only</span><br><span class="line">  --column-inserts             dump data as INSERT commands with column names</span><br><span class="line">  --disable-dollar-quoting     disable dollar quoting, use SQL standard quoting</span><br><span class="line">  --disable-triggers           disable triggers during data-only restore</span><br><span class="line">  --enable-row-security        enable row security (dump only content user has</span><br><span class="line">                               access to)</span><br><span class="line">  --exclude-table-data&#x3D;PATTERN do NOT dump data for the specified table(s)</span><br><span class="line">  --extra-float-digits&#x3D;NUM     override default setting for extra_float_digits</span><br><span class="line">  --if-exists                  use IF EXISTS when dropping objects</span><br><span class="line">  --include-foreign-data&#x3D;PATTERN</span><br><span class="line">                               include data of foreign tables on foreign</span><br><span class="line">                               servers matching PATTERN</span><br><span class="line">  --inserts                    dump data as INSERT commands, rather than COPY</span><br><span class="line">  --load-via-partition-root    load partitions via the root table</span><br><span class="line">  --no-comments                do not dump comments</span><br><span class="line">  --no-publications            do not dump publications</span><br><span class="line">  --no-security-labels         do not dump security label assignments</span><br><span class="line">  --no-subscriptions           do not dump subscriptions</span><br><span class="line">  --no-synchronized-snapshots  do not use synchronized snapshots in parallel jobs</span><br><span class="line">  --no-tablespaces             do not dump tablespace assignments</span><br><span class="line">  --no-unlogged-table-data     do not dump unlogged table data</span><br><span class="line">  --on-conflict-do-nothing     add ON CONFLICT DO NOTHING to INSERT commands</span><br><span class="line">  --quote-all-identifiers      quote all identifiers, even if not key words</span><br><span class="line">  --rows-per-insert&#x3D;NROWS      number of rows per INSERT; implies --inserts</span><br><span class="line">  --section&#x3D;SECTION            dump named section (pre-data, data, or post-data)</span><br><span class="line">  --serializable-deferrable    wait until the dump can run without anomalies</span><br><span class="line">  --snapshot&#x3D;SNAPSHOT          use given snapshot for the dump</span><br><span class="line">  --strict-names               require table and&#x2F;or schema include patterns to</span><br><span class="line">                               match at least one entity each</span><br><span class="line">  --use-set-session-authorization</span><br><span class="line">                               use SET SESSION AUTHORIZATION commands instead of</span><br><span class="line">                               ALTER OWNER commands to set ownership</span><br><span class="line"></span><br><span class="line">Connection options:</span><br><span class="line">  -d, --dbname&#x3D;DBNAME      database to dump</span><br><span class="line">  -h, --host&#x3D;HOSTNAME      database server host or socket directory</span><br><span class="line">  -p, --port&#x3D;PORT          database server port number</span><br><span class="line">  -U, --username&#x3D;NAME      connect as specified database user</span><br><span class="line">  -w, --no-password        never prompt for password</span><br><span class="line">  -W, --password           force password prompt (should happen automatically)</span><br><span class="line">  --role&#x3D;ROLENAME          do SET ROLE before dump</span><br><span class="line"></span><br><span class="line">If no database name is supplied, then the PGDATABASE environment</span><br><span class="line">variable value is used.</span><br></pre></td></tr></table></figure>
+<br>    
 
-<p><strong>备份：</strong></p>
-<p><code>pg_dump -h 192.168.141.13 -p 5432 -U postgres $dbname &gt; db.sql</code> (如上面帮助文档，-s：仅结构；-a：仅数据)</p>
-<p><code>pg_dump -h 192.168.141.13 -p 5432 -U postgres -d $dbname -t $tbname&gt; tb.sql</code></p>
+<h3 id="4-备份恢复"><a href="#4-备份恢复" class="headerlink" title="4. 备份恢复"></a>4. 备份恢复</h3><ul>
+<li><strong>备份：</strong></li>
+</ul>
+<p>备份数据库（-s：仅结构；-a：仅数据）：</p>
+<p><code>pg_dump -h 192.168.141.13 -p 5432 -U postgres $dbname &gt; db.sql</code>;</p>
 <p><code>pg_dump &quot;host=192.168.141.13 port=5432 user=postgres password=postgres dbname=test&quot; -f db.sql</code></p>
+<p>备份指定表：</p>
+<p><code>pg_dump -h 192.168.141.13 -p 5432 -U postgres -d $dbname -t $tbname&gt; tb.sql</code></p>
 <p><code>pg_dump &quot;host=192.168.141.13 port=5432 user=postgres password=postgres dbname=test&quot; -t $tbname -f tb.sql</code></p>
+<p><code>-F c</code>指定备份的数据格式：</p>
 <p><code>pg_dump &quot;host=192.168.141.13 port=5432 user=postgres password=postgres dbname=test&quot; -F c -f db.dump</code></p>
-<h3 id="3-pg-restore"><a href="#3-pg-restore" class="headerlink" title="3. pg_restore"></a>3. pg_restore</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">pg_restore restores a PostgreSQL database from an archive created by pg_dump.</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  pg_restore [OPTION]... [FILE]</span><br><span class="line"></span><br><span class="line">General options:</span><br><span class="line">  -d, --dbname&#x3D;NAME        connect to database name</span><br><span class="line">  -f, --file&#x3D;FILENAME      output file name (- for stdout)</span><br><span class="line">  -F, --format&#x3D;c|d|t       backup file format (should be automatic)</span><br><span class="line">  -l, --list               print summarized TOC of the archive</span><br><span class="line">  -v, --verbose            verbose mode</span><br><span class="line">  -V, --version            output version information, then exit</span><br><span class="line">  -?, --help               show this help, then exit</span><br><span class="line"></span><br><span class="line">Options controlling the restore:</span><br><span class="line">  -a, --data-only              restore only the data, no schema</span><br><span class="line">  -c, --clean                  clean (drop) database objects before recreating</span><br><span class="line">  -C, --create                 create the target database</span><br><span class="line">  -e, --exit-on-error          exit on error, default is to continue</span><br><span class="line">  -I, --index&#x3D;NAME             restore named index</span><br><span class="line">  -j, --jobs&#x3D;NUM               use this many parallel jobs to restore</span><br><span class="line">  -L, --use-list&#x3D;FILENAME      use table of contents from this file for</span><br><span class="line">                               selecting&#x2F;ordering output</span><br><span class="line">  -n, --schema&#x3D;NAME            restore only objects in this schema</span><br><span class="line">  -N, --exclude-schema&#x3D;NAME    do not restore objects in this schema</span><br><span class="line">  -O, --no-owner               skip restoration of object ownership</span><br><span class="line">  -P, --function&#x3D;NAME(args)    restore named function</span><br><span class="line">  -s, --schema-only            restore only the schema, no data</span><br><span class="line">  -S, --superuser&#x3D;NAME         superuser user name to use for disabling triggers</span><br><span class="line">  -t, --table&#x3D;NAME             restore named relation (table, view, etc.)</span><br><span class="line">  -T, --trigger&#x3D;NAME           restore named trigger</span><br><span class="line">  -x, --no-privileges          skip restoration of access privileges (grant&#x2F;revoke)</span><br><span class="line">  -1, --single-transaction     restore as a single transaction</span><br><span class="line">  --disable-triggers           disable triggers during data-only restore</span><br><span class="line">  --enable-row-security        enable row security</span><br><span class="line">  --if-exists                  use IF EXISTS when dropping objects</span><br><span class="line">  --no-comments                do not restore comments</span><br><span class="line">  --no-data-for-failed-tables  do not restore data of tables that could not be</span><br><span class="line">                               created</span><br><span class="line">  --no-publications            do not restore publications</span><br><span class="line">  --no-security-labels         do not restore security labels</span><br><span class="line">  --no-subscriptions           do not restore subscriptions</span><br><span class="line">  --no-tablespaces             do not restore tablespace assignments</span><br><span class="line">  --section&#x3D;SECTION            restore named section (pre-data, data, or post-data)</span><br><span class="line">  --strict-names               require table and&#x2F;or schema include patterns to</span><br><span class="line">                               match at least one entity each</span><br><span class="line">  --use-set-session-authorization</span><br><span class="line">                               use SET SESSION AUTHORIZATION commands instead of</span><br><span class="line">                               ALTER OWNER commands to set ownership</span><br><span class="line"></span><br><span class="line">Connection options:</span><br><span class="line">  -h, --host&#x3D;HOSTNAME      database server host or socket directory</span><br><span class="line">  -p, --port&#x3D;PORT          database server port number</span><br><span class="line">  -U, --username&#x3D;NAME      connect as specified database user</span><br><span class="line">  -w, --no-password        never prompt for password</span><br><span class="line">  -W, --password           force password prompt (should happen automatically)</span><br><span class="line">  --role&#x3D;ROLENAME          do SET ROLE before restore</span><br><span class="line"></span><br><span class="line">The options -I, -n, -N, -P, -t, -T, and --section can be combined and specified</span><br><span class="line">multiple times to select multiple objects.</span><br><span class="line"></span><br><span class="line">If no input file name is supplied, then standard input is used.</span><br></pre></td></tr></table></figure>
-
-<p><strong>恢复数据库</strong></p>
+<ul>
+<li><strong>恢复：</strong></li>
+</ul>
 <p><code>pg_restore -h 192.168.141.13 -U postgres -d $dbname db.dump</code></p>
+<br>
+
+<h3 id="5-sql"><a href="#5-sql" class="headerlink" title="5. sql"></a>5. sql</h3><ul>
+<li>Array合并</li>
+</ul>
+<p>经常有这样的场景：希望将表test1中某数组字段中的值合并到表test2中对应的数组字段，并要求去重</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test1(</span><br><span class="line">  <span class="keyword">id</span> bigserial,</span><br><span class="line">  type1 <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">  models1 <span class="built_in">varchar</span>(<span class="number">64</span>)[]</span><br><span class="line">); </span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test2(</span><br><span class="line">  <span class="keyword">id</span> bigserial,</span><br><span class="line">  type2 <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">  models2 <span class="built_in">varchar</span>(<span class="number">64</span>)[]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>这种场景可能有两种情况，一是以被合并的test2数据为准，只更新test2中已经存在的数据，则可以使用update：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> test2 <span class="keyword">set</span> models2 = <span class="built_in">array</span>(<span class="keyword">select</span> k.mk <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">unnest</span>(models2) <span class="keyword">as</span> mk <span class="keyword">union</span> <span class="keyword">select</span> <span class="keyword">unnest</span>(mm.models) <span class="keyword">as</span> mk) k) </span><br><span class="line"><span class="keyword">from</span> (<span class="keyword">select</span> type1, <span class="built_in">array</span>(<span class="keyword">select</span> <span class="keyword">unnest</span>(models1)) models <span class="keyword">from</span> test1) mm</span><br><span class="line"><span class="keyword">where</span> type2 = mm.type1</span><br></pre></td></tr></table></figure>
+
+<p>有时也会要求以test1为准，即常见的如果存在则更新，没有则新增，那么此时可以通过conflict来实现，但是要先建立唯一索引：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">unique</span> <span class="keyword">index</span> unique_type <span class="keyword">on</span> test2 <span class="keyword">using</span> btree(type2);</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test2(type2, models2)</span><br><span class="line"><span class="keyword">select</span> type1, <span class="built_in">array</span>(<span class="keyword">select</span> <span class="keyword">distinct</span> <span class="keyword">unnest</span>(models1)) <span class="keyword">from</span> test1 </span><br><span class="line"><span class="keyword">on</span> conflict(type2) <span class="keyword">do</span> <span class="keyword">update</span> <span class="keyword">set</span></span><br><span class="line">models2 = <span class="built_in">array</span>(<span class="keyword">select</span> k.mk <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">unnest</span>(test2.models2) <span class="keyword">as</span> mk <span class="keyword">union</span> <span class="keyword">select</span> <span class="keyword">unnest</span>(excluded.models2) <span class="keyword">as</span> mk) k)</span><br></pre></td></tr></table></figure>
+
+<p>如果细心的话，会发现insert时的查询比update中多了一个distinct去重，这是因为虽然union会进行去重，但是如果insert是新增的话将不会执行union，所以要查询时就做好去重操作</p>
+<ul>
+<li>array_agg/string_agg</li>
+</ul>
+<p>array_agg经常与group by一起用，将分组结果以数组的形式给出，但是如果原来的字段已经是数组，则比较麻烦，array_agg要求原来的数组字段元素个数要一致才行</p>
+<p>还是举一个场景：通过关键词定义模型对文本数据进行匹配，需要能满足类似<code>(a or b) and (c or d) and not(e or f)</code>的能力，
+比如定义一个模型好孩子：（品格好 或 学习好）并且 （爱干净 或 懂礼貌） 但是不能 （调皮 或 捣蛋）</p>
+<p>这里可以定义几个概念：模型 -&gt; 模型定义 -&gt; 词组 -&gt; 关键词<br>一个模型可以有若干个模型定义；<br>一个模型定义可以有若干个词组；<br>一个词组则包括若干个关键词；    </p>
+<p>然后便可以如下初始化表结构和数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">model</span>(</span><br><span class="line">  <span class="keyword">id</span> bigserial,</span><br><span class="line">  <span class="keyword">model</span> <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">  model_define <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">  keyword_group <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">  negative int2 <span class="keyword">default</span> <span class="number">0</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> model_keyword(</span><br><span class="line">  <span class="keyword">id</span> bigserial,</span><br><span class="line">  keyword_group <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">  keyword <span class="built_in">varchar</span>(<span class="number">64</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">model</span>(<span class="keyword">model</span>, model_define, keyword_group, negative) <span class="keyword">values</span> (<span class="string">'好孩子'</span>, <span class="string">'好孩子-定义1'</span>, <span class="string">'好孩子-定义1-词组1'</span>, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">model</span>(<span class="keyword">model</span>, model_define, keyword_group, negative) <span class="keyword">values</span> (<span class="string">'好孩子'</span>, <span class="string">'好孩子-定义1'</span>, <span class="string">'好孩子-定义1-词组2'</span>, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">model</span>(<span class="keyword">model</span>, model_define, keyword_group, negative) <span class="keyword">values</span> (<span class="string">'好孩子'</span>, <span class="string">'好孩子-定义1'</span>, <span class="string">'好孩子-定义1-词组3'</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">model</span>(<span class="keyword">model</span>, model_define, keyword_group, negative) <span class="keyword">values</span> (<span class="string">'坏孩子'</span>, <span class="string">'坏孩子-定义1'</span>, <span class="string">'坏孩子-定义1-词组1'</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> model_keyword(keyword_group, keyword) <span class="keyword">values</span> (<span class="string">'好孩子-定义1-词组1'</span>, <span class="string">'品格好'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> model_keyword(keyword_group, keyword) <span class="keyword">values</span> (<span class="string">'好孩子-定义1-词组1'</span>, <span class="string">'成绩好'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> model_keyword(keyword_group, keyword) <span class="keyword">values</span> (<span class="string">'好孩子-定义1-词组2'</span>, <span class="string">'爱干净'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> model_keyword(keyword_group, keyword) <span class="keyword">values</span> (<span class="string">'好孩子-定义1-词组2'</span>, <span class="string">'懂礼貌'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> model_keyword(keyword_group, keyword) <span class="keyword">values</span> (<span class="string">'好孩子-定义1-词组3'</span>, <span class="string">'调皮'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> model_keyword(keyword_group, keyword) <span class="keyword">values</span> (<span class="string">'好孩子-定义1-词组3'</span>, <span class="string">'捣蛋'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> model_keyword(keyword_group, keyword) <span class="keyword">values</span> (<span class="string">'坏孩子-定义1-词组1'</span>, <span class="string">'爱打架'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>最后在查询组织数据时，先以词组进行分组，使用string_agg将单词以<code>|</code>进行拼接；然后再以模型定义进行分组，使用array_agg来组织词组；
+并且使用string_agg根据negative的值将行转为列，这样最终每行结果就代表一个模型定义，如下：</p>
+<p><img src="/img/20190925/20190925.1.jpg" alt=""> </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> a.model, a.model_define, </span><br><span class="line">       string_agg((<span class="keyword">case</span> a.negative <span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> keywords::<span class="built_in">varchar</span> <span class="keyword">end</span>),<span class="string">''</span>)::<span class="built_in">varchar</span>[] <span class="keyword">as</span> keywords,</span><br><span class="line">       string_agg((<span class="keyword">case</span> a.negative <span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> keywords::<span class="built_in">varchar</span> <span class="keyword">end</span>),<span class="string">''</span>)::<span class="built_in">varchar</span>[] <span class="keyword">as</span> negtaiveKeywords</span><br><span class="line">  <span class="keyword">from</span>(<span class="keyword">select</span> t.model, t.model_define, array_agg(t.keywords) keywords, t.negative </span><br><span class="line">         <span class="keyword">from</span>(<span class="keyword">select</span> m.model, m.model_define, m.keyword_group, m.negative, string_agg(mk.keyword, <span class="string">'|'</span>) keywords</span><br><span class="line">                <span class="keyword">from</span> <span class="keyword">model</span> m, model_keyword mk </span><br><span class="line">               <span class="keyword">where</span> m.keyword_group = mk.keyword_group </span><br><span class="line">               <span class="keyword">group</span> <span class="keyword">by</span> m.model, m.model_define, m.keyword_group, m.negative</span><br><span class="line">       ) t <span class="keyword">group</span> <span class="keyword">by</span> t.model, t.model_define, t.negative 													</span><br><span class="line">) a <span class="keyword">group</span> <span class="keyword">by</span> a.model, a.model_define</span><br></pre></td></tr></table></figure>
+
+<p><br><strong>参考：</strong></p>
+<ol>
+<li><a href="https://dbaplus.cn/news-11-3235-1.html" target="_blank" rel="noopener">https://dbaplus.cn/news-11-3235-1.html</a></li>
+</ol>
 
       
     </div>
@@ -326,7 +408,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-psql"><span class="toc-text">1. psql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-pg-dump"><span class="toc-text">2. pg_dump</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-pg-restore"><span class="toc-text">3. pg_restore</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-创建数据库"><span class="toc-text">1. 创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-删除数据库"><span class="toc-text">2. 删除数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-登录执行"><span class="toc-text">3. 登录执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-备份恢复"><span class="toc-text">4. 备份恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-sql"><span class="toc-text">5. sql</span></a></li></ol>
 </div>
 
 
