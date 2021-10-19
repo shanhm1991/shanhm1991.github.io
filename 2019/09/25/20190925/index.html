@@ -6,8 +6,8 @@
   <title>postgre 常用操作 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="本文主要是将日常对pg的使用做了一些笔记，其实主要就是几个命令psql、pg_dump、pg_restore，实际使用时完全可以查看文档就行，常用的自然会记得，但是好记性不如烂笔头，
-这里记录一下也是为了减轻自己一些不必要的记忆负担，毕竟脑瓜子内存有限不如直接记到电脑硬盘，用到时翻一下也很快">
+  <meta name="description" content="本文主要是将日常对pg的使用做了一些笔记，其实主要就是几个命令psql、pg_dump、pg_restore，实际使用时完全可以查看文档就行，并且一些常用的操作用多了自然会记得，但是好记性不如烂笔头，
+这里记录一下也是为了减轻自己一些不必要的记忆负担，毕竟脑瓜子内存有限不如直接记到电脑硬盘上，用到时翻一下也比较方便">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -87,7 +87,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
+   <font style="color: #999;"> words: 2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 9min</font>
    
    
   
@@ -113,8 +113,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>本文主要是将日常对pg的使用做了一些笔记，其实主要就是几个命令<code>psql</code>、<code>pg_dump</code>、<code>pg_restore</code>，实际使用时完全可以查看文档就行，常用的自然会记得，但是好记性不如烂笔头，
-这里记录一下也是为了减轻自己一些不必要的记忆负担，毕竟脑瓜子内存有限不如直接记到电脑硬盘，用到时翻一下也很快</p>
+        <p>本文主要是将日常对pg的使用做了一些笔记，其实主要就是几个命令<code>psql</code>、<code>pg_dump</code>、<code>pg_restore</code>，实际使用时完全可以查看文档就行，并且一些常用的操作用多了自然会记得，但是好记性不如烂笔头，
+这里记录一下也是为了减轻自己一些不必要的记忆负担，毕竟脑瓜子内存有限不如直接记到电脑硬盘上，用到时翻一下也比较方便</p>
 <a id="more"></a>
 
 <h3 id="1-创建数据库"><a href="#1-创建数据库" class="headerlink" title="1. 创建数据库"></a>1. 创建数据库</h3><ol>
@@ -305,6 +305,18 @@
 并且使用string_agg根据negative的值将行转为列，这样最终每行结果就代表一个模型定义，如下：</p>
 <p><img src="/img/20190925/20190925.1.jpg" alt=""> </p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> a.model, a.model_define, </span><br><span class="line">       string_agg((<span class="keyword">case</span> a.negative <span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> keywords::<span class="built_in">varchar</span> <span class="keyword">end</span>),<span class="string">''</span>)::<span class="built_in">varchar</span>[] <span class="keyword">as</span> keywords,</span><br><span class="line">       string_agg((<span class="keyword">case</span> a.negative <span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> keywords::<span class="built_in">varchar</span> <span class="keyword">end</span>),<span class="string">''</span>)::<span class="built_in">varchar</span>[] <span class="keyword">as</span> negtaiveKeywords</span><br><span class="line">  <span class="keyword">from</span>(<span class="keyword">select</span> t.model, t.model_define, array_agg(t.keywords) keywords, t.negative </span><br><span class="line">         <span class="keyword">from</span>(<span class="keyword">select</span> m.model, m.model_define, m.keyword_group, m.negative, string_agg(mk.keyword, <span class="string">'|'</span>) keywords</span><br><span class="line">                <span class="keyword">from</span> <span class="keyword">model</span> m, model_keyword mk </span><br><span class="line">               <span class="keyword">where</span> m.keyword_group = mk.keyword_group </span><br><span class="line">               <span class="keyword">group</span> <span class="keyword">by</span> m.model, m.model_define, m.keyword_group, m.negative</span><br><span class="line">       ) t <span class="keyword">group</span> <span class="keyword">by</span> t.model, t.model_define, t.negative 													</span><br><span class="line">) a <span class="keyword">group</span> <span class="keyword">by</span> a.model, a.model_define</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>json_agg/json_build_object</li>
+</ul>
+<p>json_build_object可以将查询的结果直接以json的方式给出来</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test3(</span><br><span class="line">  <span class="keyword">id</span> bigserial,</span><br><span class="line">  user_name <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">  user_age int2,</span><br><span class="line">	user_sex <span class="built_in">varchar</span>(<span class="number">32</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">coalesce</span>(json_agg(json_build_object(</span><br><span class="line"><span class="string">'userName'</span>, user_name, </span><br><span class="line"><span class="string">'userAge'</span>, user_age, </span><br><span class="line"><span class="string">'userSex'</span>, user_sex																	 </span><br><span class="line">)),<span class="string">'[]'</span>) </span><br><span class="line"><span class="keyword">from</span> test3 t</span><br></pre></td></tr></table></figure>
+
+<p>或者分页查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> json_build_object(</span><br><span class="line"><span class="string">'list'</span>, (<span class="keyword">select</span> <span class="keyword">coalesce</span>(json_agg(row_to_json(t) ),<span class="string">'[]'</span>) </span><br><span class="line">           <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">id</span>, </span><br><span class="line">                        user_name <span class="string">"userName"</span>, </span><br><span class="line">                        user_age <span class="string">"userAge"</span>,</span><br><span class="line">                        user_sex <span class="string">"userSex"</span></span><br><span class="line">                   <span class="keyword">from</span> test3 <span class="keyword">limit</span> <span class="number">10</span> <span class="keyword">offset</span> <span class="number">0</span></span><br><span class="line">                ) t</span><br><span class="line">        ),</span><br><span class="line"><span class="string">'count'</span>, (<span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">from</span> test3))</span><br></pre></td></tr></table></figure>
 
 <p><br><strong>参考：</strong></p>
 <ol>
