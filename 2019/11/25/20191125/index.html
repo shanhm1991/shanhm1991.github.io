@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>redis 常用操作 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="Redis(Remote Dictionary Server)，即远程字典服务，是一个开源的使用C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。
+redis是一个基于内存的key-value存储系统，类似Memcached，区别的是redis会周期性的把更新的数据写入磁盘（RDB）或者把修改操作写入追加的记录文件（AOF），
+并在此基础上实现master-slave(主从)同步。因此redis可以用于高速缓存，同时它支持多种数据类型，以及集群和事务的操作，进而也可以用于发布订阅、地图信息分析、计数器等系统">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="redis 常用操作"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">迷途漫漫，终有一归</span>
+  <h2><font style="color: #999;">articles:  91 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20191125" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-11-24T16:00:00.000Z"><a href="/2019/11/25/20191125/">2019-11-25</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        redis 常用操作
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <font style="color: #999;"> words: 885  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 3min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/日常笔记/">日常笔记</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/redis/">redis</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Redis(Remote Dictionary Server)，即远程字典服务，是一个开源的使用C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。</p>
+<p>redis是一个基于内存的key-value存储系统，类似Memcached，区别的是redis会周期性的把更新的数据写入磁盘（RDB）或者把修改操作写入追加的记录文件（AOF），
+并在此基础上实现master-slave(主从)同步。<br>因此redis可以用于高速缓存，同时它支持多种数据类型，以及集群和事务的操作，进而也可以用于发布订阅、地图信息分析、计数器等系统</p>
+<a id="more"></a>
+
+<h3 id="1-安装配置"><a href="#1-安装配置" class="headerlink" title="1. 安装配置"></a>1. 安装配置</h3><p>Linux下安装非常简单，官网下载安装包，解压后执行：<code>make install</code>，安装完之后在<code>\usr\local\bin</code>下便可以看到redis的可执行文件</p>
+<p>然后修改配置文件<code>redis.conf</code>，便可以指定配置文件进行启动：<code>redis-server /path/to/redis.conf</code>，当然也可以修改多个配置文件启动多个redis实例</p>
+<figure class="highlight plain"><figcaption><span class="caption">vim redis.conf 6.2.5</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"># 默认不是在后台运行模式，可改成yes设置成后台运行模式</span><br><span class="line">daemonize no</span><br><span class="line"></span><br><span class="line"># 当后台运行时，Redis默认会把pid记在&#x2F;var&#x2F;run&#x2F;redis.pid，当运行多个redis服务时，需要指定不同的pid文件和端口</span><br><span class="line">pidfile &#x2F;var&#x2F;run&#x2F;redis.pid</span><br><span class="line"></span><br><span class="line"># 默认监听端口：6379</span><br><span class="line">port 6379</span><br><span class="line"></span><br><span class="line"># 绑定地址，允许哪些网络连接，比如127.0.0.1只允许本地连接，不设置或者0.0.0.0则允许所有连接</span><br><span class="line">bind 127.0.0.1 -::1</span><br><span class="line"></span><br><span class="line"># 默认开启保护模式</span><br><span class="line">protected-mode yes</span><br><span class="line"></span><br><span class="line"># 客户端连接的超时时间，单位秒。如果客户端在一定时间内没有发出任何指令，那么关闭该连接，默认0表示关闭此设置</span><br><span class="line">timeout 0</span><br><span class="line"></span><br><span class="line"># log级别</span><br><span class="line"># debug 记录很多信息，用于开发和测试</span><br><span class="line"># varbose 有用的信息，不像debug会记录那么多</span><br><span class="line"># notice 普通的verbose，常用于生产环境</span><br><span class="line"># warning 只有非常重要或者严重的信息会记录到日志</span><br><span class="line">loglevel debug</span><br><span class="line"></span><br><span class="line"># log文件地址，默认stdout，如果配置为空，并且是后台模式，则会输出到&#x2F;dev&#x2F;null</span><br><span class="line">logfile &#x2F;var&#x2F;log&#x2F;redis&#x2F;redis.log</span><br><span class="line"></span><br><span class="line"># 可用数据库数，默认为16，默认选择数据库0</span><br><span class="line">databases 16</span><br><span class="line"></span><br><span class="line">################################ 快照RDB #################################</span><br><span class="line">## 工作方式 ：周期性将redis中数据快照到dump.rdb文件</span><br><span class="line">## 优势 ：备份恢复简单。RDB通过子进程完成持久化工作，相对比AOF启动效率高</span><br><span class="line">## 劣势 ：服务器故障会丢失几分钟内的数据</span><br><span class="line"></span><br><span class="line"># save 900 1      900秒内至少有1个key被改变，则持久化快照</span><br><span class="line"># save 300 10     300秒内至少有300个key被改变，则持久化快照</span><br><span class="line"># save 60 10000   60秒内至少有10000个key被改变，则持久化快照</span><br><span class="line"></span><br><span class="line"># 默认持久化到rdb文件时进行压缩</span><br><span class="line">rdbcompression yes</span><br><span class="line"></span><br><span class="line"># 默认持久化文件名为dump.rdb</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># 默认持久化文件目录为当前目录</span><br><span class="line">dir .&#x2F;</span><br><span class="line"></span><br><span class="line"># 默认当持久化失败时则拒绝写入动作，比如磁盘满了，则拒绝set操作</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line"></span><br><span class="line"># 默认对rdb文件进行校验</span><br><span class="line">rdbchecksum yes</span><br><span class="line"></span><br><span class="line"># 在没有启用持久性的情况下，删除复制实例中使用的RDB文件。默认禁用，此选项仅在AOF和RDB持久性都禁用情况下才生效，否则忽略。</span><br><span class="line">rdb-del-sync-files no</span><br></pre></td></tr></table></figure>
+
+
+<p><br><strong>参考：</strong></p>
+<ol>
+<li><a href="https://redis.io/" target="_blank" rel="noopener">https://redis.io/</a></li>
+<li><a href="https://developer.aliyun.com/article/38806" target="_blank" rel="noopener">https://developer.aliyun.com/article/38806</a></li>
+<li><a href="https://www.cnblogs.com/alanlee/p/7053577.html" target="_blank" rel="noopener">https://www.cnblogs.com/alanlee/p/7053577.html</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+	  
+	  
+		  <a class="alignright next" href="/2019/10/17/20191017/">
+		    git 常用操作
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/日常笔记/">日常笔记</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/redis/">redis</a>
+  </div>
+
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style ">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+
+    
+	
+    
+	
+    
+
+    <a class="addthis_counter addthis_pill_style"></a>
+	
+  </div>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+ 		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-安装配置"><span class="toc-text">1. 安装配置</span></a></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2021 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
