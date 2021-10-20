@@ -86,7 +86,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 4.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 15min</font>
+   <font style="color: #999;"> words: 4.2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 16min</font>
    
    
   
@@ -400,6 +400,8 @@ place参数用来告诉git提交记录来自于main，并推送到远程仓库�
 <figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch --all</span><br><span class="line">git reset --hard origin/master</span><br></pre></td></tr></table></figure>
 
 <p>另外，有时我们可能无法确定当前状况，比如当前所在分支，以及各个区域之间的差异，那么可以通过<code>git status</code>来进行查看</p>
+<p>如果想将远程仓库的提交撤销，则需要通过<code>git push -f</code>来强行推送（如果没权限，则需要将分支解除protected），因为本地版本落后于远程仓库。但是在多人协作时，如果别人已经拉取了提交记录，并且在你撤销之后进行push，则又有可能将你希望撤销的提交有推送到远程仓库，
+所以在撤销远程仓库的记录后需要通知小伙伴做相应的修改（比如先拉个分支保存当前自己的修改，然后在获取仓库的版本覆盖本地记录，最后再合并修改）</p>
 <h4 id="3-2-git-branch-tag"><a href="#3-2-git-branch-tag" class="headerlink" title="3.2. git branch/tag"></a>3.2. git branch/tag</h4><p>开发中经常会有分支和tag的创建删除，这里小总结一下</p>
 <figure class="highlight shell"><figcaption><span class="caption">solution</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b v1.2.0 #创建本地分支</span><br><span class="line">git push origin v1.2.0 #推送分支到远程</span><br><span class="line"></span><br><span class="line">git push origin --delete v1.2.0 #删除远程分支和本地追踪分支</span><br><span class="line">git branch -D v1.2.0            #删除本地分支</span><br><span class="line"></span><br><span class="line">git tag v1.2.0           #创建本地tag</span><br><span class="line">git tag -l               #查看本地tag</span><br><span class="line">git show v1.2.0          #查看tag信息</span><br><span class="line">git tag -d v1.2.0        #删除本地tag</span><br><span class="line"></span><br><span class="line">git push origin v1.2.0       #推送tag到远程</span><br><span class="line">git ls-remote --tags origin  #查看远程tag</span><br><span class="line">git push origin :v1.2.0      #删除远程tag</span><br></pre></td></tr></table></figure>
 
