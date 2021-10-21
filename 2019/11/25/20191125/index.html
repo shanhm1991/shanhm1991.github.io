@@ -88,7 +88,7 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 885  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 3min</font>
+   <font style="color: #999;"> words: 1.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 5min</font>
    
    
   
@@ -121,9 +121,201 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
 
 <h3 id="1-安装配置"><a href="#1-安装配置" class="headerlink" title="1. 安装配置"></a>1. 安装配置</h3><p>Linux下安装非常简单，官网下载安装包，解压后执行：<code>make install</code>，安装完之后在<code>\usr\local\bin</code>下便可以看到redis的可执行文件</p>
 <p>然后修改配置文件<code>redis.conf</code>，便可以指定配置文件进行启动：<code>redis-server /path/to/redis.conf</code>，当然也可以修改多个配置文件启动多个redis实例</p>
-<figure class="highlight plain"><figcaption><span class="caption">vim redis.conf 6.2.5</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"># 默认不是在后台运行模式，可改成yes设置成后台运行模式</span><br><span class="line">daemonize no</span><br><span class="line"></span><br><span class="line"># 当后台运行时，Redis默认会把pid记在&#x2F;var&#x2F;run&#x2F;redis.pid，当运行多个redis服务时，需要指定不同的pid文件和端口</span><br><span class="line">pidfile &#x2F;var&#x2F;run&#x2F;redis.pid</span><br><span class="line"></span><br><span class="line"># 默认监听端口：6379</span><br><span class="line">port 6379</span><br><span class="line"></span><br><span class="line"># 绑定地址，允许哪些网络连接，比如127.0.0.1只允许本地连接，不设置或者0.0.0.0则允许所有连接</span><br><span class="line">bind 127.0.0.1 -::1</span><br><span class="line"></span><br><span class="line"># 默认开启保护模式</span><br><span class="line">protected-mode yes</span><br><span class="line"></span><br><span class="line"># 客户端连接的超时时间，单位秒。如果客户端在一定时间内没有发出任何指令，那么关闭该连接，默认0表示关闭此设置</span><br><span class="line">timeout 0</span><br><span class="line"></span><br><span class="line"># log级别</span><br><span class="line"># debug 记录很多信息，用于开发和测试</span><br><span class="line"># varbose 有用的信息，不像debug会记录那么多</span><br><span class="line"># notice 普通的verbose，常用于生产环境</span><br><span class="line"># warning 只有非常重要或者严重的信息会记录到日志</span><br><span class="line">loglevel debug</span><br><span class="line"></span><br><span class="line"># log文件地址，默认stdout，如果配置为空，并且是后台模式，则会输出到&#x2F;dev&#x2F;null</span><br><span class="line">logfile &#x2F;var&#x2F;log&#x2F;redis&#x2F;redis.log</span><br><span class="line"></span><br><span class="line"># 可用数据库数，默认为16，默认选择数据库0</span><br><span class="line">databases 16</span><br><span class="line"></span><br><span class="line">################################ 快照RDB #################################</span><br><span class="line">## 工作方式 ：周期性将redis中数据快照到dump.rdb文件</span><br><span class="line">## 优势 ：备份恢复简单。RDB通过子进程完成持久化工作，相对比AOF启动效率高</span><br><span class="line">## 劣势 ：服务器故障会丢失几分钟内的数据</span><br><span class="line"></span><br><span class="line"># save 900 1      900秒内至少有1个key被改变，则持久化快照</span><br><span class="line"># save 300 10     300秒内至少有300个key被改变，则持久化快照</span><br><span class="line"># save 60 10000   60秒内至少有10000个key被改变，则持久化快照</span><br><span class="line"></span><br><span class="line"># 默认持久化到rdb文件时进行压缩</span><br><span class="line">rdbcompression yes</span><br><span class="line"></span><br><span class="line"># 默认持久化文件名为dump.rdb</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># 默认持久化文件目录为当前目录</span><br><span class="line">dir .&#x2F;</span><br><span class="line"></span><br><span class="line"># 默认当持久化失败时则拒绝写入动作，比如磁盘满了，则拒绝set操作</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line"></span><br><span class="line"># 默认对rdb文件进行校验</span><br><span class="line">rdbchecksum yes</span><br><span class="line"></span><br><span class="line"># 在没有启用持久性的情况下，删除复制实例中使用的RDB文件。默认禁用，此选项仅在AOF和RDB持久性都禁用情况下才生效，否则忽略。</span><br><span class="line">rdb-del-sync-files no</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span class="caption">vim redis.conf 6.2.5</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"># 默认不是在后台运行模式，可改成yes设置成后台运行模式</span><br><span class="line">daemonize no</span><br><span class="line"></span><br><span class="line"># 当后台运行时，Redis默认会把pid记在&#x2F;var&#x2F;run&#x2F;redis.pid，当运行多个redis服务时，需要指定不同的pid文件和端口</span><br><span class="line">pidfile &#x2F;var&#x2F;run&#x2F;redis.pid</span><br><span class="line"></span><br><span class="line"># 默认监听端口：6379</span><br><span class="line">port 6379</span><br><span class="line"></span><br><span class="line"># 绑定地址，允许哪些网络连接，比如127.0.0.1只允许本地连接，不设置或者0.0.0.0则允许所有连接</span><br><span class="line">bind 127.0.0.1 -::1</span><br><span class="line"></span><br><span class="line"># 默认开启保护模式</span><br><span class="line">protected-mode yes</span><br><span class="line"></span><br><span class="line"># 客户端连接的超时时间，单位秒。如果客户端在一定时间内没有发出任何指令，那么关闭该连接，默认0表示关闭此设置</span><br><span class="line">timeout 0</span><br><span class="line"></span><br><span class="line"># log级别</span><br><span class="line"># debug 记录很多信息，用于开发和测试</span><br><span class="line"># varbose 有用的信息，不像debug会记录那么多</span><br><span class="line"># notice 普通的verbose，常用于生产环境</span><br><span class="line"># warning 只有非常重要或者严重的信息会记录到日志</span><br><span class="line">loglevel debug</span><br><span class="line"></span><br><span class="line"># log文件地址，默认stdout，如果配置为空，并且是后台模式，则会输出到&#x2F;dev&#x2F;null</span><br><span class="line">logfile &#x2F;var&#x2F;log&#x2F;redis&#x2F;redis.log</span><br><span class="line"></span><br><span class="line"># 可用数据库数，默认为16，默认选择数据库0</span><br><span class="line">databases 16</span><br><span class="line"></span><br><span class="line">################################ 快照RDB #################################</span><br><span class="line">## 工作方式 ：周期性将redis中数据快照到dump.rdb文件</span><br><span class="line">## 优势 ：备份恢复简单。RDB通过子进程完成持久化工作，相对比AOF启动效率高</span><br><span class="line">## 劣势 ：服务器故障会丢失几分钟内的数据</span><br><span class="line"></span><br><span class="line"># save 900 1      900秒内至少有1个key被改变，则持久化快照</span><br><span class="line"># save 300 10     300秒内至少有300个key被改变，则持久化快照</span><br><span class="line"># save 60 10000   60秒内至少有10000个key被改变，则持久化快照</span><br><span class="line"></span><br><span class="line"># 默认持久化到rdb文件时进行压缩</span><br><span class="line">rdbcompression yes</span><br><span class="line"></span><br><span class="line"># 默认持久化文件名为dump.rdb</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># 默认持久化文件目录为当前目录</span><br><span class="line">dir .&#x2F;</span><br><span class="line"></span><br><span class="line"># 默认当持久化失败时则拒绝写入动作，比如磁盘满了，则拒绝set操作</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line"></span><br><span class="line"># 默认对rdb文件进行校验</span><br><span class="line">rdbchecksum yes</span><br><span class="line"></span><br><span class="line"># 在没有启用持久性的情况下，删除复制实例中使用的RDB文件，默认禁用</span><br><span class="line">rdb-del-sync-files no</span><br><span class="line"></span><br><span class="line">################################# 主从复制 #################################</span><br></pre></td></tr></table></figure>
 
-
+<h3 id="2-操作"><a href="#2-操作" class="headerlink" title="2. 操作"></a>2. 操作</h3><p>使用<code>redis-cli -h 127.0.0.1 -p 6379</code>便可以连接对应的redis实例，然后所有的操作（原子操作）都可以通过命令来进行</p>
+<p><strong>db 操作：</strong>
+    <table>
+        <tr>
+            <td><code>select 3</code></td>
+            <td>：切换数据库</td>
+        </tr>
+        <tr>
+            <td><code>dbsize</code></td>
+            <td>：查看当前库大小</td>
+        </tr>
+        <tr>
+            <td><code>flush db</code></td>
+            <td>：清空当前数据库</td>
+        </tr>
+        <tr>
+            <td><code>flushall</code></td>
+            <td>：清空所有数据库</td>
+        </tr>
+    </table></p>
+<p><strong>key 操作：</strong>
+    <table>
+        <tr>
+            <td><code>keys *</code></td>
+            <td>：获取所有的key</td>
+        </tr>
+        <tr>
+            <td><code>exists key</code></td>
+            <td>：是否存在key</td>
+        </tr>
+        <tr>
+            <td><code>move key 1</code></td>
+            <td>：从数据库1中删除key</td>
+        </tr>
+        <tr>
+            <td><code>type key</code></td>
+            <td>：查看key类型</td>
+        </tr>
+        <tr>
+            <td><code>expire key 10</code></td>
+            <td>：设置key过期时间</td>
+        </tr>
+        <tr>
+            <td><code>ttl key</code></td>
+            <td>：查看key剩余时间</td>
+        </tr>
+    </table></p>
+<h3 id="3-数据类型"><a href="#3-数据类型" class="headerlink" title="3. 数据类型"></a>3. 数据类型</h3><p><strong>String：</strong>
+    <table>
+        <tr>
+            <td><code>set key value</code></td>
+            <td>：设置key的值</td>
+        </tr>
+        <tr>
+            <td><code>get key</code></td>
+            <td>：获取key的值</td>
+        </tr>
+        <tr>
+            <td><code>mset k1 v1 k2 v2 k3 v3</code></td>
+            <td>：设置多值</td>
+        </tr>
+        <tr>
+            <td><code>mget k1 k2 k3</code></td>
+            <td>：获取多值</td>
+        </tr>
+        <tr>
+            <td><code>setnx key value</code></td>
+            <td>：如果当前key不存在，则设置成功</td>
+        </tr>
+        <tr>
+            <td><code>msetnx k1 v1 k2 v2</code></td>
+            <td>：如果当前key不存在，则设置成功（一个失败则全部失败）</td>
+        </tr>
+        <tr>
+            <td><code>getset key value</code></td>
+            <td>：返回当前值，并设置新值</td>
+        </tr>
+        <tr>
+            <td><code>setex key 10 value</code></td>
+            <td>：设置key的值，并设置10秒过期时间</td>
+        </tr>
+        <tr>
+            <td><code>strlen key</code></td>
+            <td>：查看key对应值的长度</td>
+        </tr>
+        <tr>
+            <td><code>append key value</code></td>
+            <td>：在key的值后面拼接字符串，如果key不存在则相当于set</td>
+        </tr>
+        <tr>
+            <td><code>setrange key 2 value</code></td>
+            <td>：设置key的值，并从位置2开始的地方进行覆盖</td>
+        </tr>
+        <tr>
+            <td><code>getrange key 0 5</code></td>
+            <td>：获取key的值，并截取位置0-5</td>
+        </tr>
+        <tr>
+            <td><code>incr key</code></td>
+            <td>：key的值+1</td>
+        </tr>
+        <tr>
+            <td><code>decr key</code></td>
+            <td>：key的值-1</td>
+        </tr>
+        <tr>
+            <td><code>incrby key 10</code></td>
+            <td>：key的值+10</td>
+        </tr>
+        <tr>
+            <td><code>decrby key 10</code></td>
+            <td>：ey的值-10</td>
+        </tr>
+    </table></p>
+<p>场景：使用mset/mget存取对象，相对直接存取json可以更灵活的操作</p>
+<p>保存人员：<code>mset user:1:name shanhm user:1:age 30 user:1:sex man</code><br>获取人员属性：<code>mget user:1:name user:1:age user:1:sex</code></p>
+<p><strong>List</strong>
+    <table>
+        <tr>
+            <td><code>lpush key v1 v2</code></td>
+            <td>：从头部向列表中放入值</td>
+        </tr>
+        <tr>
+            <td><code>get key</code></td>
+            <td>：获取key的值</td>
+        </tr>
+    </table></p>
+<p><strong>Set</strong>
+    <table>
+        <tr>
+            <td><code>set key value</code></td>
+            <td>：设置key的值</td>
+        </tr>
+        <tr>
+            <td><code>get key</code></td>
+            <td>：获取key的值</td>
+        </tr>
+    </table></p>
+<p><strong>Hash</strong>
+    <table>
+        <tr>
+            <td><code>set key value</code></td>
+            <td>：设置key的值</td>
+        </tr>
+        <tr>
+            <td><code>get key</code></td>
+            <td>：获取key的值</td>
+        </tr>
+    </table></p>
+<p><strong>Zset</strong>
+    <table>
+        <tr>
+            <td><code>set key value</code></td>
+            <td>：设置key的值</td>
+        </tr>
+        <tr>
+            <td><code>get key</code></td>
+            <td>：获取key的值</td>
+        </tr>
+    </table></p>
+<p><strong>geospatial</strong>
+    <table>
+        <tr>
+            <td><code>set key value</code></td>
+            <td>：设置key的值</td>
+        </tr>
+        <tr>
+            <td><code>get key</code></td>
+            <td>：获取key的值</td>
+        </tr>
+    </table></p>
+<p><strong>hyperloglog</strong>
+    <table>
+        <tr>
+            <td><code>set key value</code></td>
+            <td>：设置key的值</td>
+        </tr>
+        <tr>
+            <td><code>get key</code></td>
+            <td>：获取key的值</td>
+        </tr>
+    </table></p>
+<p><strong>bitmaps</strong>
+    <table>
+        <tr>
+            <td><code>set key value</code></td>
+            <td>：设置key的值</td>
+        </tr>
+        <tr>
+            <td><code>get key</code></td>
+            <td>：获取key的值</td>
+        </tr>
+    </table></p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li><a href="https://redis.io/" target="_blank" rel="noopener">https://redis.io/</a></li>
@@ -224,7 +416,7 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-安装配置"><span class="toc-text">1. 安装配置</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-安装配置"><span class="toc-text">1. 安装配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-操作"><span class="toc-text">2. 操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-数据类型"><span class="toc-text">3. 数据类型</span></a></li></ol>
 </div>
 
 
