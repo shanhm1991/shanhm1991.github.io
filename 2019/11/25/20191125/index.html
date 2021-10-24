@@ -88,7 +88,7 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 2.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
+   <font style="color: #999;"> words: 2.6k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 10min</font>
    
    
   
@@ -123,7 +123,7 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
 <p>然后修改配置文件<code>redis.conf</code>，便可以指定配置文件进行启动：<code>redis-server /path/to/redis.conf</code>，当然也可以修改多个配置文件启动多个redis实例</p>
 <figure class="highlight plain"><figcaption><span class="caption">vim redis.conf 6.2.5</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"># 默认不是在后台运行模式，可改成yes设置成后台运行模式</span><br><span class="line">daemonize no</span><br><span class="line"></span><br><span class="line"># 当后台运行时，Redis默认会把pid记在&#x2F;var&#x2F;run&#x2F;redis.pid，当运行多个redis服务时，需要指定不同的pid文件和端口</span><br><span class="line">pidfile &#x2F;var&#x2F;run&#x2F;redis.pid</span><br><span class="line"></span><br><span class="line"># 默认监听端口：6379</span><br><span class="line">port 6379</span><br><span class="line"></span><br><span class="line"># 绑定地址，允许哪些网络连接，比如127.0.0.1只允许本地连接，不设置或者0.0.0.0则允许所有连接</span><br><span class="line">bind 127.0.0.1 -::1</span><br><span class="line"></span><br><span class="line"># 默认开启保护模式</span><br><span class="line">protected-mode yes</span><br><span class="line"></span><br><span class="line"># 客户端连接的超时时间，单位秒。如果客户端在一定时间内没有发出任何指令，那么关闭该连接，默认0表示关闭此设置</span><br><span class="line">timeout 0</span><br><span class="line"></span><br><span class="line"># log级别</span><br><span class="line"># debug 记录很多信息，用于开发和测试</span><br><span class="line"># varbose 有用的信息，不像debug会记录那么多</span><br><span class="line"># notice 普通的verbose，常用于生产环境</span><br><span class="line"># warning 只有非常重要或者严重的信息会记录到日志</span><br><span class="line">loglevel debug</span><br><span class="line"></span><br><span class="line"># log文件地址，默认stdout，如果配置为空，并且是后台模式，则会输出到&#x2F;dev&#x2F;null</span><br><span class="line">logfile &#x2F;var&#x2F;log&#x2F;redis&#x2F;redis.log</span><br><span class="line"></span><br><span class="line"># 可用数据库数，默认为16，默认选择数据库0</span><br><span class="line">databases 16</span><br><span class="line"></span><br><span class="line">################################ 快照RDB #################################</span><br><span class="line">## 工作方式 ：周期性将redis中数据快照到dump.rdb文件</span><br><span class="line">## 优势 ：备份恢复简单。RDB通过子进程完成持久化工作，相对比AOF启动效率高</span><br><span class="line">## 劣势 ：服务器故障会丢失几分钟内的数据</span><br><span class="line"></span><br><span class="line"># save 900 1      900秒内至少有1个key被改变，则持久化快照</span><br><span class="line"># save 300 10     300秒内至少有300个key被改变，则持久化快照</span><br><span class="line"># save 60 10000   60秒内至少有10000个key被改变，则持久化快照</span><br><span class="line"></span><br><span class="line"># 默认持久化到rdb文件时进行压缩</span><br><span class="line">rdbcompression yes</span><br><span class="line"></span><br><span class="line"># 默认持久化文件名为dump.rdb</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># 默认持久化文件目录为当前目录</span><br><span class="line">dir .&#x2F;</span><br><span class="line"></span><br><span class="line"># 默认当持久化失败时则拒绝写入动作，比如磁盘满了，则拒绝set操作</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line"></span><br><span class="line"># 默认对rdb文件进行校验</span><br><span class="line">rdbchecksum yes</span><br><span class="line"></span><br><span class="line"># 在没有启用持久性的情况下，删除复制实例中使用的RDB文件，默认禁用</span><br><span class="line">rdb-del-sync-files no</span><br><span class="line"></span><br><span class="line">################################# 主从复制 #################################</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-操作"><a href="#2-操作" class="headerlink" title="2. 操作"></a>2. 操作</h3><p>使用<code>redis-cli -h 127.0.0.1 -p 6379</code>便可以连接对应的redis实例，然后所有的操作（原子操作）都可以通过命令来进行，当然redis的命令肯定不止下面这些，更多的命令及其操作可以查询官网相关文档</p>
+<h3 id="2-支持操作"><a href="#2-支持操作" class="headerlink" title="2. 支持操作"></a>2. 支持操作</h3><p>使用<code>redis-cli -h 127.0.0.1 -p 6379</code>便可以连接对应的redis实例，然后所有的操作（原子操作）都可以通过命令来进行，当然redis的命令肯定不止下面这些，更多的命令及其操作可以查询官网相关文档</p>
 <p><strong>db 操作：</strong>
     <table>
         <tr>
@@ -170,7 +170,7 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
             <td>：查看key剩余时间</td>
         </tr>
     </table></p>
-<h3 id="3-数据类型"><a href="#3-数据类型" class="headerlink" title="3. 数据类型"></a>3. 数据类型</h3><p><strong>String：</strong>
+<h4 id="2-1-数据类型"><a href="#2-1-数据类型" class="headerlink" title="2.1. 数据类型"></a>2.1. 数据类型</h4><p><strong>String：</strong>
     <table>
         <tr>
             <td><code>set key value</code></td>
@@ -429,44 +429,86 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
         </tr>
     </table></p>
 <p><strong>geospatial</strong></p>
-<p>地理位置集合（经度 纬度 value）
+<p>地理位置集合（经度 纬度 value），其底层也是通过zset来实现的，所以支持zset的所有命令，比如可以通过<code>zrange</code>排序获取位置，或者<code>zrem</code>删除位置
     <table>
         <tr>
-            <td><code>geoadd china:city 116.40 39.90 beijing</code></td>
+            <td><code>geoadd key 116.40 39.90 beijing</code></td>
             <td>：添加城市北京</td>
         </tr>
         <tr>
-            <td><code>get key</code></td>
-            <td>：获取key的值</td>
+            <td><code>geopos key beijing</code></td>
+            <td>：获取指定城市位置</td>
+        </tr>
+        <tr>
+            <td><code>geodist key beijing shanghai 单位</code></td>
+            <td>：获取两个位置距离，单位（m/km/mi英里/ft英尺）</td>
+        </tr>
+        <tr>
+            <td><code>georadius geodist key 经度 纬度 半径 单位 withcoord count</code></td>
+            <td>：获取指定位置（坐标）指定半径内的位置</td>
+        </tr>
+        <tr>
+            <td><code>georadius geodist key beijing 半径 单位 withcoord count</code></td>
+            <td>：获取指定位置指定半径内的位置</td>
         </tr>
     </table></p>
-<p><strong>hyperloglog</strong>
+<p><strong>hyperloglog</strong></p>
+<p>hyperloglog 基数统计算法，即统计集合中不重复的元素个数，常见的集合也许可以通过set去重来count，但对超大集合的内存消耗显然是不能接受的，这时hyperloglog算法可以保证只消耗12kb内存的情况下估算出集合基数，而且出错率只有0.81%
     <table>
         <tr>
-            <td><code>set key value</code></td>
-            <td>：设置key的值</td>
+            <td><code>pfadd key value ...</code></td>
+            <td>：添加元素，可多值</td>
         </tr>
         <tr>
-            <td><code>get key</code></td>
-            <td>：获取key的值</td>
+            <td><code>pfcount key</code></td>
+            <td>：获取基数</td>
+        </tr>
+        <tr>
+            <td><code>pfmerge key3 key1 key2</code></td>
+            <td>：合并key1集合，key2集合，结果为key3集合</td>
         </tr>
     </table></p>
-<p><strong>bitmaps</strong>
+<p><strong>bitmaps</strong></p>
+<p>位图，即位存储，只保存0和1两个状态
     <table>
         <tr>
-            <td><code>set key value</code></td>
-            <td>：设置key的值</td>
+            <td><code>setbit key 0 1</code></td>
+            <td>：设置第0位为1</td>
         </tr>
         <tr>
-            <td><code>get key</code></td>
-            <td>：获取key的值</td>
+            <td><code>setbit key 1 0</code></td>
+            <td>：设置第1位为0</td>
+        </tr>
+        <tr>
+            <td><code>getbit key 1</code></td>
+            <td>：获取第1位值</td>
+        </tr>
+        <tr>
+            <td><code>bitcount key</code></td>
+            <td>：统计值为1的位数</td>
         </tr>
     </table></p>
+<h4 id="2-2-事务"><a href="#2-2-事务" class="headerlink" title="2.2. 事务"></a>2.2. 事务</h4><p>redis事务即一组命令集合，其将所有命令序列化，然后按照顺序执行，所以只有在发起执行命令时事务才开始进行，它可以保证一次性、顺序性、排他性，但是没有事务隔离级别的概念。
+另外，如果命令错误则直接放弃，而如果是命令执行失败则正常进行。<br>其步骤也很简单：</p>
+<ul>
+<li>开启事务(multi)</li>
+<li>命令入队(…)</li>
+<li>执行事务(exec) 或者 放弃事务(discard)</li>
+</ul>
+<h4 id="2-3-乐观锁"><a href="#2-3-乐观锁" class="headerlink" title="2.3. 乐观锁"></a>2.3. 乐观锁</h4><p>可以通过<code>watch</code>在事务开启前对key的值进行监视，如果在事务执行时发现key的发生变化，则事务失败，一般如果失败之后，会在再次监视之前会先解除锁以便获取最新的值进行监视</p>
+<ul>
+<li>解除锁(unwatch)</li>
+<li>监视乐观锁(watch key)</li>
+<li>开启事务(multi)</li>
+<li>命令入队(…)</li>
+<li>执行事务(exec)</li>
+</ul>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li><a href="https://redis.io/" target="_blank" rel="noopener">https://redis.io/</a></li>
 <li><a href="https://developer.aliyun.com/article/38806" target="_blank" rel="noopener">https://developer.aliyun.com/article/38806</a></li>
 <li><a href="https://www.cnblogs.com/alanlee/p/7053577.html" target="_blank" rel="noopener">https://www.cnblogs.com/alanlee/p/7053577.html</a></li>
+<li><a href="https://www.jianshu.com/p/55defda6dcd2" target="_blank" rel="noopener">https://www.jianshu.com/p/55defda6dcd2</a></li>
 </ol>
 
       
@@ -562,7 +604,7 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-安装配置"><span class="toc-text">1. 安装配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-操作"><span class="toc-text">2. 操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-数据类型"><span class="toc-text">3. 数据类型</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-安装配置"><span class="toc-text">1. 安装配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-支持操作"><span class="toc-text">2. 支持操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-数据类型"><span class="toc-text">2.1. 数据类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-事务"><span class="toc-text">2.2. 事务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-乐观锁"><span class="toc-text">2.3. 乐观锁</span></a></li></ol></li></ol>
 </div>
 
 
