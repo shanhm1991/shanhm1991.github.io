@@ -888,7 +888,7 @@ pre .doctype,
 pre .pi,
 pre .lisp .string,
 pre .javadoc {
-  color: #317152;
+  color: #9393ad;
   font-style: Roboto-Regular;
 }
 pre .keyword,
@@ -899,10 +899,7 @@ pre .css .tag,
 pre .request,
 pre .status,
 pre .nginx .title {
-  font-family: Microsoft-YaHei;
-  font-weight: bold;
-  color: #7f0055;
-  font-size: xx-small;
+  color: #a41acf;
 }
 pre .number,
 pre .command,
@@ -912,7 +909,7 @@ pre .phpdoc,
 pre .tex .formula,
 pre .regexp,
 pre .hexcolor {
-  color: #2a00ff;
+  color: #228b22;
 }
 pre .title,
 pre .localvars,
@@ -923,7 +920,7 @@ pre .identifier,
 pre .vhdl,
 pre .literal,
 pre .id {
-  color: #e33e12;
+  color: #d18613;
 }
 pre .attribute,
 pre .variable,
@@ -933,7 +930,7 @@ pre .constant,
 pre .class .title,
 pre .parent,
 pre .haskell .type {
-  color: #7042b7;
+  color: #e13406;
 }
 pre .preprocessor,
 pre .preprocessor .keyword,

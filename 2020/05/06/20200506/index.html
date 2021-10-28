@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>《UNIX环境高级编程》 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="…">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="《UNIX环境高级编程》"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
+  <h2><font style="color: #999;">articles:  93 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20200506" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2020-05-05T16:00:00.000Z"><a href="/2020/05/06/20200506/">2020-05-06</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        《UNIX环境高级编程》
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <font style="color: #999;"> words: 586  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 3min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/读书笔记/">读书笔记</a>
+  </div>
+
+
+   
+   
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>…</p>
+<a id="more"></a>
+
+<h3 id="1-ls"><a href="#1-ls" class="headerlink" title="1. ls"></a>1. ls</h3><figure class="highlight c"><figcaption><span class="caption">vim test.ls.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">    DIR           *dp;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">dirp</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(argc != <span class="number">2</span>)</span><br><span class="line">        err_sys(<span class="string">"usage: ls dir_name"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>((dp = opendir(argv[<span class="number">1</span>])) == <span class="literal">NULL</span>)</span><br><span class="line">        err_quit(<span class="string">"can't open %s"</span>, argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>((dirp = readdir(dp)) != <span class="literal">NULL</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, dirp-&gt;d_name);</span><br><span class="line"></span><br><span class="line">    closedir(dp);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-fork"><a href="#3-fork" class="headerlink" title="3. fork"></a>3. fork</h3><figure class="highlight c"><figcaption><span class="caption">vim test.fork.c</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> var_globe = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">char</span> buf[] = <span class="string">"a write to stdout\n"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> var_local = <span class="number">88</span>;</span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">write</span>(STDOUT_FILENO, buf, <span class="keyword">sizeof</span>(buf) - <span class="number">1</span>) != <span class="keyword">sizeof</span>(buf) - <span class="number">1</span>)</span><br><span class="line">        err_sys(<span class="string">"write error"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"before fork\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>((pid = fork()) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        err_sys(<span class="string">"fork error"</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">        var_globe++;</span><br><span class="line">        var_local++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"子进程："</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        sleep(<span class="number">2</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"父进程："</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"pid=%ld, parentPid=%ld, globe=%d, local=%d\n"</span>, getpid(), (<span class="keyword">long</span>)getppid(), var_globe, var_local);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span class="fileDir">gcc test.fork.c -o fork && ./</span><span class="caption">fork</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a write to stdout</span><br><span class="line">before fork</span><br><span class="line">子进程：pid&#x3D;23401, parentPid&#x3D;23400, globe&#x3D;7, local&#x3D;89</span><br><span class="line">父进程：pid&#x3D;23400, parentPid&#x3D;23207, globe&#x3D;6, local&#x3D;88</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span class="fileDir">gcc test.fork.c -o fork && ./</span><span class="caption">fork > tmp.txt</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a write to stdout</span><br><span class="line">before fork</span><br><span class="line">子进程：pid&#x3D;23465, parentPid&#x3D;23464, globe&#x3D;7, local&#x3D;89</span><br><span class="line">before fork</span><br><span class="line">父进程：pid&#x3D;23464, parentPid&#x3D;23207, globe&#x3D;6, local&#x3D;88</span><br></pre></td></tr></table></figure>
+
+<h3 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h3><figure class="highlight c"><figcaption><span class="caption">apue.h</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;      /* for definition of errno */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdarg.h&gt;     /* ISO C variable aruments */</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXLINE 4096</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">err_doit</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>, <span class="keyword">const</span> <span class="keyword">char</span> *, va_list)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Nonfatal error related to a system call.</span></span><br><span class="line"><span class="comment"> * Print a message and return.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">err_ret</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span>&#123;</span><br><span class="line">    va_list     ap;</span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line">    err_doit(<span class="number">1</span>, errno, fmt, ap);</span><br><span class="line">    va_end(ap);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Fatal error related to a system call.</span></span><br><span class="line"><span class="comment"> * Print a message and terminate.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">err_sys</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span>&#123;</span><br><span class="line">    va_list     ap;</span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line">    err_doit(<span class="number">1</span>, errno, fmt, ap);</span><br><span class="line">    va_end(ap);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Fatal error unrelated to a system call.</span></span><br><span class="line"><span class="comment"> * Error code passed as explict parameter.</span></span><br><span class="line"><span class="comment"> * Print a message and terminate.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">err_exit</span><span class="params">(<span class="keyword">int</span> error, <span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span>&#123;</span><br><span class="line">    va_list     ap;</span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line">    err_doit(<span class="number">1</span>, error, fmt, ap);</span><br><span class="line">    va_end(ap);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Fatal error related to a system call.</span></span><br><span class="line"><span class="comment"> * Print a message, dump core, and terminate.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">err_dump</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span>&#123;</span><br><span class="line">    va_list     ap;</span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line">    err_doit(<span class="number">1</span>, errno, fmt, ap);</span><br><span class="line">    va_end(ap);</span><br><span class="line">    <span class="built_in">abort</span>();        <span class="comment">/* dump core and terminate */</span></span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);        <span class="comment">/* shouldn't get here */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Nonfatal error unrelated to a system call.</span></span><br><span class="line"><span class="comment"> * Print a message and return.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">err_msg</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span>&#123;</span><br><span class="line">    va_list     ap;</span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line">    err_doit(<span class="number">0</span>, <span class="number">0</span>, fmt, ap);</span><br><span class="line">    va_end(ap);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Fatal error unrelated to a system call.</span></span><br><span class="line"><span class="comment"> * Print a message and terminate.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">err_quit</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span>&#123;</span><br><span class="line">    va_list     ap;</span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line">    err_doit(<span class="number">0</span>, <span class="number">0</span>, fmt, ap);</span><br><span class="line">    va_end(ap);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Print a message and return to caller.</span></span><br><span class="line"><span class="comment"> * Caller specifies "errnoflag".</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">err_doit</span><span class="params">(<span class="keyword">int</span> errnoflag, <span class="keyword">int</span> error, <span class="keyword">const</span> <span class="keyword">char</span> *fmt, va_list ap)</span></span>&#123;</span><br><span class="line">   <span class="keyword">char</span>    buf[MAXLINE];</span><br><span class="line">   vsnprintf(buf, MAXLINE, fmt, ap);</span><br><span class="line">   <span class="keyword">if</span> (errnoflag)</span><br><span class="line">       <span class="built_in">snprintf</span>(buf + <span class="built_in">strlen</span>(buf), MAXLINE - <span class="built_in">strlen</span>(buf), <span class="string">": %s"</span>, strerror(error));</span><br><span class="line">   <span class="built_in">strcat</span>(buf, <span class="string">"\n"</span>);</span><br><span class="line">   fflush(<span class="built_in">stdout</span>);     <span class="comment">/* in case stdout and stderr are the same */</span></span><br><span class="line">   <span class="built_in">fputs</span>(buf, <span class="built_in">stderr</span>);</span><br><span class="line">   fflush(<span class="literal">NULL</span>);       <span class="comment">/* flushes all stdio output streams */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><br><strong>参考：</strong></p>
+<ol>
+<li>《UNIX环境高级编程》</li>
+<li><a href="http://www.apuebook.com/apue3e.html" target="_blank" rel="noopener">http://www.apuebook.com/apue3e.html</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+	  
+	  
+		  <a class="alignright next" href="/2020/01/10/20200110/">
+		    mac 常用操作
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/读书笔记/">读书笔记</a>
+  </div>
+
+
+        
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style ">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+
+    
+	
+    
+	
+    
+
+    <a class="addthis_counter addthis_pill_style"></a>
+	
+  </div>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+ 		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-ls"><span class="toc-text">1. ls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-fork"><span class="toc-text">3. fork</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#附录："><span class="toc-text">附录：</span></a></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2021 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
