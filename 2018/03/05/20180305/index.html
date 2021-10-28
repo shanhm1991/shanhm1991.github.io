@@ -86,7 +86,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 595  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
+   <font style="color: #999;"> words: 1.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 4min</font>
    
    
   
@@ -115,7 +115,7 @@
         <p>本文主要是整理了下日常工作中使用vim的操作，大部分操作其实都是用多了自然就会记得，但是脑壳内存实在有限，时间一长不用了又会忘记，所以整理记到硬盘上更好些，用到时查一下也比较方便</p>
 <a id="more"></a>
 
-<p><strong>vim设置</strong><br>    <table>
+<h3 id="1-操作笔记"><a href="#1-操作笔记" class="headerlink" title="1. 操作笔记"></a>1. 操作笔记</h3><p><strong>vim设置</strong><br>    <table>
         <tr>
             <td><code>:set number</code></td>
             <td>：显示行号</td>
@@ -136,15 +136,35 @@
 <p>如果希望设置永久生效，可以修改文件：<code>vim ~/.vimrc</code></p>
 <p><strong>窗口控制</strong><br>    <table>
         <tr>
-            <td><code>:sp</code></td>
-            <td>：横向分屏</td>
+            <td><code>:sp path</code></td>
+            <td>：横向分屏，并在新窗口打开指定路径文件，默认打开当前文件</td>
         </tr>
         <tr>
-            <td><code>:vsp</code></td>
-            <td>：纵向分屏（一般用<code>:vsp 路径</code>在新窗口列出目录文件，选择对应文件回车便打开，也可以<code>:open 路径</code>返回）</td>
+            <td><code>:vsp path</code></td>
+            <td>：纵向分屏，并在新窗口打开指定路径文件，默认打开当前文件</td>
         </tr>
         <tr>
-            <td><code>ctrl + ww</code></td>
+            <td><code>:open path</code></td>
+            <td>：重新打开指定路径</td>
+        </tr>
+        <tr>
+            <td><code>:Sex path</code></td>
+            <td>：在水平拆分窗口中打开指定目录（默认当前目录）的文件浏览器</td>
+        </tr>
+        <tr>
+            <td><code>:Vex path</code></td>
+            <td>：在垂直拆分窗口中打开指定目录（默认当前目录）的文件浏览器</td>
+        </tr>
+        <tr>
+            <td><code>:res num</code></td>
+            <td>：调整窗口高度</td>
+        </tr>
+        <tr>
+            <td><code>:vertical res num</code></td>
+            <td>：调整窗口宽度</td>
+        </tr>
+        <tr>
+            <td><code>ctrl + w + w</code></td>
             <td>：切换窗口</td>
         </tr>
     </table></p>
@@ -347,6 +367,45 @@
 <li>输入注释字符<code>#</code>或者<code>//</code></li>
 <li><code>Esc</code>:</li>
 </ol>
+<h3 id="2-插件-Python"><a href="#2-插件-Python" class="headerlink" title="2. 插件 Python"></a>2. 插件 Python</h3><p><font color="blue">插件地址</font>：<code>https://github.com/rkulla/pydiction.git</code></p>
+<ol>
+<li>将<code>python_pydiction.vim</code>放到目录：<code>~/.vim/after/ftplugin</code></li>
+<li>将<code>complete-dict</code>放到目录：<code>~/.vim/tools/pydiction</code></li>
+<li>编辑<code>.vimrc</code>，添加行：</li>
+</ol>
+<figure class="highlight shell"><figcaption><span class="caption">.vimrc</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">set autoindent</span><br><span class="line">set tabstop=4  </span><br><span class="line">set shiftwidth=4  </span><br><span class="line">set expandtab</span><br><span class="line"></span><br><span class="line">filetype plugin on</span><br><span class="line">let g:pydiction_location ='~/.vim/tools/pydiction/complete-dict'</span><br><span class="line">let g:pydiction_menu_height = 20</span><br></pre></td></tr></table></figure>
+
+<p>然后编辑<code>.py</code>文件时按tab键便可以有补全提示了，如果打开时报错，可能是上面的文件格式有问题，执行下<code>dos2unix</code></p>
+<h3 id="3-插件-taglist"><a href="#3-插件-taglist" class="headerlink" title="3. 插件 taglist"></a>3. 插件 taglist</h3><p><font color="blue">下载地址</font>：<code>https://sourceforge.net/projects/vim-taglist/files/vim-taglist/</code></p>
+<p>下载后解压到<code>~/.vim</code>目录下即可，然后在vim时通过<code>:Tlist</code>便可以打开文件的结构化视图，也可以添加一些默认设置：</p>
+<figure class="highlight shell"><figcaption><span class="caption">.vimrc</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let Tlist_Auto_Open = 1         打开vim时自动打开Tlist</span><br><span class="line">let Tlist_Exit_OnlyWindow = 1   taglist为最后一个窗口时，退出vim</span><br><span class="line">let Tlist_WinWidth = 40         设置Tlist窗口的默认宽度</span><br></pre></td></tr></table></figure>
+
+<p>另外，进入doc目录，在vim的命令模式下执行<code>:helptags .</code>，可以将doc导入帮助文档，后面便可以通过<code>help taglist.txt</code>查看帮助手册</p>
+<h3 id="4-插件-ctags"><a href="#4-插件-ctags" class="headerlink" title="4. 插件 ctags"></a>4. 插件 ctags</h3><p><font color="blue">下载地址</font>：<code>https://sourceforge.net/projects/ctags/files/ctags/</code></p>
+<p>下载解压后，如下进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用：</strong></p>
+<ol>
+<li>首先在需要打开的项目根目录下执行：<code>sudo ctags -R *</code>，即生成索引文件tags</li>
+<li>然后在<code>~/.vimrc</code>中添加：<code>set tags={tags文件路径}</code></li>
+<li>最后在打开的文件中便可以通过<code>:ta var</code>跳转到变量的定义位置了</li>
+</ol>
+<p><strong>常用快捷键：</strong>
+    <table>
+        <tr>
+            <td><code>ctrl + ]</code></td>
+            <td>：跳转至光标所在对象定义之处</td>
+        </tr>
+        <tr>
+            <td><code>ctrl + W + ]</code></td>
+            <td>：在新窗口打开光标所在对象定义之处</td>
+        </tr>
+        <tr>
+            <td><code>ctrl + t</code></td>
+            <td>：返回跳转前位置</td>
+        </tr>
+    </table>    </p>
 <p><br><strong>参考</strong></p>
 
       
@@ -446,7 +505,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-操作笔记"><span class="toc-text">1. 操作笔记</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-插件-Python"><span class="toc-text">2. 插件 Python</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-插件-taglist"><span class="toc-text">3. 插件 taglist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-插件-ctags"><span class="toc-text">4. 插件 ctags</span></a></li></ol>
 </div>
 
 

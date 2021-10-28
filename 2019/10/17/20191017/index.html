@@ -86,7 +86,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 5.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 20min</font>
+   <font style="color: #999;"> words: 5.6k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 21min</font>
    
    
   
@@ -453,10 +453,31 @@ place参数用来告诉git提交记录来自于main，并推送到远程仓库�
             <td>：针对当前仓库进行配置，对应配置文件为：.git/config</td>
         </tr>
     </table></p>
-<p>常用配置从中：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 编辑对应的配置文件</span></span><br><span class="line">git config -e</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 列出配置项</span></span><br><span class="line">git config -l</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置用户信息</span></span><br><span class="line">git config --global user.name "shanhm1991"</span><br><span class="line">git config --global user.email "shanhm1991@163.com"</span><br></pre></td></tr></table></figure>
+<p>常用配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git config -e   # 编辑对应的配置文件</span><br><span class="line">git config -l   # 列出配置项</span><br><span class="line"></span><br><span class="line">git config --global credential.helper store          # 记住密码</span><br><span class="line">git config --global user.name "shanhm1991"           # 用户名</span><br><span class="line">git config --global user.email "shanhm1991@163.com"  # 邮箱</span><br></pre></td></tr></table></figure>
 
-<h3 id="4-Git仓库服务"><a href="#4-Git仓库服务" class="headerlink" title="4. Git仓库服务"></a>4. Git仓库服务</h3><p><br><strong>参考：</strong></p>
+<h3 id="4-Git仓库服务"><a href="#4-Git仓库服务" class="headerlink" title="4. Git仓库服务"></a>4. Git仓库服务</h3><ul>
+<li>先设置ssh免密连接（这里用ssh协议搭建）</li>
+</ul>
+<p>这里在服务上创建一个git用户来测试：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useradd -d /home/git -m git</span><br><span class="line"></span><br><span class="line">su - git</span><br><span class="line">mkdir .ssh</span><br><span class="line">vim .ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p>然后在本地通过<code>ssh-keygen -o</code>生成一对秘钥，并将<code>id_rsa.pub</code>的内容追加到上面的<code>authorized_keys</code>中，接着重启sshd服务即可。但是实际操作时发现并没有生效，
+仍然要输入密码，然后在日志<code>/var/log/secure</code>中看到如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Oct 27 20:49:47 bogon sshd[62683]: Authentication refused: bad ownership or modes for file &#x2F;home&#x2F;git&#x2F;.ssh&#x2F;authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p>提示<code>authorized_keys</code>的权限有问题，因为SSH不希望组用户对~/.ssh目录有写权限，因此<code>chmod -R g-w /home/git/.ssh/</code></p>
+<ul>
+<li>创建git仓库</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir demo.git</span><br><span class="line">cd demo.git/</span><br><span class="line">git init --bare --shared</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>clone/commit/push</li>
+</ul>
+<p>克隆仓库：<code>git clone git@192.168.141.21:/home/git/demo.git</code></p>
+<p>然后便是正常提交了，提交之前先设置一下自己的<code>user.name</code>和<code>user.email</code></p>
+<p><br><strong>参考：</strong></p>
 <ol>
 <li><a href="https://git-scm.com/book/zh/v2" target="_blank" rel="noopener">https://git-scm.com/book/zh/v2</a></li>
 <li><a href="https://learngitbranching.js.org/?locale=zh_CN" target="_blank" rel="noopener">https://learngitbranching.js.org/?locale=zh_CN</a></li>
