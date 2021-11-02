@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>《java并发编程实战》四 线程安全性委托 | Echo</title>
+  <title>《java并发编程实战》 线程安全性的委托 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="在上一篇文章中，曾利用过将现场安全性委托给现有的线程安全类的方法。委托是创建线程安全类的一个最有效策略：
-只需让现有的线程安全类管理所有的状态即可。Java类库包含丰富的并发基础构建模块，如线程安全的容器以及各种用于协调多个相互协作的线程的同步工具类。">
+  <meta name="description" content="委托是创建线程安全类的一个最有效策略：只需让现有的线程安全类管理所有的状态即可。
+Java类库包含丰富的并发构建模块，如线程安全容器以及各种用于协调多个相互协作的线程的同步工具类。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="《java并发编程实战》四 线程安全性委托"/>
+  <meta property="og:title" content="《java并发编程实战》 线程安全性的委托"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -75,7 +75,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        《java并发编程实战》四 线程安全性委托
+        《java并发编程实战》 线程安全性的委托
     </h1>
     
     
@@ -92,12 +92,17 @@
    
   
   <div class="categories">
-    <a href="/categories/读书笔记/">读书笔记</a>
+    <a href="/categories/java-笔记/">java 笔记</a>
   </div>
 
 
    
    
+  
+  <div class="tags">
+    <a href="/tags/JUC/">JUC</a>
+  </div>
+
 
    
    <hr style="background-color: #ddd; height:1px; border:none;" /><br>
@@ -108,23 +113,26 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>在上一篇文章中，曾利用过将现场安全性委托给现有的线程安全类的方法。<font color="#E51508">委托是创建线程安全类的一个最有效策略：
-只需让现有的线程安全类管理所有的状态即可。</font>Java类库包含丰富的并发基础构建模块，如线程安全的容器以及各种用于协调多个相互协作的线程的同步工具类。</p>
+        <p><font color="#E51508">委托是创建线程安全类的一个最有效策略：只需让现有的线程安全类管理所有的状态即可。</font>
+Java类库包含丰富的并发构建模块，如线程安全容器以及各种用于协调多个相互协作的线程的同步工具类。</p>
 <a id="more"></a>
 
-<h3 id="1-同步容器"><a href="#1-同步容器" class="headerlink" title="1. 同步容器"></a>1. 同步容器</h3><p>这些类的方式是：将它们的状态封装起来，并对每个公有方法都进行同步，使得每次只有一个线程能访问容器的状态，因此同步容器类都是线程安全的。同步容器类是通过其自身的锁来保护它的每个方法，
-如果在某些情况下需要额外的客户端加锁来保护复合操作如：迭代或者条件运算（若没有则添加），可以通过获得容器类的锁，在客户端构造原子操作。</p>
+<h3 id="1-同步容器"><a href="#1-同步容器" class="headerlink" title="1. 同步容器"></a>1. 同步容器</h3><p>这些容器的方式是：将它们的状态封装起来，并对每个公有方法进行同步，使得每次只有一个线程能访问容器的状态，因此同步容器类是线程安全的。</p>
+<p>同步容器类是通过其自身的锁来保护其状态访问，如果在某些情况下需要额外的客户端加锁来保护复合操作：如迭代或者条件运算（若没有则添加），可以通过获得容器类的锁，在客户端构造原子操作。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">getLast</span><span class="params">(Vector list)</span></span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span>(list)&#123;</span><br><span class="line">        <span class="keyword">int</span> lastIndex = list.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> list.get(lastIndex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>通过在客户端加锁可以解决不可靠的迭代问题，但会导致在迭代期间其他线程无法访问，降低了并发性</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在调用size和get之间存在并发访问</span></span><br><span class="line"><span class="keyword">synchronized</span>(vector)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;vector.size(); i++)&#123;</span><br><span class="line">        doSomething(vector.get(i));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>同步容器类的迭代器并没有考虑并发修改的问题，它的策略是‘及时失败’，即当它们发现容器在迭代过程中被修改会及时抛出<code>ConcurrentModificationException</code><font color="Gray">（看过集合类源码的小伙伴肯定见过modCount这个计数，
-它表示当前集合对象被修改即新增或删除元素的次数。在每次创建迭代器时会在迭代器实例中记一个计数expectedModCount并置为modCount，
-如果在后面的迭代过程中发现了这两个计数值不等即表示在创建完迭代器之后集合发生过改变，就立即抛出异常）</font>。<font color="#E51508">因此要注意的是，即使在单线程中，也可能抛出异常。</font>如果在集合的迭代器的迭代过程中，
-直接从容器中删除元素就会抛出这个异常。正确的做法是调用迭代器的删除方法<code>iterator.remove()</code>，它会同时修改<code>modCount</code>和<code>expectedModCount</code>，使它们保持一致。</p>
+
+<p>同步容器类的迭代器并没有考虑并发修改的问题，它的策略是“及时失败”，即当它们发现容器在迭代过程中被修改会及时抛出异常<code>ConcurrentModificationException</code></p>
+<p><font color="Gray">集合类源码中有一个<code>modCount</code>计数，它表示当前集合被修改（新增或删除）的次数。在每次创建迭代器时会将迭代器中的<code>expectedModCount</code>置为<code>modCount</code>，
+如果在后面的迭代过程中发现这两个计数值不相等，则表示在创建完迭代器之后的迭代期间集合发生过改变，于是立即抛出异常。</font><font color="#E51508">要注意的是，即使在单线程中，
+也可能抛出异常，</font><font color="Gray">如果在集合的迭代器迭代过程中，直接从容器中删除元素就会抛出这个异常。正确的做法是调用迭代器的删除方法<code>iterator.remove()</code>，
+它会同时修改<code>modCount</code>和<code>expectedModCount</code>，使它们保持一致。</font></p>
 <p>在多线程环境中要想避免这个异常，就必须在迭代过程中持有容器的锁。如果不想在迭代期间对容器加锁，一种替代的方法就是克隆容器，在副本上进行迭代，但克隆的过程中仍然要对容器加锁，
-这种方式的好坏取决于具体场景需求。另外在调用容器的<code>toString</code>，<code>hsahCode</code>，<code>equals</code>，<code>containsAll</code>，<code>removeAll</code>，<code>retainAll</code>等方法时，以及把容器作为参数的构造函数，都会间接的对容器进行迭代，
+这种方式的好坏取决于具体场景需求。<br>另外在调用容器的<code>toString</code>，<code>hsahCode</code>，<code>equals</code>，<code>containsAll</code>，<code>removeAll</code>，<code>retainAll</code>等方法时，以及把容器作为参数的构造函数，都会间接的对容器进行迭代，
 因此要注意所有这些隐含的迭代操作都可能抛出异常。</p>
-<h3 id="2-并发容器"><a href="#2-并发容器" class="headerlink" title="2. 并发容器"></a>2. 并发容器</h3><p>同步容器将所有对容器状态的访问都串行化，以实现他们的线程安全性，这种方法的代价是严重降低了并发性。因此，Java 5.0提供了多种并发容器来改进同步容器的性能。  </p>
+<h3 id="2-并发容器"><a href="#2-并发容器" class="headerlink" title="2. 并发容器"></a>2. 并发容器</h3><p>同步容器将所有对容器状态的访问都串行化，以实现线程安全，这种方法的代价是严重降低了并发性，因此，Java 5.0提供了多种并发容器来改进同步容器的性能。  </p>
 <h4 id="2-1-ConcurrentHashMap"><a href="#2-1-ConcurrentHashMap" class="headerlink" title="2.1. ConcurrentHashMap"></a>2.1. ConcurrentHashMap</h4><p>同步容器类在执行每个操作期间都持有一个锁。在一些操作中，例如：<code>HashMap.get</code>或<code>List.contains</code>可能包含大量的工作，当遍历散列桶或链表来查找某个特定的对象时，必须在许多元素上调用<code>equals</code>，
 而<code>equals</code>本身也含有一定的计算量。在基于散列的容器中，如果hashCode不能很均匀地分布散列值，那么容器中的元素就不会均匀地分布在整个容器中。某些情况下，
 某个糟糕的散列函数还会把一个散列表变成线性链表<font color="Gray">（在jdk1.8之后，HashMap已经改成了用红黑树实现来避免这个问题）</font>。当遍历很长的链表并且在某些或者全部元素上调用<code>equals</code>方法时，
@@ -239,7 +247,7 @@
 	  
 	  
 		  <a class="alignright next" href="/2019/01/03/20190103/">
-		    《java并发编程实战》三 线程安全类的设计
+		    《java并发编程实战》 线程安全类的设计
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -249,11 +257,16 @@
         
   
   <div class="categories">
-    <a href="/categories/读书笔记/">读书笔记</a>
+    <a href="/categories/java-笔记/">java 笔记</a>
   </div>
 
 
         
+  
+  <div class="tags">
+    <a href="/tags/JUC/">JUC</a>
+  </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style ">

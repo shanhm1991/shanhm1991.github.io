@@ -7,8 +7,8 @@
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="ThreadLocal从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值并且互不影响，其非常适合用来作为线程上下文变量，
-比如在一些连接池或者事务的场景中。至于其思路，则是让每个线程各自持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是ThreadLocal，
-因此每个ThreadLocal也就对应一个本地变量。当然，如果这个本地变量本身就是一个线程共享的对象，那么使用ThreadLocal也就没有意义。
+比如在一些连接池或者事务的场景中。至于其思路，则是让每个Thread都持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是共享的ThreadLocal实例，
+因此每个ThreadLocal也就对应一个本地变量。。但是，如果这个本地变量本身就是一个线程共享的对象，那么就算使用ThreadLocal也不是线程安全的。
 另外，这里设计者将具体的map操作都封装在了ThreadLocal中，然后提供统一的get/set接口，好让开发更加简洁方便">
   
   
@@ -102,7 +102,7 @@
    
   
   <div class="tags">
-    <a href="/tags/JUC/">JUC</a>
+    <a href="/tags/JUC/">JUC</a>   <a href="/tags/ThreadLocal/">ThreadLocal</a>
   </div>
 
 
@@ -116,8 +116,8 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值并且互不影响，其非常适合用来作为线程上下文变量，
-比如在一些连接池或者事务的场景中。至于其思路，则是<font style="color:red;">让每个线程各自持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是ThreadLocal，
-因此每个ThreadLocal也就对应一个本地变量</font>。当然，如果这个本地变量本身就是一个线程共享的对象，那么使用<code>ThreadLocal</code>也就没有意义。
+比如在一些连接池或者事务的场景中。至于其思路，则是<font style="color:red;">让每个Thread都持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是共享的ThreadLocal实例，
+因此每个ThreadLocal也就对应一个本地变量。</font>。但是，如果这个本地变量本身就是一个线程共享的对象，那么就算使用ThreadLocal也不是线程安全的。
 另外，这里设计者将具体的map操作都封装在了ThreadLocal中，然后提供统一的get/set接口，好让开发更加简洁方便</p>
 <a id="more"></a>
 
@@ -189,7 +189,7 @@
         
   
   <div class="tags">
-    <a href="/tags/JUC/">JUC</a>
+    <a href="/tags/JUC/">JUC</a>   <a href="/tags/ThreadLocal/">ThreadLocal</a>
   </div>
 
 

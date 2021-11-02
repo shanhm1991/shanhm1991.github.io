@@ -144,8 +144,8 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值并且互不影响，其非常适合用来作为线程上下文变量，
-比如在一些连接池或者事务的场景中。至于其思路，则是<font style="color:red;">让每个线程各自持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是ThreadLocal，
-因此每个ThreadLocal也就对应一个本地变量</font>。当然，如果这个本地变量本身就是一个线程共享的对象，那么使用<code>ThreadLocal</code>也就没有意义。
+比如在一些连接池或者事务的场景中。至于其思路，则是<font style="color:red;">让每个Thread都持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是共享的ThreadLocal实例，
+因此每个ThreadLocal也就对应一个本地变量。</font>。但是，如果这个本地变量本身就是一个线程共享的对象，那么就算使用ThreadLocal也不是线程安全的。
 另外，这里设计者将具体的map操作都封装在了ThreadLocal中，然后提供统一的get/set接口，好让开发更加简洁方便</p>
       
     </div>
@@ -641,7 +641,7 @@ java中类型的加载、链接和初始化都在运行期间完成，这种策�
   
     <li><a href="/categories/Linux笔记/">Linux笔记</a><small>6</small></li>
   
-    <li><a href="/categories/java-笔记/">java 笔记</a><small>22</small></li>
+    <li><a href="/categories/java-笔记/">java 笔记</a><small>26</small></li>
   
     <li><a href="/categories/代码笔记/">代码笔记</a><small>5</small></li>
   
@@ -653,7 +653,7 @@ java中类型的加载、链接和初始化都在运行期间完成，这种策�
   
     <li><a href="/categories/设计模式/">设计模式</a><small>6</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>19</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>15</small></li>
   
   </ul>
 </div>
@@ -663,7 +663,7 @@ java中类型的加载、链接和初始化都在运行期间完成，这种策�
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 11.67px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.67px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.67px;">CAS</a> <a href="/tags/Collection/" style="font-size: 15px;">Collection</a> <a href="/tags/Comparable/" style="font-size: 10px;">Comparable</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 16.67px;">I/O</a> <a href="/tags/IOC/" style="font-size: 13.33px;">IOC</a> <a href="/tags/Instrumentation/" style="font-size: 10px;">Instrumentation</a> <a href="/tags/JUC/" style="font-size: 18.33px;">JUC</a> <a href="/tags/Jdbc/" style="font-size: 10px;">Jdbc</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/Tomcat/" style="font-size: 13.33px;">Tomcat</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/awk/" style="font-size: 10px;">awk</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 15px;">class</a> <a href="/tags/fom/" style="font-size: 11.67px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/java%E5%86%85%E5%AD%98/" style="font-size: 15px;">java内存</a> <a href="/tags/jstat/" style="font-size: 10px;">jstat</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/sed/" style="font-size: 10px;">sed</a> <a href="/tags/servlet/" style="font-size: 11.67px;">servlet</a> <a href="/tags/spring/" style="font-size: 20px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">事务</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%9D%A1%E4%BB%B6%E9%98%9F%E5%88%97/" style="font-size: 10px;">条件队列</a> <a href="/tags/%E7%BC%96%E8%A7%A3%E7%A0%81/" style="font-size: 10px;">编解码</a>
+    <a href="/tags/AQS/" style="font-size: 11.67px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.67px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.67px;">CAS</a> <a href="/tags/Collection/" style="font-size: 15px;">Collection</a> <a href="/tags/Comparable/" style="font-size: 10px;">Comparable</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 16.67px;">I/O</a> <a href="/tags/IOC/" style="font-size: 13.33px;">IOC</a> <a href="/tags/Instrumentation/" style="font-size: 10px;">Instrumentation</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/Jdbc/" style="font-size: 10px;">Jdbc</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.67px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 13.33px;">Tomcat</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/awk/" style="font-size: 10px;">awk</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 15px;">class</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/fom/" style="font-size: 11.67px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/java%E5%86%85%E5%AD%98/" style="font-size: 15px;">java内存</a> <a href="/tags/jstat/" style="font-size: 10px;">jstat</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/sed/" style="font-size: 10px;">sed</a> <a href="/tags/servlet/" style="font-size: 11.67px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.33px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">事务</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E6%9D%A1%E4%BB%B6%E9%98%9F%E5%88%97/" style="font-size: 10px;">条件队列</a> <a href="/tags/%E7%BC%96%E8%A7%A3%E7%A0%81/" style="font-size: 10px;">编解码</a>
   </div>
 </div>
 
