@@ -45,7 +45,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
-  <h2><font style="color: #999;">articles:  93 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  92 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -160,7 +160,7 @@ double因为一般cpu都有专门的浮点单元，其存取哪怕是在32bit jv
 <h4 id="3-2-栈封闭"><a href="#3-2-栈封闭" class="headerlink" title="3.2. 栈封闭"></a>3.2. 栈封闭</h4><p>即局部变量，其本身就是封闭在线程之中。</p>
 <h4 id="3-3-ThreadLocal"><a href="#3-3-ThreadLocal" class="headerlink" title="3.3. ThreadLocal"></a>3.3. ThreadLocal</h4><p><code>ThreadLocal</code>可以使线程中的某个值与保存值的对象关联起来，其提供了<code>get</code>与<code>set</code>接口，<code>get</code>总是返回由当前执行线程在调用<code>set</code>时设置的最新值。
 这些方法为每个使用该变量的线程都存有一份独立的副本。</p>
-<p><font color="Gray">具体参考：<a href="https://shanhm1991.github.io/2017/09/06/20170906/">https://shanhm1991.github.io/2017/09/06/20170906/</a> ，其思路是设计时让每个Thread都持有一个私有的ThreadLocalMap，
+<p><font color="Gray"><code>ThreadLocal</code>的源码分析，可以参考：<a href="https://shanhm1991.github.io/2017/09/06/20170906/">https://shanhm1991.github.io/2017/09/06/20170906/</a> ，其思路是让每个<code>Thread</code>都持有一个私有的<code>ThreadLocalMap</code>，
 然后使用共享的key来保存值，而这个key就是共享的ThreadLocal实例，因此每个ThreadLocal也就对应一个本地变量。但是，如果这个本地变量本身就是一个线程共享的对象，
 那么就算使用ThreadLocal也不是线程安全的。</font>   </p>
 <p>ThreadLocal对象一般用于防止对可变的单实例变量或全局变量进行共享。例如，通过将JDBC的连接保存到ThreadLocal对象中，可以让每个线程都拥有属于自己的连接，
