@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>设计模式 建造者模式 | Echo</title>
+  <title>《深入理解java虚拟机》 GC日志与GC参数 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="有时，一个对象会由不同的部件组成，一些情况下，在某些部件没有恰当的值之前，对象不能作为一个完整的产品使用，甚至有时候，一个对象的组成部件必须按照某个顺序赋值才有意义。建造者模式利用导演者对象以及具体建造者对象，将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。">
+  <meta name="description" content="…">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="设计模式 建造者模式"/>
+  <meta property="og:title" content="《深入理解java虚拟机》 GC日志与GC参数"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -74,9 +74,13 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        设计模式 建造者模式
+        《深入理解java虚拟机》 GC日志与GC参数
     </h1>
     
+    
+       <div class="title" style="padding: 5px 0px 20px 10px; color: #766;">
+            ———— Java SE 7
+       </div> 
     
   
   
@@ -86,17 +90,22 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 934  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 4min</font>
+   <font style="color: #999;"> words: 1.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 4min</font>
    
    
   
   <div class="categories">
-    <a href="/categories/设计模式/">设计模式</a>
+    <a href="/categories/java-笔记/">java 笔记</a>
   </div>
 
 
    
    
+  
+  <div class="tags">
+    <a href="/tags/GC/">GC</a>
+  </div>
+
 
    
    <hr style="background-color: #ddd; height:1px; border:none;" /><br>
@@ -107,40 +116,101 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>有时，一个对象会由不同的部件组成，一些情况下，在某些部件没有恰当的值之前，对象不能作为一个完整的产品使用，甚至有时候，一个对象的组成部件必须按照某个顺序赋值才有意义。<br>建造者模式利用导演者对象以及具体建造者对象，将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
+        <p>…</p>
 <a id="more"></a>
 
-<h3 id="1-结构"><a href="#1-结构" class="headerlink" title="1. 结构"></a>1. 结构</h3><ul>
-<li>抽象建造者角色(Builder)：给出各个部件的创建接口，以规范Product各个组成部件的建造，通常独立于应用的业务逻辑。</li>
-<li>具体建造者角色(ConcreteBuilder)：实现各个部件的具体构造和装配，与应用程序紧密相关。</li>
-<li>导演者角色(Director)：负责安排具体建造者创建。</li>
-<li>产品角色(Product)：建造的对象。</li>
+<h3 id="1-GC日志分析"><a href="#1-GC日志分析" class="headerlink" title="1. GC日志分析"></a>1. GC日志分析</h3><p>每一种收集器的日志形式都是由它们自身的实现所决定，虚拟机设计者为了方便用户阅读，将各个收集器的日志都维持一定的共性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0.097: [GC [PSYoungGen: 5396K-&gt;568K(75776K)] 5396K-&gt;568K(248320K), 0.0009988 secs] </span><br><span class="line">       [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.00 secs] </span><br><span class="line">0.098: [Full GC [PSYoungGen: 568K-&gt;0K(75776K)] [ParOldGen: 0K-&gt;468K(172544K)] 568K-&gt;468K(248320K) </span><br><span class="line">       [PSPermGen: 2563K-&gt;2562K(21504K)], 0.0074459 secs] [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.01 secs]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>最前面的数字0.097、0.098，代表GC发生的时间，这个数字的含义是Java虚拟机启动以来经过的秒数。</p>
+</li>
+<li><p>开头的[GC、[Full GC是说明这次垃圾收集的停顿类型，而不是用来区分新生代GC还是老年代GC。如果有“Full”，说明发生了Stop-The-World。
+例如在收集器ParNew在收集新生代时的日志中也可能出现[Full GC (一般由于分配担保失败之类的问题引起)。</p>
+</li>
+<li><p>在后面的[PSYoungGen、[ParOldGen、[PSPermGen表示GC发生的区域，这里显示的区域名称与使用的GC收集器密切相关，
+例如这里使用的收集器为Parallel Scavenge，那它对应的新生代名称为PSYoungGen；如果使用的是Serial收集器，则新生代名称为DefNew；
+如果是ParNew收集器，则叫ParNew；同理对于老年代和永久代的名称。</p>
+</li>
+<li><p>对于方括号内部的比如：5396K-&gt;568K(75776K)，意思是“GC前该内存区域已使用容量 -&gt; GC后该内存区域已使用容量（该内存区域总容量）”。</p>
+</li>
+<li><p>对于方括号外部的：5396K-&gt;568K(248320K)、568K-&gt;468K(248320K)，表示“GC前Java堆已使用容量 -&gt; GC后Java堆已使用容量(Java堆总容量)”。</p>
+</li>
+<li><p>最后的：0.0009988 secs、0.0074459 secs，表示该内存区域GC所占用的时间，单位秒。有的收集器会给出更具体的时间数据数据，如这里的[Times: user=0.00 sys=0.00, real=0.00 secs]，
+里面的时间与Linux的time命令所输出的时间含义一致，分别代表用户消耗的CPU时间、内核消耗的CPU时间、操作从开始到结束所经过的墙钟时间。<strong>墙钟时间</strong>与CPU时间的区别是它包括各种非运算的等待耗时，
+如等待磁盘I/O、等待线程阻塞，而CPU时间不包括这些。但当系统有多CPU或者多核的话，多线程操作会叠加这些CPU时间，所以当看到user或sys时间超过real也是正常的。</p>
+</li>
 </ul>
-<p>导演者将客户端创建产品的请求划分为对各个部件的建造请求，并将这些请求委派给具体建造者，客户端直接访问导演者而对建造过程不感知。
-它将产品本身与产品的创建过程分开，使得相同的创建过程可以创建不同的产品对象。因为每一个具体建造者都相对独立，因此可以很方便地替换或增加具体建造者。
-这样在有些情况下，如果将具体建造者再抽象出一层接口，就可以很灵活的改变建造过程了。</p>
-<h3 id="2-应用"><a href="#2-应用" class="headerlink" title="2. 应用"></a>2. 应用</h3><h4 id="2-1-java-StringBuilder"><a href="#2-1-java-StringBuilder" class="headerlink" title="2.1. java StringBuilder"></a>2.1. java StringBuilder</h4><p><code>StringBuilder</code>中的<code>append</code>方法就使用了建造者模式，不过装配方法只有一个，<code>append</code>返回自身，比较简单。</p>
-<p><img src="/img/20171003/20171003.1.jpg" alt=""> </p>
-<p><code>Appendable</code>为抽象建造者，定义了建造方法</p>
-<figure class="highlight java"><figcaption><span class="caption">java.lang.Appendable</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Appendable</span> </span>&#123;</span><br><span class="line">    <span class="function">Appendable <span class="title">append</span><span class="params">(CharSequence csq)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">    <span class="function">Appendable <span class="title">append</span><span class="params">(CharSequence csq, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">    <span class="function">Appendable <span class="title">append</span><span class="params">(<span class="keyword">char</span> c)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-GC参数"><a href="#2-GC参数" class="headerlink" title="2. GC参数"></a>2. GC参数</h3><table style="width:100%;">
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseSerialGC</td>
+        <td>Client模式下的默认值，使用Serial + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseParNewGC</td>
+        <td>使用ParNew + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseConcMarkSweepGC</td>
+        <td>使用ParNew + CMS + Serial Old的收集器组合进行内存回收，Serial Old作为CMS出现Concurrent Mode Failure失败后的后备收集器使用</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseParallelGC</td>
+        <td>Server模式下的默认值，使用Parallel Scavenge + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseParallelOldGC</td>
+        <td>使用Parallel Scavenge + Parallel Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">SurvivorRatio</td>
+        <td>设置新生代中Eden与Survivor的比例，默认8</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">PretenureSizeThreshold</td>
+        <td>设置直接进入老年代的对象大小</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">MaxPretenureThreshold</td>
+        <td>设置晋升到老年代的对象年龄</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseAdaptiveSizePolicy</td>
+        <td>是否动态调整Java堆中各个区域的大小以及进入老年代的年龄</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">HandlePromotionFailure</td>
+        <td>是否允许分配担保失败，即老年代的剩余空间不足以应付新生代的整个Eden和Survivor区的所有对象都存活的极端情况</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">ParallelGCThreads</td>
+        <td>设置并行GC时进行内存回收的线程数</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">GCTimeRatio</td>
+        <td>仅在使用Parallel Scavenge收集器时生效，GC时间占总时间的比率，默认99，即允许1%的GC时间</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">MAXGCPauseMillis</td>
+        <td>仅在使用Parallel Scavenge收集器时生效，设置GC最大停顿时间</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">CMSInitiatingOccupancyFraction</td>
+        <td>仅在使用CMS收集器时生效，设置老年代空间被使用多少后触发垃圾收集，默认68%</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">UseCMSCompactAtFullCollection</td>
+        <td>仅在使用CMS收集器时生效，完成垃圾收集后是否要进行一次内存碎片整理</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td style="border-right:1px solid gray;">CMSFullGCsBeforeCompaction</td>
+        <td>仅在使用CMS收集器时生效，设置收集器在进行若干次垃圾收集后再启动一次内存碎片整理</td>
+    </tr >
+</table>
 
-<p><code>StringBuilder</code>既充当导演者，也充当产品角色，还充当具体建造者，具体建造在<code>AbstractStringBuilder</code>中实现</p>
-<figure class="highlight java"><figcaption><span class="caption">java.lang.AbstractStringBuilder</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractStringBuilder</span> <span class="keyword">implements</span> <span class="title">Appendable</span>, <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span>[] value;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AbstractStringBuilder <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (str == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> appendNull();</span><br><span class="line">        <span class="keyword">int</span> len = str.length();</span><br><span class="line">        ensureCapacityInternal(count + len);</span><br><span class="line">        str.getChars(<span class="number">0</span>, len, value, count);</span><br><span class="line">        count += len;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacityInternal</span><span class="params">(<span class="keyword">int</span> minimumCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// overflow-conscious code</span></span><br><span class="line">        <span class="keyword">if</span> (minimumCapacity - value.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            value = Arrays.copyOf(value,</span><br><span class="line">                    newCapacity(minimumCapacity));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>另外，<code>StringBuilder</code>还有一个兄弟实现类<code>StringBuffer</code>，它们的区别只在于是否使用了同步</p>
-<figure class="highlight java"><figcaption><span class="caption">java.lang.StringBuilder</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> StringBuilder <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.append(str);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><figcaption><span class="caption">java.lang.StringBuffer</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> StringBuffer <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    toStringCache = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">super</span>.append(str);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-2-mybatis-SqlSessionFactoryBuilder"><a href="#2-2-mybatis-SqlSessionFactoryBuilder" class="headerlink" title="2.2. mybatis SqlSessionFactoryBuilder"></a>2.2. mybatis SqlSessionFactoryBuilder</h4><figure class="highlight java"><figcaption><span class="caption">org.apache.ibatis.session.SqlSessionFactoryBuilder</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SqlSessionFactoryBuilder</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> SqlSessionFactory <span class="title">build</span><span class="params">(Reader reader, String environment, Properties properties)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			XMLConfigBuilder parser = <span class="keyword">new</span> XMLConfigBuilder(reader, environment, properties);</span><br><span class="line">			<span class="keyword">return</span> build(parser.parse());</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="keyword">throw</span> ExceptionFactory.wrapException(<span class="string">"Error building SqlSession."</span>, e);</span><br><span class="line">		&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">			ErrorContext.instance().reset();</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				reader.close();</span><br><span class="line">			&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">				<span class="comment">// Intentionally ignore. Prefer previous error.</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> SqlSessionFactory <span class="title">build</span><span class="params">(Configuration config)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> DefaultSqlSessionFactory(config);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>从命名可以看出<code>SqlSessionFactoryBuilder</code>想要构建一个<code>SqlSessionFactory</code>，不过首先它需要先构建一个<code>Configuration</code>，而<code>Configuration</code>由<code>XMLConfigBuilder</code>负责构建</p>
-<figure class="highlight java"><figcaption><span class="caption">org.apache.ibatis.builder.xml.XMLConfigBuilder</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XMLConfigBuilder</span> <span class="keyword">extends</span> <span class="title">BaseBuilder</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Configuration <span class="title">parse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (parsed) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BuilderException(<span class="string">"Each XMLConfigBuilder can only be used once."</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		parsed = <span class="keyword">true</span>;</span><br><span class="line">		parseConfiguration(parser.evalNode(<span class="string">"/configuration"</span>));</span><br><span class="line">		<span class="keyword">return</span> configuration;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">parseConfiguration</span><span class="params">(XNode root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">//issue #117 read properties first</span></span><br><span class="line">			propertiesElement(root.evalNode(<span class="string">"properties"</span>));</span><br><span class="line">			Properties settings = settingsAsProperties(root.evalNode(<span class="string">"settings"</span>));</span><br><span class="line">			loadCustomVfs(settings);</span><br><span class="line">			typeAliasesElement(root.evalNode(<span class="string">"typeAliases"</span>));</span><br><span class="line">			pluginElement(root.evalNode(<span class="string">"plugins"</span>));</span><br><span class="line">			objectFactoryElement(root.evalNode(<span class="string">"objectFactory"</span>));</span><br><span class="line">			objectWrapperFactoryElement(root.evalNode(<span class="string">"objectWrapperFactory"</span>));</span><br><span class="line">			reflectorFactoryElement(root.evalNode(<span class="string">"reflectorFactory"</span>));</span><br><span class="line">			settingsElement(settings);</span><br><span class="line">			<span class="comment">// read it after objectFactory and objectWrapperFactory issue #631</span></span><br><span class="line">			environmentsElement(root.evalNode(<span class="string">"environments"</span>));</span><br><span class="line">			databaseIdProviderElement(root.evalNode(<span class="string">"databaseIdProvider"</span>));</span><br><span class="line">			typeHandlerElement(root.evalNode(<span class="string">"typeHandlers"</span>));</span><br><span class="line">			mapperElement(root.evalNode(<span class="string">"mappers"</span>));</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BuilderException(<span class="string">"Error parsing SQL Mapper Configuration. Cause: "</span> + e, e);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>parse</code>方法最终返回一个<code>Configuration</code>，构建<code>Configuration</code>对象的建造过程都在<code>parseConfiguration</code>方法中，这也就是 Mybatis解析XML配置文件的主要过程了。</p>
 <p><br><strong>参考：</strong></p>
 <ol>
-<li>《java与模式》 </li>
+<li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
 </ol>
 
       
@@ -153,13 +223,13 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2017/10/04/20171004/">
-		    设计模式 原型模式
+		    《深入理解java虚拟机》 Jvm工具
 		  </a>
 	  
 	  
 	  
 		  <a class="alignright next" href="/2017/10/02/20171002/">
-		    设计模式 工厂模式
+		    《深入理解java虚拟机》 垃圾标记与收集算法
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -169,11 +239,16 @@
         
   
   <div class="categories">
-    <a href="/categories/设计模式/">设计模式</a>
+    <a href="/categories/java-笔记/">java 笔记</a>
   </div>
 
 
         
+  
+  <div class="tags">
+    <a href="/tags/GC/">GC</a>
+  </div>
+
 
         
   <div class="addthis addthis_toolbox addthis_default_style ">
@@ -235,7 +310,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-结构"><span class="toc-text">1. 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-应用"><span class="toc-text">2. 应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-java-StringBuilder"><span class="toc-text">2.1. java StringBuilder</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-mybatis-SqlSessionFactoryBuilder"><span class="toc-text">2.2. mybatis SqlSessionFactoryBuilder</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-GC日志分析"><span class="toc-text">1. GC日志分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GC参数"><span class="toc-text">2. GC参数</span></a></li></ol>
 </div>
 
 

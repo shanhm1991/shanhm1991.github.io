@@ -73,7 +73,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/01/18/20190118/">《深入理解java虚拟机》 垃圾标记与收集算法</a>
+       <a href="/2019/01/18/20190118/">设计模式 工厂模式</a>
     </h1>
     
   
@@ -87,12 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>java内存运行时的各个部分，其中程序计数器、虚拟机栈、本地方法栈3个区域随线程而生，随线程而灭；
-栈中的栈帧随着方法的进入和退出而有条不絮地执行着出栈和入栈操作。
-每一个栈帧中分配多少内存基本上是在类结构确定下来时就已知的（尽管JIT编译器会进行一些优化，但大体可认为是编译期可预知的），
-因此这个几个区域内存的分配和回收都具备确定性。而java堆和方法区则不一样，一个接口的多个实现类需要的内存可能不一样，
-一个方法的多个分支需要的内存也可能不一样，我们只有在程序处于运行期间才能知道会创建哪些对象，这部分内存的分配和回收都是动态的，
-因此垃圾收集器所关注的主要就是堆内存以及方法区。</p>
+        <p>工厂模式负责将大量拥有共同接口的类实例化，它可以动态决定将哪一个类实例化</p>
       
     </div>
 	
@@ -130,7 +125,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/01/17/20190117/">《深入理解java虚拟机》 运行时内存异常</a>
+       <a href="/2019/01/17/20190117/">设计模式 单例模式</a>
     </h1>
     
   
@@ -144,7 +139,11 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>在java虚拟机规范的描述中，除了程序计数器外，虚拟机内存的其他几个运行时区域都有发生<code>OutOfMemoryError</code>异常的可能</p>
+        <p>单例模式的意思就是确保某个类的实例在系统中只有一个，可以简单概括为以下三点：</p>
+<ol>
+<li>只能有一个类实例；</li>
+<li>类必须自行创建这个实例；</li>
+<li>类必须自行向整个系统提供这个实例。
       
     </div>
 	
@@ -182,7 +181,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/01/15/20190115/">《深入理解java虚拟机》 运行时数据区</a>
+       <a href="/2019/01/15/20190115/">设计模式 原则&amp;分类</a>
     </h1>
     
   
@@ -196,7 +195,12 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>java虚拟机在执行java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。</p>
+        <p>设计模式的主要目标在于保证程序的高可用及高扩展性，在实际开发中不应该过多地纠结使用哪种设计模式，而是应该多体会设计模式的原则，换言之，只要遵循一定的原则，
+这些所谓的模式完全可能在无意识的状态下自发出现在产品代码中。其实这些设计模式也都不是谁突然间硬想出来的，而是从大量实践中总结出来的比较好的组织代码结构的方式。  </p>
+<p>好的设计能够有效避免或者延缓程序<font color="#E51508">架构的腐化</font>，通常，很多程序结构一开始也许设计得还可以，但随着业务功能的不断扩展和变化，
+可能就不得不在结构上做出一些妥协让步，慢慢地也就失去了结构。<br>另外，在设计过程中也要注意避免<font color="#E51508">过度设计</font>，即为不可能发生的变动付出过多的复杂度代价。总之不要滥用设计模式，不要觉得一个地方有可能会变动，
+就忍不住考虑是否应该增加复杂度来换取灵活性。而要避免过度设计，关键在于能正确的预见变化，以及权衡所引入的复杂度相对于发生变化的可能性和破坏力是否值得，
+当然这些都需要一定的经验积累以及对业务的认识。</p>
       
     </div>
 	
@@ -297,7 +301,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/01/11/20190111/">《java并发编程实战》 非阻塞同步机制</a>
+       <a href="/2019/01/11/20190111/">《java并发编程实战》 非阻塞的同步</a>
     </h1>
     
   
@@ -457,7 +461,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/01/08/20190108/">《java并发编程实战》 同步操作的性能问题</a>
+       <a href="/2019/01/08/20190108/">《java并发编程实战》 同步的性能问题</a>
     </h1>
     
   
@@ -661,7 +665,7 @@
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 11.67px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.67px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.67px;">CAS</a> <a href="/tags/Collection/" style="font-size: 15px;">Collection</a> <a href="/tags/Comparable/" style="font-size: 10px;">Comparable</a> <a href="/tags/Executor/" style="font-size: 11.67px;">Executor</a> <a href="/tags/FutureTask/" style="font-size: 11.67px;">FutureTask</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 16.67px;">I/O</a> <a href="/tags/IOC/" style="font-size: 13.33px;">IOC</a> <a href="/tags/Instrumentation/" style="font-size: 10px;">Instrumentation</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/Jdbc/" style="font-size: 10px;">Jdbc</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.67px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 13.33px;">Tomcat</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/awk/" style="font-size: 10px;">awk</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 15px;">class</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/fom/" style="font-size: 11.67px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/sed/" style="font-size: 10px;">sed</a> <a href="/tags/servlet/" style="font-size: 11.67px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.33px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">事务</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" style="font-size: 10px;">循环依赖</a> <a href="/tags/%E7%BC%96%E8%A7%A3%E7%A0%81/" style="font-size: 10px;">编解码</a>
+    <a href="/tags/AQS/" style="font-size: 11.67px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.67px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.67px;">CAS</a> <a href="/tags/Enum/" style="font-size: 10px;">Enum</a> <a href="/tags/Exception/" style="font-size: 10px;">Exception</a> <a href="/tags/Executor/" style="font-size: 11.67px;">Executor</a> <a href="/tags/FutureTask/" style="font-size: 11.67px;">FutureTask</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 16.67px;">I/O</a> <a href="/tags/IOC/" style="font-size: 13.33px;">IOC</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/Jdbc/" style="font-size: 13.33px;">Jdbc</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.67px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 13.33px;">Tomcat</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 15px;">class</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/fom/" style="font-size: 11.67px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 11.67px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.33px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a>
   </div>
 </div>
 
