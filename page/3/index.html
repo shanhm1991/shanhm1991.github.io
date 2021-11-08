@@ -252,18 +252,20 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>假设一个线程为变量赋值：variable = 3；<br>内存模型需要解决一个问题：“在什么条件下，读取variable的线程将看到这个值为3？”<br>这看上去理所当然，但是如果缺少内存同步，那么将会有许多因素使得线程无法立即看到，甚至永远也看不到另一个线程的操作结果。例如：     </p>
+        <p>假设一个线程为变量赋值<code>var = 3</code>，那么内存模型需要解决一个问题：在什么条件下，读取<code>var</code>的线程能看到这个值为<code>3</code>。     </p>
+<p>这看上去理所当然，但如果缺少内存同步，那么将有许多因素使得线程无法立即看到，甚至永远看不到另一个线程的操作结果：   </p>
 <ul>
 <li>在编译器中生成的指令顺序，可以与源代码中的顺序不同，此外编译器还会将变量保存在寄存器而不是内存中；</li>
 <li>处理器可以采用乱序或并行等方式来执行指令；</li>
-<li>缓存可能会改变将写入变量提交到主内存的次序；</li>
-<li>而且保存在处理器本地缓存中的值，对于其他处理器是不可见的。<br>这些因素都会使得一个线程无法看到变量的最新值，并且会导致其他线程中的内存操作看起来似乎在乱序执行。</li>
+<li>缓存可能会改变将写入变量提交到内存的次序；</li>
+<li>而且保存在处理器本地缓存中的值，对于其他处理器是不可见的；</li>
 </ul>
-<p>JVM规定了一组最小保证，这组保证规定了对变量的写入操作将在何时对于其他线程可见。JVM在设计时就在可预测性和程序的易于开发性之间进行了权衡，
-从而在各种主流的处理器体系架构上都能实现高性能的JVM。<font color="#E51508">Java语言规范要求JVM在线程中维护一种类似串行的语义：只要程序的最终结果与严格串行环境中执行的结果相同，
-那么上面所有的操作都是允许的。</font><br>这确实是一件好事，因为计算机近年来在性能上的提升很大程度要归功于这些重新排序措施。在单线程环境中，我们无法看到所有这些底层技术，它们除了提高程序的执行速度外，不会产生其他影响。
-而在多线程环境中，要维护程序的串行性将导致很大的性能开销。对于并发应用程序中的线程来说，它们在大部分时间里都执行各自的任务，因此在线程之间的协调操作只会降低应用程序的运行速度，而不会带来任何好处。
-只有当多个线程要共享数据时，才必须协调它们之间的操作，并且JVM依赖程序通过同步操作来找出这些协调操作将在何时发生。</p>
+<p>这些因素都会使得一个线程无法看到变量的最新值，并且会导致其他线程中的内存操作看起来似乎在乱序执行。</p>
+<p>Jvm规定了一组最小保证，这组保证规定了对变量的写入操作将在何时对于其他线程可见。Jvm在设计时就在可预测性和程序的易于开发性之间进行了权衡，从而在各种主流的处理器体系架构上都能实现高性能的Jvm。
+<font color="#E51508">Java语言规范要求Jvm在线程中维护一种类似串行的语义：只要程序的最终结果与严格串行环境中执行的结果相同，那么上面所有的操作都是允许的。</font>    </p>
+<p>这确实是一件好事，因为计算机在性能上的提升很大程度要归功于这些重排序措施。在单线程环境中，我们无法看到所有这些底层技术，它们除了提高程序的执行速度外，不会产生其他影响。
+而在多线程环境中，要维护程序的串行性将导致很大的性能开销。对于并发应用程序中的线程来说，它们在大部分时间里都执行各自的任务，因此，在线程之间的协调操作只会降低应用程序的运行速度，而不会带来任何好处。
+只有当多个线程要共享数据时，才必须协调它们之间的操作，并且Jvm依赖程序也是通过同步操作来找出这些协调操作将在何时发生。</p>
       
     </div>
 	
@@ -315,8 +317,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>非阻塞算法可以使多个线程在竞争相同的数据时不会发生阻塞，因此它能在粒度更细的层次上进行协调，并且极大地减少调度开销。在基于锁的算法中，
-如果一个线程在休眠或者自旋时持有锁，那么其他线程都无法执行下去，而非阻塞算法不会受到单个线程失败的影响。</p>
+        <p>非阻塞算法可以使多个线程在竞争共享的数据时不发生阻塞，因此它能在粒度更细的层次上进行协调，并且极大地减少调度开销。在基于锁的算法中，如果一个线程在休眠或者自旋时持有锁，
+那么其他线程都无法执行下去，而非阻塞算法则不会受到单个线程失败的影响。</p>
       
     </div>
 	
@@ -368,9 +370,9 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>创建状态依赖类的最简单方法通常是在类库中现有状态依赖类的基础上进行构造。如果类库中没有提供你需要的功能，可以使用java语言和类库提供的底层机制来构造自己的同步机制，
+        <p>创建状态依赖类最简单的方法通常是在类库中现有状态依赖类的基础上进行构造，如果类库不支持，则可以使用Java语言和类库提供的底层机制来构造自己的同步机制，
 包括内置的条件队列、显示的<code>Condition</code>对象以及<code>AbstractQueuedSynchronizer</code>框架。</p>
-<p><font color="#E51508">在单线程程序中调用方法时，如果基于某个状态的前提条件未得到满足，那么这个条件永远无法成真。而在并发程序中，基于状态的条件可能会由于其他线程的操作而改变。</font></p>
+<p>在单线程的程序中调用方法时，如果基于某个状态的前提条件未得到满足，那么这个条件永远无法成真。而在并发程序中，基于状态的条件可能会由于其他线程的操作而改变。</p>
       
     </div>
 	
@@ -422,8 +424,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>java 5.0之前，在协调共享对象的访问时可以使用的机制有<code>synchronized</code>和<code>volatile</code>。java 5.0新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置加锁机制不适用时，作为一种可选择的高级功能。
-在java 6.0中，使用了与<code>ReentrantLock</code>类似的算法对内置锁进行了改进，有效地提高了内置锁的可伸缩性。</p>
+        <p>在java 5.0之前，协调共享对象的访问可以使用的机制有<code>synchronized</code>和<code>volatile</code>，java 5.0中新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置锁不再适用时，作为一种可选择的高级功能。
+在java 6.0中，也使用了与<code>ReentrantLock</code>类似的算法对内置锁本身进行了改进，有效地提高了内置锁的可伸缩性。</p>
       
     </div>
 	
@@ -665,7 +667,7 @@
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 11.67px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.67px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.67px;">CAS</a> <a href="/tags/Enum/" style="font-size: 10px;">Enum</a> <a href="/tags/Exception/" style="font-size: 10px;">Exception</a> <a href="/tags/Executor/" style="font-size: 13.33px;">Executor</a> <a href="/tags/FutureTask/" style="font-size: 13.33px;">FutureTask</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 16.67px;">I/O</a> <a href="/tags/IOC/" style="font-size: 13.33px;">IOC</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/Jdbc/" style="font-size: 13.33px;">Jdbc</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.67px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 13.33px;">Tomcat</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 15px;">class</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/fom/" style="font-size: 11.67px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 11.67px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.33px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a>
+    <a href="/tags/AQS/" style="font-size: 11.67px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.67px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.67px;">CAS</a> <a href="/tags/Enum/" style="font-size: 10px;">Enum</a> <a href="/tags/Exception/" style="font-size: 10px;">Exception</a> <a href="/tags/Executor/" style="font-size: 13.33px;">Executor</a> <a href="/tags/FutureTask/" style="font-size: 13.33px;">FutureTask</a> <a href="/tags/GC/" style="font-size: 11.67px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 16.67px;">I/O</a> <a href="/tags/IOC/" style="font-size: 13.33px;">IOC</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/Jdbc/" style="font-size: 13.33px;">Jdbc</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.67px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 13.33px;">Tomcat</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 15px;">class</a> <a href="/tags/final/" style="font-size: 11.67px;">final</a> <a href="/tags/fom/" style="font-size: 11.67px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 10px;">intern</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 13.33px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 11.67px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.33px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a>
   </div>
 </div>
 
