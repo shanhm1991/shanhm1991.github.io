@@ -475,7 +475,7 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>在类加载成功之后，其便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及字段修改。
+        <p>在类加载成功之后，便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及字段修改。
 那么，便可以通过反射根据运行时获取的类型信息来创建实例，而且可以跳过访问权限的限制访问字段和方法</p>
       
     </div>
@@ -528,11 +528,11 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>关于类加载机制，即把描述类的字节数据（比如class文件）加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。与那些编译时需要链接的语言不同，
-java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，但是为java应用程序提供了高度的灵活性，
-<font color="#E51508">java能够动态扩展的语言特性就是依赖运行期动态加载和动态连接这些特点来实现的</font></p>
-<p>比如编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过java预定义或自定义的加载器，让一个本地应用程序在运行时从网络或其它地方加载一个二进制流作为程序代码的一部分。
-这种组装应用程序的方式已广泛应用于java程序之中，从最基础的Applet、JSP到相对复杂的OSGI。</p>
+        <p>关于类加载机制，即把描述类的字节数据（class文件）加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。与那些编译时需要链接的语言不同，java中类型的加载、链接和初始化都在运行期间完成，
+这种策略虽然在类加载时增加了一些性能开销，但是为java应用程序提供了高度的灵活性，
+<font color="#E51508">Java能够动态扩展的语言特性</font>就是依赖<font color="#E51508">运行期动态加载</font>和<font color="#E51508">动态连接</font>这些特点来实现的。</p>
+<p>比如，编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过Java预定义或自定义的加载器，让一个本地应用程序在运行时从网络或其它地方加载一个二进制流作为程序代码的一部分。
+这种组装应用程序的方式已广泛应用于Java程序之中，从最基础的Applet、JSP到相对复杂的OSGI。</p>
       
     </div>
 	
@@ -584,8 +584,8 @@ java中类型的加载、链接和初始化都在运行期间完成，这种策�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>class文件是一种字节码存储格式，它只与java虚拟机进行绑定，因此它是java实现平台无关性的基础。另外，任何其它语言，
-只要能编译成一个有效地class文件，那么也都可以在java虚拟机上执行，因此，通过class文件这个媒介，java虚拟机同时拥有语言无关的中立特性</p>
+        <p>class文件是一种字节码存储格式，它只与Java虚拟机绑定，因此它是Java实现平台无关性的基础。另外，任何其它语言，只要能编译成一个有效class文件，
+那么也可以在Java虚拟机上执行，因此，通过class这个媒介，Java虚拟机同时拥有语言无关的中立特性</p>
       
     </div>
 	
@@ -660,7 +660,7 @@ java中类型的加载、链接和初始化都在运行期间完成，这种策�
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 11.43px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.43px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.43px;">CAS</a> <a href="/tags/Enum/" style="font-size: 10px;">Enum</a> <a href="/tags/Exception/" style="font-size: 10px;">Exception</a> <a href="/tags/Executor/" style="font-size: 12.86px;">Executor</a> <a href="/tags/FutureTask/" style="font-size: 12.86px;">FutureTask</a> <a href="/tags/GC/" style="font-size: 11.43px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 15.71px;">I/O</a> <a href="/tags/IOC/" style="font-size: 12.86px;">IOC</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/JVM/" style="font-size: 17.14px;">JVM</a> <a href="/tags/Jdbc/" style="font-size: 12.86px;">Jdbc</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.43px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 12.86px;">Tomcat</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 14.29px;">class</a> <a href="/tags/final/" style="font-size: 11.43px;">final</a> <a href="/tags/fom/" style="font-size: 11.43px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 11.43px;">intern</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 12.86px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 11.43px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.57px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E5%BC%95%E7%94%A8/" style="font-size: 10px;">引用</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a>
+    <a href="/tags/AQS/" style="font-size: 11.43px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.43px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.43px;">CAS</a> <a href="/tags/Enum/" style="font-size: 10px;">Enum</a> <a href="/tags/Exception/" style="font-size: 10px;">Exception</a> <a href="/tags/Executor/" style="font-size: 12.86px;">Executor</a> <a href="/tags/FutureTask/" style="font-size: 12.86px;">FutureTask</a> <a href="/tags/GC/" style="font-size: 11.43px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 15.71px;">I/O</a> <a href="/tags/IOC/" style="font-size: 12.86px;">IOC</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/JVM/" style="font-size: 17.14px;">JVM</a> <a href="/tags/Jdbc/" style="font-size: 12.86px;">Jdbc</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.43px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 12.86px;">Tomcat</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 14.29px;">class</a> <a href="/tags/final/" style="font-size: 11.43px;">final</a> <a href="/tags/fom/" style="font-size: 11.43px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 11.43px;">intern</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 12.86px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 11.43px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.57px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 11.43px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E5%BC%95%E7%94%A8/" style="font-size: 10px;">引用</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a>
   </div>
 </div>
 

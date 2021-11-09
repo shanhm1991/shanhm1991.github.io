@@ -140,21 +140,22 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>多任务处理在现代计算机操作系统中是一项必备的功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大了，
-更重要的原因是计算机的运算速度与它的存储和通信子系统速度的差距太大，大量的时间都花费在磁盘I/O，网络通信或者数据库访问上，
-因此处理器在大部分时间里都处于等待其他资源的状态。<br>那么让计算机并发执行若干个运算任务则可以更充分地利用计算机处理器的效能，
-但复杂性在于绝大多数的运算任务都不可能只靠处理器计算就能完成，处理器至少要与内存交互，如读取运算数据、存储运算结果等，
-这个I/O操作是无法消除的。</p>
+        <p>多任务处理在现代计算机操作系统中是一项必备功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大，
+更重要的原因是<font color="#E51508">计算机的运算速度与它的存储和通信子系统速度的差距巨大</font>，
+大量的时间都花费在磁盘I/O，网络通信或者数据库访问上，因此处理器在大部分时间里都处于等待其他资源的状态。    </p>
+<p>那么让计算机并发执行若干个运算任务便可以更充分地利用计算机处理器的效能，但复杂性在于绝大多数的运算任务都不可能只靠处理器计算就能完成，
+处理器至少要与内存交互，如读取运算数据、存储运算结果等，这个I/O操作是无法消除的。</p>
 <p>所以现代计算机通过加入一层读写速度尽可能接近处理器运算速度的高速缓存来作为内存与处理器之间的缓冲：
 将运算需要使用的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。</p>
-<p><font color="#E51508">基于高速缓存的存储交互很好地解决了处理器与内存的速度矛盾，但是引入了复杂度更高的一个问题：缓存一致性。</font></p>
-<p>在多处理器系统中，每个处理器都有自己的高速缓存，而它们又共享同一主内存。当多个处理器的运算任务都涉及同一块主内存区域时，
-将可能导致各自的缓存数据不一致，在将数据同步回主内存时以谁的缓存数据为准呢？为了解决一致性的问题，
-需要各个处理器访问缓存时都遵循一些协议，在读写时要根据协议来进行操作。<br>因此，内存模型可以理解为：在特定的操作协议下，对特定的内存或高速缓存进行读写访问的过程抽象。</p>
-<p>除了增加高速缓存之外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，
-处理器会在计算之后将乱序执行的结果重组，保证该结果与顺序执行的结果是一致的，
-但并不保证程序中的各个语句计算的先后顺序与输入的代码顺序一致。因此，如果存在一个计算任务依赖另外一个计算任务的中间结果，
-那么其顺序性并不能依靠代码的先后顺序来保证。与处理器的乱序执行优化器类似，java虚拟机的即时编译器中也有类似的指令重排序优化。</p>
+<p><font color="#E51508">基于高速缓存的存储交互很好地解决了处理器与内存之间的速度矛盾，但是引入了复杂度更高的一个问题：缓存一致性。</font></p>
+<p>在多处理器系统中，每个处理器都有自己的高速缓存，它们共享同一主内存。当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致，
+那么在将数据同步回主内存时应该以谁的缓存数据为准呢？</p>
+<p>为了解决一致性问题，就需要各个处理器访问缓存时遵循一些协议，在读写时要根据协议来进行操作。因此，
+<font color="#E51508">内存模型可以理解为：在特定的操作协议下，对特定的内存或高速缓存进行读写访问的过程抽象</font></p>
+<p>除了增加高速缓存外，<font color="#E51508">为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化</font>，处理器会在计算之后将乱序执行的结果重组，
+保证该结果与顺序执行的结果一致，但并不保证程序中的各个语句计算的先后顺序与输入的代码顺序一致。</p>
+<p>因此，如果存在一个计算任务依赖另外一个计算任务的中间结果，那么其顺序性并不能依靠代码的先后顺序来保证。
+与处理器的乱序执行优化器类似，Java虚拟机的即时编译器中也有类似的指令重排序优化。</p>
       
     </div>
 	
@@ -654,7 +655,7 @@
 <div class="widget tagcloud">
   <h3 class="title">Tag Cloud</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 11.43px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.43px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.43px;">CAS</a> <a href="/tags/Enum/" style="font-size: 10px;">Enum</a> <a href="/tags/Exception/" style="font-size: 10px;">Exception</a> <a href="/tags/Executor/" style="font-size: 12.86px;">Executor</a> <a href="/tags/FutureTask/" style="font-size: 12.86px;">FutureTask</a> <a href="/tags/GC/" style="font-size: 11.43px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 15.71px;">I/O</a> <a href="/tags/IOC/" style="font-size: 12.86px;">IOC</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/JVM/" style="font-size: 17.14px;">JVM</a> <a href="/tags/Jdbc/" style="font-size: 12.86px;">Jdbc</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.43px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 12.86px;">Tomcat</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 14.29px;">class</a> <a href="/tags/final/" style="font-size: 11.43px;">final</a> <a href="/tags/fom/" style="font-size: 11.43px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 11.43px;">intern</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 12.86px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 11.43px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.57px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E5%BC%95%E7%94%A8/" style="font-size: 10px;">引用</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a>
+    <a href="/tags/AQS/" style="font-size: 11.43px;">AQS</a> <a href="/tags/Aop/" style="font-size: 11.43px;">Aop</a> <a href="/tags/ApplicationContext/" style="font-size: 10px;">ApplicationContext</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 11.43px;">CAS</a> <a href="/tags/Enum/" style="font-size: 10px;">Enum</a> <a href="/tags/Exception/" style="font-size: 10px;">Exception</a> <a href="/tags/Executor/" style="font-size: 12.86px;">Executor</a> <a href="/tags/FutureTask/" style="font-size: 12.86px;">FutureTask</a> <a href="/tags/GC/" style="font-size: 11.43px;">GC</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 15.71px;">I/O</a> <a href="/tags/IOC/" style="font-size: 12.86px;">IOC</a> <a href="/tags/JUC/" style="font-size: 20px;">JUC</a> <a href="/tags/JVM/" style="font-size: 17.14px;">JVM</a> <a href="/tags/Jdbc/" style="font-size: 12.86px;">Jdbc</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 11.43px;">ThreadLocal</a> <a href="/tags/Tomcat/" style="font-size: 12.86px;">Tomcat</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 14.29px;">class</a> <a href="/tags/final/" style="font-size: 11.43px;">final</a> <a href="/tags/fom/" style="font-size: 11.43px;">fom</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 11.43px;">intern</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/poi/" style="font-size: 12.86px;">poi</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 11.43px;">servlet</a> <a href="/tags/spring/" style="font-size: 18.57px;">spring</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 11.43px;">volatile</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E5%BC%95%E7%94%A8/" style="font-size: 10px;">引用</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 10px;">泛型</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10px;">注解</a>
   </div>
 </div>
 
