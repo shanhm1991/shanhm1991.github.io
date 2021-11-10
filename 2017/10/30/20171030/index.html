@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Java synchronized（TODO） | Echo</title>
+  <title>《深入理解Java虚拟机》线程安全与锁优化（TODO） | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="synchronized是java中用来实现线程同步操作的关键字，其目的是在多线程并发场景下保证对共享资源操作的线程安全。这里只是简单分析一下其实现机制，至于具体的使用方法则不再赘述。">
+  <meta name="description" content="…">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Java synchronized（TODO）"/>
+  <meta property="og:title" content="《深入理解Java虚拟机》线程安全与锁优化（TODO）"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -61,20 +61,20 @@
 <div class="clearfix"></div>
 </header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20170827" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20171030" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-26T16:00:00.000Z"><a href="/2017/08/27/20170827/">2017-08-27</a></time>
+        <time class="dt-published" datetime="2017-10-29T16:00:00.000Z"><a href="/2017/10/30/20171030/">2017-10-30</a></time>
       
       
 
   
   
     <h1 class="p-name title" itemprop="headline name">
-        Java synchronized（TODO）
+        《深入理解Java虚拟机》线程安全与锁优化（TODO）
     </h1>
     
     
@@ -86,7 +86,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 208  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 707  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
    
    
   
@@ -99,7 +99,7 @@
    
   
   <div class="tags">
-    <a href="/tags/JUC/">JUC</a>
+    <a href="/tags/JVM/">JVM</a>
   </div>
 
 
@@ -112,11 +112,62 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p><code>synchronized</code>是java中用来实现线程同步操作的关键字，其目的是在多线程并发场景下保证对共享资源操作的线程安全。这里只是简单分析一下其实现机制，至于具体的使用方法则不再赘述。</p>
+        <p>…</p>
 <a id="more"></a>
 
+<h3 id="1-线程"><a href="#1-线程" class="headerlink" title="1. 线程"></a>1. 线程</h3><p>线程是比进程更轻量级的调度执行单位，线程的引入，可以把一个进程的资源分配和执行调度分开，各个线程既可以共享进程资源，比如内存地址、文件I/O等，又可以独立调度。</p>
+<p>Java提供了在不同硬件和操作系统平台下对线程操作的统一处理，每个已经执行<code>start()</code>且还未结束的<code>java.lang.Thread</code>实例就代表了一个线程。</p>
+<h4 id="1-1-线程实现"><a href="#1-1-线程实现" class="headerlink" title="1.1. 线程实现"></a>1.1. 线程实现</h4><ul>
+<li><p><strong>内核线程</strong></p>
+</li>
+<li><p><strong>用户线程</strong></p>
+</li>
+<li><p><strong>混合实现</strong></p>
+</li>
+</ul>
+<br>
 
-<h3 id="锁升级"><a href="#锁升级" class="headerlink" title="锁升级"></a>锁升级</h3><p>32位对象头信息：
+<h4 id="1-2-线程调度"><a href="#1-2-线程调度" class="headerlink" title="1.2. 线程调度"></a>1.2. 线程调度</h4><ul>
+<li><p><strong>协同式</strong></p>
+</li>
+<li><p><strong>抢占式</strong></p>
+</li>
+</ul>
+<br>
+
+<h4 id="1-3-线程状态"><a href="#1-3-线程状态" class="headerlink" title="1.3. 线程状态"></a>1.3. 线程状态</h4><p>Java定义了5种线程状态，在任意一个时间点，一个线程只能处于一种状态</p>
+<ul>
+<li><strong>新建：</strong><code>New</code></li>
+</ul>
+<p>即创建后尚未启动的线程，此时只是一个Java对象</p>
+<ul>
+<li><strong>运行：</strong><code>Runable</code></li>
+</ul>
+<p>对应操作系统线程状态中的<code>Running</code>和<code>Ready</code>，也就是线程可能正在执行，也可能正在等待分配CPU执行时间</p>
+<ul>
+<li><strong>无限期等待：</strong><code>Waiting</code></li>
+</ul>
+<p>线程不会被分配CPU执行时间，需要其它线程显式地唤醒，使线程进入无限期等待的方法一般有<code>Object.wait()</code>、<code>Thread.join()</code>、<code>LockSupport.park()</code></p>
+<ul>
+<li><strong>限期等待：</strong><code>Timed Waiting</code></li>
+</ul>
+<p>同样不会被分配CPU执行时间，但不需要其它线程显式地唤醒，一定时间后由系统自动唤醒，使线程进入限期等待的方法一般有<code>Thread.sleep()</code>、<code>Object.wait()</code>、<code>Thread.join()</code>、
+<code>LockSupport.parkNanos()</code>、<code>LockSupport.parkUntil()</code></p>
+<ul>
+<li><strong>阻塞：</strong><code>Blocked</code></li>
+</ul>
+<p>线程阻塞与等待的区别是，阻塞状态是在等待一个排他锁，直到另一个线程释放这个锁，而等待是等待一段时间，或者是等待唤醒动作的发生，当线程进入同步块时就进入阻塞状态。</p>
+<ul>
+<li><strong>结束：</strong><code>Terminated</code></li>
+</ul>
+<p>已执行结束的线程</p>
+<p>对于上面5种状态，可以画出其状态转换图如下：</p>
+<p><img src="/img/20171030/20171030.1.jpg" alt=""> </p>
+<br>
+
+<h3 id="2-锁-synchronized"><a href="#2-锁-synchronized" class="headerlink" title="2. 锁 synchronized"></a>2. 锁 synchronized</h3><p><code>synchronized</code>是java中用来实现线程同步操作的关键字，其目的是在多线程并发场景下保证对共享资源操作的线程安全。这里只是简单分析一下其实现机制，至于具体的使用方法则不再赘述。</p>
+<p>锁升级</p>
+<p>32位对象头信息：
     <table width=100% cellpadding=10px>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3); background: #DBDBDB;">
             <td width=15% rowspan=2>锁状态</td>
@@ -162,8 +213,9 @@
             <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">11</td>
         </tr>
     </table></p>
-<h3 id="synchronized实现"><a href="#synchronized实现" class="headerlink" title="synchronized实现"></a>synchronized实现</h3><p><br><strong>参考：</strong> </p>
+<h3 id="3-锁优化"><a href="#3-锁优化" class="headerlink" title="3. 锁优化"></a>3. 锁优化</h3><p><br><strong>参考：</strong> </p>
 <ol>
+<li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
 <li><a href="http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/" target="_blank" rel="noopener">http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/29866981" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/29866981</a></li>
 <li><a href="https://www.jianshu.com/p/c3313dcf2c23" target="_blank" rel="noopener">https://www.jianshu.com/p/c3313dcf2c23</a></li>
@@ -180,14 +232,14 @@
 	    
 	<nav id="pagination">
 	  
-		  <a class="alignleft prev" href="/2017/08/31/20170831/">
-		    Java 泛型
+		  <a class="alignleft prev" href="/2017/11/01/20171101/">
+		    Tomcat Http与Servlet
 		  </a>
 	  
 	  
 	  
-		  <a class="alignright next" href="/2017/08/23/20170823/">
-		    Java Enum
+		  <a class="alignright next" href="/2017/10/08/20171008/">
+		    《深入理解Java虚拟机》 内存模型
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -204,7 +256,7 @@
         
   
   <div class="tags">
-    <a href="/tags/JUC/">JUC</a>
+    <a href="/tags/JVM/">JVM</a>
   </div>
 
 
@@ -268,7 +320,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#锁升级"><span class="toc-text">锁升级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized实现"><span class="toc-text">synchronized实现</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程"><span class="toc-text">1. 线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-线程实现"><span class="toc-text">1.1. 线程实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-线程调度"><span class="toc-text">1.2. 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-线程状态"><span class="toc-text">1.3. 线程状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-锁-synchronized"><span class="toc-text">2. 锁 synchronized</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-锁优化"><span class="toc-text">3. 锁优化</span></a></li></ol>
 </div>
 
 
