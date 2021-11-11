@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>《深入理解Java虚拟机》线程安全与锁优化（TODO） | Echo</title>
+  <title>《深入理解Java虚拟机》线程安全与锁优化 | Echo</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="…">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="《深入理解Java虚拟机》线程安全与锁优化（TODO）"/>
+  <meta property="og:title" content="《深入理解Java虚拟机》线程安全与锁优化"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -74,7 +74,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        《深入理解Java虚拟机》线程安全与锁优化（TODO）
+        《深入理解Java虚拟机》线程安全与锁优化
     </h1>
     
     
@@ -86,7 +86,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 707  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
+   <font style="color: #999;"> words: 721  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
    
    
   
@@ -165,8 +165,17 @@
 <p><img src="/img/20171030/20171030.1.jpg" alt=""> </p>
 <br>
 
-<h3 id="2-锁-synchronized"><a href="#2-锁-synchronized" class="headerlink" title="2. 锁 synchronized"></a>2. 锁 synchronized</h3><p><code>synchronized</code>是java中用来实现线程同步操作的关键字，其目的是在多线程并发场景下保证对共享资源操作的线程安全。这里只是简单分析一下其实现机制，至于具体的使用方法则不再赘述。</p>
-<p>锁升级</p>
+<h3 id="2-锁（synchronized）"><a href="#2-锁（synchronized）" class="headerlink" title="2. 锁（synchronized）"></a>2. 锁（synchronized）</h3><p><code>synchronized</code>是java中用来实现线程同步操作的关键字，其目的是在多线程并发场景下保证对共享资源操作的线程安全。这里只是简单分析一下其实现机制，至于具体的使用方法则不再赘述。</p>
+<h3 id="3-锁优化"><a href="#3-锁优化" class="headerlink" title="3. 锁优化"></a>3. 锁优化</h3><ul>
+<li><p><strong>锁消除</strong></p>
+</li>
+<li><p><strong>锁粗化</strong></p>
+</li>
+<li><p><strong>自旋锁</strong></p>
+</li>
+<li><p><strong>轻量级锁</strong></p>
+</li>
+</ul>
 <p>32位对象头信息：
     <table width=100% cellpadding=10px>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3); background: #DBDBDB;">
@@ -213,7 +222,10 @@
             <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">11</td>
         </tr>
     </table></p>
-<h3 id="3-锁优化"><a href="#3-锁优化" class="headerlink" title="3. 锁优化"></a>3. 锁优化</h3><p><br><strong>参考：</strong> </p>
+<ul>
+<li><strong>偏向锁</strong></li>
+</ul>
+<p><br><strong>参考：</strong> </p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
 <li><a href="http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/" target="_blank" rel="noopener">http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/</a></li>
@@ -320,7 +332,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程"><span class="toc-text">1. 线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-线程实现"><span class="toc-text">1.1. 线程实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-线程调度"><span class="toc-text">1.2. 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-线程状态"><span class="toc-text">1.3. 线程状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-锁-synchronized"><span class="toc-text">2. 锁 synchronized</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-锁优化"><span class="toc-text">3. 锁优化</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程"><span class="toc-text">1. 线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-线程实现"><span class="toc-text">1.1. 线程实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-线程调度"><span class="toc-text">1.2. 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-线程状态"><span class="toc-text">1.3. 线程状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-锁（synchronized）"><span class="toc-text">2. 锁（synchronized）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-锁优化"><span class="toc-text">3. 锁优化</span></a></li></ol>
 </div>
 
 
