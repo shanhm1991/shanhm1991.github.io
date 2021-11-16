@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>《深入理解Java虚拟机》线程安全与锁优化 | Echo</title>
+  <title>《深入理解Java虚拟机》Java线程与锁优化 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="…">
+  <meta name="description" content="线程是比进程更轻量级的调度执行单位，线程的引入可以把一个进程的资源分配和执行调度分开，各个线程既可以共享进程资源（内存资源、文件I/O等），又可以独立调度。
+Java提供了在不同硬件和操作系统平台下对线程操作的统一处理，每个已经执行start()且还未结束的java.lang.Thread实例就代表了一个线程。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="《深入理解Java虚拟机》线程安全与锁优化"/>
+  <meta property="og:title" content="《深入理解Java虚拟机》Java线程与锁优化"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -74,7 +75,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        《深入理解Java虚拟机》线程安全与锁优化
+        《深入理解Java虚拟机》Java线程与锁优化
     </h1>
     
     
@@ -86,7 +87,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 721  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
+   <font style="color: #999;"> words: 2.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 10min</font>
    
    
   
@@ -99,7 +100,7 @@
    
   
   <div class="tags">
-    <a href="/tags/JVM/">JVM</a>
+    <a href="/tags/JVM/">JVM</a>   <a href="/tags/synchronized/">synchronized</a>   <a href="/tags/Monitor/">Monitor</a>
   </div>
 
 
@@ -112,61 +113,120 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>…</p>
+        <p>线程是比进程更轻量级的调度执行单位，线程的引入可以把一个进程的资源分配和执行调度分开，各个线程既可以共享进程资源（内存资源、文件I/O等），又可以独立调度。</p>
+<p>Java提供了在不同硬件和操作系统平台下对线程操作的统一处理，每个已经执行<code>start()</code>且还未结束的<code>java.lang.Thread</code>实例就代表了一个线程。</p>
 <a id="more"></a>
 
-<h3 id="1-线程"><a href="#1-线程" class="headerlink" title="1. 线程"></a>1. 线程</h3><p>线程是比进程更轻量级的调度执行单位，线程的引入，可以把一个进程的资源分配和执行调度分开，各个线程既可以共享进程资源，比如内存地址、文件I/O等，又可以独立调度。</p>
-<p>Java提供了在不同硬件和操作系统平台下对线程操作的统一处理，每个已经执行<code>start()</code>且还未结束的<code>java.lang.Thread</code>实例就代表了一个线程。</p>
-<h4 id="1-1-线程实现"><a href="#1-1-线程实现" class="headerlink" title="1.1. 线程实现"></a>1.1. 线程实现</h4><ul>
-<li><p><strong>内核线程</strong></p>
-</li>
-<li><p><strong>用户线程</strong></p>
-</li>
-<li><p><strong>混合实现</strong></p>
-</li>
+<h3 id="1-线程"><a href="#1-线程" class="headerlink" title="1. 线程"></a>1. 线程</h3><h4 id="1-1-线程实现"><a href="#1-1-线程实现" class="headerlink" title="1.1. 线程实现"></a>1.1. 线程实现</h4><ul>
+<li><strong>内核线程</strong></li>
 </ul>
-<br>
-
-<h4 id="1-2-线程调度"><a href="#1-2-线程调度" class="headerlink" title="1.2. 线程调度"></a>1.2. 线程调度</h4><ul>
-<li><p><strong>协同式</strong></p>
-</li>
-<li><p><strong>抢占式</strong></p>
-</li>
-</ul>
-<br>
-
-<h4 id="1-3-线程状态"><a href="#1-3-线程状态" class="headerlink" title="1.3. 线程状态"></a>1.3. 线程状态</h4><p>Java定义了5种线程状态，在任意一个时间点，一个线程只能处于一种状态</p>
+<p>内核线程（KLT）直接由操作系统内核支持，每个内核线程可以视为内核的一个分身。这种线程由内核来完成线程切换，内核通过调度器（Scheduler）对线程进程调度，
+并负责将线程的任务映射到各个处理器上。</p>
+<p><font color="#E51508">程序一般不会直接使用内核线程，而是通过一种高级接口：轻量级进程（LWP），也就是我们通常意义上所讲的线程。</font>
+每个轻量级进程都由一个内核线程支持，也就是1:1的关系。</p>
+<p><img src="/img/20171030/20171030.2.jpg" alt=""> </p>
+<p>但是基于内核实现，各种线程操作，如创建、析构以及同步，都需要进行系统调用。而系统调用代价相对较高，需要在用户态和内核态之间来回切换。
+另外，由于每个轻量级进程都需要一个内核线程支持，因此一个系统能够支持的轻量级进程数量也是有限的。</p>
 <ul>
-<li><strong>新建：</strong><code>New</code></li>
+<li><strong>用户线程</strong></li>
+</ul>
+<p>一般如果一个线程只要不是内核线程，那么就可以认为是用户线程，所以上面的LWP也属于用户线程。但严格意义上的用户线程是指完全建立在用户空间的线程库上，系统内核不感知线程的存在。
+这样线程的建立、同步、销毁及调度都在用户态完成，不需要内核介入，因此操作可以非常快速且低消耗，也可以支持更大规模的线程数量。</p>
+<p><img src="/img/20171030/20171030.3.jpg" alt=""> </p>
+<p>但用户线程没有内核支持，所有的线程操作都需要自己处理，因此在实现上相当困难。</p>
+<ul>
+<li><strong>混合实现</strong></li>
+</ul>
+<p>混合实现下，既存在用户线程，也存在轻量级进程。线程还是完全建立在用户空间中，因此对于创建、切换、析构等操作依然廉价，并可以支持大规模的用户线程并发。
+而轻量级进程则作为用户线程和内核线程之间的桥梁，这样可以使用内核线程提供的线程调度以及处理器映射处理。</p>
+<p><img src="/img/20171030/20171030.4.jpg" alt=""> </p>
+<ul>
+<li><strong>Java线程实现</strong></li>
+</ul>
+<p>Java在1.2之前，是基于称为绿色线程的用户线程来实现的，而在1.2之后，线程模型改为<font color="#E51508">直接基于操作系统原生线程模型</font>来实现。因此，
+操作系统支持怎样的线程模型，很大程度上就决定了Java虚拟机的线程实现。</p>
+<p>由于Windows和Linux提供的线程模型都是1:1的内核线程模型，因此，<font color="#E51508">Windows和Linux版的JDK都是使用的一对一的线程模型实现的</font>，
+也就是一个Java线程映射到一个轻量级进程之上。</p>
+<br>
+
+<h4 id="1-2-线程调度"><a href="#1-2-线程调度" class="headerlink" title="1.2. 线程调度"></a>1.2. 线程调度</h4><p>线程调度是指系统为线程分配处理器使用权的过程，主要有协同式调度和抢占式调度。</p>
+<p>如果使用协同式调度，线程的执行时间由线程本身来控制，线程把自己的工作执行晚了之后，主动通知系统切换到另一个线程上。其好处是实现简单，而且由于线程要把自己的事情干完后才会进行线程切换，
+切换操作对于线程自己是可知的，所以不存在什么线程同步问题。但坏处也很明显，因为线程的执行时间不可控，如果一个线程一直阻塞也就一直不会通知系统进行线程切换。</p>
+<p>如果使用抢占式，那么每个线程将由系统来分配执行时间，线程的切换不由线程本身来决定。这种方式下，线程的执行时间是系统可控的，也就不会出现一个线程导致整个进程阻塞的问题。</p>
+<br>
+
+<h4 id="1-3-Java线程状态"><a href="#1-3-Java线程状态" class="headerlink" title="1.3. Java线程状态"></a>1.3. Java线程状态</h4><p>Java定义了5种线程状态，在任意一个时间点，一个线程只能处于一种状态</p>
+<ul>
+<li><strong>新建</strong><code>New</code></li>
 </ul>
 <p>即创建后尚未启动的线程，此时只是一个Java对象</p>
 <ul>
-<li><strong>运行：</strong><code>Runable</code></li>
+<li><strong>运行</strong><code>Runable</code></li>
 </ul>
-<p>对应操作系统线程状态中的<code>Running</code>和<code>Ready</code>，也就是线程可能正在执行，也可能正在等待分配CPU执行时间</p>
+<p>对应操作系统线程状态中的 Running 和 Ready，也就是线程可能正在执行，也可能正在等待分配CPU执行时间</p>
 <ul>
-<li><strong>无限期等待：</strong><code>Waiting</code></li>
+<li><strong>无限期等待</strong><code>Waiting</code></li>
 </ul>
-<p>线程不会被分配CPU执行时间，需要其它线程显式地唤醒，使线程进入无限期等待的方法一般有<code>Object.wait()</code>、<code>Thread.join()</code>、<code>LockSupport.park()</code></p>
+<p>线程不会被分配CPU执行时间，需要其它线程显式地唤醒，使线程进入无限期等待的方法一般有Object.wait()、Thread.join()、LockSupport.park()</p>
 <ul>
-<li><strong>限期等待：</strong><code>Timed Waiting</code></li>
+<li><strong>限期等待</strong><code>Timed Waiting</code></li>
 </ul>
-<p>同样不会被分配CPU执行时间，但不需要其它线程显式地唤醒，一定时间后由系统自动唤醒，使线程进入限期等待的方法一般有<code>Thread.sleep()</code>、<code>Object.wait()</code>、<code>Thread.join()</code>、
-<code>LockSupport.parkNanos()</code>、<code>LockSupport.parkUntil()</code></p>
+<p>同样不会被分配CPU执行时间，但不需要其它线程显式地唤醒，一定时间后由系统自动唤醒，使线程进入限期等待的方法一般有Thread.sleep()、Object.wait()、Thread.join()、
+LockSupport.parkNanos()、LockSupport.parkUntil()</p>
 <ul>
-<li><strong>阻塞：</strong><code>Blocked</code></li>
+<li><strong>阻塞</strong><code>Blocked</code></li>
 </ul>
 <p>线程阻塞与等待的区别是，阻塞状态是在等待一个排他锁，直到另一个线程释放这个锁，而等待是等待一段时间，或者是等待唤醒动作的发生，当线程进入同步块时就进入阻塞状态。</p>
 <ul>
-<li><strong>结束：</strong><code>Terminated</code></li>
+<li><strong>结束</strong><code>Terminated</code></li>
 </ul>
 <p>已执行结束的线程</p>
 <p>对于上面5种状态，可以画出其状态转换图如下：</p>
 <p><img src="/img/20171030/20171030.1.jpg" alt=""> </p>
 <br>
 
-<h3 id="2-锁（synchronized）"><a href="#2-锁（synchronized）" class="headerlink" title="2. 锁（synchronized）"></a>2. 锁（synchronized）</h3><p><code>synchronized</code>是java中用来实现线程同步操作的关键字，其目的是在多线程并发场景下保证对共享资源操作的线程安全。这里只是简单分析一下其实现机制，至于具体的使用方法则不再赘述。</p>
-<h3 id="3-锁优化"><a href="#3-锁优化" class="headerlink" title="3. 锁优化"></a>3. 锁优化</h3><ul>
+<h3 id="2-锁（synchronized）"><a href="#2-锁（synchronized）" class="headerlink" title="2. 锁（synchronized）"></a>2. 锁（synchronized）</h3><p>synchronized是Java中用来实现线程同步操作的关键字，由JVM实现，这样可以使得应用开发中对于线程同步的操作非常简洁，这里简单讨论一下其实现机制。</p>
+<ul>
+<li><strong>Monitor</strong></li>
+</ul>
+<p>JVM中的<font color="#E51508">synchronized是基于进入（monitorenter）和退出（monitorexit）Monitor对象来实现的，在涉及同步的对象头信息中会保存指向Monitor的指针。</font>
+monitorenter指令会在编译后插入到同步代码块的开始位置，而monitorexit则插入到方法结束处和异常处。任何对象都有一个Monitor与之关联，当Monitor被持有后，它将处于锁定状态。</p>
+<p>在hotSpot中，Monitor由ObjectMonitor实现，其主要结构如下： </p>
+<figure class="highlight c"><figcaption><span class="caption">ObjectMonitor.hpp</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ObjectMonitor() &#123;</span><br><span class="line">    _header       = <span class="literal">NULL</span>;</span><br><span class="line">    _count        = <span class="number">0</span>;  <span class="comment">// monitor进入数</span></span><br><span class="line">    _waiters      = <span class="number">0</span>,</span><br><span class="line">    _recursions   = <span class="number">0</span>;  <span class="comment">// 线程的重入次数</span></span><br><span class="line">    _object       = <span class="literal">NULL</span>;</span><br><span class="line">    _owner        = <span class="literal">NULL</span>;  <span class="comment">// 标识拥有该monitor的线程</span></span><br><span class="line">    _WaitSet      = <span class="literal">NULL</span>;  <span class="comment">// 等待线程组成的双向循环链表，_WaitSet是第一个节点</span></span><br><span class="line">    _WaitSetLock  = <span class="number">0</span> ;</span><br><span class="line">    _Responsible  = <span class="literal">NULL</span> ;</span><br><span class="line">    _succ         = <span class="literal">NULL</span> ;</span><br><span class="line">    _cxq          = <span class="literal">NULL</span> ; <span class="comment">// 多线程竞争锁进入时的单向链表</span></span><br><span class="line">    FreeNext      = <span class="literal">NULL</span> ;</span><br><span class="line">    _EntryList    = <span class="literal">NULL</span> ; <span class="comment">// 处于等待锁block状态的线程，会被加入到该列表</span></span><br><span class="line">    _SpinFreq     = <span class="number">0</span> ;</span><br><span class="line">    _SpinClock    = <span class="number">0</span> ;</span><br><span class="line">    OwnerIsThread = <span class="number">0</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>owner：</strong>初始为NULL，当被线程占有时，owner标记为该线程的唯一标识。当线程释放时，owner又恢复为NULL。owner是一个临界资源，通过CAS操作来保证其线程安全；</li>
+<li><strong>_cxq：</strong>竞争队列，所有请求锁的线程首先会被放到该队列中（单向链表）。<code>_cxq</code>也是一个临界资源，同样通过CAS操作来修改，比如<code>compareAndSet(node.next, newThread)</code>，因此，<code>_cxq</code>是一个后进先出的stack；</li>
+<li><strong>_EntryList：</strong><font color="#E51508">监控区</font>，锁已被其他线程获取，期待获取锁的线程就进入Monitor对象的监控区；</li>
+<li><strong>_WaitSet：</strong><font color="#E51508">待授权区</font>，曾经获取到锁，但是调用了wait方法，线程进入待授权区；</li>
+</ul>
+<p><img src="/img/20171030/20171030.5.jpg" alt=""> </p>
+<p><code>_WaitSet</code>区域的线程收到<code>Notify/notifyAll</code>通知时，会进入<code>_EntryList</code>区域。即通过<code>object</code>获得内置锁<code>objectMonitor</code>，
+然后调用其<code>notify</code>方法，将<code>_waitset</code>结点移出等待链表，并置于<code>_EntrySet</code>，等待获取锁。</p>
+<figure class="highlight c"><figcaption><span class="caption">notify</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1.调用ObjectSynchronizer::notify方法</span></span><br><span class="line"><span class="keyword">void</span> ObjectSynchronizer::notify(Handle obj, TRAPS) &#123;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">		</span><br><span class="line">    <span class="comment">// 2.调用ObjectSynchronizer::inflate方法</span></span><br><span class="line">    ObjectSynchronizer::inflate(THREAD, obj())-&gt;notify(THREAD);</span><br><span class="line">&#125;</span><br><span class="line">	</span><br><span class="line"><span class="comment">// 3.通过inflate方法得到ObjectMonitor对象</span></span><br><span class="line">ObjectMonitor * ATTR ObjectSynchronizer::inflate (Thread * Self, oop object) &#123;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">		</span><br><span class="line">    <span class="keyword">if</span> (mark-&gt;has_monitor()) &#123;</span><br><span class="line">        ObjectMonitor * inf = mark-&gt;monitor() ;</span><br><span class="line">        assert (inf-&gt;header()-&gt;is_neutral(), <span class="string">"invariant"</span>);</span><br><span class="line">        assert (inf-&gt;object() == object, <span class="string">"invariant"</span>) ;</span><br><span class="line">        assert (ObjectSynchronizer::verify_objmon_isinpool(inf), <span class="string">"monitor is inva;lid"</span>);</span><br><span class="line">        <span class="keyword">return</span> inf </span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 调用ObjectMonitor的notify方法</span></span><br><span class="line"><span class="keyword">void</span> ObjectMonitor::notify(TRAPS) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//5. 调用DequeueWaiter方法移出_waiterSet第一个结点</span></span><br><span class="line">    ObjectWaiter * iterator = DequeueWaiter() ;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//6. 将DequeueWaiter尾插入_EntrySet的操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当前拥有锁的线程释放锁时，处于<code>_EntryList</code>区域的线程都会抢占该锁，但是只能有一个Thread抢占成功，而其它线程依然在<code>_EntryList</code>中等待下次抢占锁的机会。
+也是通过<code>object</code>获得内置锁<code>objectMonitor</code>，并通过内置锁将Thread封装成<code>OjectWaiter</code>，然后调用<code>addWaiter</code>将它插入<code>_waitSet</code>中，最后释放锁。</p>
+<figure class="highlight c"><figcaption><span class="caption">wait</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1.调用ObjectSynchronizer::wait方法</span></span><br><span class="line"><span class="keyword">void</span> ObjectSynchronizer::wait(Handle obj, jlong <span class="built_in">millis</span>, TRAPS) &#123;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">// ... ...</span></span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 2. 获得Object的monitor对象</span></span><br><span class="line">    ObjectMonitor* monitor = ObjectSynchronizer::inflate(THREAD, obj());</span><br><span class="line">    DTRACE_MONITOR_WAIT_PROBE(monitor, obj(), THREAD, <span class="built_in">millis</span>);</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//3.调用monitor的wait方法</span></span><br><span class="line">    monitor-&gt;wait(<span class="built_in">millis</span>, <span class="literal">true</span>, THREAD);</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 4.在wait方法中调用addWaiter方法</span></span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">void</span> ObjectMonitor::AddWaiter(ObjectWaiter* node) &#123;</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">    <span class="keyword">if</span> (_WaitSet == <span class="literal">NULL</span>) &#123; <span class="comment">// _WaitSet为null，就初始化_waitSet</span></span><br><span class="line">        _WaitSet = node;</span><br><span class="line">        node-&gt;_prev = node;</span><br><span class="line">        node-&gt;_next = node;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// 否则就尾插</span></span><br><span class="line">        ObjectWaiter* head = _WaitSet ;</span><br><span class="line">        ObjectWaiter* tail = head-&gt;_prev;</span><br><span class="line">        assert(tail-&gt;_next == head, <span class="string">"invariant check"</span>);</span><br><span class="line">        tail-&gt;_next = node;</span><br><span class="line">        head-&gt;_prev = node;</span><br><span class="line">        node-&gt;_next = head;</span><br><span class="line">        node-&gt;_prev = tail;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 5.然后在ObjectMonitor::exit释放锁，接着 thread_ParkEvent-&gt;park  也就是wait</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>Mutex Lock</strong></li>
+</ul>
+<p><font color="#E51508">Monitor本质是基于底层操作系统的Mutex Lock（互斥锁）来实现的，每个对象都对应于一个可称为 “互斥锁” 的标记，
+这个标记用来保证在任一时刻，只能有一个线程访问该对象。</font></p>
+<p>互斥锁：用于保护临界区，确保同一时间只有一个线程访问数据。对共享资源的访问，先对互斥量进行加锁，如果互斥量已经上锁，调用线程会阻塞，直到互斥量被解锁。
+在完成了对共享资源的访问后，要对互斥量进行解锁。</p>
+<p><img src="/img/20171030/20171030.6.jpg" alt=""></p>
+<ol>
+<li>申请mutex</li>
+<li>如果成功，则持有该mutex</li>
+<li>如果失败，则进行spin自旋，spin的过程就是在线等待mutex，不断发起mutex gets，直到获得mutex或者达到spin_count限制为止</li>
+<li>依据工作模式的不同选择yiled还是sleep</li>
+<li>若达到sleep限制或者被主动唤醒或者完成yield，则重复1~4步，直到获得为止</li>
+</ol>
+<h3 id="3-锁优化"><a href="#3-锁优化" class="headerlink" title="3. 锁优化"></a>3. 锁优化</h3><p>由于Java线程是映射到操作系统的原生线程之上，如果要阻塞或唤醒一条线程，都需要操作系统来帮忙完成，这就需要从用户态转换到核心态中，而状态转换需要耗费很多的处理器时间。
+所以synchronized是Java语言中的一个重量级操作。因此，在JDK1.6中，虚拟机进行了一些优化，譬如在通知操作系统阻塞线程之前加入一段自旋等待过程，避免频繁地切入到核心态中。</p>
+<ul>
 <li><p><strong>锁消除</strong></p>
 </li>
 <li><p><strong>锁粗化</strong></p>
@@ -228,11 +288,10 @@
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
-<li><a href="http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/" target="_blank" rel="noopener">http://dreamrunner.org/blog/2014/06/29/qian-tan-mutex-lock/</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/29866981" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/29866981</a></li>
 <li><a href="https://www.jianshu.com/p/c3313dcf2c23" target="_blank" rel="noopener">https://www.jianshu.com/p/c3313dcf2c23</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/90508284" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/90508284</a></li>
-<li><a href="https://blog.csdn.net/zqz_zqz/article/details/70233767" target="_blank" rel="noopener">https://blog.csdn.net/zqz_zqz/article/details/70233767</a></li>
+<li><a href="https://www.cnblogs.com/hongdada/p/14513036.html" target="_blank" rel="noopener">https://www.cnblogs.com/hongdada/p/14513036.html</a></li>
 </ol>
 
       
@@ -268,7 +327,7 @@
         
   
   <div class="tags">
-    <a href="/tags/JVM/">JVM</a>
+    <a href="/tags/JVM/">JVM</a>   <a href="/tags/synchronized/">synchronized</a>   <a href="/tags/Monitor/">Monitor</a>
   </div>
 
 
@@ -332,7 +391,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程"><span class="toc-text">1. 线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-线程实现"><span class="toc-text">1.1. 线程实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-线程调度"><span class="toc-text">1.2. 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-线程状态"><span class="toc-text">1.3. 线程状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-锁（synchronized）"><span class="toc-text">2. 锁（synchronized）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-锁优化"><span class="toc-text">3. 锁优化</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程"><span class="toc-text">1. 线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-线程实现"><span class="toc-text">1.1. 线程实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-线程调度"><span class="toc-text">1.2. 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Java线程状态"><span class="toc-text">1.3. Java线程状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-锁（synchronized）"><span class="toc-text">2. 锁（synchronized）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-锁优化"><span class="toc-text">3. 锁优化</span></a></li></ol>
 </div>
 
 
