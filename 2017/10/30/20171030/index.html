@@ -87,7 +87,7 @@ Java提供了在不同硬件和操作系统平台下对线程操作的统一处�
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 2.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 10min</font>
+   <font style="color: #999;"> words: 4.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 15min</font>
    
    
   
@@ -100,7 +100,7 @@ Java提供了在不同硬件和操作系统平台下对线程操作的统一处�
    
   
   <div class="tags">
-    <a href="/tags/JVM/">JVM</a>   <a href="/tags/synchronized/">synchronized</a>   <a href="/tags/Monitor/">Monitor</a>
+    <a href="/tags/JVM/">JVM</a>   <a href="/tags/JUC/">JUC</a>   <a href="/tags/synchronized/">synchronized</a>   <a href="/tags/Monitor/">Monitor</a>
   </div>
 
 
@@ -224,19 +224,36 @@ monitorenter指令会在编译后插入到同步代码块的开始位置，而mo
 <li>依据工作模式的不同选择yiled还是sleep</li>
 <li>若达到sleep限制或者被主动唤醒或者完成yield，则重复1~4步，直到获得为止</li>
 </ol>
-<h3 id="3-锁优化"><a href="#3-锁优化" class="headerlink" title="3. 锁优化"></a>3. 锁优化</h3><p>由于Java线程是映射到操作系统的原生线程之上，如果要阻塞或唤醒一条线程，都需要操作系统来帮忙完成，这就需要从用户态转换到核心态中，而状态转换需要耗费很多的处理器时间。
-所以synchronized是Java语言中的一个重量级操作。因此，在JDK1.6中，虚拟机进行了一些优化，譬如在通知操作系统阻塞线程之前加入一段自旋等待过程，避免频繁地切入到核心态中。</p>
+<h3 id="3-锁优化"><a href="#3-锁优化" class="headerlink" title="3. 锁优化"></a>3. 锁优化</h3><p>由于Java线程是映射到操作系统的原生线程之上，如果要阻塞或唤醒一条线程，都需要操作系统来帮忙完成，这就需要从用户态转换到内核态中，而状态转换需要耗费很多的处理器时间。
+所以synchronized是Java语言中的一个重量级操作。因此，在JDK1.6中，虚拟机进行了一些优化，譬如在通知操作系统阻塞线程之前加入一段自旋等待过程，<font color="#E51508">目的就是避免频繁地切入到内核态</font></p>
 <ul>
-<li><p><strong>锁消除</strong></p>
-</li>
-<li><p><strong>锁粗化</strong></p>
-</li>
-<li><p><strong>自旋锁</strong></p>
-</li>
-<li><p><strong>轻量级锁</strong></p>
-</li>
+<li><strong>锁消除</strong></li>
 </ul>
-<p>32位对象头信息：
+<p>锁消除是指虚拟机即时编译器在运行时，检测到在一些同步代码上不可能存在共享数据的锁竞争。其检测依据主要来源于<font color="#E51508">逃逸分析</font>的支持，
+如果判断一段代码中，堆上的所有数据都不会逃逸出去而被其它线程访问到，那就可以把它们当做栈上数据对待，认为是线程私有的，也就无须加锁操作了。</p>
+<p>很多情况下，一些同步操作并不是开发人员自己加入的，而是本身就存在于很多Api的调用中，比如<code>StringBuffer</code>。</p>
+<ul>
+<li><strong>锁粗化</strong></li>
+</ul>
+<p>理论上，在开发中应该将同步操作的范围限制成越小越好，只在必要的共享数据操作时才进行同步，这样如果存在锁竞争，其他等待的线程能够尽快获取到锁。</p>
+<p>但如果一系列的操作频繁地对同一个对象反复的加锁和解锁，甚至在循环体中进行，那么即使没有线程竞争，就加锁解锁操作本身也会造成不小的消耗。因此，如果虚拟机检测到有这样一些列零碎的同步操作，
+将会把同步范围粗化到整个操作的外围。</p>
+<ul>
+<li><strong>自旋锁</strong></li>
+</ul>
+<p>考虑到很多共享数据上的锁定状态只会持续很短时间，而为了这段很短的锁定时间去挂起和恢复线程并不值得。如果存在多个处理器，能让两个或以上的线程同时执行，
+那么可以让后请求锁的线程自旋等待一会，但不放弃处理器的执行时间，看看持有锁的线程是否很快就会释放锁。</p>
+<p>自旋锁在JDK 1.4.2中引入，可以使用<code>-XX:+UseSpinning</code>参数来开启，在JDK 1.6中改为默认开启。自旋锁并不能代替阻塞，自旋的目的是为了避免频繁切换线程的开销，
+但如果获取锁的操作确实需要阻塞很长时间，那么自旋只会白白浪费处理器资源，因此，自旋等待的时间需要有限度，可以通过<code>-XX:PreBlockSpin</code>指定，默认10次。</p>
+<p>另外，JDK 1.6中引入了自适应自旋锁，也就是根据之前在锁上自旋等待的经验来判断本次是否进行自旋等待，或本次自旋等待的次数。随着程序运行和性能监控信息的不断完善，
+虚拟机对程序锁的状况的预测也将越来越准确。</p>
+<ul>
+<li><strong>轻量级锁</strong></li>
+</ul>
+<p>轻量级锁是相对之前介绍的依赖系统互斥量来实现的传统锁而言的，其本意是在没有多线程竞争的前提下，减少传统重量级锁使用系统互斥量而产生的性能消耗。</p>
+<p>要理解轻量级锁，首先得了解<font color="#E51508">对象头的结构</font>，可以分为两部分，<font color="#E51508">一部分用于存储对象自身的运行时数据</font>，称为“Mark Word”，
+<font color="#E51508">另一部分用于存储指向方法区对象类型数据的指针</font>。当然，如果是数组对象的话，还会有一个额外的部分用于存储数组长度。</p>
+<p>对象头信息是与对象数据无关的额外存储成本，因此，考虑到空间使用效率，Mark Word被设计成一个非固定的数据结构以便能在极小的内存空间中存储尽量多的信息，以下是32位对象头的结构：
     <table width=100% cellpadding=10px>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3); background: #DBDBDB;">
             <td width=15% rowspan=2>锁状态</td>
@@ -268,12 +285,12 @@ monitorenter指令会在编译后插入到同步代码块的开始位置，而mo
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3);">
             <td><font color="#E51508">轻量级锁</font></td>
-            <td colspan=4 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">指向栈中锁记录的指针</td>
+            <td colspan=4 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">指向栈中轻量级锁记录的指针</td>
             <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">00</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3);">
             <td><font color="#E51508">重量级锁</font></td>
-            <td colspan=4 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">指向重量级锁的指针</td>
+            <td colspan=4 style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">指向重量级锁Monitor的指针</td>
             <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">10</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.3);">
@@ -282,9 +299,21 @@ monitorenter指令会在编译后插入到同步代码块的开始位置，而mo
             <td style="border-left:0.01rem solid rgba(102,102,102,0.3); padding-left:5px;">11</td>
         </tr>
     </table></p>
+<p>加锁过程：</p>
+<p>在进入同步块的时候，如果对象没有被锁定（锁状态位01），那么虚拟机首先在当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间，用于存储锁对象目前Mark Word的拷贝，
+称为Displaced Mark Word</p>
+<p>然后，虚拟机使用CAS尝试将对象的Mark Word更新为指向Lock Record的指针。如果成功了，那么线程就拥有了该对象的锁，并且将Mark Word的锁标识位转为00，表示处于轻量级锁定状态。  </p>
+<p>如果失败了，虚拟机首先检查Mark Word是否指向当前线程的栈帧，如果是则说明线程已经拥有了对象的锁，那么直接进入同步块执行；否则说明锁对象已经被其他线程抢占，
+此时轻量级锁不再有效，将升级为重量级锁，锁标志位转为10，Mark Word指向重量级锁，线程进入阻塞，并且后面获取锁的线程都将进入阻塞。</p>
+<p>解锁过程：</p>
+<p>尝试通过CAS将对象头中的Mark Word替换为线程栈帧中的Displaced Mark Word，如果成功，则整个同步过程就完成了，
+否则，说明有其他线程尝试获取过该锁（Mark Word已改变，锁已膨胀），那么就要在释放锁的同时，唤醒被挂起的线程。</p>
 <ul>
 <li><strong>偏向锁</strong></li>
 </ul>
+<p>偏向锁也是JDK 1.6引入的锁优化机制，其目的是消除数据在无竞争情况下的同步，如果说轻量级锁是在无竞争情况下使用CAS操作去消除同步使用的互斥量，那么偏向锁则连加锁和解锁时的CAS都省掉了。</p>
+<p>当锁对象第一次被线程获取时，虚拟机将把对象头中的锁标志设为01，即偏向模式，同时使用CAS将线程ID记录在Mark Word中。如果成功，则不再需要任何同步操作。</p>
+<p>当另一个线程尝试获取锁时，偏向模式就宣告结束，根据锁对象目前是否处于被锁定状态，决定撤销偏向后是恢复到未锁定状态还是轻量级锁定状态，然后再与之前类似进行重试。</p>
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
@@ -327,7 +356,7 @@ monitorenter指令会在编译后插入到同步代码块的开始位置，而mo
         
   
   <div class="tags">
-    <a href="/tags/JVM/">JVM</a>   <a href="/tags/synchronized/">synchronized</a>   <a href="/tags/Monitor/">Monitor</a>
+    <a href="/tags/JVM/">JVM</a>   <a href="/tags/JUC/">JUC</a>   <a href="/tags/synchronized/">synchronized</a>   <a href="/tags/Monitor/">Monitor</a>
   </div>
 
 
