@@ -87,7 +87,7 @@ Java提供了在不同硬件和操作系统平台下对线程操作的统一处�
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 4.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 15min</font>
+   <font style="color: #999;"> words: 5.6k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 20min</font>
    
    
   
@@ -314,6 +314,26 @@ monitorenter指令会在编译后插入到同步代码块的开始位置，而mo
 <p>偏向锁也是JDK 1.6引入的锁优化机制，其目的是消除数据在无竞争情况下的同步，如果说轻量级锁是在无竞争情况下使用CAS操作去消除同步使用的互斥量，那么偏向锁则连加锁和解锁时的CAS都省掉了。</p>
 <p>当锁对象第一次被线程获取时，虚拟机将把对象头中的锁标志设为01，即偏向模式，同时使用CAS将线程ID记录在Mark Word中。如果成功，则不再需要任何同步操作。</p>
 <p>当另一个线程尝试获取锁时，偏向模式就宣告结束，根据锁对象目前是否处于被锁定状态，决定撤销偏向后是恢复到未锁定状态还是轻量级锁定状态，然后再与之前类似进行重试。</p>
+<h3 id="4-Java与协程"><a href="#4-Java与协程" class="headerlink" title="4. Java与协程"></a>4. Java与协程</h3><p>Java语言提供了统一的线程抽象接口，来隐藏了各种操作系统线程的差异性，这曾是它区别于其它语言的一大优势。在此基础上，涌现了无数多线程的应用与框架，
+比如Servlet API中一个线程处理一个HTTP请求，这样语言与框架已经自动屏蔽了相当多同步和并发的复杂性，这让普通开发者能以很小的学习成本就可以完成开发任务。</p>
+<p>但时至今日，对web应用的服务要求，无论是在请求数量还是复杂度上，都已不可同日而语，这一方面源于业务量的增长，另一方面来自于为了应对业务复杂化而不断进行的服务细分。
+现代B/S系统中的一次业务请求，往往需要分布在不同机器上的大量服务共同协作来实现，这种服务细分的架构在降低单个服务复杂度、增加复用性的同时，也增加了服务的数量，
+缩短了留给每个服务的响应时间，即要求每个服务都必须在极短的时间内响应，这样组合多个服务的总耗时才不会太长。</p>
+<p>这就与Java虚拟机目前基于内核线程的实现产生了矛盾，这种映射到操作系统上的线程在切换和调度操作上存在天然的缺陷，其代价高昂，并且系统本身能容纳的线程数量也很有限。
+传统的Web服务器的线程池可以在几十到几百之间，但当存在百万记的请求需要处理时，即使系统能处理得过来，其中的切换消耗也是相当可观的。</p>
+<p><font color="#E51508">内核线程的调度成本主要来自于用户态与内核态之间的切换，而这两种状态切换的开销主要来自于响应中断、保护和恢复执行线程的成本，</font>
+这也就是上面锁优化的目的，尽量避免导致线程挂起和恢复的操作。</p>
+<p>处理器执行线程A的操作时，并不是只有代码程序就能跑起来，程序是数据和代码的结合，代码执行时还必须有上下文数据的支撑。而这些数据则存储在内存、缓存和寄存器中，
+并且这些计算机资源是所有线程共享的，</p>
+<p>假设发生这样一次线程切换<code>线程A -&gt; 系统中断 -&gt; 线程B</code>，当从线程A切换到线程B执行之前，操作系统首先要把线程A的上下文数据保存好，然后再把寄存器、
+内存分页等恢复到线程B挂起时的状态，这样线程B唤醒后才能正常执行。所以，这种保护和恢复线程的工作，免不了涉及一系列数据在各种缓存器、缓存中的来回拷贝，显然不可能是一种轻量级的操作。</p>
+<p>所以，<font color="#E51508">如果改为采用用户线程，将这种保护、恢复现场以及调度的工作从操作系统交到开发人员手上，那么就可以想一些办法来缩减开销</font></p>
+<p>由于多数的用户线程被设计成协同式调度，因此它有了一个别名：<font color="#E51508">协程</font>。其大致原理是通过在内存中划出一片额外空间来模拟调用栈，
+只要其他线程中方法压栈、退栈时遵守规则，不破坏这片空间即可。所以有时也称为：有栈协程，但不等于协程就一定是以协同调度的方式工作，也存在非协同式、可自定义调度的协程实现。</p>
+<p>协程的主要优势在于轻量，比如在Linux 64位上的HotSpot中，线程栈的容量默认位1MB（也可以通过<code>-Xss</code>或<code>-XX:ThreadStackSize</code>设置），此外内核数据结构还会消耗额外16KB内存。
+与之相对的，一个协程的栈通常只在几百字节到几KB之间，所以在Java虚拟机的线程池容量达到两百已经不算小了，而如果使用协程，则可以以十万计。</p>
+<p>OpenJDK在2018年创建了Loom项目，其背后的意图是重新提供对用户线程的支持，以解决上面提到的目前Java面临的困境。当然，这并不是为了取代之前基于操作系统线程的实现，
+而是会有两个并发编程模型在Java虚拟机中并存。新模型会有意地保持与目前线程模型相似的API设计，它们甚至可以拥有一个共同的基类，这样现有的代码就不需要为了新模型而进行过多的改动。</p>
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
@@ -420,7 +440,7 @@ monitorenter指令会在编译后插入到同步代码块的开始位置，而mo
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程"><span class="toc-text">1. 线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-线程实现"><span class="toc-text">1.1. 线程实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-线程调度"><span class="toc-text">1.2. 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Java线程状态"><span class="toc-text">1.3. Java线程状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-锁（synchronized）"><span class="toc-text">2. 锁（synchronized）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-锁优化"><span class="toc-text">3. 锁优化</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程"><span class="toc-text">1. 线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-线程实现"><span class="toc-text">1.1. 线程实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-线程调度"><span class="toc-text">1.2. 线程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Java线程状态"><span class="toc-text">1.3. Java线程状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-锁（synchronized）"><span class="toc-text">2. 锁（synchronized）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-锁优化"><span class="toc-text">3. 锁优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Java与协程"><span class="toc-text">4. Java与协程</span></a></li></ol>
 </div>
 
 

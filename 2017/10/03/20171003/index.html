@@ -6,7 +6,9 @@
   <title>《深入理解Java虚拟机》 垃圾收集器 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="…">
+  <meta name="description" content="垃圾收集器即对垃圾收集算法的实现，虚拟机规范并没有对垃圾收集器的实现做任何规定，因此不同的厂商可以自行实现。虽然可以将各个收集器放在一起进行比较，
+但并不能挑选出一款最好或者万能的收集器出来，只能在具体场景下选择最合适的收集器。
+下图展示了7种作用于不同分代的经典收集器，图中的连线表示两个收集器可以搭配起来使用。这里说的经典是相对后面几款仍处于实验状态，但执行效果上有革命性改进的高性能低延迟收集器而言的。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -90,7 +92,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 4min</font>
+   <font style="color: #999;"> words: 1.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
    
    
   
@@ -116,10 +118,24 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>…</p>
+        <p>垃圾收集器即对垃圾收集算法的实现，虚拟机规范并没有对垃圾收集器的实现做任何规定，因此不同的厂商可以自行实现。虽然可以将各个收集器放在一起进行比较，
+但并不能挑选出一款最好或者万能的收集器出来，只能在具体场景下选择最合适的收集器。</p>
+<p>下图展示了7种作用于不同分代的经典收集器，图中的连线表示两个收集器可以搭配起来使用。这里说的经典是相对后面几款仍处于实验状态，但执行效果上有革命性改进的高性能低延迟收集器而言的。</p>
+<p><img src="/img/20171003/20171003.1.jpg" alt=""> </p>
 <a id="more"></a>
 
-<h3 id="1-GC日志分析"><a href="#1-GC日志分析" class="headerlink" title="1. GC日志分析"></a>1. GC日志分析</h3><p>每一种收集器的日志形式都是由它们自身的实现所决定，虚拟机设计者为了方便用户阅读，将各个收集器的日志都维持一定的共性</p>
+
+<h3 id="1-垃圾收集器"><a href="#1-垃圾收集器" class="headerlink" title="1. 垃圾收集器"></a>1. 垃圾收集器</h3><h4 id="1-1-Serial-收集器"><a href="#1-1-Serial-收集器" class="headerlink" title="1.1. Serial 收集器"></a>1.1. Serial 收集器</h4><p>Serial是最基础，历史最久的收集器，曾经是JDK 1.3.1之前HotSpot虚拟机新生代收集器的唯一选择。其是一个单线程工作的收集器，并且它在进行垃圾收集时，必须暂停其他所有工作线程，
+直到它收集结束，也就是“Stop The World”。从JDK 1.3开始，一直到最新的JDK 13，HotSpot虚拟机团队为消除或者降低用户线程因垃圾收集而导致停顿所做的努力一直在持续，但仍然无法彻底消除。</p>
+<p><img src="/img/20171003/20171003.2.jpg" alt=""> </p>
+<p>Serial收集器并不是老而无用，迄今为止，它依然是HotSpot虚拟机在客户端模式下新生代的默认收集器。其优点是简单而高效，对于内存受限的环境，它是所有收集器里额外内存消耗最小的。
+对于处理器数较少的环境，Serial没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程收集效率。</p>
+<p>在桌面应用以及部分微服务应用中，分配给虚拟机管理的内存一般不会特别大，垃圾收集的停顿时间基本可以控制在几十毫秒左右，只要不是频繁发生收集，通常都可以接受。
+因此，Serial对运行在客户端模式下的虚拟机来说仍然是一个不错的选择。</p>
+<h4 id="1-2-ParNew-收集器"><a href="#1-2-ParNew-收集器" class="headerlink" title="1.2. ParNew 收集器"></a>1.2. ParNew 收集器</h4><h4 id="1-3-Parallel-Scavenge-收集器"><a href="#1-3-Parallel-Scavenge-收集器" class="headerlink" title="1.3. Parallel Scavenge 收集器"></a>1.3. Parallel Scavenge 收集器</h4><h4 id="1-4-Serial-Old-收集器"><a href="#1-4-Serial-Old-收集器" class="headerlink" title="1.4. Serial Old 收集器"></a>1.4. Serial Old 收集器</h4><h4 id="1-5-Parallel-Old-收集器"><a href="#1-5-Parallel-Old-收集器" class="headerlink" title="1.5. Parallel Old 收集器"></a>1.5. Parallel Old 收集器</h4><h4 id="1-6-CMS-收集器"><a href="#1-6-CMS-收集器" class="headerlink" title="1.6. CMS 收集器"></a>1.6. CMS 收集器</h4><h4 id="1-7-G1-收集器"><a href="#1-7-G1-收集器" class="headerlink" title="1.7. G1 收集器"></a>1.7. G1 收集器</h4><h4 id="1-8-Shenandoah-收集器"><a href="#1-8-Shenandoah-收集器" class="headerlink" title="1.8. Shenandoah 收集器"></a>1.8. Shenandoah 收集器</h4><h4 id="1-9-ZGC-收集器"><a href="#1-9-ZGC-收集器" class="headerlink" title="1.9. ZGC 收集器"></a>1.9. ZGC 收集器</h4><h4 id="1-10-Epsilon-收集器"><a href="#1-10-Epsilon-收集器" class="headerlink" title="1.10. Epsilon 收集器"></a>1.10. Epsilon 收集器</h4><h3 id="2-垃圾收集参数"><a href="#2-垃圾收集参数" class="headerlink" title="2. 垃圾收集参数"></a>2. 垃圾收集参数</h3><h3 id="3-垃圾收集日志"><a href="#3-垃圾收集日志" class="headerlink" title="3. 垃圾收集日志"></a>3. 垃圾收集日志</h3><ol>
+<li>GC日志分析</li>
+</ol>
+<p>每一种收集器的日志形式都是由它们自身的实现所决定，虚拟机设计者为了方便用户阅读，将各个收集器的日志都维持一定的共性</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0.097: [GC [PSYoungGen: 5396K-&gt;568K(75776K)] 5396K-&gt;568K(248320K), 0.0009988 secs] </span><br><span class="line">       [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.00 secs] </span><br><span class="line">0.098: [Full GC [PSYoungGen: 568K-&gt;0K(75776K)] [ParOldGen: 0K-&gt;468K(172544K)] 568K-&gt;468K(248320K) </span><br><span class="line">       [PSPermGen: 2563K-&gt;2562K(21504K)], 0.0074459 secs] [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.01 secs]</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -139,9 +155,12 @@
 <li><p>最后的：0.0009988 secs、0.0074459 secs，表示该内存区域GC所占用的时间，单位秒。有的收集器会给出更具体的时间数据数据，如这里的[Times: user=0.00 sys=0.00, real=0.00 secs]，
 里面的时间与Linux的time命令所输出的时间含义一致，分别代表用户消耗的CPU时间、内核消耗的CPU时间、操作从开始到结束所经过的墙钟时间。<strong>墙钟时间</strong>与CPU时间的区别是它包括各种非运算的等待耗时，
 如等待磁盘I/O、等待线程阻塞，而CPU时间不包括这些。但当系统有多CPU或者多核的话，多线程操作会叠加这些CPU时间，所以当看到user或sys时间超过real也是正常的。</p>
+<ol start="2">
+<li>GC参数</li>
+</ol>
 </li>
 </ul>
-<h3 id="2-GC参数"><a href="#2-GC参数" class="headerlink" title="2. GC参数"></a>2. GC参数</h3><table style="width:100%;">
+<table style="width:100%;">
     <tr style="border-bottom:1px solid gray;">
         <td style="border-right:1px solid gray;">UseSerialGC</td>
         <td>Client模式下的默认值，使用Serial + Serial Old的收集器组合进行内存回收</td>
@@ -310,7 +329,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-GC日志分析"><span class="toc-text">1. GC日志分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GC参数"><span class="toc-text">2. GC参数</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-垃圾收集器"><span class="toc-text">1. 垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Serial-收集器"><span class="toc-text">1.1. Serial 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-ParNew-收集器"><span class="toc-text">1.2. ParNew 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Parallel-Scavenge-收集器"><span class="toc-text">1.3. Parallel Scavenge 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-Serial-Old-收集器"><span class="toc-text">1.4. Serial Old 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-Parallel-Old-收集器"><span class="toc-text">1.5. Parallel Old 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-CMS-收集器"><span class="toc-text">1.6. CMS 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-7-G1-收集器"><span class="toc-text">1.7. G1 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-8-Shenandoah-收集器"><span class="toc-text">1.8. Shenandoah 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-9-ZGC-收集器"><span class="toc-text">1.9. ZGC 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-10-Epsilon-收集器"><span class="toc-text">1.10. Epsilon 收集器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-垃圾收集参数"><span class="toc-text">2. 垃圾收集参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-垃圾收集日志"><span class="toc-text">3. 垃圾收集日志</span></a></li></ol>
 </div>
 
 
