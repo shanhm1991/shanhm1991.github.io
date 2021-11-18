@@ -92,7 +92,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
+   <font style="color: #999;"> words: 2.2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
    
    
   
@@ -132,7 +132,19 @@
 对于处理器数较少的环境，Serial没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程收集效率。</p>
 <p>在桌面应用以及部分微服务应用中，分配给虚拟机管理的内存一般不会特别大，垃圾收集的停顿时间基本可以控制在几十毫秒左右，只要不是频繁发生收集，通常都可以接受。
 因此，Serial对运行在客户端模式下的虚拟机来说仍然是一个不错的选择。</p>
-<h4 id="1-2-ParNew-收集器"><a href="#1-2-ParNew-收集器" class="headerlink" title="1.2. ParNew 收集器"></a>1.2. ParNew 收集器</h4><h4 id="1-3-Parallel-Scavenge-收集器"><a href="#1-3-Parallel-Scavenge-收集器" class="headerlink" title="1.3. Parallel Scavenge 收集器"></a>1.3. Parallel Scavenge 收集器</h4><h4 id="1-4-Serial-Old-收集器"><a href="#1-4-Serial-Old-收集器" class="headerlink" title="1.4. Serial Old 收集器"></a>1.4. Serial Old 收集器</h4><h4 id="1-5-Parallel-Old-收集器"><a href="#1-5-Parallel-Old-收集器" class="headerlink" title="1.5. Parallel Old 收集器"></a>1.5. Parallel Old 收集器</h4><h4 id="1-6-CMS-收集器"><a href="#1-6-CMS-收集器" class="headerlink" title="1.6. CMS 收集器"></a>1.6. CMS 收集器</h4><h4 id="1-7-G1-收集器"><a href="#1-7-G1-收集器" class="headerlink" title="1.7. G1 收集器"></a>1.7. G1 收集器</h4><h4 id="1-8-Shenandoah-收集器"><a href="#1-8-Shenandoah-收集器" class="headerlink" title="1.8. Shenandoah 收集器"></a>1.8. Shenandoah 收集器</h4><h4 id="1-9-ZGC-收集器"><a href="#1-9-ZGC-收集器" class="headerlink" title="1.9. ZGC 收集器"></a>1.9. ZGC 收集器</h4><h4 id="1-10-Epsilon-收集器"><a href="#1-10-Epsilon-收集器" class="headerlink" title="1.10. Epsilon 收集器"></a>1.10. Epsilon 收集器</h4><h3 id="2-垃圾收集参数"><a href="#2-垃圾收集参数" class="headerlink" title="2. 垃圾收集参数"></a>2. 垃圾收集参数</h3><h3 id="3-垃圾收集日志"><a href="#3-垃圾收集日志" class="headerlink" title="3. 垃圾收集日志"></a>3. 垃圾收集日志</h3><ol>
+<h4 id="1-2-ParNew-收集器"><a href="#1-2-ParNew-收集器" class="headerlink" title="1.2. ParNew 收集器"></a>1.2. ParNew 收集器</h4><p>ParNew收集器实际上就是Serial的多线程并行版本，其行为以及相关的控制参数，包括对象分配规则、回收策略等都与Serial完全一致，因此它们在实现上也共用了相当多的代码。
+这里解释下并行与并发在垃圾收集器中的语义：</p>
+<ul>
+<li><strong>并行：</strong>描述的是多条垃圾收集器线程之间的关系，即同一时间存在多条垃圾收集线程在协同工作；</li>
+<li><strong>并发：</strong>描述的是垃圾收集器线程与用户线程之间的关系，即同一时间存在垃圾收集线程与用户线程同时工作；</li>
+</ul>
+<p><img src="/img/20171003/20171003.3.jpg" alt=""> </p>
+<p>ParNew一般是运行在服务端模式下HotSpot虚拟机的默认新生代收集器，尤其在JDK 1.7之前，它是除Serial之外，唯一能与CMS配合使用的收集器，因此，
+在使用<code>-XX:+UseConcMarkSweepGC</code>激活CMS收集器后，ParNew将是默认的新生代收集器，当然，也可以使用<code>-XX:+/-UseParNewGC</code>来指定或者禁用。</p>
+<p>可以说是CMS的出现巩固了ParNew的地位，但随着更先进的G1收集器出现，其作为CMS的继承者或替代者登场，并且是一个面向全堆的收集器，因此不再需要其他新生代收集器配合。
+所以，从JDK 9开始，官方希望G1能完全替代服务端模式下默认的ParNew + CMS组合，并直接取消了对ParNew + Serial Old，以及Serial + CMS这两组收集器组合的支持，
+另外，还取消了参数<code>-XX:+UseParNewGC</code>，这意味着ParNew只能与CMS一起使用，或者说将ParNew合入了CMS。</p>
+<h4 id="1-3-Parallel-Scavenge-收集器"><a href="#1-3-Parallel-Scavenge-收集器" class="headerlink" title="1.3. Parallel Scavenge 收集器"></a>1.3. Parallel Scavenge 收集器</h4><h4 id="1-4-Serial-Old-收集器"><a href="#1-4-Serial-Old-收集器" class="headerlink" title="1.4. Serial Old 收集器"></a>1.4. Serial Old 收集器</h4><h4 id="1-5-Parallel-Old-收集器"><a href="#1-5-Parallel-Old-收集器" class="headerlink" title="1.5. Parallel Old 收集器"></a>1.5. Parallel Old 收集器</h4><h4 id="1-6-CMS-收集器"><a href="#1-6-CMS-收集器" class="headerlink" title="1.6. CMS 收集器"></a>1.6. CMS 收集器</h4><h4 id="1-7-G1-收集器"><a href="#1-7-G1-收集器" class="headerlink" title="1.7. G1 收集器"></a>1.7. G1 收集器</h4><h4 id="1-8-Shenandoah-收集器"><a href="#1-8-Shenandoah-收集器" class="headerlink" title="1.8. Shenandoah 收集器"></a>1.8. Shenandoah 收集器</h4><h4 id="1-9-ZGC-收集器"><a href="#1-9-ZGC-收集器" class="headerlink" title="1.9. ZGC 收集器"></a>1.9. ZGC 收集器</h4><h4 id="1-10-Epsilon-收集器"><a href="#1-10-Epsilon-收集器" class="headerlink" title="1.10. Epsilon 收集器"></a>1.10. Epsilon 收集器</h4><h3 id="2-垃圾收集参数"><a href="#2-垃圾收集参数" class="headerlink" title="2. 垃圾收集参数"></a>2. 垃圾收集参数</h3><h3 id="3-垃圾收集日志"><a href="#3-垃圾收集日志" class="headerlink" title="3. 垃圾收集日志"></a>3. 垃圾收集日志</h3><ol>
 <li>GC日志分析</li>
 </ol>
 <p>每一种收集器的日志形式都是由它们自身的实现所决定，虚拟机设计者为了方便用户阅读，将各个收集器的日志都维持一定的共性</p>
