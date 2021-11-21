@@ -73,7 +73,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/07/04/20190704/">基于ThreadPool/spring构建计划任务 使用文档</a>
+       <a href="/2019/07/04/20190704/">基于spring构建计划任务 使用文档</a>
     </h1>
     
   
@@ -87,7 +87,10 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>接着上文的介绍，下面简单介绍下fom的使用方式。</p>
+        <blockquote>
+<p><a href="https://github.com/shanhm1991/spring-fom-demo" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom-demo</a></p>
+</blockquote>
+<p>接着上文的介绍，下面简单介绍下fom的使用方式。</p>
       
     </div>
 	
@@ -125,7 +128,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/07/02/20190702/">基于ThreadPool/spring构建计划任务 设计文档</a>
+       <a href="/2019/07/02/20190702/">基于spring构建计划任务 设计文档</a>
     </h1>
     
   
@@ -142,11 +145,9 @@
         <blockquote>
 <p><a href="https://github.com/shanhm1991/spring-fom" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom</a></p>
 </blockquote>
-<p>写这个工具最开始是为了处理各种各样的离线数据文件，其中涉及到一些定时任务，而使用现有的工具，比如spring-schedule，总免不了要做一些额外的工作，于是干脆自己尝试造了这样一个轮子，
-也是因为一开始设计是与文件有关，所以就取名为fom。</p>
-<p>概括起来，fom其实也比较简单，其几乎所有的流程逻辑都在<code>ScheduleContext</code>中，里面维护了一个定时线程和一个线程池，另外自定义了一套状态转换机制，每个<code>ScheduleContext</code>相当于一个独立的定时器，
-其生命周期（加载、启动、终止）完全基于spring的应用上下文。对于具体的任务则抽象为<code>Task</code>，其实就是在<code>Callable</code>的基础上定义了一套任务执行的模板，
-整个fom的功能设计，都是围绕<code>ScheduleContext</code>和<code>Task</code>实现的。 </p>
+<p>写这个工具一开始是为了解决各种离线数据文件的处理，其中涉及到一些定时任务，但除了定时之外，还希望能支持任务批处理，以及能对任务进行实时监控和一些干预等操作。
+如果直接使用 spring 提供的 Schedule，免不了要做一些额外的工作，于是自己尝试设计和实现了这样一个计划任务框架，因为一开始是设计用来处理文件的，又是基于 spring 来实现的，
+所以取名为 spring-fom。</p>
       
     </div>
 	

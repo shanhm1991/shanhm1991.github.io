@@ -150,6 +150,8 @@
 
 <figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/spring-fom/blob/master/spring-fom-task-support/src/test/java/org/spring/fom/support/task/</span><span class="caption">ExcelTest.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSheetReader</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123; </span><br><span class="line">    Resource resource = <span class="keyword">new</span> ClassPathResource(<span class="string">"SheetTest.xlsx"</span>);</span><br><span class="line">    File excel = resource.getFile();</span><br><span class="line">		</span><br><span class="line">    SheetTask sheetTask = <span class="keyword">new</span> SheetTask(excel);</span><br><span class="line">    sheetTask.setExcelRule(<span class="string">"sheetRule.xml"</span>);</span><br><span class="line">    sheetTask.call();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p><br><strong>参考：</strong></p>
+
       
     </div>
 	
@@ -160,7 +162,7 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2019/07/02/20190702/">
-		    基于ThreadPool/spring构建计划任务 设计文档
+		    基于spring构建计划任务 设计文档
 		  </a>
 	  
 	  
