@@ -9,7 +9,7 @@
   <meta name="description" content="https://github.com/shanhm1991/spring-fom
 
 写这个工具一开始是为了解决各种离线数据文件的处理，其中涉及到一些定时任务，但除了定时之外，还希望能支持任务批处理，以及能对任务进行实时监控和一些干预等操作。
-如果直接使用 spring 提供的 Schedule，免不了要做一些额外的工作，于是自己尝试设计和实现了这样一个计划任务框架，因为一开始是设计用来处理文件的，又是基于 spring 来实现的，
+如果直接使用 spring 提供的 Schedule，免不了要做一些额外的工作，于是自己尝试设计和实现了这样一个计划任务框架，由于当时是设计用来处理文件的，又是基于 spring 来实现的，
 所以取名为 spring-fom。">
   
   
@@ -90,7 +90,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
+   <font style="color: #999;"> words: 3.6k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 13min</font>
    
    
   
@@ -103,7 +103,7 @@
    
   
   <div class="tags">
-    <a href="/tags/fom/">fom</a>
+    <a href="/tags/schedule/">schedule</a>
   </div>
 
 
@@ -120,7 +120,7 @@
 <p><a href="https://github.com/shanhm1991/spring-fom" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom</a></p>
 </blockquote>
 <p>写这个工具一开始是为了解决各种离线数据文件的处理，其中涉及到一些定时任务，但除了定时之外，还希望能支持任务批处理，以及能对任务进行实时监控和一些干预等操作。
-如果直接使用 spring 提供的 Schedule，免不了要做一些额外的工作，于是自己尝试设计和实现了这样一个计划任务框架，因为一开始是设计用来处理文件的，又是基于 spring 来实现的，
+如果直接使用 spring 提供的 Schedule，免不了要做一些额外的工作，于是自己尝试设计和实现了这样一个计划任务框架，由于当时是设计用来处理文件的，又是基于 spring 来实现的，
 所以取名为 spring-fom。</p>
 <a id="more"></a>
 
@@ -132,184 +132,184 @@
    <table width=100%>
         <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>
-            1. 支持最基本的定时任务，以及三种定时语义（cron/fixedRate/fixedDelay）
-            </td>
+    1. 支持最基本的定时任务，以及三种定时语义（cron/fixedRate/fixedDelay）
+    </td>
         </tr>
         <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>
-            2. 支持<font color="#E51508">定时多任务</font>执行<br>
-               &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>ScheduleFactory</code>可以创建批任务，或者通过<code>@Scheduled</code>指定多个任务方法<br>
-               &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>ScheduleCompleter</code>可以定义任务全部完成时的处理
-            </td>
+    2. 支持<font color="#E51508">定时多任务</font>执行<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>ScheduleFactory</code>可以创建批任务，或者通过<code>@Scheduled</code>指定多个任务方法<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>ScheduleCompleter</code>可以定义任务全部完成时的处理
+    </td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
-            <td>
-            3. 支持<font color="#E51508">实时启动 / 停止定时任务</font>，即能够在不重启应用的情况下，启动或停止指定的定时任务<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>ScheduleTerminator</code>可以自定义定时器关闭时的处理
-            </td>
-        </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
-            <td>
-            4. 支持<font color="#E51508">手动干预定时任务的执行</font>，比如当定时任务未到执行时机时，可以手动使其立即执行<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;如果当前任务正在执行则能够支持两种策略：直接忽略，或者等待本次执行完成后立即再重新执行
-            </td>
-        </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
-            <td>
-            5. 支持<font color="#E51508">实时修改任务配置</font>，并支持持久化，这样重启后修改依然有效
-            </td>
-        </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
-            <td>
-            6. 支持<font color="#E51508">任务超时检测和处理</font>，通过<code>taskOverTime</code>可以设置任务超时时间<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>TaskTimeoutHandler</code>可以自定义任务超时的处理。默认通过<code>Interrupt中</code>断<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;通过<code>detectTimeoutOnEachTask</code>可以设置是否对每个任务单独检测超时，有可能在多任务场景中希望对整体任务计算超时
-            </td>
-        </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
-            <td>
-            7. 支持<font color="#E51508">任务冲突检测</font><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;通过<code>enableTaskConflict</code>可以打开任务冲突检测，即如果提交任务时，发现已经存在对应id的任务，并且还在运行，则忽略本次提交任务，
-            这在文件处理的场景中比较有用；
-            </td>
-        </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
-            <td>
-            8. 支持一些运维管理操作的接口<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;提供了一个简单的运维界面，可以通过开关<code>enableFomView</code>打开
-            </td>
-        </tr>
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
+        <td>
+    3. 支持<font color="#E51508">实时启动 / 停止定时任务</font>，即能够在不重启应用的情况下，启动或停止指定的定时任务<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>ScheduleTerminator</code>可以自定义定时器关闭时的处理
+    </td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
+        <td>
+    4. 支持<font color="#E51508">手动干预定时任务的执行</font>，比如当定时任务未到执行时机时，可以手动使其立即执行<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;如果当前任务正在执行则能够支持两种策略：直接忽略，或者等待本次执行完成后立即再重新执行
+    </td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
+        <td>
+    5. 支持<font color="#E51508">实时修改任务配置</font>，并支持持久化，这样重启后修改依然有效
+    </td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
+        <td>
+    6. 支持<font color="#E51508">任务超时检测和处理</font>，通过<code>taskOverTime</code>可以设置任务超时时间<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>TaskTimeoutHandler</code>可以自定义任务超时的处理。默认通过<code>Interrupt中</code>断<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;通过<code>detectTimeoutOnEachTask</code>可以设置是否对每个任务单独检测超时，有可能在多任务场景中希望对整体任务计算超时
+    </td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
+        <td>
+    7. 支持<font color="#E51508">任务冲突检测</font><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;通过<code>enableTaskConflict</code>可以打开任务冲突检测，即如果提交任务时，发现已经存在对应id的任务，并且还在运行，则忽略本次任务，
+    这在文件处理的场景中比较有用；
+    </td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
+        <td>
+    8. 支持一些运维管理操作的接口<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;提供了一个简单的运维界面，可以通过开关<code>enableFomView</code>打开
+    </td>
+    </tr>
     </table></p>
 <h4 id="1-2-配置定义"><a href="#1-2-配置定义" class="headerlink" title="1.2. 配置定义"></a>1.2. 配置定义</h4><p>对应上面的功能设计，需要给出如下一套配置定义：
     <table width=100%>
         <tr style="border-bottom:0.01rem solid grey;">
             <th width=25%>任务配置：@FomSchedule</th>
             <th width=14%>默认值：</th>
-            <th width=46%>说明：</th>
-            <th width=15%>生效：</th>
+    <th width=46%>说明：</th>
+    <th width=15%>生效：</th>
         </tr>
         <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>cron</td>
             <td>null</td>
-            <td>定时计划：时间表</td>
-            <td>下次任务执行</td>
+    <td>定时计划：时间表</td>
+    <td>下次任务执行</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>fixedRate</td>
             <td>0</td>
-            <td>定时计划：距离任务开始的时间，单位（毫秒）</td>
-            <td>下次任务执行</td>
+    <td>定时计划：距离任务开始的时间，单位（毫秒）</td>
+    <td>下次任务执行</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>fixedDelay</td>
             <td>0</td>
-            <td>定时计划：距离任务结束的时间，单位（毫秒）<br>定时计划优先级：cron &gt; fixedRate &gt; fixedDelay</td>
-            <td>下次任务执行</td>
+    <td>定时计划：距离任务结束的时间，单位（毫秒）<br>定时计划优先级：cron &gt; fixedRate &gt; fixedDelay</td>
+    <td>下次任务执行</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>threadCore</td>
             <td>1</td>
-            <td>核心线程数，如果设置的core &gt; max，则将max置为core</td>
-            <td>立即生效</td>
+    <td>核心线程数，如果设置的core &gt; max，则将max置为core</td>
+    <td>立即生效</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>threadMax</td>
             <td>1</td>
-            <td>最大线程数，如果设置的max &lt; core，则将core置为max</td>
-            <td>立即生效</td>
+    <td>最大线程数，如果设置的max &lt; core，则将core置为max</td>
+    <td>立即生效</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>threadAliveTime</td>
             <td>1</td>
-            <td>任务线程最大空闲时间，单位（毫秒）</td>
-            <td>立即生效</td>
+    <td>任务线程最大空闲时间，单位（毫秒）</td>
+    <td>立即生效</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>queueSize</td>
             <td>256</td>
-            <td>任务队列长度</td>
-            <td>任务重启</td>
+    <td>任务队列长度</td>
+    <td>任务重启</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>taskOverTime</td>
             <td>0</td>
-            <td>任务超时时间，单位（毫秒）</td>
-            <td>下次任务执行</td>
+    <td>任务超时时间，单位（毫秒）</td>
+    <td>下次任务执行</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>enable</td>
             <td>true</td>
-            <td>是否在加载时启动（startup）</td>
-            <td>任务重启</td>
+    <td>是否在加载时启动（startup）</td>
+    <td>任务重启</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>execOnLoad</td>
             <td>false</td>
-            <td>是否在启动时立即执行</td>
-            <td>任务重启</td>
+    <td>是否在启动时立即执行</td>
+    <td>任务重启</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>enableTaskConflict</td>
             <td>false</td>
-            <td>是否检测任务冲突（根据任务id）</td>
-            <td>任务重启</td>
+    <td>是否检测任务冲突（根据任务id）</td>
+    <td>任务重启</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>enableTaskResultStat</td>
             <td>true</td>
-            <td>是否对任务结果进行缓存统计</td>
-            <td>立即生效</td>
+    <td>是否对任务结果进行缓存统计</td>
+    <td>立即生效</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>detectTimeoutOnEachTask</td>
             <td>true</td>
-            <td>是否针对每个任务单独检测超时</td>
-            <td>下次任务执行</td>
+    <td>是否针对每个任务单独检测超时</td>
+    <td>下次任务执行</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>ignoreExecRequestWhenRunning</td>
             <td>true</td>
-            <td>Running状态时是否忽略立即执行请求<br>如果false，将在本次任务执行完成后立即重新执行</td>
-            <td>立即生效</td>
+    <td>Running状态时是否忽略立即执行请求<br>如果false，将在本次任务执行完成后立即重新执行</td>
+    <td>立即生效</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>remark</td>
             <td>null</td>
-            <td>备注说明</td>
-            <td>立即生效</td>
+    <td>备注说明</td>
+    <td>立即生效</td>
         </tr>
         <tr style="border-bottom:0.01rem solid grey;">
             <th width=25%>启动开关：@EnableFom</th>
             <th width=10%>默认值：</th>
-            <th width=50%>说明：</th>
+    <th width=50%>说明：</th>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>enableFomView</td>
             <td>false</td>
-            <td>是否启用自带的任务管理界面fom.html</td>
+    <td>是否启用自带的任务管理界面fom.html</td>
         </tr>
         <tr style="border-bottom:0.01rem solid grey;">
             <th width=25%>环境变量：</th>
             <th width=10%>默认值：</th>
-            <th width=50%>说明：</th>
+    <th width=50%>说明：</th>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>spring.fom.config.cache.enable</td>
             <td>true</td>
-            <td>是否对配置修改进行否持久化</td>
+    <td>是否对配置修改进行否持久化</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>spring.fom.config.cache.path</td>
             <td>cache/schedule</td>
-            <td>配置持久化的文件路径</td>
+    <td>配置持久化的文件路径</td>
         </tr>
-        <tr style="border-bottom:0.01rem solid #cfc8c8;">
+    <tr style="border-bottom:0.01rem solid #cfc8c8;">
             <td>spring.fom.config.cache.history</td>
             <td>false</td>
-            <td>是否保存历史修改的持久化文件，默认只保存最近一次修改</td>
+    <td>是否保存历史修改的持久化文件，默认只保存最近一次修改</td>
         </tr>
     </table></p>
-<h4 id="3-1-状态定义"><a href="#3-1-状态定义" class="headerlink" title="3.1. 状态定义"></a>3.1. 状态定义</h4><p>对于<code>ScheduleContext</code>中维护的几个状态，其状态转换机制可以如下图描述：</p>
+<h4 id="1-3-状态定义"><a href="#1-3-状态定义" class="headerlink" title="1.3. 状态定义"></a>1.3. 状态定义</h4><p>对于<code>ScheduleContext</code>中维护的几个状态，其状态转换机制可以如下图所示：</p>
 <p><img src="/img/20190702/20190702.1.jpg" alt=""></p>
 <ul>
 <li>如果处于状态：<font color="#E51508">INITED</font> 或 <font color="#E51508">STOPPED</font></li>
@@ -333,12 +333,41 @@
 <li>如果处于状态：<font color="#E51508">STOPPING</font></li>
 </ul>
 <p>此时忽略一切外部请求，直到定时线程等待所有任务结束之后，由定时线程将状态切换为 STOPPED；</p>
-<br>
-
-<p>对于<code>ScheduleContext</code>中的定时线程，根据上面的状态描述，可以简要画出其执行流程如下：</p>
+<h4 id="1-4-定时线程"><a href="#1-4-定时线程" class="headerlink" title="1.4. 定时线程"></a>1.4. 定时线程</h4><p>对于<code>ScheduleContext</code>中的定时线程，根据上面的状态描述，可以简要画出其执行流程如下：</p>
 <p><img src="/img/20190702/20190702.5.jpg" alt=""> </p>
-<h3 id="2-详细设计"><a href="#2-详细设计" class="headerlink" title="2. 详细设计"></a>2. 详细设计</h3><p>下面内容，有时间再补</p>
-<h3 id="3-其它"><a href="#3-其它" class="headerlink" title="3. 其它"></a>3. 其它</h3><h4 id="3-1-任务统计"><a href="#3-1-任务统计" class="headerlink" title="3.1. 任务统计"></a>3.1. 任务统计</h4><p>一些任务结果统计，在fom.html上， 可以自定义统计行为</p>
+<h3 id="2-详细设计"><a href="#2-详细设计" class="headerlink" title="2. 详细设计"></a>2. 详细设计</h3><p>除了定时线程和状态之外，每个<code>ScheduleContext</code>还维护了一个私有的线程池，其对于具体的任务就是委托给线程池来执行的，其实<code>ScheduleContext</code>中的状态基本上就是其线程池状态的体现。
+下面就具体说明下<code>ScheduleContext</code>将任务委托给线程池执行之后，是如何检测任务结束以及超时的，至于其它的细节实现，根据上面的描述，基本上已经能了解大概，就不再赘述了。</p>
+<h4 id="2-1-任务执行"><a href="#2-1-任务执行" class="headerlink" title="2.1. 任务执行"></a>2.1. 任务执行</h4><p>对于任务的执行可以直接提交给线程池异步执行即可，问题是<font color="#E51508">如何检测提交的任务在什么时候结束，尤其是提交了多个任务之后</font>。
+比较简单的想法可能是由定时线程在提交任务时记录一个提交任务数，然后由工作线程在任务执行结束时将计数减1，如果减完后计数为0，则表示任务全部结束。</p>
+<p>但在实现中，会发现在提交时这个任务实际提交数无法直接确定，暂且不考虑提交异常的问题，如果要检测任务冲突，那只能遍历进行提交，每次提交时需要检测任务id是否已经存在并正在运行，
+如果是则放弃本次任务，这样只能在每个任务实际提交成功后才能将提交任务数加1。</p>
+<p>于是问题又变复杂了，就是在工作线程执行任务，或将任务计数减1的同时，定时线程可能也在提交新的任务，并将任务计数加1。</p>
+<p>所以，首先<font color="#E51508">要保证在检测任务全部结束时，提交任务这个动作已经结束</font>，否则如果任务执行足够快，可能出现后面的任务还没来得及提交，工作线程已经将提交的任务全部执行完并将计数置为0，
+从而误以为所有任务都已经执行完了。对于这个问题，可以加一个提交任务是否结束的标识即可，这样定时线程在提交结束后将这个标识置为真，然后工作线程在任务执行结束并将计数减1后，
+除了判断计数是否为0，还需要判断提交是否已经结束。</p>
+<p>这样看上去好像没什么问题了，但是<font color="#E51508">在定时线程提交完任务，与定时线程将提交结束标识置为真，两个操作之间并没有同步</font>。可能出现这样的场景：定时线程已经全部提交结束了，
+并且工作线程也把任务全部执行结束了，但在工作线程判断任务是否全部结束时，定时线程还没将提交结束标识置为真，于是工作线程就直接结束了。这样如果希望在任务全部结束时触发执行一些处理，
+那么可能就会错失了执行的时机。所以，在定时线程提交结束之后，也需要检测一下任务是否已经全部结束，这样如果工作线程错过了执行，可以由定时线程来作下把关。</p>
+<p>在实现中，对于上面提及的两个变量：任务提交数和提交结束标识，以及相关的操作，都封装在<code>ScheduleBatch</code>中，具体如下</p>
+<figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/spring-fom/blob/master/src/main/java/org/springframework/fom/</span><span class="caption">ScheduleContext.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduleBatch</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 任务是否全部提交结束</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> hasSubmitCompleted = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 还没有结束的任务数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger taskNotCompleted = <span class="keyword">new</span> AtomicInteger(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 闭锁，等待任务全部提交并执行结束</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CountDownLatch completeLatch = <span class="keyword">new</span> CountDownLatch(<span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">submitCompleted</span><span class="params">()</span></span>&#123;</span><br><span class="line">        hasSubmitCompleted = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasSubmitCompleted</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> hasSubmitCompleted;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">taskCompleted</span><span class="params">()</span></span>&#123;</span><br><span class="line">        completeLatch.countDown();</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">waitTaskCompleted</span><span class="params">(<span class="keyword">long</span> taskOverTime)</span> <span class="keyword">throws</span> InterruptedException</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> completeLatch.await(taskOverTime, TimeUnit.MILLISECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">waitTaskCompleted</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>&#123;</span><br><span class="line">        completeLatch.await();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">increaseTaskNotCompleted</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> taskNotCompleted.incrementAndGet();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasTaskCompleted</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> taskNotCompleted.decrementAndGet() == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getTaskNotCompleted</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> taskNotCompleted.get();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>借助上面<code>ScheduleBatch</code>提供的操作，可以简要画出下图来描述一下定时线程提交任务，并等待任务结束的流程</p>
+<p><img src="/img/20190702/20190702.9.jpg" alt=""> </p>
+<h4 id="2-1-超时检测"><a href="#2-1-超时检测" class="headerlink" title="2.1. 超时检测"></a>2.1. 超时检测</h4><p>上面<code>ScheduleBatch</code>提供了一个限时等待方法<code>waitTaskCompleted(long taskOverTime)</code>，如果任务设置了超时，那么在等待任务结束时将会使用限时等待。</p>
+<p>超时检测的实现思路并不难想，主要是<font color="#E51508">借助于延时队列<code>DelayQueue</code>，并通过<code>Delayed</code>来包装一下任务对应的<code>future</code></font></p>
+<p>这样当定时线程提交结束后，首先等一个给定的超时时间<code>overTime</code>，如果等完还有任务没有结束，那么获取这些任务的耗时。如果已经超时，则尝试取消；如果还没有超时，那么计算一下任务剩余的可用时间，
+并封装成<code>Delayed</code>放入延时队列。</p>
+<p>接下来就是反复从延时队列中获取一个时间最近的任务来判断，同样的如果超时了就取消，否则重新计算剩余时间再放回队列。这样如果最后队列为空，就表示所有的任务都已经结束或者超时。
+要注意的是，这时并不代表任务都已真正结束，定时线程对于每个任务，检测到超时只会尝试一次取消，如果任务不响应，定时线程也没办法，所以还要通过<code>scheduleBatch.waitTaskCompleted()</code>
+来进行最后的兜底，相关的实现，在省去不相关的代码后可以简约如下：</p>
+<figure class="highlight java"><figcaption><span class="fileDir">:https://github.com/shanhm1991/spring-fom/blob/master/src/main/java/org/springframework/fom/</span><span class="caption">ScheduleContext.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">waitTaskCompleted</span><span class="params">(ScheduleBatch&lt;E&gt; scheduleBatch)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> overTime = scheduleConfig.getTaskOverTime();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(scheduleBatch.waitTaskCompleted(overTime))&#123; </span><br><span class="line">        cleanCompletedFutures();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        DelayQueue&lt;TaskDelayed&gt; delayQueue  = <span class="keyword">new</span> DelayQueue&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(TimedFuture&lt;Result&lt;E&gt;&gt; future : submitFutures)&#123;</span><br><span class="line">            waitTaskFuture(future, delayQueue, overTime);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(!delayQueue.isEmpty())&#123;</span><br><span class="line">            TaskDelayed taskDelayed = delayQueue.take();</span><br><span class="line">            waitTaskFuture(taskDelayed.getFuture(), delayQueue, overTime);</span><br><span class="line">        &#125;</span><br><span class="line">        scheduleBatch.waitTaskCompleted();</span><br><span class="line">        cleanCompletedFutures();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">waitTaskFuture</span><span class="params">(TimedFuture&lt;Result&lt;E&gt;&gt; future, DelayQueue&lt;TaskDelayed&gt; delayQueue, <span class="keyword">long</span> overTime)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!future.isDone()) &#123;</span><br><span class="line">        <span class="keyword">long</span> startTime = future.getStartTime();  </span><br><span class="line">        <span class="keyword">if</span>(startTime == <span class="number">0</span>)&#123; <span class="comment">// startTime = 0 表示任务还没启动</span></span><br><span class="line">            delayQueue.add(<span class="keyword">new</span> TaskDelayed(future, overTime)); </span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">long</span> cost = System.currentTimeMillis() - future.getStartTime(); </span><br><span class="line">            <span class="keyword">if</span>(cost &gt;= overTime)&#123;</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    handleTimeout(future.getTaskId(), cost);</span><br><span class="line">                &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">                    logger.error(<span class="string">""</span>, e); </span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                logger.warn(<span class="string">"cancle task[&#123;&#125;] due to time out, cost=&#123;&#125;ms"</span>, future.getTaskId(), cost);</span><br><span class="line">                future.cancel(<span class="keyword">true</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                delayQueue.add(<span class="keyword">new</span> TaskDelayed(future, overTime - cost)); </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="3-其它"><a href="#3-其它" class="headerlink" title="3. 其它"></a>3. 其它</h3><p>到这里，主要实现思路基本都已经说完了，下面的内容只是为了让spring-fom使用起来更方便而做一些事情 </p>
+<h4 id="3-1-关于统计"><a href="#3-1-关于统计" class="headerlink" title="3.1. 关于统计"></a>3.1. 关于统计</h4><p>一些任务结果统计，在fom.html上， 可以自定义统计行为</p>
 <h4 id="3-2-关于配置"><a href="#3-2-关于配置" class="headerlink" title="3.2. 关于配置"></a>3.2. 关于配置</h4><h4 id="3-3-关于日志"><a href="#3-3-关于日志" class="headerlink" title="3.3. 关于日志"></a>3.3. 关于日志</h4><p>提供对任务日志级别的实时修改，并适配log4j/log4j2/logback</p>
 <p><br><strong>参考：</strong></p>
 
@@ -375,7 +404,7 @@
         
   
   <div class="tags">
-    <a href="/tags/fom/">fom</a>
+    <a href="/tags/schedule/">schedule</a>
   </div>
 
 
@@ -439,7 +468,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-概要设计"><span class="toc-text">1. 概要设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-功能设计"><span class="toc-text">1.1. 功能设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-配置定义"><span class="toc-text">1.2. 配置定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-状态定义"><span class="toc-text">3.1. 状态定义</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-详细设计"><span class="toc-text">2. 详细设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-其它"><span class="toc-text">3. 其它</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-任务统计"><span class="toc-text">3.1. 任务统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-关于配置"><span class="toc-text">3.2. 关于配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-关于日志"><span class="toc-text">3.3. 关于日志</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-概要设计"><span class="toc-text">1. 概要设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-功能设计"><span class="toc-text">1.1. 功能设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-配置定义"><span class="toc-text">1.2. 配置定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-状态定义"><span class="toc-text">1.3. 状态定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-定时线程"><span class="toc-text">1.4. 定时线程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-详细设计"><span class="toc-text">2. 详细设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-任务执行"><span class="toc-text">2.1. 任务执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-超时检测"><span class="toc-text">2.1. 超时检测</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-其它"><span class="toc-text">3. 其它</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-关于统计"><span class="toc-text">3.1. 关于统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-关于配置"><span class="toc-text">3.2. 关于配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-关于日志"><span class="toc-text">3.3. 关于日志</span></a></li></ol></li></ol>
 </div>
 
 
