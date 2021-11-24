@@ -128,113 +128,113 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=15%><code>select 3</code></td>
-            <td>：切换数据库</td>
+            <td>切换数据库</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>dbsize</code></td>
-            <td>：查看当前库大小</td>
+            <td>查看当前库大小</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>flush db</code></td>
-            <td>：清空当前数据库</td>
+            <td>清空当前数据库</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>flushall</code></td>
-            <td>：清空所有数据库</td>
+            <td>清空所有数据库</td>
         </tr>
     </table></p>
 <p><strong>key 操作：</strong>
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=15%><code>keys *</code></td>
-            <td>：获取所有的key</td>
+            <td>获取所有的key</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>exists key</code></td>
-            <td>：是否存在key</td>
+            <td>是否存在key</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>move key 1</code></td>
-            <td>：从数据库1中删除key</td>
+            <td>从数据库1中删除key</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>type key</code></td>
-            <td>：查看key类型</td>
+            <td>查看key类型</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>expire key 10</code></td>
-            <td>：设置key过期时间</td>
+            <td>设置key过期时间</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>ttl key</code></td>
-            <td>：查看key剩余时间</td>
+            <td>查看key剩余时间</td>
         </tr>
     </table></p>
 <h4 id="2-1-数据类型"><a href="#2-1-数据类型" class="headerlink" title="2.1. 数据类型"></a>2.1. 数据类型</h4><p><strong>String：</strong>
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=25%><code>set key value</code></td>
-            <td>：设置key的值</td>
+            <td>设置key的值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>get key</code></td>
-            <td>：获取key的值</td>
+            <td>获取key的值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>mset k1 v1 k2 v2 k3 v3</code></td>
-            <td>：设置多值</td>
+            <td>设置多值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>mget k1 k2 k3</code></td>
-            <td>：获取多值</td>
+            <td>获取多值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>setnx key value</code></td>
-            <td>：如果当前key不存在，则设置成功</td>
+            <td>如果当前key不存在，则设置成功</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>msetnx k1 v1 k2 v2</code></td>
-            <td>：如果当前key不存在，则设置成功（一个失败则全部失败）</td>
+            <td>如果当前key不存在，则设置成功（一个失败则全部失败）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>getset key value</code></td>
-            <td>：返回当前值，并设置新值</td>
+            <td>返回当前值，并设置新值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>setex key 10 value</code></td>
-            <td>：设置key的值，并设置10秒过期时间</td>
+            <td>设置key的值，并设置10秒过期时间</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>strlen key</code></td>
-            <td>：查看key对应值的长度</td>
+            <td>查看key对应值的长度</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>append key value</code></td>
-            <td>：在key的值后面拼接字符串，如果key不存在则相当于set</td>
+            <td>在key的值后面拼接字符串，如果key不存在则相当于set</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>setrange key 2 value</code></td>
-            <td>：设置key的值，并从位置2开始的地方进行覆盖</td>
+            <td>设置key的值，并从位置2开始的地方进行覆盖</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>getrange key 0 5</code></td>
-            <td>：获取key的值，并截取位置0-5</td>
+            <td>获取key的值，并截取位置0-5</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>incr key</code></td>
-            <td>：key的值+1</td>
+            <td>key的值+1</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>decr key</code></td>
-            <td>：key的值-1</td>
+            <td>key的值-1</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>incrby key 10</code></td>
-            <td>：key的值+10</td>
+            <td>key的值+10</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>decrby key 10</code></td>
-            <td>：ey的值-10</td>
+            <td>ey的值-10</td>
         </tr>
     </table></p>
 <p>场景：使用mset/mget存取对象，相对直接存取json可以更灵活的操作，当然如果直接用下面的Map更好</p>
@@ -243,51 +243,51 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=30%><code>lpush key v1 v2</code></td>
-            <td>：从头部向列表中放入值</td>
+            <td>从头部向列表中放入值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>rpush key v3 v4</code></td>
-            <td>：从尾部向列表中放入值</td>
+            <td>从尾部向列表中放入值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>lpop key</code></td>
-            <td>：从头部弹出值</td>
+            <td>从头部弹出值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>rpop key</code></td>
-            <td>：从尾部弹出值</td>
+            <td>从尾部弹出值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>lindex key index</code></td>
-            <td>：根据索引获取值</td>
+            <td>根据索引获取值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>lrange key 0 1</code></td>
-            <td>：按照索引（首尾）获取多值</td>
+            <td>按照索引（首尾）获取多值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>llen key</code></td>
-            <td>：获取列表长度</td>
+            <td>获取列表长度</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>lrem key count value</code></td>
-            <td>：从列表中移除指定个数(count)的值(value)</td>
+            <td>从列表中移除指定个数(count)的值(value)</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>ltrim key index count</code></td>
-            <td>：根据下标(index)截取(count)个元素，改变原列表</td>
+            <td>根据下标(index)截取(count)个元素，改变原列表</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>lset key index value</code></td>
-            <td>：更新列表指定位置的值，前提key列表已经存在，且index存在</td>
+            <td>更新列表指定位置的值，前提key列表已经存在，且index存在</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>linsert key before|after v1 v2</code></td>
-            <td>：在v1的前后插入值v2</td>
+            <td>在v1的前后插入值v2</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>rpoplpush key1 key2</code></td>
-            <td>：组合命令：将列表key1中的尾部元素移到列表key2头部</td>
+            <td>组合命令：将列表key1中的尾部元素移到列表key2头部</td>
         </tr>
     </table></p>
 <p>redis中的list本质上是一个双向链表，其结构如下：</p>
@@ -297,51 +297,51 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=25%><code>sadd key value</code></td>
-            <td>：向set中添加元素，如果已存在则失败</td>
+            <td>向set中添加元素，如果已存在则失败</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>srem key value</code></td>
-            <td>：从set中移除值</td>
+            <td>从set中移除值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>smembers key</code></td>
-            <td>：查看set中所有元素</td>
+            <td>查看set中所有元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>sismember key value</code></td>
-            <td>：查看set(key)中是否存在元素value</td>
+            <td>查看set(key)中是否存在元素value</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>scard key</code></td>
-            <td>：查看set的元素个数</td>
+            <td>查看set的元素个数</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>srandmember key</code></td>
-            <td>：从set中随机抽取1个元素</td>
+            <td>从set中随机抽取1个元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>srandmember key n</code></td>
-            <td>：从set中随机抽取n个元素</td>
+            <td>从set中随机抽取n个元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>spop key</code></td>
-            <td>：随机删除一个元素</td>
+            <td>随机删除一个元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>smove k1 k2 value</code></td>
-            <td>：将k1中的值移到k2中</td>
+            <td>将k1中的值移到k2中</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>sdiff k1 k2</code></td>
-            <td>：取k1与k2的差集（在k1中，不在k2中）</td>
+            <td>取k1与k2的差集（在k1中，不在k2中）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>sinter k1 k2</code></td>
-            <td>：取k1和k2的交集</td>
+            <td>取k1和k2的交集</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>sunion k1 k2</code></td>
-            <td>：取k1和k2的并集</td>
+            <td>取k1和k2的并集</td>
         </tr>
     </table></p>
 <p><strong>Hash</strong></p>
@@ -349,43 +349,43 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=40%><code>hset key field value</code></td>
-            <td>：设置map的字段值</td>
+            <td>设置map的字段值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hget key field</code></td>
-            <td>：获取map指定字段的值</td>
+            <td>获取map指定字段的值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hgetall key</code></td>
-            <td>：获取map所有字段-值</td>
+            <td>获取map所有字段-值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hdel key field</code></td>
-            <td>：删除map指定的字段</td>
+            <td>删除map指定的字段</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hmset key field1 value1 field2 value2</code></td>
-            <td>：设置map多个字段值</td>
+            <td>设置map多个字段值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hmget key field1 field2</code></td>
-            <td>：获取map多个字段的值</td>
+            <td>获取map多个字段的值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hlen key</code></td>
-            <td>：获取map的字段数</td>
+            <td>获取map的字段数</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hexists key field</code></td>
-            <td>：查看map是否存在字段</td>
+            <td>查看map是否存在字段</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hkeys key</code></td>
-            <td>：获取map所有字段</td>
+            <td>获取map所有字段</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>hvals key</code></td>
-            <td>：获取map所有字段值</td>
+            <td>获取map所有字段值</td>
         </tr>
     </table></p>
 <p><strong>Zset</strong></p>
@@ -393,39 +393,39 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=40%><code>zadd key score value</code></td>
-            <td>：设置值，指定score</td>
+            <td>设置值，指定score</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>zadd key score1 value1 score2 value2</code></td>
-            <td>：设置多个值</td>
+            <td>设置多个值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>zrange key 0 1 withscores</code></td>
-            <td>：按索引排序获取</td>
+            <td>按索引排序获取</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>zrevrange key 0 -1 withscores</code></td>
-            <td>：按索引倒叙获取</td>
+            <td>按索引倒叙获取</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>zrangebyscore key -inf +inf withscores</code></td>
-            <td>：按score排序获取（指定区间）</td>
+            <td>按score排序获取（指定区间）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>zrevrangebyscore key 500 100 withscores</code></td>
-            <td>：按score倒叙获取（指定区间）</td>
+            <td>按score倒叙获取（指定区间）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>zrem key value</code></td>
-            <td>：删除指定元素</td>
+            <td>删除指定元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>zcard key</code></td>
-            <td>：获取元素个数</td>
+            <td>获取元素个数</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>acount key score1 score2</code></td>
-            <td>：获取指定区间元素个数</td>
+            <td>获取指定区间元素个数</td>
         </tr>
     </table></p>
 <p><strong>geospatial</strong></p>
@@ -433,23 +433,23 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=50%><code>geoadd key 116.40 39.90 beijing</code></td>
-            <td>：添加城市北京</td>
+            <td>添加城市北京</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>geopos key beijing</code></td>
-            <td>：获取指定城市位置</td>
+            <td>获取指定城市位置</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>geodist key beijing shanghai 单位</code></td>
-            <td>：获取两个位置距离，单位（m/km/mi英里/ft英尺）</td>
+            <td>获取两个位置距离，单位（m/km/mi英里/ft英尺）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>georadius geodist key 经度 纬度 半径 单位 withcoord count</code></td>
-            <td>：获取指定位置（坐标）指定半径内的位置</td>
+            <td>获取指定位置（坐标）指定半径内的位置</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>georadius geodist key beijing 半径 单位 withcoord count</code></td>
-            <td>：获取指定位置指定半径内的位置</td>
+            <td>获取指定位置指定半径内的位置</td>
         </tr>
     </table></p>
 <p><strong>hyperloglog</strong></p>
@@ -457,15 +457,15 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=25%><code>pfadd key value ...</code></td>
-            <td>：添加元素，可多值</td>
+            <td>添加元素，可多值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>pfcount key</code></td>
-            <td>：获取基数</td>
+            <td>获取基数</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>pfmerge key3 key1 key2</code></td>
-            <td>：合并key1集合，key2集合，结果为key3集合</td>
+            <td>合并key1集合，key2集合，结果为key3集合</td>
         </tr>
     </table></p>
 <p><strong>bitmaps</strong></p>
@@ -473,19 +473,19 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td width=25%><code>setbit key 0 1</code></td>
-            <td>：设置第0位为1</td>
+            <td>设置第0位为1</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>setbit key 1 0</code></td>
-            <td>：设置第1位为0</td>
+            <td>设置第1位为0</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>getbit key 1</code></td>
-            <td>：获取第1位值</td>
+            <td>获取第1位值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
             <td><code>bitcount key</code></td>
-            <td>：统计值为1的位数</td>
+            <td>统计值为1的位数</td>
         </tr>
     </table></p>
 <h4 id="2-2-事务"><a href="#2-2-事务" class="headerlink" title="2.2. 事务"></a>2.2. 事务</h4><p>redis事务即一组命令集合，其将所有命令序列化，然后按照顺序执行，所以只有在发起执行命令时事务才开始进行，它可以保证一次性、顺序性、排他性，但是没有事务隔离级别的概念。

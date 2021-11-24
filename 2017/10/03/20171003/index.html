@@ -81,7 +81,7 @@
     
     
        <div class="title" style="padding: 5px 0px 20px 10px; color: #766;">
-            ———— JDK 1.7
+            ———— JDK 1.8
        </div> 
     
   
@@ -92,7 +92,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 2.2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
+   <font style="color: #999;"> words: 2.5k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 9min</font>
    
    
   
@@ -144,9 +144,108 @@
 <p>可以说是CMS的出现巩固了ParNew的地位，但随着更先进的G1收集器出现，其作为CMS的继承者或替代者登场，并且是一个面向全堆的收集器，因此不再需要其他新生代收集器配合。
 所以，从JDK 9开始，官方希望G1能完全替代服务端模式下默认的ParNew + CMS组合，并直接取消了对ParNew + Serial Old，以及Serial + CMS这两组收集器组合的支持，
 另外，还取消了参数<code>-XX:+UseParNewGC</code>，这意味着ParNew只能与CMS一起使用，或者说将ParNew合入了CMS。</p>
-<h4 id="1-3-Parallel-Scavenge-收集器"><a href="#1-3-Parallel-Scavenge-收集器" class="headerlink" title="1.3. Parallel Scavenge 收集器"></a>1.3. Parallel Scavenge 收集器</h4><h4 id="1-4-Serial-Old-收集器"><a href="#1-4-Serial-Old-收集器" class="headerlink" title="1.4. Serial Old 收集器"></a>1.4. Serial Old 收集器</h4><h4 id="1-5-Parallel-Old-收集器"><a href="#1-5-Parallel-Old-收集器" class="headerlink" title="1.5. Parallel Old 收集器"></a>1.5. Parallel Old 收集器</h4><h4 id="1-6-CMS-收集器"><a href="#1-6-CMS-收集器" class="headerlink" title="1.6. CMS 收集器"></a>1.6. CMS 收集器</h4><h4 id="1-7-G1-收集器"><a href="#1-7-G1-收集器" class="headerlink" title="1.7. G1 收集器"></a>1.7. G1 收集器</h4><h4 id="1-8-Shenandoah-收集器"><a href="#1-8-Shenandoah-收集器" class="headerlink" title="1.8. Shenandoah 收集器"></a>1.8. Shenandoah 收集器</h4><h4 id="1-9-ZGC-收集器"><a href="#1-9-ZGC-收集器" class="headerlink" title="1.9. ZGC 收集器"></a>1.9. ZGC 收集器</h4><h4 id="1-10-Epsilon-收集器"><a href="#1-10-Epsilon-收集器" class="headerlink" title="1.10. Epsilon 收集器"></a>1.10. Epsilon 收集器</h4><h3 id="2-垃圾收集参数"><a href="#2-垃圾收集参数" class="headerlink" title="2. 垃圾收集参数"></a>2. 垃圾收集参数</h3><h3 id="3-垃圾收集日志"><a href="#3-垃圾收集日志" class="headerlink" title="3. 垃圾收集日志"></a>3. 垃圾收集日志</h3><ol>
-<li>GC日志分析</li>
-</ol>
+<h4 id="1-3-Parallel-Scavenge-收集器"><a href="#1-3-Parallel-Scavenge-收集器" class="headerlink" title="1.3. Parallel Scavenge 收集器"></a>1.3. Parallel Scavenge 收集器</h4><h4 id="1-4-Serial-Old-收集器"><a href="#1-4-Serial-Old-收集器" class="headerlink" title="1.4. Serial Old 收集器"></a>1.4. Serial Old 收集器</h4><h4 id="1-5-Parallel-Old-收集器"><a href="#1-5-Parallel-Old-收集器" class="headerlink" title="1.5. Parallel Old 收集器"></a>1.5. Parallel Old 收集器</h4><h4 id="1-6-CMS-收集器"><a href="#1-6-CMS-收集器" class="headerlink" title="1.6. CMS 收集器"></a>1.6. CMS 收集器</h4><h4 id="1-7-G1-收集器"><a href="#1-7-G1-收集器" class="headerlink" title="1.7. G1 收集器"></a>1.7. G1 收集器</h4><h4 id="1-8-Shenandoah-收集器"><a href="#1-8-Shenandoah-收集器" class="headerlink" title="1.8. Shenandoah 收集器"></a>1.8. Shenandoah 收集器</h4><h4 id="1-9-ZGC-收集器"><a href="#1-9-ZGC-收集器" class="headerlink" title="1.9. ZGC 收集器"></a>1.9. ZGC 收集器</h4><h4 id="1-10-Epsilon-收集器"><a href="#1-10-Epsilon-收集器" class="headerlink" title="1.10. Epsilon 收集器"></a>1.10. Epsilon 收集器</h4><h3 id="2-GC-参数"><a href="#2-GC-参数" class="headerlink" title="2. GC 参数"></a>2. GC 参数</h3><table style="width:100%;">
+    <tr style="border-bottom:1px solid gray;">
+        <td  width=26%>UseSerialGC</td>
+        <td>Client模式下的默认值，使用Serial + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>UseParNewGC</td>
+        <td>使用ParNew + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>UseConcMarkSweepGC</td>
+        <td>使用ParNew + CMS + Serial Old的收集器组合进行内存回收，Serial Old作为CMS出现Concurrent Mode Failure失败后的后备收集器使用</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>UseParallelGC</td>
+        <td>Server模式下的默认值，使用Parallel Scavenge + Serial Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>UseParallelOldGC</td>
+        <td>使用Parallel Scavenge + Parallel Old的收集器组合进行内存回收</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>SurvivorRatio</td>
+        <td>设置新生代中Eden与Survivor的比例，默认8</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>PretenureSizeThreshold</td>
+        <td>设置直接进入老年代的对象大小</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>MaxPretenureThreshold</td>
+        <td>设置晋升到老年代的对象年龄</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>UseAdaptiveSizePolicy</td>
+        <td>是否动态调整Java堆中各个区域的大小以及进入老年代的年龄</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>HandlePromotionFailure</td>
+        <td>是否允许分配担保失败，即老年代的剩余空间不足以应付新生代的整个Eden和Survivor区的所有对象都存活的极端情况</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>ParallelGCThreads</td>
+        <td>设置并行GC时进行内存回收的线程数</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>GCTimeRatio</td>
+        <td>仅在使用Parallel Scavenge收集器时生效，GC时间占总时间的比率，默认99，即允许1%的GC时间</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>MAXGCPauseMillis</td>
+        <td>仅在使用Parallel Scavenge收集器时生效，设置GC最大停顿时间</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>CMSInitiatingOccupancyFraction</td>
+        <td>仅在使用CMS收集器时生效，设置老年代空间被使用多少后触发垃圾收集，默认68%</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>UseCMSCompactAtFullCollection</td>
+        <td>仅在使用CMS收集器时生效，完成垃圾收集后是否要进行一次内存碎片整理</td>
+    </tr >
+    <tr style="border-bottom:1px solid gray;">
+        <td>CMSFullGCsBeforeCompaction</td>
+        <td>仅在使用CMS收集器时生效，设置收集器在进行若干次垃圾收集后再启动一次内存碎片整理</td>
+    </tr >
+</table>
+
+<h3 id="3-GC-日志"><a href="#3-GC-日志" class="headerlink" title="3. GC 日志"></a>3. GC 日志</h3><p>JDK 1.8日志参数：
+    <table width=100%>
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td  width=35%>-Xloggc</td>
+            <td>指定GC日志文件，比如：-Xloggc:log/gc.log</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:PrintGC</td>
+            <td>打印GC日志</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:+PrintGCDetails</td>
+            <td>打印GC详细日志，并在进程退出前打印堆的详情信息</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:+PrintHeapAtGC</td>
+            <td>每次GC前后打印堆信息</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:+PrintReferenceGC</td>
+            <td>跟踪软引用、弱引用、虚引用和Finallize队列</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:+PrintGCTimeStamps</td>
+            <td>打印GC发生的时间</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:+PrintGCApplicationConcurrentTime</td>
+            <td>打印进程的执行时间</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:+PrintGCApplicationStoppedTime</td>
+            <td>打印进程由于GC而产生的停顿时间</td>
+        </tr >
+    </table></p>
 <p>每一种收集器的日志形式都是由它们自身的实现所决定，虚拟机设计者为了方便用户阅读，将各个收集器的日志都维持一定的共性</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0.097: [GC [PSYoungGen: 5396K-&gt;568K(75776K)] 5396K-&gt;568K(248320K), 0.0009988 secs] </span><br><span class="line">       [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.00 secs] </span><br><span class="line">0.098: [Full GC [PSYoungGen: 568K-&gt;0K(75776K)] [ParOldGen: 0K-&gt;468K(172544K)] 568K-&gt;468K(248320K) </span><br><span class="line">       [PSPermGen: 2563K-&gt;2562K(21504K)], 0.0074459 secs] [Times: user&#x3D;0.00 sys&#x3D;0.00, real&#x3D;0.01 secs]</span><br></pre></td></tr></table></figure>
 
@@ -167,78 +266,44 @@
 <li><p>最后的：0.0009988 secs、0.0074459 secs，表示该内存区域GC所占用的时间，单位秒。有的收集器会给出更具体的时间数据数据，如这里的[Times: user=0.00 sys=0.00, real=0.00 secs]，
 里面的时间与Linux的time命令所输出的时间含义一致，分别代表用户消耗的CPU时间、内核消耗的CPU时间、操作从开始到结束所经过的墙钟时间。<strong>墙钟时间</strong>与CPU时间的区别是它包括各种非运算的等待耗时，
 如等待磁盘I/O、等待线程阻塞，而CPU时间不包括这些。但当系统有多CPU或者多核的话，多线程操作会叠加这些CPU时间，所以当看到user或sys时间超过real也是正常的。</p>
-<ol start="2">
-<li>GC参数</li>
-</ol>
 </li>
 </ul>
-<table style="width:100%;">
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">UseSerialGC</td>
-        <td>Client模式下的默认值，使用Serial + Serial Old的收集器组合进行内存回收</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">UseParNewGC</td>
-        <td>使用ParNew + Serial Old的收集器组合进行内存回收</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">UseConcMarkSweepGC</td>
-        <td>使用ParNew + CMS + Serial Old的收集器组合进行内存回收，Serial Old作为CMS出现Concurrent Mode Failure失败后的后备收集器使用</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">UseParallelGC</td>
-        <td>Server模式下的默认值，使用Parallel Scavenge + Serial Old的收集器组合进行内存回收</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">UseParallelOldGC</td>
-        <td>使用Parallel Scavenge + Parallel Old的收集器组合进行内存回收</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">SurvivorRatio</td>
-        <td>设置新生代中Eden与Survivor的比例，默认8</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">PretenureSizeThreshold</td>
-        <td>设置直接进入老年代的对象大小</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">MaxPretenureThreshold</td>
-        <td>设置晋升到老年代的对象年龄</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">UseAdaptiveSizePolicy</td>
-        <td>是否动态调整Java堆中各个区域的大小以及进入老年代的年龄</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">HandlePromotionFailure</td>
-        <td>是否允许分配担保失败，即老年代的剩余空间不足以应付新生代的整个Eden和Survivor区的所有对象都存活的极端情况</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">ParallelGCThreads</td>
-        <td>设置并行GC时进行内存回收的线程数</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">GCTimeRatio</td>
-        <td>仅在使用Parallel Scavenge收集器时生效，GC时间占总时间的比率，默认99，即允许1%的GC时间</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">MAXGCPauseMillis</td>
-        <td>仅在使用Parallel Scavenge收集器时生效，设置GC最大停顿时间</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">CMSInitiatingOccupancyFraction</td>
-        <td>仅在使用CMS收集器时生效，设置老年代空间被使用多少后触发垃圾收集，默认68%</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">UseCMSCompactAtFullCollection</td>
-        <td>仅在使用CMS收集器时生效，完成垃圾收集后是否要进行一次内存碎片整理</td>
-    </tr >
-    <tr style="border-bottom:1px solid gray;">
-        <td style="border-right:1px solid gray;">CMSFullGCsBeforeCompaction</td>
-        <td>仅在使用CMS收集器时生效，设置收集器在进行若干次垃圾收集后再启动一次内存碎片整理</td>
-    </tr >
-</table>
-
+<h3 id="4-附录：JVM参数"><a href="#4-附录：JVM参数" class="headerlink" title="4. 附录：JVM参数"></a>4. 附录：JVM参数</h3><p>除了GC参数之外的一些常用参数：
+    <table width=100%>
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td  width=18%>-Xms</td>
+            <td>初始堆大小，比如：-Xms1024m</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-Xmx</td>
+            <td>最大堆大小，比如：-Xmx1024m</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-Xmn</td>
+            <td>年轻代大小，比如：-Xmn512m</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td style="vertical-align:bottom">-XX:NewRatio</td>
+            <td>年轻代与老年代的比值，比如：-XX:NewRatio=4，表示<code>年轻代/老年代=1/4</code>，<br>年轻代占整个堆的<code>1/5</code>。如果Xms = Xmx，并设置了Xmn的情况下，则此参数无效。</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:SurvivorRatio</td>
+            <td>Eden区与Survivor区的比值，默认8，表示<code>Survivor/Eden=1/8</code>，整个年轻代的划分为<code>8:1:1</code></td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td style="vertical-align:bottom">-Xss</td>
+            <td>线程栈大小，JDK 5.0之后默认为1M，之前为256K，减小线程栈可以生成更多的线程。<br>但也不能无限生成，经验值在3000~5000左右，对于一般的小应用，如果栈不是很深，256k应该是够用的。</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:MetaspaceSize</td>
+            <td>初始元数据空间大小</td>
+        </tr >
+        <tr style="border-bottom:1px solid #d2c1c1;">
+            <td>-XX:MaxMetaspaceSize</td>
+            <td>最大元数据空间大小</td>
+        </tr >
+    </table></p>
+<p>默认(MinHeapFreeRatio参数可以调整)空余堆内存小于40%时，JVM就会增大堆直到-Xmx的最大限制.<br>默认(MaxHeapFreeRatio参数可以调整)空余堆内存大于70%时，JVM会减少堆直到 -Xms的最小限制</p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
@@ -341,7 +406,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-垃圾收集器"><span class="toc-text">1. 垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Serial-收集器"><span class="toc-text">1.1. Serial 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-ParNew-收集器"><span class="toc-text">1.2. ParNew 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Parallel-Scavenge-收集器"><span class="toc-text">1.3. Parallel Scavenge 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-Serial-Old-收集器"><span class="toc-text">1.4. Serial Old 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-Parallel-Old-收集器"><span class="toc-text">1.5. Parallel Old 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-CMS-收集器"><span class="toc-text">1.6. CMS 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-7-G1-收集器"><span class="toc-text">1.7. G1 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-8-Shenandoah-收集器"><span class="toc-text">1.8. Shenandoah 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-9-ZGC-收集器"><span class="toc-text">1.9. ZGC 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-10-Epsilon-收集器"><span class="toc-text">1.10. Epsilon 收集器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-垃圾收集参数"><span class="toc-text">2. 垃圾收集参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-垃圾收集日志"><span class="toc-text">3. 垃圾收集日志</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-垃圾收集器"><span class="toc-text">1. 垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Serial-收集器"><span class="toc-text">1.1. Serial 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-ParNew-收集器"><span class="toc-text">1.2. ParNew 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Parallel-Scavenge-收集器"><span class="toc-text">1.3. Parallel Scavenge 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-Serial-Old-收集器"><span class="toc-text">1.4. Serial Old 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-Parallel-Old-收集器"><span class="toc-text">1.5. Parallel Old 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-CMS-收集器"><span class="toc-text">1.6. CMS 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-7-G1-收集器"><span class="toc-text">1.7. G1 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-8-Shenandoah-收集器"><span class="toc-text">1.8. Shenandoah 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-9-ZGC-收集器"><span class="toc-text">1.9. ZGC 收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-10-Epsilon-收集器"><span class="toc-text">1.10. Epsilon 收集器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GC-参数"><span class="toc-text">2. GC 参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-GC-日志"><span class="toc-text">3. GC 日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-附录：JVM参数"><span class="toc-text">4. 附录：JVM参数</span></a></li></ol>
 </div>
 
 
