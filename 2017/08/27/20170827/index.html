@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>《深入理解Java虚拟机》 运行时栈帧 &amp; 方法调用 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="Java虚拟机以方法作为最基本的执行单元，而栈帧则是用于支持虚拟机进行方法调用和方法执行背后的数据结构，它也是虚拟机运行时数据区中的虚拟机栈的栈元素。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="《深入理解Java虚拟机》 运行时栈帧 &amp; 方法调用"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
+  <h2><font style="color: #999;">articles:  95 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20170827" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-08-26T16:00:00.000Z"><a href="/2017/08/27/20170827/">2017-08-27</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        《深入理解Java虚拟机》 运行时栈帧 &amp; 方法调用
+    </h1>
+    
+    
+       <div class="title" style="padding: 5px 0px 20px 10px; color: #766;">
+            ———— JDK 1.9
+       </div> 
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <font style="color: #999;"> words: 592  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/Java-笔记/">Java 笔记</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/JVM/">JVM</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Java虚拟机以方法作为最基本的执行单元，而栈帧则是用于支持虚拟机进行方法调用和方法执行背后的数据结构</font>，它也是虚拟机运行时数据区中的虚拟机栈的栈元素。</p>
+<a id="more"></a>
+
+<h3 id="1-运行时栈帧"><a href="#1-运行时栈帧" class="headerlink" title="1. 运行时栈帧"></a>1. 运行时栈帧</h3><p>栈帧存储了方法的局部变量表、操作数栈、动态连接和返回地址等信息，在Java代码编译的时候，需要多深的操作数栈就已经确定下来，并写入到方法表的Code属性之中。
+每一个方法从调用开始到执行结束的过程，都对应着一个栈帧在虚拟机栈里面从入栈到出栈的过程。</p>
+<p><img src="/img/20170827/20170827.1.jpg" alt=""></p>
+<h4 id="1-1-局部变量表"><a href="#1-1-局部变量表" class="headerlink" title="1.1. 局部变量表"></a>1.1. 局部变量表</h4><p>局部变量表用于存放方法参数和方法内部定义的局部变量，在编译Class文件时，就已经在方法Code属性max_locals中确定了该方法的局部变量表的最大容量。</p>
+<p>局部变量表以槽Slot为单位进行存储，虚拟机规范中并没有明确指出一个Slot应该占用的内存大小，只要能存放一个boolean、byte、char、short、int、float、reference或returnAddress类型的数据。</p>
+<p>其中reference表示对一个对象实例的引用，一般来说，虚拟机实现至少应该能通过引用做到两件事，一是根据引用能直接或间接地查找到对象在Java堆中的数据存放的起始地址或索引，
+二是根据引用能直接或间接地查找到对象所属类型数据在方法区中地址，否则将无法实现《Java语言规范》中定义的语法约定。
+<font color="gray">并不是所有语言的对象引用都能满足这两点，比如C++语言，默认情况下只能满足第一点，这也是为何C++中无法提供像Java一样的反射机制。</font></p>
+<p>为了尽可能节省栈帧所占用的内存，局部变量表中的Slot被设计成可以重用的。不过这样的设计除了节省栈帧空间外，在某些情况下还会影响垃圾收集的行为。</p>
+<h4 id="1-2-操作栈"><a href="#1-2-操作栈" class="headerlink" title="1.2. 操作栈"></a>1.2. 操作栈</h4><h4 id="1-3-动态连接"><a href="#1-3-动态连接" class="headerlink" title="1.3. 动态连接"></a>1.3. 动态连接</h4><h3 id="2-方法调用"><a href="#2-方法调用" class="headerlink" title="2. 方法调用"></a>2. 方法调用</h3><h4 id="2-1-解析"><a href="#2-1-解析" class="headerlink" title="2.1. 解析"></a>2.1. 解析</h4><h4 id="2-2-分派"><a href="#2-2-分派" class="headerlink" title="2.2. 分派"></a>2.2. 分派</h4><p><br><strong>参考：</strong></p>
+<ol>
+<li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2017/08/31/20170831/">
+		    Java 泛型
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2017/08/25/20170825/">
+		    《深入理解Java虚拟机》 字节码指令
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/Java-笔记/">Java 笔记</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/JVM/">JVM</a>
+  </div>
+
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style ">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+
+    
+	
+    
+	
+    
+
+    <a class="addthis_counter addthis_pill_style"></a>
+	
+  </div>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+ 		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-运行时栈帧"><span class="toc-text">1. 运行时栈帧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-局部变量表"><span class="toc-text">1.1. 局部变量表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-操作栈"><span class="toc-text">1.2. 操作栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-动态连接"><span class="toc-text">1.3. 动态连接</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-方法调用"><span class="toc-text">2. 方法调用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-解析"><span class="toc-text">2.1. 解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-分派"><span class="toc-text">2.2. 分派</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2021 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
