@@ -47,7 +47,7 @@ ssh无法登录">
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
-  <h2><font style="color: #999;">articles:  95 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  96 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -90,7 +90,7 @@ ssh无法登录">
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 562  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
+   <font style="color: #999;"> words: 568  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
    
    
   
@@ -129,7 +129,7 @@ ssh无法登录">
 <h4 id="问题2：域名无法解析"><a href="#问题2：域名无法解析" class="headerlink" title="问题2：域名无法解析"></a>问题2：域名无法解析</h4><p><img src="/img/20180503/20180503.5.jpg" alt=""> </p>
 <p>提示域名无法解析，不过在windows上是可以ping的通的，所以怀疑的是配的dns地址问题。<br>这边耗了很长时间，后来参考<a href="https://blog.csdn.net/u013304231/article/details/53319375" target="_blank" rel="noopener">https://blog.csdn.net/u013304231/article/details/53319375</a><br>想到了可能是路由的问题，关于路由/网关/dns的办法介绍可以看这篇：<a href="https://blog.csdn.net/sgl520lxl/article/details/51974215" target="_blank" rel="noopener">https://blog.csdn.net/sgl520lxl/article/details/51974215</a></p>
 <p><img src="/img/20180503/20180503.6.jpg" alt=""> </p>
-<p>增加路由后，再执行wget <a href="http://www.baidu.com，就可以看到200" target="_blank" rel="noopener">www.baidu.com，就可以看到200</a> ok的响应了。</p>
+<p><code>route add default gw 192.168.141.1 ens33</code>增加路由后，再执行wget，就可以看到200 ok的响应了。</p>
 <h4 id="问题3：ssh无法登录"><a href="#问题3：ssh无法登录" class="headerlink" title="问题3：ssh无法登录"></a>问题3：ssh无法登录</h4><p>本以为都结束了，然后发现ssh无法登录，连接失败。参考<a href="https://blog.csdn.net/niuwei22007/article/details/50486872" target="_blank" rel="noopener">https://blog.csdn.net/niuwei22007/article/details/50486872</a><br>应该是由于网关不一致的问题（以前在电脑与电脑之间用网线传数据时经常会修改网关，只要两边网关一致就可以远程桌面了）<br>于是修改本机的网络配置：</p>
 <p><img src="/img/20180503/20180503.7.jpg" alt=""> </p>
 <p>其实一开始我是改的Ethernet，然后发现在window上能ping通了，ssh也可以登录，但是虚拟机不能上网了，改回自动获取ip后，虚拟机可以上网但是又无法ssh登录了，
