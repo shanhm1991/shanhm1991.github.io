@@ -94,7 +94,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 264  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 1.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 4min</font>
    
    
   
@@ -107,7 +107,7 @@
    
   
   <div class="tags">
-    <a href="/tags/JVM/">JVM</a>
+    <a href="/tags/JVM/">JVM</a>   <a href="/tags/泛型/">泛型</a>
   </div>
 
 
@@ -127,9 +127,22 @@
 支撑了程序执行效率的不断提升，而javac在编译期的优化过程，则支撑了开发者的编码效率和语言使用者的体验。</p>
 <a id="more"></a>
 
+<h3 id="1-javac-编译器"><a href="#1-javac-编译器" class="headerlink" title="1. javac 编译器"></a>1. javac 编译器</h3><p>javac编译器不像HotSpot虚拟机那样使用C++语言（以及少量C语言）实现，它本身就是一个由Java语言编写的程序。但是这里并不打算去研究它的源码实现细节了，主要来看一下javac对泛型的处理</p>
+<p><font color="gray">之前对Java 泛型的使用已经做过相关笔记：<a href="https://shanhm1991.github.io/2017/08/31/20170831/">https://shanhm1991.github.io/2017/08/31/20170831/</a> ，只是这里的角度不一样，
+感觉这里更像是站在一个Java语言设计者的角度去体会Java泛型在实现时的取舍。</font></p>
+<h4 id="1-1-泛型"><a href="#1-1-泛型" class="headerlink" title="1.1. 泛型"></a>1.1. 泛型</h4><p>泛型的本质是参数化类型（Parameterized Type）或者参数化多态（Parametric Polymorphism）的应用，即可以<font color="#E51508">将操作的数据类型指定为方法签名中的一种特殊参数</font>，
+这种参数类型能够用在类、接口和方法的创建中，分别构成泛型类、泛型接口和泛型方法，这样进一步增强了编程语言的类型系统和抽象能力。</p>
+<p>Java泛型的实现方式叫作“类型擦除式泛型”，而C#选择的方式是“具现化式泛型”，这些术语都源于C++模板语法中的概念。<br>在C#中，泛型无论在程序源码中，还是编译后的中间语言，或者运行期的CLR中都是切实存在的，比如<code>List&lt;int&gt;</code>与<code>List&lt;string&gt;</code>就是两个不同的类型，
+它们由系统在运行期生成，有着自己独立的虚方法表和类型数据。<br>而在Java语言中，泛型只存在于程序源码中，在编译后的字节码文件中，全部泛型都被替换位原来的裸类型，因此对于运行期的Java语言来说，<code>List&lt;int&gt;</code>与<code>List&lt;string&gt;</code>其实是同一个类型。</p>
+<p>所以Java泛型更像是一种语法糖，其无论是在使用效果上还是运行效率上，几乎全面落后于C#泛型的方式。唯一的优势则在于实现这种泛型的影响范围上：
+擦除式泛型的实现几乎只需要在javac编译器上作出改进即可，不需要改的字节码或者Java虚拟机，这样也保证了即使以前没有使用泛型的库也可以直接运行在Java 5.0之上。</p>
+<p>由于使用的类型擦除方式，导致运行期无法获取到泛型类型信息，将使得Java泛型在实际使用中会受到很多限制，基本只要与参数类型相关的操作都无法进行，比如</p>
+<figure class="highlight java"><figcaption><span class="caption">ParameterizedType.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterizedType</span>&lt;<span class="title">E</span>&gt; </span>&#123;    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(Object item)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(item <span class="keyword">instanceof</span> E) &#123;    <span class="comment">// 非法，无法对泛型类型进行实例判断</span></span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        E newItem = <span class="keyword">new</span> E();       <span class="comment">// 非法，无法使用泛型类型创建对象</span></span><br><span class="line">        E[] itemArray = <span class="keyword">new</span> E[<span class="number">10</span>]; <span class="comment">// 非法，无法使用泛型类型创建数组</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>这样如果要写一个从<code>List</code>到数组转换的泛型版本方法，由于不能从<code>List</code>取得参数化类型<code>T</code>，就不得不再额外传入一个数组的元素类型作为参数，实属无奈</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; T[] list2Array(List&lt;T&gt; list, Class&lt;T&gt; componentType)&#123;</span><br><span class="line">    T[] array = (T[])Array.newInstance(componentType, list.size());</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">    <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><br><strong>参考：</strong> </p>
+<h3 id="2-即时编译器"><a href="#2-即时编译器" class="headerlink" title="2. 即时编译器"></a>2. 即时编译器</h3><h4 id="2-1-方法内联"><a href="#2-1-方法内联" class="headerlink" title="2.1. 方法内联"></a>2.1. 方法内联</h4><h4 id="2-2-逃逸分析"><a href="#2-2-逃逸分析" class="headerlink" title="2.2. 逃逸分析"></a>2.2. 逃逸分析</h4><h4 id="2-3-公共子表达式消除"><a href="#2-3-公共子表达式消除" class="headerlink" title="2.3. 公共子表达式消除"></a>2.3. 公共子表达式消除</h4><h4 id="2-4-检查消除"><a href="#2-4-检查消除" class="headerlink" title="2.4. 检查消除"></a>2.4. 检查消除</h4><p><br><strong>参考：</strong> </p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
 </ol>
@@ -167,7 +180,7 @@
         
   
   <div class="tags">
-    <a href="/tags/JVM/">JVM</a>
+    <a href="/tags/JVM/">JVM</a>   <a href="/tags/泛型/">泛型</a>
   </div>
 
 
@@ -231,7 +244,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-javac-编译器"><span class="toc-text">1. javac 编译器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-泛型"><span class="toc-text">1.1. 泛型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-即时编译器"><span class="toc-text">2. 即时编译器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-方法内联"><span class="toc-text">2.1. 方法内联</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-逃逸分析"><span class="toc-text">2.2. 逃逸分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-公共子表达式消除"><span class="toc-text">2.3. 公共子表达式消除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-检查消除"><span class="toc-text">2.4. 检查消除</span></a></li></ol></li></ol>
 </div>
 
 
