@@ -3,15 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tomcat 容器 Container （TODO） | Echo</title>
+  <title>《深入理解Java虚拟机》 编译 &amp; 优化 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="">
+  <meta name="description" content="Java的编译过程可以分为两个阶段，首先是将.java文件编译为.class文件的过程，称为前端编译，比如javac；然后在运行期，可能即时编译器（JIT）又会将字节码转变为本地机器码，
+比如HotSopt的C1、C2编译器，或者Graal编译器。
+对于优化处理，Java虚拟机团队选择将性能优化的措施全部集中在运行期的即时编译器中，以便让那些不是由 javac 产生的 Class 文件也能享受到性能优化的好处，
+至于 javac 中则做了一些针对Java语言编码过程的优化，用来降低开发者的编码复杂度、提高编码效率。可以这样认为，即时编译器在运行期的优化过程，
+支撑了程序执行效率的不断提升，而javac在编译期的优化过程，则支撑了开发者的编码效率和语言使用者的体验。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Tomcat 容器 Container （TODO）"/>
+  <meta property="og:title" content="《深入理解Java虚拟机》 编译 &amp; 优化"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -61,22 +65,26 @@
 <div class="clearfix"></div>
 </header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20171105" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20170915" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-11-04T16:00:00.000Z"><a href="/2017/11/05/20171105/">2017-11-05</a></time>
+        <time class="dt-published" datetime="2017-09-14T16:00:00.000Z"><a href="/2017/09/15/20170915/">2017-09-15</a></time>
       
       
 
   
   
     <h1 class="p-name title" itemprop="headline name">
-        Tomcat 容器 Container （TODO）
+        《深入理解Java虚拟机》 编译 &amp; 优化
     </h1>
     
+    
+       <div class="title" style="padding: 5px 0px 20px 10px; color: #766;">
+            ———— JDK 1.9
+       </div> 
     
   
   
@@ -86,12 +94,12 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 0  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 264  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
   <div class="categories">
-    <a href="/categories/开源框架/">开源框架</a>
+    <a href="/categories/Java-笔记/">Java 笔记</a>
   </div>
 
 
@@ -99,7 +107,7 @@
    
   
   <div class="tags">
-    <a href="/tags/Tomcat/">Tomcat</a>
+    <a href="/tags/JVM/">JVM</a>
   </div>
 
 
@@ -112,11 +120,19 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <a id="more"></a>
+        <p>Java的编译过程可以分为两个阶段，首先是将<code>.java</code>文件编译为<code>.class</code>文件的过程，称为前端编译，比如javac；然后在运行期，可能即时编译器（JIT）又会将字节码转变为本地机器码，
+比如HotSopt的C1、C2编译器，或者Graal编译器。</p>
+<p>对于优化处理，Java虚拟机团队选择将<font color="#E51508">性能优化的措施全部集中在运行期的即时编译器中，以便让那些不是由 javac 产生的 Class 文件也能享受到性能优化的好处</font>，
+至于 <font color="#E51508">javac 中则做了一些针对Java语言编码过程的优化，用来降低开发者的编码复杂度、提高编码效率</font>。可以这样认为，即时编译器在运行期的优化过程，
+支撑了程序执行效率的不断提升，而javac在编译期的优化过程，则支撑了开发者的编码效率和语言使用者的体验。</p>
+<a id="more"></a>
 
 
 
-
+<p><br><strong>参考：</strong> </p>
+<ol>
+<li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
+</ol>
 
       
     </div>
@@ -127,14 +143,14 @@
 	    
 	<nav id="pagination">
 	  
-		  <a class="alignleft prev" href="/2017/12/23/20171223/">
-		    windows安装mysql
+		  <a class="alignleft prev" href="/2017/09/30/20170930/">
+		    《深入理解Java虚拟机》 运行时数据区
 		  </a>
 	  
 	  
 	  
-		  <a class="alignright next" href="/2017/11/03/20171103/">
-		    Tomcat 连接器 Connector（Nio）（doing）
+		  <a class="alignright next" href="/2017/09/12/20170912/">
+		    JUC ConcurrentHashMap（TODO）
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -144,14 +160,14 @@
         
   
   <div class="categories">
-    <a href="/categories/开源框架/">开源框架</a>
+    <a href="/categories/Java-笔记/">Java 笔记</a>
   </div>
 
 
         
   
   <div class="tags">
-    <a href="/tags/Tomcat/">Tomcat</a>
+    <a href="/tags/JVM/">JVM</a>
   </div>
 
 

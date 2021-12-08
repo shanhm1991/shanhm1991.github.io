@@ -43,7 +43,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
-  <h2><font style="color: #999;">articles:  96 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  97 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -171,9 +171,9 @@
 因此它们都适合在类加载阶段进行解析。</p>
 <p>字节码指令集设计了不同的指令，来调用不同类型的方法</p>
 <ul>
-<li>invokevirtual 调用静态方法</li>
+<li>invokevirtual 调用虚方法 </li>
 <li>invokespecial 调用实例构造器<init>()、私有方法、或父类方法</li>
-<li>invokestatic 调用虚方法</li>
+<li>invokestatic 调用静态方法</li>
 <li>invokeinterface 调用接口方法，会在运行时再确定一个实现该接口的对象</li>
 <li>invokedynamic 区别于前4条调用指令将分派逻辑固化在Java虚拟机内部，invokedynamic将分派逻辑交给用户来决定</li>
 </ul>
