@@ -10,9 +10,8 @@
 }
 body {
   background: #eee;
-  color: #444;
-  font-family: "Times New Roman", "Microsoft YaHei", Arial, sans-serif;
-  font-size: 14px;
+  color: #222;
+  font: 13px/20px Arial, Helvetica, sans-serif;
   text-shadow: 0 0 1px transparent;
 }
 @media screen and (max-width: 1260px) {

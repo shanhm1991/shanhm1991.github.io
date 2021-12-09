@@ -94,7 +94,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 1.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 4min</font>
+   <font style="color: #999;"> words: 3.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 13min</font>
    
    
   
@@ -107,7 +107,7 @@
    
   
   <div class="tags">
-    <a href="/tags/JVM/">JVM</a>   <a href="/tags/泛型/">泛型</a>
+    <a href="/tags/JVM/">JVM</a>   <a href="/tags/泛型/">泛型</a>   <a href="/tags/JIT/">JIT</a>   <a href="/tags/CodeCache/">CodeCache</a>
   </div>
 
 
@@ -127,24 +127,178 @@
 支撑了程序执行效率的不断提升，而javac在编译期的优化过程，则支撑了开发者的编码效率和语言使用者的体验。</p>
 <a id="more"></a>
 
-<h3 id="1-javac-编译器"><a href="#1-javac-编译器" class="headerlink" title="1. javac 编译器"></a>1. javac 编译器</h3><p>javac编译器不像HotSpot虚拟机那样使用C++语言（以及少量C语言）实现，它本身就是一个由Java语言编写的程序。但是这里并不打算去研究它的源码实现细节了，主要来看一下javac对泛型的处理</p>
+<h3 id="1-javac-编译器"><a href="#1-javac-编译器" class="headerlink" title="1. javac 编译器"></a>1. javac 编译器</h3><p>javac编译器不像HotSpot虚拟机那样使用C++语言（以及少量C语言）实现，它本身就是一个由Java语言编写的程序。但是这里并不打算去研究它的源码实现细节了，下面主要来看一下javac对泛型的处理</p>
 <p><font color="gray">之前对Java 泛型的使用已经做过相关笔记：<a href="https://shanhm1991.github.io/2017/08/31/20170831/">https://shanhm1991.github.io/2017/08/31/20170831/</a> ，只是这里的角度不一样，
 感觉这里更像是站在一个Java语言设计者的角度去体会Java泛型在实现时的取舍。</font></p>
 <h4 id="1-1-泛型"><a href="#1-1-泛型" class="headerlink" title="1.1. 泛型"></a>1.1. 泛型</h4><p>泛型的本质是参数化类型（Parameterized Type）或者参数化多态（Parametric Polymorphism）的应用，即可以<font color="#E51508">将操作的数据类型指定为方法签名中的一种特殊参数</font>，
 这种参数类型能够用在类、接口和方法的创建中，分别构成泛型类、泛型接口和泛型方法，这样进一步增强了编程语言的类型系统和抽象能力。</p>
 <p>Java泛型的实现方式叫作“类型擦除式泛型”，而C#选择的方式是“具现化式泛型”，这些术语都源于C++模板语法中的概念。<br>在C#中，泛型无论在程序源码中，还是编译后的中间语言，或者运行期的CLR中都是切实存在的，比如<code>List&lt;int&gt;</code>与<code>List&lt;string&gt;</code>就是两个不同的类型，
-它们由系统在运行期生成，有着自己独立的虚方法表和类型数据。<br>而在Java语言中，泛型只存在于程序源码中，在编译后的字节码文件中，全部泛型都被替换位原来的裸类型，因此对于运行期的Java语言来说，<code>List&lt;int&gt;</code>与<code>List&lt;string&gt;</code>其实是同一个类型。</p>
+它们由系统在运行期生成，有着自己独立的虚方法表和类型数据。<br>而在Java语言中，泛型只存在于程序源码中，在编译后的字节码文件中，全部泛型都被替换位原来的裸类型，并且在相应的地方插入强制转型代码，因此对于运行期的Java语言来说，<code>List&lt;int&gt;</code>与<code>List&lt;string&gt;</code>其实是同一个类型。</p>
 <p>所以Java泛型更像是一种语法糖，其无论是在使用效果上还是运行效率上，几乎全面落后于C#泛型的方式。唯一的优势则在于实现这种泛型的影响范围上：
 擦除式泛型的实现几乎只需要在javac编译器上作出改进即可，不需要改的字节码或者Java虚拟机，这样也保证了即使以前没有使用泛型的库也可以直接运行在Java 5.0之上。</p>
-<p>由于使用的类型擦除方式，导致运行期无法获取到泛型类型信息，将使得Java泛型在实际使用中会受到很多限制，基本只要与参数类型相关的操作都无法进行，比如</p>
+<p>也就是说，Java在实现泛型时希望能保证以前直接用<code>ArrayList</code>的代码，在泛型新版本中还能继续使用同一个容器，这就必须让所有泛型化的实例类型，比如<code>ArrayList&lt;T&gt;</code>，能自动成为<code>ArrayList</code>的子类型才可以，否则类型转换就是不安全的。
+由此引出了<font color="#E51508">裸类型</font>的概念，比如Java泛型希望能支持下面这样的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; strList &#x3D; new ArrayList&lt;&gt;();strList.add(&quot;a&quot;);</span><br><span class="line">List&lt;Integer&gt; intList &#x3D; new ArrayList&lt;&gt;(); intList.add(1);</span><br><span class="line">        </span><br><span class="line">List list;</span><br><span class="line">list &#x3D; strList;</span><br><span class="line">list &#x3D; intList;</span><br></pre></td></tr></table></figure>
+
+<p>对于裸类型的实现可以有两种选择，一种是在运行期由Java虚拟机来自动地、真实地构造出<code>ArrayList&lt;Integer&gt;</code>这样的类型，并且自动实现从<code>ArrayList&lt;Integer&gt;</code>派生自<code>ArrayList</code>的继承关系，来满足裸类型的定义；
+另一种则是索性简单粗暴地直接在编译时把<code>ArrayList&lt;Integer&gt;</code>还原回<code>ArrayList</code>，只在元素访问、修改时自动插入一些强制类型转换和检查指令，这样看起来也能满足需求，而Java就是这样实现的。</p>
+<p>比如下面的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">"name"</span>, <span class="string">"shanhm"</span>);</span><br><span class="line">    map.put(<span class="string">"email"</span>, <span class="string">"163.com"</span>);</span><br><span class="line">        </span><br><span class="line">    String name = map.get(<span class="string">"name"</span>);</span><br><span class="line">    String email = map.get(<span class="string">"email"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在编译之后实际上是这样的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Map map = <span class="keyword">new</span> HashMap();</span><br><span class="line">    map.put(<span class="string">"name"</span>, <span class="string">"shanhm"</span>);</span><br><span class="line">    map.put(<span class="string">"email"</span>, <span class="string">"163.com"</span>);</span><br><span class="line">        </span><br><span class="line">    String name = (String)map.get(<span class="string">"name"</span>);</span><br><span class="line">    String email = (String)map.get(<span class="string">"email"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是，由于使用的类型擦除方式，导致<font color="#E51508">运行期无法获取到泛型类型信息</font>，这样在Java泛型在的际使用中将受到很多限制，比如只要与类型相关的操作基本都无法支持，它更多的作用只是提供一种编译期的类型安全检查</p>
 <figure class="highlight java"><figcaption><span class="caption">ParameterizedType.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterizedType</span>&lt;<span class="title">E</span>&gt; </span>&#123;    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(Object item)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(item <span class="keyword">instanceof</span> E) &#123;    <span class="comment">// 非法，无法对泛型类型进行实例判断</span></span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        E newItem = <span class="keyword">new</span> E();       <span class="comment">// 非法，无法使用泛型类型创建对象</span></span><br><span class="line">        E[] itemArray = <span class="keyword">new</span> E[<span class="number">10</span>]; <span class="comment">// 非法，无法使用泛型类型创建数组</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>这样如果要写一个从<code>List</code>到数组转换的泛型版本方法，由于不能从<code>List</code>取得参数化类型<code>T</code>，就不得不再额外传入一个数组的元素类型作为参数，实属无奈</p>
+<p>这样如果要写一个从<code>List</code>到数组转换的泛型版本方法，由于不能从<code>List</code>取得参数化类型<code>T</code>，就不得不再额外传入一个数组的元素类型作为参数，比如下面这样</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; T[] list2Array(List&lt;T&gt; list, Class&lt;T&gt; componentType)&#123;</span><br><span class="line">    T[] array = (T[])Array.newInstance(componentType, list.size());</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">    <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-即时编译器"><a href="#2-即时编译器" class="headerlink" title="2. 即时编译器"></a>2. 即时编译器</h3><h4 id="2-1-方法内联"><a href="#2-1-方法内联" class="headerlink" title="2.1. 方法内联"></a>2.1. 方法内联</h4><h4 id="2-2-逃逸分析"><a href="#2-2-逃逸分析" class="headerlink" title="2.2. 逃逸分析"></a>2.2. 逃逸分析</h4><h4 id="2-3-公共子表达式消除"><a href="#2-3-公共子表达式消除" class="headerlink" title="2.3. 公共子表达式消除"></a>2.3. 公共子表达式消除</h4><h4 id="2-4-检查消除"><a href="#2-4-检查消除" class="headerlink" title="2.4. 检查消除"></a>2.4. 检查消除</h4><p><br><strong>参考：</strong> </p>
+<p>此外，使用擦除法实现泛型还有一个问题就是<font color="#E51508">无法支持基础类型</font>，因为不支持int、long等与Object之间的强制转型。这里Java给出的解决方案依然是简单粗暴：
+既然没法转换那索性就别支持原生类型了，大家都用<code>ArrayList&lt;Integer&gt;</code>、<code>ArrayList&lt;Long&gt;</code>吧，反正已经做了自动类型转换，以及自动装箱拆箱操作。
+这个决定后面导致了无数构造包装类和装箱、拆箱的开销，也成为了Java泛型慢的一个重要原因，也是现在Valhalla项目要重点解决的问题之一。</p>
+<h3 id="2-即时编译器"><a href="#2-即时编译器" class="headerlink" title="2. 即时编译器"></a>2. 即时编译器</h3><p>目前主流的两款商用Java虚拟机（HotSpot、OpenJ9）中，Java程序最初都是通过解释器（Interpreter）进行解释执行的，当虚拟机发现某个方法或代码块运行得特别频繁，就会将这些代码认定为“热点代码”（Hot Spot Code），
+为了提高热点代码的执行效率，在运行时。虚拟机会把这些代码编译成本地机器码，并以各种手段尽可能地优化，运行时完成这个任务的编译器就称为即时编译器。</p>
+<p>解释器与编译器两者各有优势，当程序需要迅速启动和执行时，解释器可以首先发挥作用，省去编译时间，立即运行。当程序启动后，随着时间推移，编译器逐渐发挥作用，将越来越多的代码编译成本地代码，这样可以减少解释器的中间消耗，
+获得更高的执行效率。当程序运行环境中内存资源限制较大，可以使用解释器节约内存，反之可以使用编译执行来提升效率。同时，解释器还可以作为编译器激进优化时后备的逃生门。</p>
+<p>通常，java虚拟机都会采用将解释器与编译器搭配使用混合模式</p>
+<figure class="highlight plain"><figcaption><span class="caption">java -version</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java version &quot;1.8.0_11&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_11-b12)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.11-b03, mixed mode)</span><br></pre></td></tr></table></figure>
+
+<p>也可以使用<code>-Xint</code>强制虚拟机运行于解释模式，此时编译器完全不介入工作，完全使用解释方式执行</p>
+<figure class="highlight plain"><figcaption><span class="caption">java -Xint -version</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java version &quot;1.8.0_11&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_11-b12)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.11-b03, interpreted mode)</span><br></pre></td></tr></table></figure>
+
+<p>或者使用<code>-Xcomp</code>强制虚拟机运行与编译模式，此时将优先采用编译方式执行程序，但解释器仍然会在编译器无法进行的情况下介入执行过程</p>
+<figure class="highlight plain"><figcaption><span class="caption">java -Xcomp -version</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java version &quot;1.8.0_11&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_11-b12)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.11-b03, compiled mode)</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-1-CodeCache"><a href="#2-1-CodeCache" class="headerlink" title="2.1. CodeCache"></a>2.1. CodeCache</h4><p>Java虚拟机在运行时会生成本机代码，并将其存储在称为代码缓存（CodeCache）的内存区域中。JVM生成本机代码的原因有多种，包括动态生成的解释器循环、Java本机接口（JNI）存根，以及由即时编译器（JIT）编译为本机代码的Java方法。
+目前为止，JIT是 CodeCache 的最大用户，下面整理一些使用 CodeCache 的控制参数，具体内容参考自官网</p>
+<table width=100%>
+    <tr style="border-bottom:0.01rem solid grey;">
+        <th width=25%>Codecache大小控制选项</th>
+        <th width=10%>默认值</th>
+        <th width=65%>描述</th>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>InitialCodeCacheSize</td>
+        <td>160K</td>
+        <td>默认的CodeCache区域大小（单位：字节）</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>ReservedCodeCacheSize</td>
+        <td>32M/48M</td>
+        <td>CodeCache区域的最大值（单位：字节）</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>CodeCacheExpansionSize</td>
+        <td>32K/64K</td>
+        <td>CodeCache每次扩展大小（单位：字节）</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid grey;">
+        <th colspan=3>Codecache刷新选项</th>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>ExitOnFullCodeCache</td>
+        <td>false</td>
+        <td>当CodeCache区域满了的时候是否退出JVM</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>UseCodeCacheFlushing</td>
+        <td>false</td>
+        <td>是否在关闭JIT编译前清除CodeCache</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>MinCodeCacheFlushingInterval</td>
+        <td>30</td>
+        <td>刷新CodeCache的最小时间间隔（单位：秒）</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>CodeCacheMinimumFreeSpace</td>
+        <td>500K</td>
+        <td>当剩余空间小于指定值时停止JIT编译，剩余的空间不会再用来存放方法的本地代码, 可以存放本地方法适配器</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid grey;">
+        <th colspan=3>编译策略选项</th>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>CompileThreshold</td>
+        <td>10000</td>
+        <td>方法在（重新）进行JIT编译之前被调用的次数</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>OnStackReplacePercentage</td>
+        <td>140至933</td>
+        <td>该值为用于计算是否触发OSR（OnStackReplace）编译的阈值</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid grey;">
+        <th colspan=3>编译限制选项</th>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>MaxInlineLevel</td>
+        <td>9</td>
+        <td>在进行方法内联前，方法的最多嵌套调用数</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>MaxInlineSize</td>
+        <td>35</td>
+        <td>被内联方法的字节码最大值</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>MinInliningThreshold</td>
+        <td>250</td>
+        <td>被内联方法的最小调用次数</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>InlineSynchronizedMethods</td>
+        <td>true</td>
+        <td>是否对同步方法进行内联</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid grey;">
+        <th colspan=3>JIT诊断选项</th>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>PrintFlagsFinal</td>
+        <td>false</td>
+        <td>是否打印所有的JVM参数</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>PrintCodeCache</td>
+        <td>false</td>
+        <td>是否在JVM退出前打印CodeCache的使用情况</td>
+    </tr>
+    <tr style="border-bottom:0.01rem solid #ededed;">
+        <td>PrintCodeCacheOnCompilation</td>
+        <td>false</td>
+        <td>是否在每个方法被JIT编译后打印CodeCache区域的使用情况</td>
+    </tr>
+</table>
+
+<p>如果添加参数<code>–XX:+PrintCodeCache</code>，那么在VM退出时，将看到类似于下面的输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CodeCache: size&#x3D;245760Kb used&#x3D;1585Kb max_used&#x3D;1597Kb free&#x3D;244174Kb</span><br><span class="line">bounds [0x00007f2b25000000, 0x00007f2b25270000, 0x00007f2b34000000]</span><br><span class="line">total_blobs&#x3D;490 nmethods&#x3D;229 adapters&#x3D;177</span><br><span class="line">compilation: enabled</span><br></pre></td></tr></table></figure>
+
+<p>主要信息在第一行中：</p>
+<ul>
+<li><p>size: CodeCache的最大值，由参数<code>–XX:ReservedCodeCacheSize</code>指定，注意这里并不是CodeCache使用的实际物理内存 RAM 量，而是为其预留的虚拟地址空间量</p>
+</li>
+<li><p>used：CodeCache实际使用量，通常是指占用的 RAM 量，但由于碎片化以及CodeCache中空闲和已分配内存块的混合，实际占用的 RAM 可能偏大，因为已使用然后释放的块可能仍在 RAM 中。</p>
+</li>
+<li><p>max_used：CodeCache使用的高水位线，通常被认为是CodeCache占用的 RAM 量。因此，在确定应用程序使用了多少CodeCache时，一般使用这个值。</p>
+</li>
+<li><p>free: CodeCache空闲量</p>
+</li>
+</ul>
+<h4 id="2-2-编译器优化技术"><a href="#2-2-编译器优化技术" class="headerlink" title="2.2. 编译器优化技术"></a>2.2. 编译器优化技术</h4><p>编译器的任务虽然是将字节码编译为本地机器码，但其实难点并不在于能不能成功翻译出机器码，能输出高质量的优化代码才是决定编译器优秀与否的关键。下面介绍几种HotSpot虚拟机中的即时编译器在生成代码时常用的优化手段，希望能以小见大，见微知著。</p>
+<h5 id="2-2-1-方法内联"><a href="#2-2-1-方法内联" class="headerlink" title="2.2.1. 方法内联"></a>2.2.1. 方法内联</h5><p>方法内联是编译器最重要的优化手段，因为除了消除方法调用的成本之外，它更重要的意义是为其他优化手段建立了良好的基础。如果没有内联，多数其他优化手段可能都无法有效进行，比如下面示例中，如果不做内联，
+就无法发现<code>testInline()</code>中的代码全部是 Dead Code，也就无法进行代码消除</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testInline</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Object obj = <span class="keyword">null</span>;</span><br><span class="line">    foo(obj);</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(obj != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="comment">// do sometyhing</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法内联理解起来并不困难，无非就是将目标方法的代码合并到发起调用的方法之中，避免发生真实地方法调用而已。但在Java中，由于提倡使用面向对象的方式进行编程，而Java对象的方法默认是虚方法。因此，在实际实现时会发现大部分的方法都是虚方法，
+而虚方法的调用必须要在运行时进行方法接收者的多态选择，它们有可能存在多于一个版本的方法接收者。</p>
+<p>于是，在内联与虚方法之间就存在一个矛盾，在C/C++中会默认给每个方法使用 final 进行修饰，如果需要用到多态，再用 virtual 关键字来修饰，但Java选择了在虚拟机中解决这个问题。</p>
+<h5 id="2-2-2-逃逸分析"><a href="#2-2-2-逃逸分析" class="headerlink" title="2.2.2. 逃逸分析"></a>2.2.2. 逃逸分析</h5><h5 id="2-2-3-公共子表达式消除"><a href="#2-2-3-公共子表达式消除" class="headerlink" title="2.2.3. 公共子表达式消除"></a>2.2.3. 公共子表达式消除</h5><h5 id="2-2-4-检查消除"><a href="#2-2-4-检查消除" class="headerlink" title="2.2.4. 检查消除"></a>2.2.4. 检查消除</h5><p><br><strong>参考：</strong> </p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
+<li><a href="https://docs.oracle.com/javase/8/embedded/develop-apps-platforms/codecache.htm" target="_blank" rel="noopener">https://docs.oracle.com/javase/8/embedded/develop-apps-platforms/codecache.htm</a></li>
+<li><a href="http://thinkhejie.github.io/2016/05/05/JVM%E7%B3%BB%E5%88%97_06/" target="_blank" rel="noopener">http://thinkhejie.github.io/2016/05/05/JVM%E7%B3%BB%E5%88%97_06/</a></li>
 </ol>
 
       
@@ -180,7 +334,7 @@
         
   
   <div class="tags">
-    <a href="/tags/JVM/">JVM</a>   <a href="/tags/泛型/">泛型</a>
+    <a href="/tags/JVM/">JVM</a>   <a href="/tags/泛型/">泛型</a>   <a href="/tags/JIT/">JIT</a>   <a href="/tags/CodeCache/">CodeCache</a>
   </div>
 
 
@@ -244,7 +398,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-javac-编译器"><span class="toc-text">1. javac 编译器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-泛型"><span class="toc-text">1.1. 泛型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-即时编译器"><span class="toc-text">2. 即时编译器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-方法内联"><span class="toc-text">2.1. 方法内联</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-逃逸分析"><span class="toc-text">2.2. 逃逸分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-公共子表达式消除"><span class="toc-text">2.3. 公共子表达式消除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-检查消除"><span class="toc-text">2.4. 检查消除</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-javac-编译器"><span class="toc-text">1. javac 编译器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-泛型"><span class="toc-text">1.1. 泛型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-即时编译器"><span class="toc-text">2. 即时编译器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-CodeCache"><span class="toc-text">2.1. CodeCache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-编译器优化技术"><span class="toc-text">2.2. 编译器优化技术</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-1-方法内联"><span class="toc-text">2.2.1. 方法内联</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-2-逃逸分析"><span class="toc-text">2.2.2. 逃逸分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-3-公共子表达式消除"><span class="toc-text">2.2.3. 公共子表达式消除</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-4-检查消除"><span class="toc-text">2.2.4. 检查消除</span></a></li></ol></li></ol></li></ol>
 </div>
 
 
