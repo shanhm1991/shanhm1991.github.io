@@ -116,10 +116,10 @@
 <a id="more"></a>
 
 <h3 id="存储器层次"><a href="#存储器层次" class="headerlink" title="存储器层次"></a>存储器层次</h3><ul>
-<li>在CPU内部有少量的<font style="font-weight:bold; color:red;">寄存器</font>可以存储正在执行的指令或者正在参加运算的数据，寄存器访问非常快，但数量少； </li>
-<li>对于正在运行的程序的指令和数据存放在CPU可以直接访问的主存储器中，称为<font style="font-weight:bold; color:red;">主存</font>；</li>
+<li>在CPU内部有少量的<font style="font-weight:bold; color:#E51508;">寄存器</font>可以存储正在执行的指令或者正在参加运算的数据，寄存器访问非常快，但数量少； </li>
+<li>对于正在运行的程序的指令和数据存放在CPU可以直接访问的主存储器中，称为<font style="font-weight:bold; color:#E51508;">主存</font>；</li>
 <li>在主存之外，为了扩大存储容量会增加一些容量大但是访问较慢的辅助存储器，比如硬盘；CPU不能直接访问外存储器，外存储器的数据需要调用主存后才能由CPU访问；</li>
-<li>随着技术发展，CPU和主存的工作速度都在提高，但CPU提高得更快，于是又在CPU和主存之间增加了一层<font style="font-weight:bold; color:red;">高速缓存</font>(cache)，出于对性能的要求，
+<li>随着技术发展，CPU和主存的工作速度都在提高，但CPU提高得更快，于是又在CPU和主存之间增加了一层<font style="font-weight:bold; color:#E51508;">高速缓存</font>(cache)，出于对性能的要求，
 高速缓存本身又可以分成三级，即L1、L2、L3。  </li>
 </ul>
 <p>因此，现在的存储系统一般分为三级，即由cache、主存和外存储器构成，其中cache主要用于提高访问速度，而外存储器用于提高存储容量问题。</p>
@@ -127,8 +127,8 @@
 <p>随着多用户多任务系统的出现，以及程序占用存储越来越大，在程序设计时，程序所需的存储容量与计算机实际的主存容量之间往往存在矛盾。而在多用户多任务共享主存的场景下，
 这些同时运行的程序到底占用内存中哪一部分，在编制程序时是无法确定的，必须等到程序运行时才动态分配。</p>
 <p>因此，希望在编制程序时能独立编址，既不考虑程序是否能在物理存储器中存放得下，也不考虑程序应该存放在什么物理位置。而在程序运行时，则分配每个程序一定的运行空间，由地址转换器将编程时的地址
-转换为实际内存的物理地址。这样，用户编制程序时使用的地址称为<font style="font-weight:bold; color:red;">虚地址</font>或逻辑地址，
-而内存中对应的地址称为<font style="font-weight:bold; color:red;">物理地址</font>。</p>
+转换为实际内存的物理地址。这样，用户编制程序时使用的地址称为<font style="font-weight:bold; color:#E51508;">虚地址</font>或逻辑地址，
+而内存中对应的地址称为<font style="font-weight:bold; color:#E51508;">物理地址</font>。</p>
 <ul>
 <li>访问过程</li>
 </ul>
@@ -146,8 +146,8 @@
 <li>更新问题：确保主存与辅存的一致性；</li>
 </ol>
 <p>在操作系统的控制下，硬件和系统软件为用户解决了上述问题，从而使应用程序的编程大大简化。</p>
-<h5 id="页式虚拟存储器"><a href="#页式虚拟存储器" class="headerlink" title="页式虚拟存储器"></a>页式虚拟存储器</h5><p>页式虚拟存储系统中，<font style="color:red;">虚地址和主存空间都被分成等长的页，分别称为逻辑页和物理页，至于地址则通过两个字段来描述，高字段为页号，低字段为页内偏移地址</font>。</p>
-<p>在大多数系统中，每个进程对应一个<font style="font-weight:bold; color:red;">页表</font>，页表中对应每一个虚存页面有一个表项，表项内容包含其对应的主存页面地址，
+<h5 id="页式虚拟存储器"><a href="#页式虚拟存储器" class="headerlink" title="页式虚拟存储器"></a>页式虚拟存储器</h5><p>页式虚拟存储系统中，<font style="color:#E51508;">虚地址和主存空间都被分成等长的页，分别称为逻辑页和物理页，至于地址则通过两个字段来描述，高字段为页号，低字段为页内偏移地址</font>。</p>
+<p>在大多数系统中，每个进程对应一个<font style="font-weight:bold; color:#E51508;">页表</font>，页表中对应每一个虚存页面有一个表项，表项内容包含其对应的主存页面地址，
 以及表示该逻辑页是否已经调入主存的标识位。</p>
 <p>但是每个进程所需的页数并不固定，有的进程可能需要很大的地址空间，因此页表可能很长，为了节约页表本身占用的主存空间，有的系统会采用二级分页，即每个进程有一个页目录表，
 其中的每个表项指向一个页表。</p>
@@ -167,17 +167,17 @@
 <li>Procs（进程）：<br><code>r</code>: 运行队列中进程数量（可以判断是否需要增加CPU，如果长期大于1的话）<br><code>b</code>: 等待IO的进程数量</li>
 <li>memory（内存）：<br><code>swpd</code>: 使用虚拟内存大小（如果swpd不为0，但是si，so长期为0的话，这种情况不会影响系统性能）<br><code>free</code>: 空闲物理内存大小<br><code>buff</code>: 缓存文件元数据（inode 等）和来自原始块设备的数据<br><code>cache</code>: 缓存文件数据块和内存映射信息（即调用mmap()映射的文件）<br>（如果cache的值大，说明cache的文件数多，如果频繁访问的文件都能被cache处，那么磁盘的读IO bi会非常小。）</li>
 <li>Swap：<br><code>si</code>: 每秒从交换区写到内存的大小，由磁盘调入内存<br><code>so</code>: 每秒写入交换区的内存大小，由内存调入磁盘<br>（如果这si和so长期大于，系统性能会受到影响，磁盘IO和CPU都会被消耗。有时看空闲内存(free)很少的或接近于0时，就认为内存不够用了，其实不能光看这一点，还要结合si和so，
-<font style="color:red;">如果free很少，但是si和so也很少，那么不用担心，系统性能这时不会受到影响</font>）</li>
+<font style="color:#E51508;">如果free很少，但是si和so也很少，那么不用担心，系统性能这时不会受到影响</font>）</li>
 <li>IO：<br><code>bi</code>: 每秒读取的块数<br><code>bo</code>: 每秒写入的块数<br>（随机磁盘读写的时候，bi和bo越大，CPU花在IO等待上的值也会越大）</li>
 <li>system：<br><code>in</code>: 每秒中断数，包括时钟中断。<br><code>cs</code>: 每秒上下文切换数。<br>（in和cs越大，说明由内核消耗的CPU时间越多，相应的花在进程上的时间就越少）</li>
 <li>cpu：<br><code>us</code>: 即user time，用户进程执行时间百分比（us值高说明用户进程消耗的CPU时间多，但如果长期超过50%，则可以考虑优化程序）<br><code>sy</code>: 即system time，内核执行时间百分比（sy值高说明内核消耗的CPU资源多，这并不是良性表现，应该检查原因）<br><code>id</code>: 空闲时间百分比<br><code>wa</code>: CPU等待IO时间，wa值高说明磁盘IO繁忙<br><code>st</code>: 即stolen，偷取时间，与虚拟机相关    </li>
 </ul>
 <p><strong>总结：</strong></p>
-<p><font style="color:red;">识别CPU瓶颈</font>：当<code>us</code> ＋ <code>sy</code>接近于100时，表示CPU正接近于满负荷工作，但CPU满负荷工作并不能说明什么，Linux总会试图让CPU尽可能的繁忙，
+<p><font style="color:#E51508;">识别CPU瓶颈</font>：当<code>us</code> ＋ <code>sy</code>接近于100时，表示CPU正接近于满负荷工作，但CPU满负荷工作并不能说明什么，Linux总会试图让CPU尽可能的繁忙，
 以便任务的吞吐量最大化，最能确定CPU瓶颈的还是<code>r</code>，即队列中等待运行的进程数。</p>
 <p>如果<code>r</code>长期大于CPU个数（可以通过<code>cat /proc/cpuinfo|grep processor|wc -l</code>查看CPU数），且<code>id</code>很低，则说明cpu的负荷很重，一般出现这种情况，应用程序的问题会比较大一些，
 比如一些sql语句不合理的情况。</p>
-<p><font style="color:red;">识别RAM内存瓶颈</font>：通过虚拟内存机制，可以将RAM移到SWAP磁盘上，这样会出现虚拟内存的页导出和页导入现象，页导出并不能说明RAM瓶颈，
+<p><font style="color:#E51508;">识别RAM内存瓶颈</font>：通过虚拟内存机制，可以将RAM移到SWAP磁盘上，这样会出现虚拟内存的页导出和页导入现象，页导出并不能说明RAM瓶颈，
 虚拟内存系统经常会进行页导出，但经常出现页导入操作就表明服务器需要更多的内存了，页导入需要从SWAP复制回RAM，导致服务器速度变慢。即如果si和so长期非零的话，则可能存在内存瓶颈。</p>
 <p><code>wa</code>表示CPU用于等待IO的时间，如果内存够大，可以修改文件<code>/proc/sys/vm/swappiness</code>中的值，它表示实际内存区和交换区进行数据交换的倾向性大小，默认60，设置小一点，
 以便降低数据交换次数。但如果交换区Swap本身就使用的很少，说明修改也没有意义，可能进程本身就是偏IO类型的任务，对于内存和交换区的使用统计情况可以通过<code>free</code>查看：</p>
