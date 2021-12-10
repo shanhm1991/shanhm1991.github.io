@@ -94,7 +94,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 3.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 13min</font>
+   <font style="color: #999;"> words: 6.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 24min</font>
    
    
   
@@ -287,18 +287,92 @@
 </li>
 </ul>
 <h4 id="2-2-编译器优化技术"><a href="#2-2-编译器优化技术" class="headerlink" title="2.2. 编译器优化技术"></a>2.2. 编译器优化技术</h4><p>编译器的任务虽然是将字节码编译为本地机器码，但其实难点并不在于能不能成功翻译出机器码，能输出高质量的优化代码才是决定编译器优秀与否的关键。下面介绍几种HotSpot虚拟机中的即时编译器在生成代码时常用的优化手段，希望能以小见大，见微知著。</p>
-<h5 id="2-2-1-方法内联"><a href="#2-2-1-方法内联" class="headerlink" title="2.2.1. 方法内联"></a>2.2.1. 方法内联</h5><p>方法内联是编译器最重要的优化手段，因为除了消除方法调用的成本之外，它更重要的意义是为其他优化手段建立了良好的基础。如果没有内联，多数其他优化手段可能都无法有效进行，比如下面示例中，如果不做内联，
-就无法发现<code>testInline()</code>中的代码全部是 Dead Code，也就无法进行代码消除</p>
+<h5 id="2-2-1-方法内联"><a href="#2-2-1-方法内联" class="headerlink" title="2.2.1. 方法内联"></a>2.2.1. 方法内联</h5><p>方法内联是编译器最重要的优化手段，因为除了消除方法调用的成本之外，它更重要的意义是<font color="#E51508">为其他优化手段建立良好的基础</font>。如果没有内联，
+多数其他优化手段可能都无法有效进行，比如下面示例中，如果不做内联，就无法发现<code>testInline()</code>中的代码全部是 Dead Code，也就无法进行代码消除</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testInline</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Object obj = <span class="keyword">null</span>;</span><br><span class="line">    foo(obj);</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(obj != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="comment">// do sometyhing</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>方法内联理解起来并不困难，无非就是将目标方法的代码合并到发起调用的方法之中，避免发生真实地方法调用而已。但在Java中，由于提倡使用面向对象的方式进行编程，而Java对象的方法默认是虚方法。因此，在实际实现时会发现大部分的方法都是虚方法，
 而虚方法的调用必须要在运行时进行方法接收者的多态选择，它们有可能存在多于一个版本的方法接收者。</p>
 <p>于是，在内联与虚方法之间就存在一个矛盾，在C/C++中会默认给每个方法使用 final 进行修饰，如果需要用到多态，再用 virtual 关键字来修饰，但Java选择了在虚拟机中解决这个问题。</p>
-<h5 id="2-2-2-逃逸分析"><a href="#2-2-2-逃逸分析" class="headerlink" title="2.2.2. 逃逸分析"></a>2.2.2. 逃逸分析</h5><h5 id="2-2-3-公共子表达式消除"><a href="#2-2-3-公共子表达式消除" class="headerlink" title="2.2.3. 公共子表达式消除"></a>2.2.3. 公共子表达式消除</h5><h5 id="2-2-4-检查消除"><a href="#2-2-4-检查消除" class="headerlink" title="2.2.4. 检查消除"></a>2.2.4. 检查消除</h5><p><br><strong>参考：</strong> </p>
+<p>Java虚拟机引入了一种名为类型继承关系分析的技术（CHA），这是整个应用程序范围内的类型分析技术，用于确定在目前已加载的类中，某个接口是否有多于一种的实现、某个类是否存在子类、
+某个子类是否覆盖了父类的某个虚方法等信息。这样，编译器在进行内联时就可以根据不同的情况采取不同的处理：如果是非虚方法，那么直接进行内联就可以了；如果是虚方法，
+则会向 CHA 查询此方法在当前程序状态下是否有多个目标版本可选择，如果只有一个版本，那么就可以直接内联，这种内联也称为<font color="#E51508">守护内联</font>。</p>
+<p>但由于Java是动态连接的，说不准什么时候会加载到新的类型从而改变 CHA 的结论，因此这种内联属于激进预测性优化，必须预留好“逃生门”，即当作假设条件不成立时的“退路”。
+如果程序在后续执行过程中，一直没有加载到令这个方法的接收者的继承关系发生变化的类，那么这个内联优化的代码就可以一直使用下去。而如果加载了导致继承关系发生变化的新类，
+那么就必须抛弃已经编译的代码，退回到解释状态进行执行，或者重新进行编译。</p>
+<p>如果向 CHA 查询出来的方法确实有多个版本，那么即时编译器还会进行最后一次努力，即使用<font color="#E51508">内联缓存</font>的方式来缩减方法调用的开销。
+但<font color="#E51508">这种情况下方法调用是实际发生了的，只是比起直接查虚方法表要快一些</font>。虽然内联缓存带有内联二字，但是它并没有内联目标方法。
+需要明确的是，任何方法调用除非被内联，否则都会有固定开销。这些开销来源于保存程序在该方法中的执行位置，以及新建、压入和弹出新方法所使用的栈帧。</p>
+<p>内联缓存是一种加快动态绑定的优化技术，它能够缓存虚方法调用中调用者的动态类型，以及该类型所对应的目标方法。在之后的执行过程中，如果碰到已缓存的类型，内联缓存便会直接调用该类型所对应的目标方法。
+如果没有碰到已缓存的类型，则退化至使用基于方法表的动态绑定。</p>
+<p>当内联缓存没有命中的情况下，JVM需要重新使用方法表进行动态绑定。这时对于内联缓存中的内容，有两种选择。<br>一是替换单态内联缓存中的记录，这种做法就好比CPU中的数据缓存，它对数据的局部性有要求，即在替换内联缓存之后的一段时间内，方法调用者的动态类型应当保持一致，从而能够有效地利用内联缓存。
+但考虑最坏情况，如果两种不同类型的调用者，轮流进行调用，那么每次方法调用都要替换内联缓存，也就是说缓存没有起到效果反倒成为一种累赘。<br>另一种选择是劣化为超多态状态，处于这种状态下的内联缓存，实际上放弃了优化的机会。它将直接访问方法表，来动态绑定目标方法，与替换内联缓存记录的做法相比，它牺牲了优化的机会，但是节省了更新缓存的额外开销。</p>
+<p>JVM对于方法内联也提供了对应的控制参数：<strong>-XX:CompileCommand</strong></p>
+<ul>
+<li><p>格式：-XX:CompileCommand=command,method[,option]</p>
+</li>
+<li><p>含义：该参数用于定制编译需求，比如过滤某个方法不做JIT编译，若未指定方法描述符，则对全部同名方法执行命令操作，也可以使用通配符（*）指定类或方法。该参数也可以多次指定，或使用 换行符（\n）分隔参数后的多个命令。</p>
+</li>
+<li><p>命令：<br>exclude：  跳过编译指定的方法<br>compileonly：  只编译指定的方法<br>inline/dontinline：  设置是否内联指定方法<br>print：  打印生成的汇编代码<br>break：  JVM以debug模式运行时，在方法编译开始处设置断点<br>quiet：  不打印在此命令之后、通过-XX:CompileCommand指定的编译选项<br>log：  记录指定方法的编译日志，若未指定，则记录所有方法的编译日志<br>其他命令：  option，help    </p>
+</li>
+<li><p>示例：</p>
+</li>
+</ul>
+<p>设置编译器跳过编译com.jvmpocket.Dummy类test方法的4种写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-XX:CompileCommand&#x3D;exclude,com&#x2F;jvmpocket&#x2F;Dummy.test</span><br><span class="line">-XX:CompileCommand&#x3D;exclude,com&#x2F;jvmpocket&#x2F;Dummy::test</span><br><span class="line">-XX:CompileCommand&#x3D;exclude,com.jvmpocket.Dummy::test</span><br><span class="line">-XX:CompileCommand&#x3D;&quot;exclude com&#x2F;jvmpocket&#x2F;Dummy test&quot;</span><br></pre></td></tr></table></figure>
+
+<p>设置编译器只跳过编译java.lang.String类int indexOf(String)方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:CompileCommand&#x3D;&quot;exclude,java&#x2F;lang&#x2F;String.indexOf,(Ljava&#x2F;lang&#x2F;String;)I&quot;</span><br></pre></td></tr></table></figure>
+
+<p>设置编译器跳过编译所有类的indexOf方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:CompileCommand&#x3D;exclude,*.indexOf</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-2-2-逃逸分析"><a href="#2-2-2-逃逸分析" class="headerlink" title="2.2.2. 逃逸分析"></a>2.2.2. 逃逸分析</h5><p>逃逸分析并不是直接优化代码的手段，而是为其他优化措施提供依据的分析技术，与类型继承关系分析类似。其基本思路是：分析对象动态作用域，当一个对象在方法里面被定义后，它可能被外部方法所引用，比如作为调用参数传递到其他方法中，
+这种就称为<font color="#E51508">方法逃逸</font>。甚至还可能被外部线程访问，比如赋值给某个其他线程能够访问的实例变量，这种就称为<font color="#E51508">线程逃逸</font>。</p>
+<p>如果能证明一个对象不会逃逸到方法或线程之外，或者逃逸程度较低，则可以为这个对象采取不同程度的优化：</p>
+<ul>
+<li><p>栈上分配：如果确定一个对象不会逃逸出线程之外，那么就可以在栈上为这个对象进行内存分配，这样对象所占用的内存就可以随栈帧的出栈而销毁。在一般应用中，不会线程逃逸的对象所占的比例还是很大的，如果能使用栈上分配，
+那么就省去了大量的对象回收操作，从而降低垃圾收集器的压力。<font color="gray">考虑到复杂度等原因，HotSpot中暂时还没有做这项优化，但在其他一些虚拟机，比如Excelsior JET中则使用了这项优化。</font></p>
+</li>
+<li><p>标量替换：如果一个数据无法再分解成更小的数据来表示，比如Java中的基本数据类型，那么就称这些数据为<font color="#E51508">标量</font>，反之，则称为聚合量。如果将一个Java对象拆散，根据程序访问情况，
+将其用到的成员变量恢复为原始类型来访问，那么这个过程就称为<font color="#E51508">标量替换</font>。</p>
+</li>
+</ul>
+<p>如果根据逃逸分析能够证明一个对象不会被方法外部访问，并且这个对象可以被拆散，那么程序真正执行时就可以不去创建这个对象，而改为直接创建它的若干个被这个方法使用的成员变量来替代。
+对象拆分后，除了可以让对象的成员变量在栈上分配和读写外（栈上存储的数据，大概率会被虚拟机分配至物理机的高速寄存器中缓存），还可以为后续进一步的优化手段创咋条件。</p>
+<p>表里替换可以视为栈上分配的一种特例，实现更简单，因为不用考虑整个对象完整结构的分配，但对逃逸程度的要求更高，它不允许对象逃逸出方法之外，更不用提逃逸出线程之外。</p>
+<ul>
+<li>同步消除：线程同步本身是一个相对耗时的操作，如果逃逸分析能确定一个变量不会逃逸出线程，即无法被其它线程访问，那么就可以消除掉对这个变量的同步措施。</li>
+</ul>
+<p>关于逃逸分析的研究论文早在1999年就已发表，但直到JDK 6，HotSpot才开始支持初步的逃逸分析，而且直到现在这项优化技术也尚未足够成熟，仍有很大的改进余地。主要原因是逃逸分析的计算成本非常高，
+甚至不能保证逃逸分析带来的收益会高于它的消耗。比如在极端情况下，逃逸分析完毕后发现几乎找不到几个不逃逸的对象，那么运行期耗用的时间就白白浪费了，所以目前虚拟机只能采用不那么准确，但时间压力相对较小的算法来完成分析。</p>
+<p>C/C++语言中原生就支持栈上分配（不使用 new 操作符即可），C#也支持值类型，可以很自然地做到标量替换（但并不会对引用类型做这种优化）。在灵活运用栈内存方面，确实是Java的一个弱项，目前仍处于实验阶段的 Valhalla 项目中，
+设计了新的 inline 关键字来定义Java的内联类型，目的是实现与C#中值类型相对标的功能，有了这个标识与约束，以后逃逸分析做起来就能相对简单一些。</p>
+<h5 id="2-2-3-公共子表达式消除"><a href="#2-2-3-公共子表达式消除" class="headerlink" title="2.2.3. 公共子表达式消除"></a>2.2.3. 公共子表达式消除</h5><p>公共字表达式消除是一项非常经典的、普遍的优化技术，应用于各种编译器之中，它的含义是：如果一个表达式 E 之前已经被计算过，并且从先前的计算到现在 E 中的所有变量值都没有发生变化，那么 E 的这次出现就称为公共子表达式。
+比如下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int d &#x3D; (c * b) * 12 + a + (a + b * c);</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-2-4-检查消除"><a href="#2-2-4-检查消除" class="headerlink" title="2.2.4. 检查消除"></a>2.2.4. 检查消除</h5><p>Java语言是一门动态安全的语言，对数组的访问无法像C/C++那样通过裸指针进行操作。如果一个数组<code>foo[]</code>，在Java中访问其元素<code>foo[i]</code>时系统会自动进行边界检查，即<code>i</code>必须满足<code>i &gt;= 0 &amp;&amp; i &lt; foo.length</code>，
+否则将抛出越界异常。这对开发者来说是一件很友好的事情，但对虚拟机执行子系统来说，每次数组元素的访问都带有一次隐含的条件判断操作，这对于用于大量数组访问的程序来说，必然是一种性能负担。</p>
+<p>一种优化的思路是<font color="#E51508">尽可能把这种运行期检查操作提前到编译期来完成</font>，数组边界检查并不一定要在运行期一次不漏的进行，如果能在编译期根据数据流分析确定数组的 length 值，并判断访问时的下标没有越界，
+那么运行时就无须检查了。通常，数组访问会发生在循环之中，并且使用循环变量来进行元素访问，如果编译期通过数据流分析后能判断循环变量的取值永远在 [0, length] 之间，那么在运行时，就可以取消整个循环期间的边界检查。</p>
+<p>除了数组越界异常，常见的还有空指针异常和除零异常，至于处理方式则是隐式异常处理。比如下面以伪代码的形式来表示虚拟机访问程序中的某个对象属性的过程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(foo != <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> foo.value;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在使用隐式异常优化之后，访问过程会变成如下所示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> foo.value;</span><br><span class="line">&#125;<span class="keyword">catch</span>(segment_fault)&#123;</span><br><span class="line">    uncommon_trap();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虚拟机会注册一个Segment Fault信号的异常处理器，注意这里指的是进程层面的异常处理器，而并非Java中的 try-catch 异常处理。这样当 foo 不为空时，对 value 的访问不会有任何额外的判空开销，
+但是当 foo 真的为空时，则必须转到异常处理器中恢复中断并抛出 NullPointException 异常。进入异常处理器会涉及到进程从用户态转入内核态的过程，结束后再回到用户态，速度远比一次判空检查慢得多。</p>
+<p>因此，当 foo 极少为空时，隐式异常优化是值得的，但假如 foo 经常为空，那这样的优化反而会让程序更慢。所以在HotSpot中，它会根据运行期收集到的性能监控信息来自动选择最合适的方案。</p>
+<p><br><strong>参考：</strong> </p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
 <li><a href="https://docs.oracle.com/javase/8/embedded/develop-apps-platforms/codecache.htm" target="_blank" rel="noopener">https://docs.oracle.com/javase/8/embedded/develop-apps-platforms/codecache.htm</a></li>
 <li><a href="http://thinkhejie.github.io/2016/05/05/JVM%E7%B3%BB%E5%88%97_06/" target="_blank" rel="noopener">http://thinkhejie.github.io/2016/05/05/JVM%E7%B3%BB%E5%88%97_06/</a></li>
+<li><a href="https://www.cnblogs.com/dwtfukgv/p/14875571.html" target="_blank" rel="noopener">https://www.cnblogs.com/dwtfukgv/p/14875571.html</a></li>
+<li><a href="https://blog.csdn.net/ning0323/article/details/75451955" target="_blank" rel="noopener">https://blog.csdn.net/ning0323/article/details/75451955</a></li>
+<li><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html" target="_blank" rel="noopener">https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html</a></li>
 </ol>
 
       
