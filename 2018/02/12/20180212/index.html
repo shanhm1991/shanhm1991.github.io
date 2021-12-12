@@ -87,7 +87,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 6.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 21min</font>
+   <font style="color: #999;"> words: 9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 31min</font>
    
    
   
@@ -238,9 +238,99 @@
 其实三种结构也可以相互融合，比如在整体上采用片上网络方式，而在局部选择总线或者交叉开关结构，以实现性能与复杂度之间的平衡。</p>
 <p><strong>同步互斥问题：</strong>多核系统还需要解决的一个问题就是核之间的同步和互斥，多核处理机上运行的多个任务可能会竞争共享资源，因此，
 需要操作系统与硬件配合提供核间的同步机制和共享资源的互斥访问机制。比如，多核系统硬件应该提供“读-修改-写回”的原子操作或其他互斥机制，保证对共享资源的互斥访问。</p>
-<h4 id="3-4-核间任务调度"><a href="#3-4-核间任务调度" class="headerlink" title="3.4. 核间任务调度"></a>3.4. 核间任务调度</h4><p><br><strong>参考：</strong></p>
+<p>由于多核处理机内的各个核之间需要通过中断方式进行通信，所以多核处理机的中断处理方式也和单核有很大不同。
+多核内部的本地中断控制器和负责仲裁各核之间中断分配的全局中断控制器也需要封装在芯片内部。</p>
+<h4 id="3-4-核间任务调度"><a href="#3-4-核间任务调度" class="headerlink" title="3.4. 核间任务调度"></a>3.4. 核间任务调度</h4><p>多核处理机中另一个必须要解决的问题就是如何在多个处理机核之间分配任务，支持多核的操作系统必须解决任务分配、任务调度、仲裁以及负载平衡等问题，
+必要时还需要支持在多核之间进行动态任务迁移，目前关于多核的任务调度算法主要有如下两种</p>
+<ul>
+<li><p><strong>全局队列调度策略：</strong>即由操作系统维护一个全局的任务等待队列，当系统中有某个处理机核空闲时，操作系统便从全局任务等待队列中选取就绪任务并分配到此核心上执行，
+这种调度策略的优点是处理机核的利用率低。</p>
+</li>
+<li><p><strong>局部队列调度策略：</strong>操作系统为每个处理机核维护一个局部任务等待队列，当系统中有某个处理机核空闲时，便从该核的任务等待队列中选取恰当的任务执行。
+这种队列的优点在于任务基本上无需在多个处理机核之间迁移，有利于提高处理机核私有 cache 的命中率，缺点是处理机核的利用率低。</p>
+</li>
+</ul>
+<p><strong>平衡设计原则：</strong>多核系统设计必须遵循的一个重要原则就是平衡设计，与单核处理机相比，多核系统的设计复杂度大幅度提高，因为在解决某个方面问题时往往会带来其他方面的问题，
+所以多核结构设计的重点不在于某个细节采用了什么复杂或性能表现较好的设计，而是在于整体设计目标。</p>
+<p>在多核系统设计过程中必须仔细权衡对某些问题的解决办法，尽量采用简单、易于实现、成本低廉而且对整体性能影响不大的设计方案。平衡设计原则是指在芯片的复杂度、内部结构、性能、功耗、扩展性、
+部件成本等各个方面做一定的权衡，不能为了单纯的获得某一方面的性能提升而导致其他方面的问题。在设计过程中要坚持从整体结构的角度去权衡具体的结构问题。要得到一个在通常情况下，
+逻辑结构简单并且对大多数应用程序而言性能优良的处理机结构，为了整体目标往往要牺牲掉某些局部的最佳设计方案。</p>
+<h3 id="4-缓存命中问题"><a href="#4-缓存命中问题" class="headerlink" title="4. 缓存命中问题"></a>4. 缓存命中问题</h3><p>现在的处理机一般都是多核结构，通常都有三级缓存，也就是上面所示的片内共享L3 cache 结构，其中：
+L1 缓存分成两种，一种是指令缓存，一种是数据缓存。L2 缓存和 L3 缓存不分指令和数据。
+L1 和 L2 缓存继承在每一个 CPU 核中，L3 则是所有 CPU 核心共享的内存，再往后就是内存，内存后面就是硬盘，可以比较一下他们的速度：</p>
+<ul>
+<li>L1 的存取速度：<strong>4 个CPU时钟周期</strong></li>
+<li>L2 的存取速度：<strong>11 个CPU时钟周期</strong></li>
+<li>L3 的存取速度：<strong>39 个CPU时钟周期</strong></li>
+<li>RAM内存的存取速度 ：<strong>107 个CPU时钟周期</strong></li>
+</ul>
+<p>可以看到，L1 的速度是 RAM 的 27 倍，但是 L1/L2 的大小基本上也就是 KB 级别的，L3 会是 MB 级别的。例如：Intel Core i7-8700K ，是一个 6 核的 CPU，
+每个核上的 L1 是 64KB（数据和指令各 32KB），L2 是 256K，L3 则有 2MB。</p>
+<p>通常数据的读取由内存向上，先到 L3，再到 L2，再到 L1，最后到寄存器进行 CPU 计算，为什么会设计成三层，主要是有下面几个考虑：</p>
+<ul>
+<li><p>一方面是物理速度，如果要更大的容量就需要更多的晶体管，除了芯片的体积会变大，更重要的是大量的晶体管会导致速度下降，因为访问速度和要访问的晶体管所在的位置成反比，
+也就是当信号路径变长时，通信速度会变慢，这部分是物理问题。</p>
+</li>
+<li><p>另一个问题是，多核技术中，数据的状态需要在多个CPU中进行同步，并且，我们可以看到，cache 和 RAM 的速度差距太大，所以，多级不同尺寸的缓存有利于提高整体的性能。</p>
+</li>
+<li><p><strong>缓存的命中</strong></p>
+</li>
+</ul>
+<p>对于 CPU 来说，它是不会按字节来进行加载的，因为这样非常没有效率，一般来说都是按块的加载的，这个单位称为<strong>Cache Line</strong>，也就是上面多次提到的缓存行的概念。</p>
+<p><font style="color:#E51508;">一般主流 CPU 的 Cache Line 是 64 Bytes</font>（也有的 CPU 用 32Bytes 或 128Bytes），64 Bytes 也就是 16 个 32 位的整型，
+这就是 CPU 从内存中捞数据的最小单位。比如：如果 Cache Line 最小单位为 64Bytes，L1 有 32KB，那么把 Cache 分布多个 Cache Line中去，L1 就有 32KB/64B = 512 个 Cache Line。</p>
+<p>缓存需要把内存中的数据读取进来，缓存的数据放置策略决定了内存中的数据块会拷贝到 CPU Cache 中的哪个位置上，因为 Cache 的大小远小于内存，所以需要一种地址关联算法，
+能够让内存中的数据可以被映射到 Cache 中来，这个有点像内存地址从逻辑地址向物理地址映射的方法，但不完全一样，通常有如下的一些方法</p>
+<ul>
+<li><p>一种方法是，任何一个内存地址的数据都可以被缓存在任何一个 Cache Line 里，这种方法是最灵活的，但是，如果我们想知道一个内存数据是否存在于 Cache 中，
+我们就需要进行 O(n) 复杂度的 Cache 遍历，这是很没有效率的。</p>
+</li>
+<li><p>为了降低缓存搜索复杂度，需要使用像Hash Table这样的数据结构，最简单的hash table就是做求模运算，比如：L1 Cache 有 512 个 Cache Line，
+那么，通过公式：<code>(内存地址 mod 512) * 64</code> 就可以直接找到所在的 Cache 地址的偏移了。但这样的方式需要程序对内存地址的访问要非常地平均，
+不然冲突就会非常严重，而这只能是一种非常理想的情况了。</p>
+</li>
+<li><p>为了避免上述问题，就要容忍一定的hash冲突，于是就出现了 N-Way 关联。也就是把连续的 N 个 Cache Line 绑成一组，然后，先找到相关的组，然后再在这个组内找到相关的 Cache Line，
+这样的方式称为 Set Associativity，如下图所示</p>
+</li>
+</ul>
+<p><img src="/img/20180212/20180212.8.jpg" alt=""></p>
+<p>对于 N-Way 组关联，可以举个例子，比如 Intel 大多处理器的 L1 Cache 都是 32KB，8-Way 组相联，Cache Line 是 64 Bytes。这意味着：</p>
+<ul>
+<li><p>32KB的可以分成，32KB / 64B = 512 条 Cache Line</p>
+</li>
+<li><p>因为是8 Way，于是会每一Way 有  512 / 8 = 64 条 Cache Line</p>
+</li>
+<li><p>于是每一Way就有 64 x 64 = 4096 Byts 的内存。</p>
+</li>
+</ul>
+<p>为了方便索引内存地址：</p>
+<ul>
+<li><p><strong>Tag：</strong>每条 Cache Line 前都会有一个独立分配的 24 bits来存 tag，也就是内存地址的前24bits</p>
+</li>
+<li><p><strong>Index：</strong>内存地址后续的 6 个 bits 则是在这一 Way 的是Cache Line 索引，2^6 = 64 刚好可以索引 64 组Cache Line</p>
+</li>
+<li><p><strong>Offset：</strong>再往后的 6bits 用于表示在 Cache Line 里的偏移量</p>
+</li>
+</ul>
+<p>如下图所示，对于 32KB 的 L1 cache，横向分为 8 Way，于是纵向就可以将 Cache Line 分为 64 组。于是当访问内存中的一个 Cache Line 时，首先读取其中间的 6bits，确定是在那组</p>
+<p><img src="/img/20180212/20180212.9.jpg" alt=""></p>
+<p>然后，在这一组的 8 Way 的 cache line 中，再进行 O(n) n=8 的遍历，也就是匹配前 24bits 的 tag。如果匹配中了，就算命中；如果没有匹配到，则 cache miss，
+如果是读操作，那就需要向后面的缓存进行访问了，对于 L2/L3 也是这样的思路。</p>
+<p><img src="/img/20180212/20180212.10.jpg" alt=""></p>
+<p>由于中间的 6bits 决定了 Cache Line 所在的组，所以对于一段连续的内存来说，每隔 4096B 的内存会被放在同一个组内，导致缓存冲突。</p>
+<p>了解这些细节，有利于我们知道在什么情况下可以避免冲突问题，比如下面摘抄的示例：</p>
+<p>看一下多核下的性能问题，两个线程分别操作同一个数组中的两个不同的元素（无需加锁），各自循环1000万次，做加法操作，<br>其中对于p2指针，取两种情况：p[1] 和 p[30]，理论上来说，无论访问哪两个数组元素，都应该是一样的执行时间</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fn</span> <span class="params">(<span class="keyword">int</span>* data)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>*<span class="number">1024</span>*<span class="number">1024</span>; ++i)</span><br><span class="line">        *data += rand();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> p[<span class="number">32</span>];</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> *p1 = &amp;p[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">int</span> *p2 = &amp;p[<span class="number">1</span>]; <span class="comment">// 或者 int *p2 = &amp;p[30];</span></span><br><span class="line"> </span><br><span class="line"><span class="function">thread <span class="title">t1</span><span class="params">(fn, p1)</span></span>;</span><br><span class="line"><span class="function">thread <span class="title">t2</span><span class="params">(fn, p2)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>然而，实际结果是：<br>对于 p[0] 和 p[1] ：560ms<br>对于 p[0] 和 p[30]：104ms    </p>
+<p>这是因为 p[0] 和 p[1] 在同一条 Cache Line 上，而 p[0] 和 p[30] 则不可能在同一条Cache Line 上 ，CPU 的缓存最小的更新单位是 Cache Line，所以，这导致虽然两个线程在写不同的数据，
+但是因为这两个数据在同一条 Cache Line 上，就会导致缓存需要不断进在两个 CPU 的 L1/L2 中进行同步，从而导致了 5 倍的时间差异。</p>
+<p><font style="color:gray;">同样的逻辑，使用Java在自己电脑上并没能复现这样的效果，而是两者执行下来差不多，这个可能跟具体的机子以及编译执行时的优化有关，
+不过能理解和体会示例中的意思就可以了。</font></p>
+<p><br><strong>参考：</strong></p>
 <ol>
 <li>《计算机组成原理》</li>
+<li><a href="https://blog.csdn.net/songguangfan/article/details/115479861" target="_blank" rel="noopener">https://blog.csdn.net/songguangfan/article/details/115479861</a></li>
 </ol>
 
       
@@ -335,7 +425,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-并行处理机的组织与结构"><span class="toc-text">1. 并行处理机的组织与结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-超标量处理机与超长指令字处理机"><span class="toc-text">1.1. 超标量处理机与超长指令字处理机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-多处理机与多计算机"><span class="toc-text">1.2. 多处理机与多计算机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-多线程处理机"><span class="toc-text">1.3. 多线程处理机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-多核处理机"><span class="toc-text">1.4. 多核处理机</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-指令级并行与线程级并行"><span class="toc-text">2. 指令级并行与线程级并行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-多核处理机"><span class="toc-text">3. 多核处理机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-cache组织"><span class="toc-text">3.1. cache组织</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-cache一致性"><span class="toc-text">3.2. cache一致性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-核间通信"><span class="toc-text">3.3. 核间通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-核间任务调度"><span class="toc-text">3.4. 核间任务调度</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-并行处理机的组织与结构"><span class="toc-text">1. 并行处理机的组织与结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-超标量处理机与超长指令字处理机"><span class="toc-text">1.1. 超标量处理机与超长指令字处理机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-多处理机与多计算机"><span class="toc-text">1.2. 多处理机与多计算机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-多线程处理机"><span class="toc-text">1.3. 多线程处理机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-多核处理机"><span class="toc-text">1.4. 多核处理机</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-指令级并行与线程级并行"><span class="toc-text">2. 指令级并行与线程级并行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-多核处理机"><span class="toc-text">3. 多核处理机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-cache组织"><span class="toc-text">3.1. cache组织</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-cache一致性"><span class="toc-text">3.2. cache一致性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-核间通信"><span class="toc-text">3.3. 核间通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-核间任务调度"><span class="toc-text">3.4. 核间任务调度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-缓存命中问题"><span class="toc-text">4. 缓存命中问题</span></a></li></ol>
 </div>
 
 
