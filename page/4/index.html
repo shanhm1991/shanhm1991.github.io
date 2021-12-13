@@ -60,6 +60,224 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20190110" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-09T16:00:00.000Z"><a href="/2019/01/10/20190110/">2019-01-10</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/10/20190110/">《Java并发编程实战》 同步工具类的设计</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>创建状态依赖类最简单的方法通常是在类库中现有状态依赖类的基础上进行构造，如果类库不支持，则可以使用Java语言和类库提供的底层机制来构造自己的同步机制，
+包括内置的条件队列、显示的<code>Condition</code>对象以及<code>AbstractQueuedSynchronizer</code>框架。</p>
+<p>在单线程的程序中调用方法时，如果基于某个状态的前提条件未得到满足，那么这个条件永远无法成真。而在并发程序中，基于状态的条件可能会由于其他线程的操作而改变。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/10/20190110/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190109" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-08T16:00:00.000Z"><a href="/2019/01/09/20190109/">2019-01-09</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/09/20190109/">《Java并发编程实战》 显式锁的使用</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>在java 5.0之前，协调共享对象的访问可以使用的机制有<code>synchronized</code>和<code>volatile</code>，java 5.0中新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置锁不再适用时，作为一种可选择的高级功能。
+在java 6.0中，也使用了与<code>ReentrantLock</code>类似的算法对内置锁本身进行了改进，有效地提高了内置锁的可伸缩性。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/09/20190109/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190108" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-07T16:00:00.000Z"><a href="/2019/01/08/20190108/">2019-01-08</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/08/20190108/">《Java并发编程实战》 同步的性能问题</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>在<font color="#E51508">安全性</font>与<font color="#E51508">活跃性</font>之间通常存在着某种制衡，我们可以使用加锁机制来确保线程安全，但如果过度的使用加锁，则可能导致死锁。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/08/20190108/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190106" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-05T16:00:00.000Z"><a href="/2019/01/06/20190106/">2019-01-06</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/06/20190106/">《Java并发编程实战》 任务的取消</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>如果外部代码能在某个操作正常完成之前将其置入完成状态，那么这个操作就可以称为可取消的，<font color="#E51508">行为良好的软件都应该能很完善地处理失败、关闭和取消等过程。</font> 
+一个可取消的任务必须拥有取消策略，在这个策略中定义：</p>
+<ul>
+<li>其他代码如何请求取消该任务；</li>
+<li>任务在何时检查是否已经请求了取消；</li>
+<li>在响应取消请求时应该执行哪些操作；</li>
+</ul>
+<p><font color="#E51508">Java中并没有提供任何机制来安全地终止线程，但它提供了一种协作机制，即通过设置某个已请求取消的标志，然后任务执行过程中定期地查看该标志，如果设置了，那么任务提前结束。</font></p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/06/20190106/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20190105" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -384,247 +602,6 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
         
           <div class="alignleft">
             <a href="/2018/10/04/20181004/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180904" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-09-03T16:00:00.000Z"><a href="/2018/09/04/20180904/">2018-09-04</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/09/04/20180904/">centos安装oracle11g</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>vmware版本：14.1.1<br>oracle版本：Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit    </p>
-<p>问题：    </p>
-<ol>
-<li>安装vnc    </li>
-<li>用vnc安装oracle  </li>
-<li>监听服务启动</li>
-<li>客户端连接</li>
-</ol>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/09/04/20180904/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180621" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-20T16:00:00.000Z"><a href="/2018/06/21/20180621/">2018-06-21</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/06/21/20180621/">《spring源码深度解析》spring Boot</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>Spring Boot被设计用来简化spring应用的搭建和开发，其使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。这里主要介绍下springBoot的启动和自动化配置，
-以及如何集成Tomcat服务的。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/06/21/20180621/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180619" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-18T16:00:00.000Z"><a href="/2018/06/19/20180619/">2018-06-19</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/06/19/20180619/">《spring源码深度解析》spring Mvc</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>对于web应用，spring提供了springmvc。其基于Servlet实现，通过<code>DispatchServlet</code>来封装核心功能，对请求进行分派，并提供可配的处理程序映射、试图解析等。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/06/19/20180619/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180617" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-16T16:00:00.000Z"><a href="/2018/06/17/20180617/">2018-06-17</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/06/17/20180617/">《spring源码深度解析》spring Jdbc（事务）</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>事务一般指数据库事务，是由一系列对系统中数据进行访问或更新操作组成的一个执行单元。主要是当发生并发操作时，事务可以起到一个隔离作用，即避免各个操作相互影响，
-另外为数据库提供了一个从失败中恢复到正常状态的方法，同时保证了数据库即使在异常状态下仍能保持数据的一致性。</p>
-<p>以上可以概括成事务的四个特性，简称ACID</p>
-<ul>
-<li>原子性：</li>
-</ul>
-<p>即事务是原子性操作，要么不执行，要么全部执行成功；</p>
-<ul>
-<li>一致性：</li>
-</ul>
-<p>事务的执行不能破坏数据的完整性和一致性，即事务的执行没有中间状态，数据只有事务执行前的状态或执行后的状态；</p>
-<ul>
-<li>隔离性：</li>
-</ul>
-<p>在并发场景下，事务之间应该是相互隔离的，如果不同的事务同时访问相同的数据，则每个事务应该有各自完整的数据空间，即一个事务内部的操作及使用的数据对于其它事务是隔离的。
-在标准SQL规范中，定义了4种事务隔离级别，spring提供对应的设置：</p>
-<ol>
-<li>未授权读(READ_UNCOMMITTED)：最低隔离级别，运行脏读，即一个事务可以读取别的事务还没有提交的数据；</li>
-<li>授权读(READ_COMMITTED)：保证一个事务的修改只有提交后才能被另外一个事务读取；</li>
-<li>可重复读(REPEATABLE_READ)：保证一个事务在处理的过程中，多次读取同一个数据时，其值都是与事务开始时一致的，即便在过程中有其它的事务进行了提交；</li>
-<li>串行化(SERIALIZABLE)：事务被要求顺序执行；</li>
-</ol>
-<ul>
-<li>持久性：</li>
-</ul>
-<p>事务一旦提交，其对数据的状态变更将是永久性的；</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/06/17/20180617/#more" class="more-link">more</a>
           </div>
         
         

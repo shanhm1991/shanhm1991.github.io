@@ -60,6 +60,222 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20180603" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-06-02T16:00:00.000Z"><a href="/2018/06/03/20180603/">2018-06-03</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/06/03/20180603/">《spring源码深度解析》spring BeanDefinition解析（自定义标签）</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>之前梳理了<code>XmlBeanDefinitionReader</code>解析配置文件的过程，但是主要是针对默认标签的解析，所以本文主要介绍下其对于自定义标签的解析策略。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/06/03/20180603/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20180601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-05-31T16:00:00.000Z"><a href="/2018/06/01/20180601/">2018-06-01</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/06/01/20180601/">《spring源码深度解析》spring BeanDefinition解析（XmlBeanDefinitionReader）</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>spring从xml中解析及注册<code>BeanDefinition</code>的过程主要由<code>XmlBeanDefinitionReader</code>主导，其相当于一个组织者的角色，将解析的工作委托给<code>BeanDefinitionDocumentReader</code>，注册工作则分配给<code>BeanDefinitionRegistry</code>。      
+并且，在真正开始解析前，它将自己以及<code>Resource</code>，<code>ReaderEventListener</code>等接口打包成<code>XmlReaderContext</code>交给<code>BeanDefinitionDocumentReader</code>，以便在解析过程中可以回调<code>ReaderEventListener</code>中的事件接口，以及在解析完成时，
+可以拿到<code>BeanDefinitionRegistry</code>进行注册。实际上当所有<code>BeanDefinition</code>注册完成时，它的使命也就结束了，剩下的就交给<code>BeanFactory</code>了。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/06/01/20180601/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20180527" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-05-26T16:00:00.000Z"><a href="/2018/05/27/20180527/">2018-05-27</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/05/27/20180527/">ubuntu安装mysql</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>ubuntu版本：16.04<br>MySQL版本：8.0.11  </p>
+<p>问题：</p>
+<ol>
+<li>安装mysql及配置</li>
+<li>root无法登录</li>
+<li>客户端认证失败</li>
+</ol>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/05/27/20180527/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20180518" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-05-17T16:00:00.000Z"><a href="/2018/05/18/20180518/">2018-05-18</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/05/18/20180518/">ubuntu使用yum安装软件问题</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>结论：ubuntu本身不支持用yum来管理软件安装的，是自己无知</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/05/18/20180518/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20180515" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -337,122 +553,6 @@
 
 
 
-  <article id="post-20180403" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-04-02T16:00:00.000Z"><a href="/2018/04/03/20180403/">2018-04-03</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/04/03/20180403/">JUC ThreadPoolExecutor</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p><code>Executor</code>是java中任务执行的主要抽象，虽然它是一个简单的接口，但却为灵活而强大的异步任务执行框架提供了基础，它提供了一种标准的方法将任务的提交过程与执行过程解耦开来。</p>
-<figure class="highlight java"><figcaption><span class="caption">java.util.concurrent.Executor</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Executor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">excute</span><span class="params">(Runnable command)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>ExecutorService</code>在<code>Executor</code>的基础上提供了对执行服务生命周期的管理，<code>ThreadPoolExecutor</code>作为具体实现，提供了对线程<code>Thread</code>以及任务<code>Runnable</code>的管理，
-其基本思路是利用阻塞队列对任务进行管理，调用者只负责提交任务到队列，然后自己管理的线程负责从队列中获取并执行任务。
-<code>ThreadPoolExecutor</code>最主要的职责就是负责在何时以怎样的方式创建线程，然后又在怎样的时机让线程结束，其主要目的就是希望在实现任务异步执行的同时能尽量复用线程，避免无节制的频繁创建造成对系统资源的开销</p>
-<p><img src="/img/20180401/20180401.7.jpg" alt=""> </p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/04/03/20180403/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180401" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-03-31T16:00:00.000Z"><a href="/2018/04/01/20180401/">2018-04-01</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/04/01/20180401/">JUC AbstractQueuedSynchronizer</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
-确保状态的改变是安全的。通过内置的FIFO（First In First Out）队列来完成资源获取线程的排队工作。</p>
-<p>AQS同步与synchronized同步是采用的两种不同的机制：<br>synchronized在编译后，会在同步块的前后分别添加monitorenter和monitorexit两个字节码指令，这两个指令需要关联一个监视对象，当线程执行monitorenter指令时，
-需要首先获得获得监视对象的锁，即进入同步块的凭证，才能进入同步块，当线程离开同步块时，执行monitorexit指令，释放对象锁。<br>AQS同步中，使用一个int类型的变量state来表示当前同步块的状态。以独占式同步为例，state的有效值为0和1，其中0表示当前同步块中没有线程，1表示同步块中已经有线程在执行。
-当线程要进入同步块时，需要首先判断state的值是否为0，假设为0，会尝试将state修改为1，只有修改成功了之后，线程才可以进入同步块，并通过CAS操作确保同一时刻只有一个线程操作成功。
-当线程离开同步块时，会修改state的值为0，并唤醒等待的线程。所以<font style="color:red;">在AQS同步中，线程获得锁实际上是指线程成功修改了状态变量state，
-而释放锁就是是指线程将状态变量置为了可修改的状态，以便其他线程可以再次尝试修改状态变量</font></p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/04/01/20180401/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
   <article id="post-20180315" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -489,112 +589,6 @@
         
           <div class="alignleft">
             <a href="/2018/03/15/20180315/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180310" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-03-09T16:00:00.000Z"><a href="/2018/03/10/20180310/">2018-03-10</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/03/10/20180310/">Linux I/O模型</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
-为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为<font style="color:#E51508;">内核空间</font>，
-一部分为<font style="color:#E51508;">用户空间</font>。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/03/10/20180310/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180305" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-03-04T16:00:00.000Z"><a href="/2018/03/05/20180305/">2018-03-05</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/03/05/20180305/">vim 常用操作</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>本文主要是整理了下日常工作中使用vim的操作，大部分操作其实都是用多了自然就会记得，但是脑壳内存实在有限，时间一长不用了又会忘记，所以整理记到硬盘上更好些，用到时查一下也比较方便</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/03/05/20180305/#more" class="more-link">more</a>
           </div>
         
         

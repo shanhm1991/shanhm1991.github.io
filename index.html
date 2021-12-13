@@ -73,7 +73,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/07/04/20190704/">基于spring构建计划任务 使用文档</a>
+       <a href="/2019/07/04/20190704/">基于线程池构建任务管理工具 使用文档</a>
     </h1>
     
   
@@ -128,7 +128,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/07/02/20190702/">基于spring构建计划任务 设计文档</a>
+       <a href="/2019/07/02/20190702/">基于线程池构建任务管理工具 设计文档</a>
     </h1>
     
   
@@ -156,61 +156,6 @@
         
           <div class="alignleft">
             <a href="/2019/07/02/20190702/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190615" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-14T16:00:00.000Z"><a href="/2019/06/15/20190615/">2019-06-15</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/06/15/20190615/">数据结构 B+树</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>B+树又在B树基础上做了一些改进，主要是在树叶节点上添加了一个链表结构，这样可以很好的解决范围查询问题。具体做法是将所有数据节点放在最下一层树叶节点上， 所有的树叶自左向右为一个链表，而对于任意非树叶节点，不保存数据，只充当索引，
-这样节点可以保存更多的关键字，从而使树的高度更低，其实如果去掉最下一层树叶节点的话，它就是一颗B树。</p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/13/20190613/">数据结构. B树</a>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/06/15/20190615/#more" class="more-link">more</a>
           </div>
         
         
@@ -266,65 +211,6 @@
         
           <div class="alignleft">
             <a href="/2019/06/13/20190613/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190611" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-10T16:00:00.000Z"><a href="/2019/06/11/20190611/">2019-06-11</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/06/11/20190611/">数据结构 2-3树</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足H = log(N+1)，
-但实际在大部分情形下，无论其如何旋转调整都无法做到，毕竟对于每个节点，其最多只能有一个元素，两个子节点。<br>既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在一个节点只有单个子树的情况，取而代之的是节点是二叉还是三叉（如果一个节点只有单个子树，
-就使其成为三叉节点），这也就是2-3树的字面意思：即同时拥有二叉节点和三叉节点的树， 这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，
-并使树的节点达到一个绝对平衡的状态。</p>
-<p><font color="#E51508">2-3树本身并没有什么实际使用场景，但其在思维上打破了二叉树的约束，在树形数据结构中起着一个关键的连接作用，顺着这些树的关系可以联想前人是如何从二叉树想到了Avl树，
-又是怎样从2-3树想到了红黑树以及B树。</font></p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/08/20190608/">数据结构. Avl树</a>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/06/11/20190611/#more" class="more-link">more</a>
           </div>
         
         
@@ -405,60 +291,6 @@
 
 
 
-  <article id="post-20190608" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-07T16:00:00.000Z"><a href="/2019/06/08/20190608/">2019-06-08</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/06/08/20190608/">数据结构 AVL树</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>定义：Avl树在二叉查找树的基础上加了一个平衡条件：对于任意节点，其左右子树的高度差最多为1。</p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/05/20190605/">数据结构. 二叉树</a>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/06/08/20190608/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
   <article id="post-20190605" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -516,20 +348,20 @@
 
 
 
-  <article id="post-20190601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180403" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-05-31T16:00:00.000Z"><a href="/2019/06/01/20190601/">2019-06-01</a></time>
+        <time class="dt-published" datetime="2018-04-02T16:00:00.000Z"><a href="/2018/04/03/20180403/">2018-04-03</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/06/01/20190601/">数据结构 线性结构</a>
+       <a href="/2018/04/03/20180403/">JUC ThreadPoolExecutor</a>
     </h1>
     
   
@@ -543,13 +375,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>从百科中可以找到定义：数据结构即计算机存储、组织数据的方式，它的目标是反映数据元素之间的逻辑关系，其中的逻辑关系是指数据元素之间的前后关系，而与他们在计算机中的存储位置无关。</p>
-<p>常见的数据结构可以分为四种：</p>
-<ol>
-<li>集合：数据结构中的元素之间除了“同属一个集合” 的相互关系外，别无其他关系；</li>
-<li>线性结构：数据结构中的元素存在一对一的相互关系；</li>
-<li>树形结构：数据结构中的元素存在一对多的相互关系；</li>
-<li>图形结构：数据结构中的元素存在多对多的相互关系。
+        <p><code>Executor</code>是java中任务执行的主要抽象，虽然它是一个简单的接口，但却为灵活而强大的异步任务执行框架提供了基础，它提供了一种标准的方法将任务的提交过程与执行过程解耦开来。</p>
+<figure class="highlight java"><figcaption><span class="caption">java.util.concurrent.Executor</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Executor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">excute</span><span class="params">(Runnable command)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 	
@@ -557,7 +384,174 @@
       
         
           <div class="alignleft">
-            <a href="/2019/06/01/20190601/#more" class="more-link">more</a>
+            <a href="/2018/04/03/20180403/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20180401" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-03-31T16:00:00.000Z"><a href="/2018/04/01/20180401/">2018-04-01</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/04/01/20180401/">JUC AbstractQueuedSynchronizer</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
+确保状态的改变是安全的。通过内置的FIFO（First In First Out）队列来完成资源获取线程的排队工作。</p>
+<p>AQS同步与synchronized同步是采用的两种不同的机制：<br>synchronized在编译后，会在同步块的前后分别添加monitorenter和monitorexit两个字节码指令，这两个指令需要关联一个监视对象，当线程执行monitorenter指令时，
+需要首先获得获得监视对象的锁，即进入同步块的凭证，才能进入同步块，当线程离开同步块时，执行monitorexit指令，释放对象锁。<br>AQS同步中，使用一个int类型的变量state来表示当前同步块的状态。以独占式同步为例，state的有效值为0和1，其中0表示当前同步块中没有线程，1表示同步块中已经有线程在执行。
+当线程要进入同步块时，需要首先判断state的值是否为0，假设为0，会尝试将state修改为1，只有修改成功了之后，线程才可以进入同步块，并通过CAS操作确保同一时刻只有一个线程操作成功。
+当线程离开同步块时，会修改state的值为0，并唤醒等待的线程。所以<font style="color:red;">在AQS同步中，线程获得锁实际上是指线程成功修改了状态变量state，
+而释放锁就是是指线程将状态变量置为了可修改的状态，以便其他线程可以再次尝试修改状态变量</font></p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/04/01/20180401/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20180310" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-03-09T16:00:00.000Z"><a href="/2018/03/10/20180310/">2018-03-10</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/03/10/20180310/">Linux I/O模型</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
+为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为<font style="color:#E51508;">内核空间</font>，
+一部分为<font style="color:#E51508;">用户空间</font>。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/03/10/20180310/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20170911" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-09-10T16:00:00.000Z"><a href="/2017/09/11/20170911/">2017-09-11</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2017/09/11/20170911/">Java Map</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>java容器中一般最常用的就是List、Set、Map，<a href="https://shanhm1991.github.io/2017/09/10/20170910/">List</a>的实现前面已经介绍过，本文主要讨论下Map的几个实现，至于Set则比较简单，
+它们仅仅是依赖Map做了层封装而已。</p>
+<p>在讨论之前，还是先看下Map的实现结构</p>
+<p><img src="/img/20170911/20170911.1.png" alt=""></p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/09/11/20170911/#more" class="more-link">more</a>
           </div>
         
         
@@ -587,7 +581,7 @@
   
   
     <h1 class="title">
-       <a href="/2020/06/01/20200601/">Python Fly小游戏</a>
+       <a href="/2020/06/01/20200601/">《UNIX环境高级编程》 文件</a>
     </h1>
     
   
@@ -601,8 +595,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>最近在B站了看了一套Python学习视频，作为学习成果这里依葫芦画瓢写个小游戏，顺便做个笔记。因为主业是写Java，并不经常写Python，
-如果不做个笔记，估计过不了多久就忘光了，所以好记性不如烂笔记，虽然知道这些东西也许很简单</p>
+        <p>Linux中所有的 I/O 设备都被抽象为文件，这样所有的输入输出都被当作对相应的文件进行读写操作。这种将设备统一映射为文件的方式，允许Linux内核引出一个简单、低级的应用接口，称为 Unix I/O， 使得所有的输入输出都能以一种统一的方式执行。</p>
       
     </div>
 	

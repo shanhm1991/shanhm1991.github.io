@@ -60,6 +60,62 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20170915" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-09-14T16:00:00.000Z"><a href="/2017/09/15/20170915/">2017-09-15</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2017/09/15/20170915/">《深入理解Java虚拟机》 编译 &amp; 优化</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Java的编译过程可以分为两个阶段，首先是将<code>.java</code>文件编译为<code>.class</code>文件的过程，称为前端编译，比如javac；然后在运行期，可能即时编译器（JIT）又会将字节码转变为本地机器码，
+比如HotSopt的C1、C2编译器，或者Graal编译器。</p>
+<p>对于优化处理，Java虚拟机团队选择将<font color="#E51508">性能优化的措施全部集中在运行期的即时编译器中，以便让那些不是由 javac 产生的 Class 文件也能享受到性能优化的好处</font>，
+至于 <font color="#E51508">javac 中则做了一些针对Java语言编码过程的优化，用来降低开发者的编码复杂度、提高编码效率</font>。可以这样认为，即时编译器在运行期的优化过程，
+支撑了程序执行效率的不断提升，而javac在编译期的优化过程，则支撑了开发者的编码效率和语言使用者的体验。</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/09/15/20170915/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20170912" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -95,61 +151,6 @@
 	
     <footer>
       
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20170911" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2017-09-10T16:00:00.000Z"><a href="/2017/09/11/20170911/">2017-09-11</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2017/09/11/20170911/">Java Map</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>java容器中一般最常用的就是List、Set、Map，<a href="https://shanhm1991.github.io/2017/09/10/20170910/">List</a>的实现前面已经介绍过，本文主要讨论下Map的几个实现，至于Set则比较简单，
-它们仅仅是依赖Map做了层封装而已。</p>
-<p>在讨论之前，还是先看下Map的实现结构</p>
-<p><img src="/img/20170911/20170911.1.png" alt=""></p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2017/09/11/20170911/#more" class="more-link">more</a>
-          </div>
         
         
       
