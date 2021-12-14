@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>基于线程池构建任务管理工具 设计文档 | Echo</title>
+  <title>基于线程池构建任务管理工具spring-fom 设计文档 | Echo</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="https://github.com/shanhm1991/spring-fom
@@ -17,7 +17,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="基于线程池构建任务管理工具 设计文档"/>
+  <meta property="og:title" content="基于线程池构建任务管理工具spring-fom 设计文档"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -80,7 +80,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        基于线程池构建任务管理工具 设计文档
+        基于线程池构建任务管理工具spring-fom 设计文档
     </h1>
     
     
@@ -105,7 +105,7 @@
    
   
   <div class="tags">
-    <a href="/tags/schedule/">schedule</a>
+    <a href="/tags/ThreadPoolExecutor/">ThreadPoolExecutor</a>   <a href="/tags/spring/">spring</a>
   </div>
 
 
@@ -144,7 +144,7 @@
     <td>
     2. 支持<font color="#E51508">定时批(多)任务</font>执行<br>
        &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>ScheduleFactory</code>可以创建批任务，或者通过<code>@Scheduled</code>指定多个任务方法<br>
-       &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>CompleterHandler</code>可以<font color="#E51508">自定义批任务结束处理</font>
+       &nbsp;&nbsp;&nbsp;&nbsp;实现接口<code>CompleteHandler</code>可以<font color="#E51508">自定义批任务结束处理</font>
     </td>
     </tr>
     <tr style="border-bottom:0.01rem solid #ededed;">
@@ -176,7 +176,7 @@
     <tr style="border-bottom:0.01rem solid #ededed;">
     <td>
     6. 对于<strong>非定时任务场景</strong>，比如提交的批任务<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;同样支持<code>CompleterHandler</code>接口，以及超时检测和冲突检测处理，具体可以见后面的使用示例
+    &nbsp;&nbsp;&nbsp;&nbsp;同样支持<code>CompleteHandler</code>接口，以及超时检测和冲突检测处理，具体可以见后面的使用示例
     </td>
     </tr>
     </table></p>
@@ -391,8 +391,7 @@
 <figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/spring-fom/blob/master/src/main/java/org/springframework/fom/</span><span class="caption">ScheduleContext.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">ScheduleThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(state == STOPPING) &#123;</span><br><span class="line">                terminate();</span><br><span class="line">                <span class="keyword">return</span> </span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            state = RUNNING</span><br><span class="line">        </span><br><span class="line">            submit and execute tasks ...</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                waitTaskCompleted ...</span><br><span class="line">            &#125;<span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                Thread.currentThread().interrupt(); <span class="comment">// 保留中断请求，后面检测处理</span></span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            state = SLEEPING</span><br><span class="line">        </span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                wait(waitTime);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; </span><br><span class="line">                <span class="comment">// 响应中断：结束等待，并立即重新检测state</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="3-其它"><a href="#3-其它" class="headerlink" title="3. 其它"></a>3. 其它</h3><p>到这里，主要的实现思路基本已经说完了，下面的功能只是为了使用上更方便一些。<br>具体都可以在内置的任务界面中体现：<font color="#258fb8">http://{ip}:{port}/{path}/fom.html</font>，当然，如果觉得界面不满足，或者希望将一些功能放到自己的界面中，
-那么也提供了对应的<font color="#E51508">接口服务</font><code>FomService</code>，任务界面上所有的后台接口都由<code>FomService</code>提供。如果觉得<code>FomService</code>提供的接口还不满足，
-也可以直接注入所有或对应的ScheduleContext来定制一些接口</p>
+那么也提供了对应的<font color="#E51508">接口服务</font><code>FomService</code>，任务界面上所有的后台接口都由<code>FomService</code>提供。</p>
 <h4 id="3-1-关于统计"><a href="#3-1-关于统计" class="headerlink" title="3.1. 关于统计"></a>3.1. 关于统计</h4><p>每个<code>ScheduleContext</code>对各自执行的任务都会有一些统计信息，比如成功失败数、等待数、正在执行数以及结果等。这些都封装<code>ScheduleStatistics</code>中，其在<code>ScheduleContext</code>创建时初始化，
 然后由每个<code>Task</code>在结束时自行更新统计结果。</p>
 <p>另外，也可以实现接口<code>ResultHandler</code><font color="#E51508">自定义任务结果的处理</font>，比如持久化到文件或数据库，默认就在内存中保存<code>7</code>天的统计数据，方面界面做一些分析使用。</p>
@@ -422,7 +421,7 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2019/07/04/20190704/">
-		    基于线程池构建任务管理工具 使用文档
+		    基于线程池构建任务管理工具spring-fom 使用文档
 		  </a>
 	  
 	  
@@ -445,7 +444,7 @@
         
   
   <div class="tags">
-    <a href="/tags/schedule/">schedule</a>
+    <a href="/tags/ThreadPoolExecutor/">ThreadPoolExecutor</a>   <a href="/tags/spring/">spring</a>
   </div>
 
 
