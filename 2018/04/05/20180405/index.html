@@ -8,7 +8,7 @@
   
   <meta name="description" content="前面整理线程池时说过Executor是执行任务的抽象，而Runnable是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成FutureTask，它是实现了接口RunnableFuture，
 相当于是Runnable和Future的一个整合，但在实现中它又依赖于Callable，可以这样理解，它以Runnable的身份对外提供执行调用，然后在执行过程再委托给依赖的Callable处理，
-另外它以Future的身份提供一些接口服务，如此，可以画出如下UML">
+另外它以Future的身份提供一些接口服务。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -45,7 +45,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">心怀热爱，不问终点，凛冬散尽，星河长明</span>
-  <h2><font style="color: #999;">articles:  97 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  96 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -120,10 +120,10 @@
       
         <p>前面整理线程池时说过<code>Executor</code>是执行任务的抽象，而<code>Runnable</code>是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成<code>FutureTask</code>，它是实现了接口<code>RunnableFuture</code>，
 相当于是<code>Runnable</code>和<code>Future</code>的一个整合，但在实现中它又依赖于<code>Callable</code>，可以这样理解，它以<code>Runnable</code>的身份对外提供执行调用，然后在执行过程再委托给依赖的<code>Callable</code>处理，
-另外它以<code>Future</code>的身份提供一些接口服务，如此，可以画出如下UML</p>
-<p><img src="/img/20180401/20180401.12.jpg" alt=""> </p>
+另外它以<code>Future</code>的身份提供一些接口服务。</p>
 <a id="more"></a>
 
+<p><img src="/img/20180401/20180401.12.jpg" alt=""> </p>
 <h3 id="1-属性"><a href="#1-属性" class="headerlink" title="1. 属性"></a>1. 属性</h3><figure class="highlight java"><figcaption><span class="caption">java.util.concurrent.FutureTask</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state; <span class="comment">// 任务状态</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Callable&lt;V&gt; callable; <span class="comment">// 待执行的任务</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Object outcome; <span class="comment">// 任务执行的结果或异常，非volatile字段，通过期前后state状态的设置来保证线程安全</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Thread runner; <span class="comment">// 执行任务的线程，执行run方法的线程首先尝试CAS设置runner，成功才有执行资格</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> WaitNode waiters; <span class="comment">// 阻塞在Future.get上的线程</span></span><br></pre></td></tr></table></figure>
 
 <h4 id="1-1-state-状态"><a href="#1-1-state-状态" class="headerlink" title="1.1. state 状态"></a>1.1. state 状态</h4><figure class="highlight java"><figcaption><span class="caption">java.util.concurrent.FutureTask</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Possible state transitions:</span></span><br><span class="line"><span class="comment">// NEW -&gt; COMPLETING -&gt; NORMAL</span></span><br><span class="line"><span class="comment">// NEW -&gt; COMPLETING -&gt; EXCEPTIONAL</span></span><br><span class="line"><span class="comment">// NEW -&gt; CANCELLED</span></span><br><span class="line"><span class="comment">// NEW -&gt; INTERRUPTING -&gt; INTERRUPTED</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NEW          = <span class="number">0</span>; <span class="comment">// 新建</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> COMPLETING   = <span class="number">1</span>; <span class="comment">// 执行完成之后，设置结果之前的一个中间状态，表示正在完成</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NORMAL       = <span class="number">2</span>; <span class="comment">// 正常完成</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXCEPTIONAL  = <span class="number">3</span>; <span class="comment">// 异常结束</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED    = <span class="number">4</span>; <span class="comment">// 已被取消</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INTERRUPTING = <span class="number">5</span>; <span class="comment">// 中断之前设置的一个状态，表示正在中断，中断之后置为INTERRUPTED</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INTERRUPTED  = <span class="number">6</span>; <span class="comment">// 已被中断</span></span><br></pre></td></tr></table></figure>
