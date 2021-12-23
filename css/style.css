@@ -42,18 +42,23 @@ h2 {
 }
 h3 {
   font-size: 1.3em;
+  margin-top: 35px;
 }
 h4 {
   font-size: 1.2em;
+  margin-top: 20px;
 }
 h5 {
   font-size: 1.1em;
+  margin-top: 20px;
 }
 h6 {
   font-size: 1em;
+  margin-top: 20px;
 }
 h7 {
   font-size: 1em;
+  margin-top: 20px;
 }
 a {
   text-decoration: none;
@@ -336,10 +341,6 @@ article .entry ol,
 article .entry dl,
 article .entry table,
 article .entry iframe,
-article .entry h3,
-article .entry h4,
-article .entry h5,
-article .entry h6,
 article .entry .video-container {
   margin-top: 15px;
 }
@@ -662,6 +663,7 @@ footer .addthis iframe {
 }
 #sidebar .widget .title {
   padding: 15px 15px;
+  margin-top: 0px;
   font-size: 1em;
   border-bottom: 1px solid #ddd;
   font-weight: normal;
