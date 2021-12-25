@@ -7,10 +7,10 @@
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="环境：win7_x64版本：mysql-5.7.18    
-
-ERROR 1045 (28000): Access denied for user ‘root’@’localhost’解决：跳过密码登录mysql，修改root密码后重新登录
-
-sql执行错误#3167解决：set global show_compatibility_56=on;">
+1、ERROR 1045 (28000): Access denied for user ‘root’@’localhost’
+解决：跳过密码登录mysql，修改root密码后重新登录
+2、sql执行错误#3167
+解决：set global show_compatibility_56=on;">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -90,7 +90,7 @@ sql执行错误#3167解决：set global show_compatibility_56=on;">
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 363  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 371  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -112,45 +112,26 @@ sql执行错误#3167解决：set global show_compatibility_56=on;">
     <div class="e-content entry" itemprop="articleBody">
       
         <p>环境：win7_x64<br>版本：mysql-5.7.18    </p>
-<ol>
-<li><p>ERROR 1045 (28000): Access denied for user ‘root’@’localhost’<br>解决：跳过密码登录mysql，修改root密码后重新登录</p>
-</li>
-<li><p>sql执行错误#3167<br>解决：set global show_compatibility_56=on;</p>
-</li>
-</ol>
-<a id="more"></a>
-
-<br>
-
-<p>场景：官网下载mysql-5.7.18-winx64包，解压，设置好环境变量，执行install等命令安装完毕，都正常未发现什么问题。<br>但是使用客户端连接数据库时报错：ERROR 1045 (28000): Access denied for user ‘root’@’localhost’ …    </p>
-<ol>
-<li>在mysql的home目录下找my.ini文件，如果没有可以自己新建，基本配置差不多，主要在最下面添加一行：skip-grant-tables</li>
-</ol>
+<p>1、ERROR 1045 (28000): Access denied for user ‘root’@’localhost’</p>
+<p>解决：跳过密码登录mysql，修改root密码后重新登录</p>
+<p>2、sql执行错误#3167</p>
+<p>解决：set global show_compatibility_56=on;<br><a id="more"></a></p>
+<p>场景：官网下载mysql-5.7.18-winx64包，解压，设置好环境变量，执行install等命令安装完毕，都正常未发现什么问题。但是使用客户端连接数据库时报错：ERROR 1045 (28000): Access denied for user ‘root’@’localhost’ …    </p>
+<p>1、在mysql的home目录下找my.ini文件，如果没有可以自己新建，基本配置差不多，主要在最下面添加一行：skip-grant-tables</p>
 <p><img src="/img/20171223/20171223.1.png" alt=""> </p>
-<ol start="2">
-<li>重启mysql服务，然后重新登录</li>
-</ol>
+<p>2、重启mysql服务，然后重新登录</p>
 <p><img src="/img/20171223/20171223.2.png" alt=""> </p>
-<ol start="3">
-<li>这时可以执行sql了，于是直接更新user表，注意字段名不叫password，而是authentication_string，可以select确认下</li>
-</ol>
+<p>3、这时可以执行sql了，于是直接更新user表，注意字段名不叫password，而是authentication_string，可以select确认下</p>
 <p><img src="/img/20171223/20171223.3.png" alt=""> </p>
 <p>于是：</p>
 <p><img src="/img/20171223/20171223.4.png" alt=""> </p>
-<ol start="4">
-<li>修改后quit，然后用密码重新登录（到这里已经解决了root的密码问题），接着新建库</li>
-</ol>
+<p>4、修改后quit，然后用密码重新登录（到这里已经解决了root的密码问题），接着新建库</p>
 <p><img src="/img/20171223/20171223.5.png" alt=""> </p>
-<ol start="5">
-<li>新建用户时，注意要去掉my.ini中的skip-grant-tables，然后重启服务，不然会报错，建完之后设置密码并给用户赋权，最后执行：flush privileges（将修改刷到内存中，实时生效）</li>
-</ol>
+<p>5、新建用户时，注意要去掉my.ini中的skip-grant-tables，然后重启服务，不然会报错，建完之后设置密码并给用户赋权，最后执行：flush privileges（将修改刷到内存中，实时生效）</p>
 <p><img src="/img/20171223/20171223.6.png" alt=""> </p>
-<ol start="6">
-<li>最后用客户端连接，发现报错：sql执行错误#3167    </li>
-</ol>
+<p>6、最后用客户端连接，发现报错：sql执行错误#3167    </p>
 <p><img src="/img/20171223/20171223.7.png" alt=""> </p>
-<p>网上查下错误3167，大概意思是mysql5.7.6开始information_schema.global_status已经被舍弃，为了兼容性，此时需要打开show_compatibility_56，
-即：set global show_compatibility_56=on; 修改之后就可以正常连接使用了。</p>
+<p>网上查下错误3167，大概意思是mysql5.7.6开始information_schema.global_status已经被舍弃，为了兼容性，此时需要打开show_compatibility_56，即：set global show_compatibility_56=on; 修改之后就可以正常连接使用了。</p>
 <p><img src="/img/20171223/20171223.8.png" alt=""> </p>
 
       
@@ -185,24 +166,7 @@ sql执行错误#3167解决：set global show_compatibility_56=on;">
 
         
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -283,5 +247,20 @@ sql执行错误#3167解决：set global show_compatibility_56=on;">
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

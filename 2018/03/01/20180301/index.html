@@ -109,29 +109,25 @@
       
         <p>…</p>
 <a id="more"></a>
-
-
-<p><strong>查看版本：</strong>
-    <table>
+<p><strong>查看版本：</strong><br>    <table>
         <tr>
-            <td><code>uname -a</code></td>
+            <td> uname -a </td>
             <td>：查看Linux系统内核信息</td>
         </tr>
         <tr>
-            <td><code>cat /proc/version</code></td>
+            <td> cat /proc/version </td>
             <td>：查看Linux系统版本信息</td>
         </tr>
         <tr>
-            <td><code>cat /etc/issue</code></td>
+            <td> cat /etc/issue </td>
             <td>：查看Linux系统发行版信息</td>
         </tr>
         <tr>
-            <td><code>cat /proc/cpuinfo</code></td>
+            <td> cat /proc/cpuinfo </td>
             <td>：查看cpu相关信息</td>
         </tr>
     </table></p>
-<h3 id="1-sed"><a href="#1-sed" class="headerlink" title="1. sed"></a>1. sed</h3><p>Stream Editor文本流编辑，一个非交互式的面向字符流的编辑器，它逐行处理内容，每次将当前处理的行存储到临时缓冲区（模式空间 pattern space），处理完成后并输出，接着处理下一行，直到文件结束。
-sed作为常见的文本处理工具之一，是一个非常有用且重要的命令，也是写自动化shell脚本的基础。</p>
+<h3 id="1-sed"><a href="#1-sed" class="headerlink" title="1. sed"></a>1. sed</h3><p>Stream Editor文本流编辑，一个非交互式的面向字符流的编辑器，它逐行处理内容，每次将当前处理的行存储到临时缓冲区（模式空间 pattern space），处理完成后并输出，接着处理下一行，直到文件结束。<br>sed作为常见的文本处理工具之一，是一个非常有用且重要的命令，也是写自动化shell脚本的基础。</p>
 <p><strong>语法</strong></p>
 <p><code>sed [options] &#39;scripts&#39; inputfile</code></p>
 <p><strong>-options</strong></p>
@@ -179,7 +175,6 @@ sed作为常见的文本处理工具之一，是一个非常有用且重要的�
 <p><code>sed -i &#39;/^$/d&#39; m.txt</code>：删除空行</p>
 <h4 id="1-6-sed脚本"><a href="#1-6-sed脚本" class="headerlink" title="1.6. sed脚本"></a>1.6. sed脚本</h4><p>对于一些复杂的操作可以存为脚本，然后通过<code>-f</code>调用，比如</p>
 <figure class="highlight shell"><figcaption><span class="caption">test.sed</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s/pang/&amp;jing/</span><br><span class="line">s/[0-9]//g</span><br></pre></td></tr></table></figure>
-
 <p><code>sed -f test.sed  m.txt</code>：执行脚本中的动作</p>
 <h3 id="2-awk"><a href="#2-awk" class="headerlink" title="2. awk"></a>2. awk</h3><p>awk是一个强大的文本分析工具，相对于sed，awk在对数据分析并生成报告时显得尤为强大，awk也是将文件逐行读入，然后将每行分隔切片再进行各种分析处理。其名称取自三位创始人的首字符（Alfred Aho、Peter Weinberger、Family Name）。</p>
 <p><strong>语法</strong></p>
@@ -228,24 +223,7 @@ sed作为常见的文本处理工具之一，是一个非常有用且重要的�
 
         
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -326,5 +304,20 @@ sed作为常见的文本处理工具之一，是一个非常有用且重要的�
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

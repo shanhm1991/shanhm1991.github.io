@@ -60,20 +60,20 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article id="post-20180310" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190101" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-03-09T16:00:00.000Z"><a href="/2018/03/10/20180310/">2018-03-10</a></time>
+        <time class="dt-published" datetime="2018-12-31T16:00:00.000Z"><a href="/2019/01/01/20190101/">2019-01-01</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/03/10/20180310/">Linux I/O模型</a>
+       <a href="/2019/01/01/20190101/">《Java并发编程实战》 线程安全之原子性</a>
     </h1>
     
   
@@ -87,9 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
-为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为<font style="color:#E51508;">内核空间</font>，
-一部分为<font style="color:#E51508;">用户空间</font>。</p>
+        <p><font color="#E51508">如果多个线程访问某个类时，这个类始终都能表现正确的行为，则可以称这个类是线程安全的。</font>所以一个对象是否要考虑线程安全问题，取决于它是否被多个线程访问，以及是否存在多种状态。反之如果一个对象是无状态的，既它不包含任何域，也不包含任何对其他类中域的引用，那么它一定是线程安全的。否则，一般会在类中会封装必要的同步机制来保证操作的原子性，以便保证类在被多线程访问时的线程安全。<br>
       
     </div>
 	
@@ -97,7 +95,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/03/10/20180310/#more" class="more-link">more</a>
+            <a href="/2019/01/01/20190101/#more" class="more-link">more</a>
           </div>
         
         
@@ -114,20 +112,20 @@
 
 
 
-  <article id="post-20180305" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20181004" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-03-04T16:00:00.000Z"><a href="/2018/03/05/20180305/">2018-03-05</a></time>
+        <time class="dt-published" datetime="2018-10-03T16:00:00.000Z"><a href="/2018/10/04/20181004/">2018-10-04</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/03/05/20180305/">vim 常用操作</a>
+       <a href="/2018/10/04/20181004/">ubuntu安装elasticsearch及head插件</a>
     </h1>
     
   
@@ -141,7 +139,12 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>本文主要是整理了下日常工作中使用vim的操作，大部分操作其实都是用多了自然就会记得，但是脑壳内存实在有限，时间一长不用了又会忘记，所以整理记到硬盘上更好些，用到时查一下也比较方便</p>
+        <p>ubuntu版本：16.0.4<br>elasticsearch版本：6.2.4  </p>
+<p>问题：  </p>
+<ol>
+<li>安装elasticsearch服务   </li>
+<li>安装elasticsearch-head插件</li>
+</ol>
       
     </div>
 	
@@ -149,7 +152,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/03/05/20180305/#more" class="more-link">more</a>
+            <a href="/2018/10/04/20181004/#more" class="more-link">more</a>
           </div>
         
         
@@ -166,20 +169,20 @@
 
 
 
-  <article id="post-20180301" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180904" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-02-28T16:00:00.000Z"><a href="/2018/03/01/20180301/">2018-03-01</a></time>
+        <time class="dt-published" datetime="2018-09-03T16:00:00.000Z"><a href="/2018/09/04/20180904/">2018-09-04</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/03/01/20180301/">Linux 常用操作</a>
+       <a href="/2018/09/04/20180904/">centos安装oracle11g</a>
     </h1>
     
   
@@ -193,7 +196,14 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>…</p>
+        <p>vmware版本：14.1.1<br>oracle版本：Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit    </p>
+<p>问题：    </p>
+<ol>
+<li>安装vnc    </li>
+<li>用vnc安装oracle  </li>
+<li>监听服务启动</li>
+<li>客户端连接</li>
+</ol>
       
     </div>
 	
@@ -201,7 +211,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/03/01/20180301/#more" class="more-link">more</a>
+            <a href="/2018/09/04/20180904/#more" class="more-link">more</a>
           </div>
         
         
@@ -218,20 +228,20 @@
 
 
 
-  <article id="post-20180212" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180621" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-02-11T16:00:00.000Z"><a href="/2018/02/12/20180212/">2018-02-12</a></time>
+        <time class="dt-published" datetime="2018-06-20T16:00:00.000Z"><a href="/2018/06/21/20180621/">2018-06-21</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/02/12/20180212/">《计算机组成原理》 并行组织与结构</a>
+       <a href="/2018/06/21/20180621/">《spring源码深度解析》spring Boot</a>
     </h1>
     
   
@@ -245,8 +255,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>由于物理规律对半导体器件的限制，传统单处理机通过提高主频提升性能的方法受到制约，不得不转向并行处理体系结构。下面主要介绍一些并行性相关的概念，
-然后分别讨论多线程和超线程处理机、多处理机和多核处理机。</p>
+        <p>Spring Boot被设计用来简化spring应用的搭建和开发，其使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。这里主要介绍下springBoot的启动和自动化配置，以及如何集成Tomcat服务的。<br>
       
     </div>
 	
@@ -254,7 +263,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/02/12/20180212/#more" class="more-link">more</a>
+            <a href="/2018/06/21/20180621/#more" class="more-link">more</a>
           </div>
         
         
@@ -271,20 +280,20 @@
 
 
 
-  <article id="post-20180210" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180619" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-02-09T16:00:00.000Z"><a href="/2018/02/10/20180210/">2018-02-10</a></time>
+        <time class="dt-published" datetime="2018-06-18T16:00:00.000Z"><a href="/2018/06/19/20180619/">2018-06-19</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/02/10/20180210/">《计算机组成原理》 输入输出系统</a>
+       <a href="/2018/06/19/20180619/">《spring源码深度解析》spring Mvc</a>
     </h1>
     
   
@@ -298,77 +307,76 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>I/O功能模块通常简称为：I/O接口，也叫适配器，<font style="color:red;">指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件</font>。为了保证处理器和不同外设之间高效和可靠的交互，
-CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶段：I/O接口与外设之间的数据传送，以及CPU与I/O接口之间的数据传送。</p>
-<p>下图展示了CPU、I/O接口和外围设备之间的连接关系。其中外围设备自身带有设备控制器，它是控制外围设备进行操作的控制部件，它通过I/O接口接收来自CPU传送的各种信息，
-并根据设备的不同要求将这些信息传送到设备，或者从设备中读出信息传送到I/O接口。</p>
-<p><img src="/img/20180202/20180202.6.jpg" alt=""> </p>
-<p>一个标准的I/O接口可以连接一个或多个设备，其结构也如图中所示，通常包括如下功能：</p>
+        <p>对于web应用，spring提供了springmvc。其基于Servlet实现，通过<code>DispatchServlet</code>来封装核心功能，对请求进行分派，并提供可配的处理程序映射、试图解析等。<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/06/19/20180619/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20180617" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-06-16T16:00:00.000Z"><a href="/2018/06/17/20180617/">2018-06-17</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2018/06/17/20180617/">《spring源码深度解析》spring Jdbc（事务）</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>事务一般指数据库事务，是由一系列对系统中数据进行访问或更新操作组成的一个执行单元。主要是当发生并发操作时，事务可以起到一个隔离作用，即避免各个操作相互影响，另外为数据库提供了一个从失败中恢复到正常状态的方法，同时保证了数据库即使在异常状态下仍能保持数据的一致性。</p>
+<p>以上可以概括成事务的四个特性，简称ACID</p>
 <ul>
-<li>控制：接口模块根据指令信息来控制外围设备的动作，比如启动或者关闭；</li>
-<li>缓冲：接口模块在外围设备和计算机其他部件之间作为一个缓冲器，以补偿各种设备在速度上的差异；</li>
-<li>状态：接口模块监视外围设备的工作状态并保存，比如准备就绪或者忙，供CPU询问外围设备状态时用；</li>
-<li>转换：接口模块可以完成数据转换，保证数据能在外围设备和CPU之间正确的传送；</li>
-<li>整理：接口模块可以完成一些特别功能，当需要时可以修改字计数器或者当前内存地址寄存器；</li>
-<li>程序中断：当外围设备向CPU请求某种动作时，接口模块会产生一个中断请求信号到CPU;</li>
+<li><p>原子性：即事务是原子性操作，要么不执行，要么全部执行成功；</p>
+</li>
+<li><p>一致性：事务的执行不能破坏数据的完整性和一致性，即事务的执行没有中间状态，数据只有事务执行前的状态或执行后的状态；</p>
+</li>
+<li><p>隔离性：在并发场景下，事务之间应该是相互隔离的，如果不同的事务同时访问相同的数据，则每个事务应该有各自完整的数据空间，即一个事务内部的操作及使用的数据对于其它事务是隔离的。在标准SQL规范中，定义了4种事务隔离级别，spring分别提供了对应的设置：</p>
+</li>
 </ul>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/02/10/20180210/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180208" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-02-07T16:00:00.000Z"><a href="/2018/02/08/20180208/">2018-02-08</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/02/08/20180208/">《计算机组成原理》 总线系统</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>总线是构成计算机系统的互联机构，是多个系统部件之间进行数据传输的公共通道。借助于总线，各部件之间实现地址、数据、控制信息的互换。一个单处理器系统中的总线，可以分为三类：</p>
+<ol>
+<li>未授权读(READ_UNCOMMITTED)：最低隔离级别，运行脏读，即一个事务可以读取别的事务还没有提交的数据；</li>
+<li>授权读(READ_COMMITTED)：保证一个事务的修改只有提交后才能被另外一个事务读取；</li>
+<li>可重复读(REPEATABLE_READ)：保证一个事务在处理的过程中，多次读取同一个数据时，其值都是与事务开始时一致的，即便在过程中有其它的事务进行了提交；</li>
+<li>串行化(SERIALIZABLE)：事务被要求顺序执行；</li>
+</ol>
 <ul>
-<li>内部总线：CPU内部连接各寄存器及运算部件之间的总线；</li>
-<li>系统总线：CPU同计算机的其他高速功能部件，如存储器、通道等互相连接的总线，称为系统总线；</li>
-<li>I/O总线：低速I/O设备之间互相连接的总线；</li>
-</ul>
+<li>持久性：事务一旦提交，其对数据的状态变更将是永久性的；
       
     </div>
 	
@@ -376,223 +384,7 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
       
         
           <div class="alignleft">
-            <a href="/2018/02/08/20180208/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180202" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-02-01T16:00:00.000Z"><a href="/2018/02/02/20180202/">2018-02-02</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/02/02/20180202/">《计算机组成原理》 存储系统</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>存储器是计算机的核心部件之一，用于存储程序和数据。由于现代计算机对于存储器容量和速度的要求越来越高，使得存储器以及演变成了存储系统</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/02/02/20180202/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180114" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-01-13T16:00:00.000Z"><a href="/2018/01/14/20180114/">2018-01-14</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/01/14/20180114/">Java Serializable（TODO）</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <a id="more"></a>
-
-
-
-
-
-      
-    </div>
-	
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180107" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-01-06T16:00:00.000Z"><a href="/2018/01/07/20180107/">2018-01-07</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/01/07/20180107/">Java I/O 网络（doing）</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>…</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/01/07/20180107/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180101" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2017-12-31T16:00:00.000Z"><a href="/2018/01/01/20180101/">2018-01-01</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/01/01/20180101/">Java I/O 文件</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>Java在操作系统的基础上对I/O操作提供了更高级的Api封装，可以对这些Api进行一些粗略的分类，比如从数据格式的角度可以分为基于字节操作的<code>InputStream</code>和<code>OutputStream</code>，以及基于字符操作的<code>Reader</code>和<code>Writer</code>，
-从数据传输方式的角度可以分为基于磁盘操作的<code>File</code>和基于网络操作的<code>Socket</code>，其实在Java中，<font color="#E51508">I/O主要考虑的就是以怎样的方式将怎样格式的数据进行传输的问题</font>，
-然后从这两个方向考虑如何提高I/O操作的效率</p>
-<p>由于I/O类库有很多类，很难对每个都介绍到位，这里只是简单从文件操作的场景对一些常用的Api做一些梳理，尽量从中去体会Java语言对于I/O操作支持和封装的思路，另外，如果想对I/O有更好的理解，最好先有如下准备知识：</p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2018/02/10/20180210/">计算机 输入输出系统（I/O）</a></li>
-<li><a href="https://shanhm1991.github.io/2018/03/10/20180310/">Linux I/O模型</a></li>
-</ul>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/01/01/20180101/#more" class="more-link">more</a>
+            <a href="/2018/06/17/20180617/#more" class="more-link">more</a>
           </div>
         
         
@@ -709,5 +501,20 @@ CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶�
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

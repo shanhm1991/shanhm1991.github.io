@@ -60,6 +60,216 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20190629" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-06-28T16:00:00.000Z"><a href="/2019/06/29/20190629/">2019-06-29</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/06/29/20190629/">借助poi解析Excel 二 借助SAX降低内存</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>继续上文，Excel的数据存在Xml中，所以解析Excel也就是解析xml。对于文本文件，可以通过换行符来确定一行的结束。而对于xml，其描述数据的单位是节点，并且可以嵌套，因此读取时就是以节点结束来进行确定，不过除非事先知道xml的节点规则，即节点结构或相互之间的关系，否则无法正确读取。Excel中的Xml规则即由Excel规范来描述，而poi正是在这个规范的基础上提供了一套基于事件解析的api。<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/06/29/20190629/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190628" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-06-27T16:00:00.000Z"><a href="/2019/06/28/20190628/">2019-06-28</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/06/28/20190628/">借助poi解析Excel 一 实现readLine读取</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>一般读取文本时会使用<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上进行了装饰，提供<code>readLine()</code>来简化文本行的读取。使得行数据的读取可以像流水线一样，每当读取完一行后，它就自动准备好下一行并等待获取，直至全部读取结束。所以这里也<font color="#E51508">希望能够在poi的基础上提供一个类似<code>readLine()</code>的接口来读取Excel，并可以比较方便地获取行数据中的字段。</font><br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/06/28/20190628/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190615" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-06-14T16:00:00.000Z"><a href="/2019/06/15/20190615/">2019-06-15</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/06/15/20190615/">数据结构 B+树</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>B+树又在B树基础上做了一些改进，主要是在树叶节点上添加了一个链表结构，这样可以很好的解决范围查询问题。具体做法是将所有数据节点放在最下一层树叶节点上， 所有的树叶自左向右为一个链表，而对于任意非树叶节点，不保存数据，只充当索引，这样节点可以保存更多的关键字，从而使树的高度更低，其实如果去掉最下一层树叶节点的话，它就是一颗B树。<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/06/15/20190615/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190613" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-06-12T16:00:00.000Z"><a href="/2019/06/13/20190613/">2019-06-13</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/06/13/20190613/">数据结构 B树</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>前面讨论2-3树时已经提到过，B树就是一颗平衡M叉树，其插入删除操作都可以与2-3树作类似处理，这里不再赘述。</p>
+<p>这里简单讨论下其实际意义：之前的各种二叉树都有一个共同假设，即数据全部存储在内存中，因此讨论时只需关心在找到目标之前需要比较多少次数。但是当数据量大到不适合存放在内存时，就需要借助磁盘来保存了，而磁盘访问相对于内存操作要慢得多得多，因此，这时对于性能的考虑更多的是关心如何减少磁盘访问操作，</p>
+<p>思路是将（有序）数据分为 N 批，并用 M 叉平衡树来组织，即访问磁盘时每批返回至多 M-1 项数据，那么在访问某项数据时，至多需要访问磁盘的次数就为 $\log_{M} {N}$<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/06/13/20190613/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20190611" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -87,14 +297,9 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足H = log(N+1)，
-但实际在大部分情形下，无论其如何旋转调整都无法做到，毕竟对于每个节点，其最多只能有一个元素，两个子节点。<br>既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在一个节点只有单个子树的情况，取而代之的是节点是二叉还是三叉（如果一个节点只有单个子树，
-就使其成为三叉节点），这也就是2-3树的字面意思：即同时拥有二叉节点和三叉节点的树， 这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，
-并使树的节点达到一个绝对平衡的状态。</p>
-<p><font color="#E51508">2-3树本身并没有什么实际使用场景，但其在思维上打破了二叉树的约束，在树形数据结构中起着一个关键的连接作用，顺着这些树的关系可以联想前人是如何从二叉树想到了Avl树，
-又是怎样从2-3树想到了红黑树以及B树。</font></p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/08/20190608/">数据结构. Avl树</a>
+        <p>前面已经讨论过平衡二叉树Avl，其目的就是通过旋转尽量使树保持平衡，以降低树的高度或查找的时间复杂度。当然，最好的情形是能转化成一颗满二叉树，使树的高度与节点数完全满足 $H = \log_{2} {(n+1)}$，但实际在大部分情形下，无论其如何旋转调整都无法做到，毕竟对于每个节点，其最多只能有一个元素，两个子节点。    </p>
+<p>既然如此，那就打破规则，允许一个节点最多拥有两个元素，三个子树，这样就不再存在一个节点只有单个子树的情况，取而代之的是节点是二叉还是三叉（如果一个节点只有单个子树，就使其成为三叉节点），这也就是 2-3 树的字面意思：即同时拥有二叉节点和三叉节点的树， 这样在插入删除时就可以自下而上采取分裂合并的方式保证所有叶子节点都在同一层，并使树的节点达到一个绝对平衡的状态。</p>
+<p>2-3 树本身并没有什么实际使用场景，但其在<font color="#E51508">思路上打破了二叉树的约束</font>，在树形数据结构中起着一个关键的连接作用，它解决了Avl树无法绝对平衡的问题，并且顺着这个思路可以进一步联想到红黑树以及后面要讲的B树。<br>
       
     </div>
 	
@@ -146,9 +351,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>定义：Avl树在二叉查找树的基础上加了一个平衡条件：对于任意节点，其左右子树的高度差最多为1。</p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/05/20190605/">数据结构. 二叉树</a>
+        <p>定义：Avl树在二叉查找树的基础上加了一个平衡条件：对于任意节点，其左右子树的高度差最多为1。<br>
       
     </div>
 	
@@ -157,456 +360,6 @@
         
           <div class="alignleft">
             <a href="/2019/06/08/20190608/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-05-31T16:00:00.000Z"><a href="/2019/06/01/20190601/">2019-06-01</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/06/01/20190601/">数据结构 线性结构</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>从百科中可以找到定义：数据结构即计算机存储、组织数据的方式，它的目标是反映数据元素之间的逻辑关系，其中的逻辑关系是指数据元素之间的前后关系，而与他们在计算机中的存储位置无关。</p>
-<p>常见的数据结构可以分为四种：</p>
-<ol>
-<li>集合：数据结构中的元素之间除了“同属一个集合” 的相互关系外，别无其他关系；</li>
-<li>线性结构：数据结构中的元素存在一对一的相互关系；</li>
-<li>树形结构：数据结构中的元素存在一对多的相互关系；</li>
-<li>图形结构：数据结构中的元素存在多对多的相互关系。
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/06/01/20190601/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190215" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-02-14T16:00:00.000Z"><a href="/2019/02/15/20190215/">2019-02-15</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/02/15/20190215/">设计模式 代理模式</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>代理模式：即给某个对象提供一个代理，并由代理对象来控制对真实对象的访问。它的方式就是让代理类持有目标类的实例，然后在对目标类进行操作的前后加入一层代理操作。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/02/15/20190215/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190131" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-30T16:00:00.000Z"><a href="/2019/01/31/20190131/">2019-01-31</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/31/20190131/">设计模式 原型模式</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>通过给定的原型对象，获取所要创建的对象类型，然后复制这个原型对象创建出更多同类型的对象。</p>
-<h3 id="1-结构"><a href="#1-结构" class="headerlink" title="1. 结构"></a>1. 结构</h3><ul>
-<li>客户角色(Client)：客户类提出创建对象的请求。</li>
-<li>抽象原型角色(Prototype)：给出具体原型类需要的所有接口。</li>
-<li>具体原型角色(ConcretePrototype)：被复制的对象。</li>
-</ul>
-<p>原型模式的关键在于如何实现克隆方法。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/31/20190131/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190128" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-27T16:00:00.000Z"><a href="/2019/01/28/20190128/">2019-01-28</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/28/20190128/">设计模式 建造者模式</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>有时，一个对象会由不同的部件组成，一些情况下，在某些部件没有恰当的值之前，对象不能作为一个完整的产品使用，甚至有时候，一个对象的组成部件必须按照某个顺序赋值才有意义。<br>建造者模式利用导演者对象以及具体建造者对象，将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/28/20190128/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190118" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-17T16:00:00.000Z"><a href="/2019/01/18/20190118/">2019-01-18</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/18/20190118/">设计模式 工厂模式</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>工厂模式负责将大量拥有共同接口的类实例化，它可以动态决定将哪一个类实例化</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/18/20190118/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190117" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-16T16:00:00.000Z"><a href="/2019/01/17/20190117/">2019-01-17</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/17/20190117/">设计模式 单例模式</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>单例模式的意思就是确保某个类的实例在系统中只有一个，可以简单概括为以下三点：</p>
-<ol>
-<li>只能有一个类实例；</li>
-<li>类必须自行创建这个实例；</li>
-<li>类必须自行向整个系统提供这个实例。
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/17/20190117/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190115" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-14T16:00:00.000Z"><a href="/2019/01/15/20190115/">2019-01-15</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/15/20190115/">设计模式 原则&amp;分类</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>设计模式的主要目标在于保证程序的高可用及高扩展性，在实际开发中不应该过多地纠结使用哪种设计模式，而是应该多体会设计模式的原则，换言之，只要遵循一定的原则，
-这些所谓的模式完全可能在无意识的状态下自发出现在产品代码中。其实这些设计模式也都不是谁突然间硬想出来的，而是从大量实践中总结出来的比较好的组织代码结构的方式。  </p>
-<p>好的设计能够有效避免或者延缓程序<font color="#E51508">架构的腐化</font>，通常，很多程序结构一开始也许设计得还可以，但随着业务功能的不断扩展和变化，
-可能就不得不在结构上做出一些妥协让步，慢慢地也就失去了结构。<br>另外，在设计过程中也要注意避免<font color="#E51508">过度设计</font>，即为不可能发生的变动付出过多的复杂度代价。总之不要滥用设计模式，不要觉得一个地方有可能会变动，
-就忍不住考虑是否应该增加复杂度来换取灵活性。而要避免过度设计，关键在于能正确的预见变化，以及权衡所引入的复杂度相对于发生变化的可能性和破坏力是否值得，
-当然这些都需要一定的经验积累以及对业务的认识。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/15/20190115/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190112" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-11T16:00:00.000Z"><a href="/2019/01/12/20190112/">2019-01-12</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/12/20190112/">《Java并发编程实战》 Java内存模型</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>假设一个线程为变量赋值<code>var = 3</code>，那么内存模型需要解决一个问题：在什么条件下，读取<code>var</code>的线程能看到这个值为<code>3</code>。     </p>
-<p>这看上去理所当然，但如果缺少内存同步，那么将有许多因素使得线程无法立即看到，甚至永远看不到另一个线程的操作结果：   </p>
-<ul>
-<li>在编译器中生成的指令顺序，可以与源代码中的顺序不同，此外编译器还会将变量保存在寄存器而不是内存中；</li>
-<li>处理器可以采用乱序或并行等方式来执行指令；</li>
-<li>缓存可能会改变将写入变量提交到内存的次序；</li>
-<li>而且保存在处理器本地缓存中的值，对于其他处理器是不可见的；</li>
-</ul>
-<p>这些因素都会使得一个线程无法看到变量的最新值，并且会导致其他线程中的内存操作看起来似乎在乱序执行。</p>
-<p>Jvm规定了一组最小保证，这组保证规定了对变量的写入操作将在何时对于其他线程可见。Jvm在设计时就在可预测性和程序的易于开发性之间进行了权衡，从而在各种主流的处理器体系架构上都能实现高性能的Jvm。
-<font color="#E51508">Java语言规范要求Jvm在线程中维护一种类似串行的语义：只要程序的最终结果与严格串行环境中执行的结果相同，那么上面所有的操作都是允许的。</font>    </p>
-<p>这确实是一件好事，因为计算机在性能上的提升很大程度要归功于这些重排序措施。在单线程环境中，我们无法看到所有这些底层技术，它们除了提高程序的执行速度外，不会产生其他影响。
-而在多线程环境中，要维护程序的串行性将导致很大的性能开销。对于并发应用程序中的线程来说，它们在大部分时间里都执行各自的任务，因此，在线程之间的协调操作只会降低应用程序的运行速度，而不会带来任何好处。
-只有当多个线程要共享数据时，才必须协调它们之间的操作，并且Jvm依赖程序也是通过同步操作来找出这些协调操作将在何时发生。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/12/20190112/#more" class="more-link">more</a>
           </div>
         
         
@@ -723,5 +476,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

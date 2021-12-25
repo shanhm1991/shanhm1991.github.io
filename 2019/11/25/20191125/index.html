@@ -7,8 +7,8 @@
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="Redis(Remote Dictionary Server)，即远程字典服务，是一个开源的使用C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。
-redis是一个基于内存的key-value存储系统，类似Memcached，区别的是redis会周期性的把更新的数据写入磁盘（RDB）或者把修改操作写入追加的记录文件（AOF），
-并在此基础上实现master-slave(主从)同步。因此redis可以用于高速缓存，同时它支持多种数据类型，以及集群和事务的操作，进而也可以用于发布订阅、地图信息分析、计数器等系统">
+redis是一个基于内存的key-value存储系统，类似Memcached，区别的是redis会周期性的把更新的数据写入磁盘（RDB）或者把修改操作写入追加的记录文件（AOF），并在此基础上实现master-slave(主从)同步。     
+因此redis可以用于高速缓存，同时它支持多种数据类型，以及集群和事务的操作，进而也可以用于发布订阅、地图信息分析、计数器等系统">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -115,381 +115,367 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
     <div class="e-content entry" itemprop="articleBody">
       
         <p>Redis(Remote Dictionary Server)，即远程字典服务，是一个开源的使用C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。</p>
-<p>redis是一个基于内存的key-value存储系统，类似Memcached，区别的是redis会周期性的把更新的数据写入磁盘（RDB）或者把修改操作写入追加的记录文件（AOF），
-并在此基础上实现master-slave(主从)同步。<br>因此redis可以用于高速缓存，同时它支持多种数据类型，以及集群和事务的操作，进而也可以用于发布订阅、地图信息分析、计数器等系统</p>
-<a id="more"></a>
-
+<p>redis是一个基于内存的key-value存储系统，类似Memcached，区别的是redis会周期性的把更新的数据写入磁盘（RDB）或者把修改操作写入追加的记录文件（AOF），并在此基础上实现master-slave(主从)同步。     </p>
+<p>因此redis可以用于高速缓存，同时它支持多种数据类型，以及集群和事务的操作，进而也可以用于发布订阅、地图信息分析、计数器等系统<br><a id="more"></a></p>
 <h3 id="1-安装配置"><a href="#1-安装配置" class="headerlink" title="1. 安装配置"></a>1. 安装配置</h3><p>Linux下安装非常简单，官网下载安装包，解压后执行：<code>make install</code>，安装完之后在<code>\usr\local\bin</code>下便可以看到redis的可执行文件</p>
 <p>然后修改配置文件<code>redis.conf</code>，便可以指定配置文件进行启动：<code>redis-server /path/to/redis.conf</code>，当然也可以修改多个配置文件启动多个redis实例</p>
 <figure class="highlight properties"><figcaption><span class="caption">redis.conf 6.2.5</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">################################################## INCLUDES #################################################</span></span><br><span class="line"><span class="comment"># 配置包含，如果有相同配置值，后面的会覆盖前面的</span></span><br><span class="line"><span class="comment"># include /path/to/other.conf</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################## MODULES ##################################################</span></span><br><span class="line"><span class="comment"># 加载模块</span></span><br><span class="line"><span class="comment"># loadmodule /path/to/other_module.so</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################## NETWORK ##################################################</span></span><br><span class="line"><span class="comment"># 绑定地址，允许哪些网络连接，比如127.0.0.1只允许本地连接，不设置或者0.0.0.0则允许所有连接</span></span><br><span class="line"><span class="attr">bind</span> <span class="string">127.0.0.1 -::1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认开启保护模式</span></span><br><span class="line"><span class="meta">protected-mode</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认监听端口：6379</span></span><br><span class="line"><span class="attr">port</span> <span class="string">6379</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># tcp服务默认有两个队列：即tcp-backlog用于存放未连接队列，和somaxconn用于存放已连接队列</span></span><br><span class="line"><span class="comment"># 在完成tcp三次握手之前，首先进入未连接队列，完成tcp三次握手之后正式建立连接，进入已连接队列</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 因为redis是单线程的，如果出现慢查询的话，会导致已连接队列堆满，从而新accept的连接不能被处理，</span></span><br><span class="line"><span class="comment"># 不能进入已连接队列，进一步导致未连接（状态为SYN_RECV）队列堆满，</span></span><br><span class="line"><span class="comment"># 然后新连接的客户端将一直处于SYN_SENT状态，等待服务的ACK应答，最终连接超时</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 关于TCP三次握手</span></span><br><span class="line"><span class="comment"># 1. 建立连接，客户端发送syn包(syn=j)到服务，并进入SYN_SEND状态，等待服务确认；</span></span><br><span class="line"><span class="comment"># 2. 服务收到syn包，确认客户端的SYN(ack=j+1)，然后也发送一个SYN包(syn=k)，即SYN+ACK包，进入SYN_RECV状态；</span></span><br><span class="line"><span class="comment"># 3. 客户端收到服务的SYN＋ACK包，向服务发送确认ACK(ack=k+1)，发送完毕之后，客户端和服务进入ESTABLISHED状态；</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 内核配置：</span></span><br><span class="line"><span class="comment"># 修改未连接队列长度：vim /proc/sys/net/ipv4/tcp_max_syn_backlog</span></span><br><span class="line"><span class="comment"># 修改已连接队列长度：vim /proc/sys/net/core/somaxconn</span></span><br><span class="line"><span class="comment"># 如果想永久修改这两个内核参数的话可以写到配置文件，改完之后执行：sysctl -p 生效：</span></span><br><span class="line"><span class="comment"># vim /etc/sysctl.conf</span></span><br><span class="line"><span class="comment"># net.ipv4.tcp_max_syn_backlog = 2048</span></span><br><span class="line"><span class="comment"># net.core.somaxconn = 2048</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 另外，这里tcp-backlog配置时注意不要大于somaxconn的值，否则会被Linux静默地覆盖成somaxconn的值</span></span><br><span class="line"><span class="meta">tcp-backlog</span> <span class="string">511</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对于Linux，如果redis客户端和服务都在同一台机子，可以使用unix socket，不需要走TCP监听网络端口</span></span><br><span class="line"><span class="comment"># UNIX Domain Socket是在socket架构上发展起来的用于同一台主机的进程间通讯（IPC），</span></span><br><span class="line"><span class="comment"># 它不需要经过网络协议栈、打包拆包、计算校验和、维护序号和应答等，</span></span><br><span class="line"><span class="comment"># 只需将应用层数据从一个进程拷贝到另一个进程，因此可以进一步降低延时</span></span><br><span class="line"><span class="attr">unixsocket</span> <span class="string">/run/redis.sock</span></span><br><span class="line"><span class="comment"># 配置unix socket使用文件的权限</span></span><br><span class="line"><span class="attr">unixsocketperm</span> <span class="string">700</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接最大空闲时间（单位秒），即客户端在一定时间内没有任何操作，则关闭该连接，默认0表示关闭此设置</span></span><br><span class="line"><span class="attr">timeout</span> <span class="string">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置TCP连接是否为长连接，心跳信号由服务维护，周期性向客户端发送探测消息，因此长连接会额外增加服务侧的开销</span></span><br><span class="line"><span class="meta">tcp-keepalive</span> <span class="string">300</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################## TLS/SSL ##################################################</span></span><br><span class="line"><span class="meta">tls-port</span> <span class="string">6379</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-cert-file</span> <span class="string">redis.crt </span></span><br><span class="line"><span class="meta">tls-key-file</span> <span class="string">redis.key</span></span><br><span class="line"><span class="meta">tls-key-file-pass</span> <span class="string">secret</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-client-cert-file</span> <span class="string">client.crt</span></span><br><span class="line"><span class="meta">tls-client-key-file</span> <span class="string">client.key</span></span><br><span class="line"><span class="meta">tls-client-key-file-pass</span> <span class="string">secret</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-dh-params-file</span> <span class="string">redis.dh</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-ca-cert-file</span> <span class="string">ca.crt</span></span><br><span class="line"><span class="meta">tls-ca-cert-dir</span> <span class="string">/etc/ssl/certs</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-auth-clients</span> <span class="string">no</span></span><br><span class="line"><span class="meta">tls-auth-clients</span> <span class="string">optional</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-replication</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-cluster</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-protocols</span> <span class="string">"TLSv1.2 TLSv1.3"</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-ciphers</span> <span class="string">DEFAULT:!MEDIUM</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-ciphersuites</span> <span class="string">TLS_CHACHA20_POLY1305_SHA256</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-prefer-server-ciphers</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-session-caching</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-session-cache-size</span> <span class="string">5000</span></span><br><span class="line"></span><br><span class="line"><span class="meta">tls-session-cache-timeout</span> <span class="string">60</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################## GENERAL ##################################################</span></span><br><span class="line"><span class="comment"># 默认不是在后台运行，一般改成yes</span></span><br><span class="line"><span class="attr">daemonize</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过upstart和systemd管理Redis守护进程</span></span><br><span class="line"><span class="comment"># no ：没有监督互动</span></span><br><span class="line"><span class="comment"># upstart ：通过将Redis置于SIGSTOP模式来启动信号</span></span><br><span class="line"><span class="comment"># systemd ：signal systemd将READY = 1写入$NOTIFY_SOCKET</span></span><br><span class="line"><span class="comment"># auto ：检测upstart或systemd方法，基于UPSTART_JOB或NOTIFY_SOCKET环境变量</span></span><br><span class="line"><span class="attr">supervised</span> <span class="string">auto</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 后台运行时，Redis会将pid记在/var/run/redis.pid，因此当运行多个redis实例时，应该指定不同的pid文件和端口</span></span><br><span class="line"><span class="attr">pidfile</span> <span class="string">/var/run/redis.pid</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># log级别</span></span><br><span class="line"><span class="comment"># debug 调试信息，一般用于开发测试</span></span><br><span class="line"><span class="comment"># varbose 有用的信息，不像debug会记录那么多</span></span><br><span class="line"><span class="comment"># notice 普通的verbose，一般用于生产环境</span></span><br><span class="line"><span class="comment"># warning 只记录重要或者警告信息 </span></span><br><span class="line"><span class="attr">loglevel</span> <span class="string">notice</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># log文件地址，默认stdout，如果配置为空，并且是后台运行模式，则会输出到/dev/null</span></span><br><span class="line"><span class="attr">logfile</span> <span class="string">/var/log/redis/redis.log</span></span><br><span class="line"></span><br><span class="line"><span class="meta">syslog-enabled</span> <span class="string">no</span></span><br><span class="line"><span class="meta">syslog-ident</span> <span class="string">redis</span></span><br><span class="line"><span class="meta">syslog-facility</span> <span class="string">local0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">crash-log-enabled</span> <span class="string">no</span></span><br><span class="line"><span class="meta">crash-memcheck-enabled</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 可用数据库数，默认为16，默认选择数据库0</span></span><br><span class="line"><span class="attr">databases</span> <span class="string">16</span></span><br><span class="line"></span><br><span class="line"><span class="meta">always-show-logo</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">set-proc-title</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># supported:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># &#123;title&#125;           Name of process as executed if parent, or type of child process.</span></span><br><span class="line"><span class="comment"># &#123;listen-addr&#125;     Bind address or '*' followed by TCP or TLS port listening on, or</span></span><br><span class="line"><span class="comment">#                   Unix socket if only that's available.</span></span><br><span class="line"><span class="comment"># &#123;server-mode&#125;     Special mode, i.e. "[sentinel]" or "[cluster]".</span></span><br><span class="line"><span class="comment"># &#123;port&#125;            TCP port listening on, or 0.</span></span><br><span class="line"><span class="comment"># &#123;tls-port&#125;        TLS port listening on, or 0.</span></span><br><span class="line"><span class="comment"># &#123;unixsocket&#125;      Unix domain socket listening on, or "".</span></span><br><span class="line"><span class="comment"># &#123;config-file&#125;     Name of configuration file used.</span></span><br><span class="line"><span class="meta">proc-title-template</span> <span class="string">"&#123;title&#125; &#123;listen-addr&#125; &#123;server-mode&#125;"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################### SNAPSHOTTING  ###############################################</span></span><br><span class="line"><span class="comment">## 默认RDB持久化方式 ：周期性将redis中数据快照到dump.rdb文件</span></span><br><span class="line"><span class="comment">## 优势 ：备份恢复简单。RDB通过子进程完成持久化工作，相对比AOF启动效率高</span></span><br><span class="line"><span class="comment">## 劣势 ：服务器故障会丢失几分钟内的数据</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 900秒内至少有1个key被改变，则持久化快照</span></span><br><span class="line"><span class="attr">save</span> <span class="string">900 1      </span></span><br><span class="line"><span class="comment"># 300秒内至少有300个key被改变，则持久化快照</span></span><br><span class="line"><span class="attr">save</span> <span class="string">300 10     </span></span><br><span class="line"><span class="comment"># 60秒内至少有10000个key被改变，则持久化快照</span></span><br><span class="line"><span class="attr">save</span> <span class="string">60 10000   </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认当持久化失败时则拒绝写入动作，比如磁盘满了，则拒绝set操作</span></span><br><span class="line"><span class="meta">stop-writes-on-bgsave-error</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认持久化到rdb文件时进行压缩</span></span><br><span class="line"><span class="attr">rdbcompression</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认对rdb文件进行校验</span></span><br><span class="line"><span class="attr">rdbchecksum</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">sanitize-dump-payload</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认持久化文件名为dump.rdb</span></span><br><span class="line"><span class="attr">dbfilename</span> <span class="string">dump.rdb</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在没有启用持久性的情况下，删除复制实例中使用的RDB文件，默认禁用</span></span><br><span class="line"><span class="meta">rdb-del-sync-files</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认持久化文件目录为当前目录</span></span><br><span class="line"><span class="attr">dir</span> <span class="string">./</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################ REPLICATION ################################################</span></span><br><span class="line"></span><br><span class="line"><span class="attr">replicaof</span> <span class="string">&lt;masterip&gt; &lt;masterport&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">masterauth</span> <span class="string">&lt;master-password&gt;</span></span><br><span class="line"><span class="attr">masteruser</span> <span class="string">&lt;username&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">replica-serve-stale-data</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">replica-read-only</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">repl-diskless-sync</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">repl-diskless-sync-delay</span> <span class="string">5</span></span><br><span class="line"></span><br><span class="line"><span class="meta">repl-diskless-load</span> <span class="string">disabled</span></span><br><span class="line"></span><br><span class="line"><span class="meta">repl-timeout</span> <span class="string">60</span></span><br><span class="line"></span><br><span class="line"><span class="meta">repl-disable-tcp-nodelay</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">repl-backlog-size</span> <span class="string">1mb</span></span><br><span class="line"></span><br><span class="line"><span class="meta">repl-backlog-ttl</span> <span class="string">3600</span></span><br><span class="line"></span><br><span class="line"><span class="meta">replica-priority</span> <span class="string">100</span></span><br><span class="line"></span><br><span class="line"><span class="meta">replica-announced</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">min-replicas-to-write</span> <span class="string">3</span></span><br><span class="line"><span class="meta">min-replicas-max-lag</span> <span class="string">10</span></span><br><span class="line"></span><br><span class="line"><span class="meta">replica-announce-ip</span> <span class="string">5.5.5.5</span></span><br><span class="line"><span class="meta">replica-announce-port</span> <span class="string">1234</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################### KEYS TRACKING ###############################################</span></span><br><span class="line"><span class="meta">tracking-table-max-keys</span> <span class="string">1000000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################## SECURITY #################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################## CLIENTS ##################################################</span></span><br><span class="line"><span class="attr">maxclients</span> <span class="string">10000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################# MEMORY MANAGEMENT ############################################# </span></span><br><span class="line"><span class="attr">maxmemory</span> <span class="string">&lt;bytes&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">maxmemory-policy</span> <span class="string">noeviction</span></span><br><span class="line"></span><br><span class="line"><span class="meta">maxmemory-samples</span> <span class="string">5</span></span><br><span class="line"></span><br><span class="line"><span class="meta">maxmemory-eviction-tenacity</span> <span class="string">10</span></span><br><span class="line"></span><br><span class="line"><span class="meta">replica-ignore-maxmemory</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">active-expire-effort</span> <span class="string">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################### LAZY FREEING ################################################</span></span><br><span class="line"><span class="meta">lazyfree-lazy-eviction</span> <span class="string">no</span></span><br><span class="line"><span class="meta">lazyfree-lazy-expire</span> <span class="string">no</span></span><br><span class="line"><span class="meta">lazyfree-lazy-server-del</span> <span class="string">no</span></span><br><span class="line"><span class="meta">replica-lazy-flush</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">lazyfree-lazy-user-del</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">lazyfree-lazy-user-flush</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################ THREADED I/O ###############################################</span></span><br><span class="line"><span class="meta">io-threads</span> <span class="string">4</span></span><br><span class="line"></span><br><span class="line"><span class="meta">io-threads-do-reads</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################# KERNEL OOM CONTROL ############################################ </span></span><br><span class="line"><span class="meta">oom-score-adj</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">oom-score-adj-values</span> <span class="string">0 200 800</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#################################### KERNEL transparent hugepage CONTROL ####################################</span></span><br><span class="line"><span class="meta">disable-thp</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################## APPEND ONLY MODE ############################################# </span></span><br><span class="line"><span class="attr">appendonly</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="attr">appendfilename</span> <span class="string">"appendonly.aof"</span></span><br><span class="line"></span><br><span class="line"><span class="attr">appendfsync</span> <span class="string">everysec</span></span><br><span class="line"></span><br><span class="line"><span class="meta">no-appendfsync-on-rewrite</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">auto-aof-rewrite-percentage</span> <span class="string">100</span></span><br><span class="line"><span class="meta">auto-aof-rewrite-min-size</span> <span class="string">64mb</span></span><br><span class="line"></span><br><span class="line"><span class="meta">aof-load-truncated</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">aof-use-rdb-preamble</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################### LUA SCRIPTING  ##############################################</span></span><br><span class="line"><span class="meta">lua-time-limit</span> <span class="string">5000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################### REDIS CLUSTER  ##############################################</span></span><br><span class="line"><span class="meta">cluster-enabled</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">cluster-config-file</span> <span class="string">nodes-6379.conf</span></span><br><span class="line"></span><br><span class="line"><span class="meta">cluster-node-timeout</span> <span class="string">15000</span></span><br><span class="line"></span><br><span class="line"><span class="meta">cluster-replica-validity-factor</span> <span class="string">10</span></span><br><span class="line"></span><br><span class="line"><span class="meta">cluster-migration-barrier</span> <span class="string">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">cluster-allow-replica-migration</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">cluster-require-full-coverage</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">cluster-replica-no-failover</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">cluster-allow-reads-when-down</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="comment">######################################## CLUSTER DOCKER/NAT support  ######################################## </span></span><br><span class="line"><span class="meta">cluster-announce-ip</span> <span class="string">10.1.1.5</span></span><br><span class="line"><span class="meta">cluster-announce-tls-port</span> <span class="string">6379</span></span><br><span class="line"><span class="meta">cluster-announce-port</span> <span class="string">0</span></span><br><span class="line"><span class="meta">cluster-announce-bus-port</span> <span class="string">6380</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################## SLOW LOG #################################################</span></span><br><span class="line"><span class="meta">slowlog-log-slower-than</span> <span class="string">10000</span></span><br><span class="line"></span><br><span class="line"><span class="meta">slowlog-max-len</span> <span class="string">128</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################## LATENCY MONITOR ##############################################</span></span><br><span class="line"><span class="meta">latency-monitor-threshold</span> <span class="string">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################# EVENT NOTIFICATION ############################################ </span></span><br><span class="line"><span class="meta">notify-keyspace-events</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################################ GOPHER SERVER ##############################################</span></span><br><span class="line"><span class="meta">gopher-enabled</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############################################## ADVANCED CONFIG ############################################## </span></span><br><span class="line"><span class="meta">hash-max-ziplist-entries</span> <span class="string">512</span></span><br><span class="line"><span class="meta">hash-max-ziplist-value</span> <span class="string">64</span></span><br><span class="line"></span><br><span class="line"><span class="meta">list-max-ziplist-size</span> <span class="string">-2</span></span><br><span class="line"></span><br><span class="line"><span class="meta">list-compress-depth</span> <span class="string">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">set-max-intset-entries</span> <span class="string">512</span></span><br><span class="line"></span><br><span class="line"><span class="meta">zset-max-ziplist-entries</span> <span class="string">128</span></span><br><span class="line"><span class="meta">zset-max-ziplist-value</span> <span class="string">64</span></span><br><span class="line"></span><br><span class="line"><span class="meta">hll-sparse-max-bytes</span> <span class="string">3000</span></span><br><span class="line"></span><br><span class="line"><span class="meta">stream-node-max-bytes</span> <span class="string">4096</span></span><br><span class="line"><span class="meta">stream-node-max-entries</span> <span class="string">100</span></span><br><span class="line"></span><br><span class="line"><span class="attr">activerehashing</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">client-output-buffer-limit</span> <span class="string">normal 0 0 0</span></span><br><span class="line"><span class="meta">client-output-buffer-limit</span> <span class="string">replica 256mb 64mb 60</span></span><br><span class="line"><span class="meta">client-output-buffer-limit</span> <span class="string">pubsub 32mb 8mb 60</span></span><br><span class="line"></span><br><span class="line"><span class="meta">client-query-buffer-limit</span> <span class="string">1gb</span></span><br><span class="line"></span><br><span class="line"><span class="meta">proto-max-bulk-len</span> <span class="string">512mb</span></span><br><span class="line"></span><br><span class="line"><span class="attr">hz</span> <span class="string">10</span></span><br><span class="line"></span><br><span class="line"><span class="meta">dynamic-hz</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">aof-rewrite-incremental-fsync</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">rdb-save-incremental-fsync</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="meta">lfu-log-factor</span> <span class="string">10</span></span><br><span class="line"><span class="meta">lfu-decay-time</span> <span class="string">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">########################################### ACTIVE DEFRAGMENTATION #########################################</span></span><br><span class="line"><span class="attr">activedefrag</span> <span class="string">no</span></span><br><span class="line"></span><br><span class="line"><span class="meta">active-defrag-ignore-bytes</span> <span class="string">100mb</span></span><br><span class="line"></span><br><span class="line"><span class="meta">active-defrag-threshold-lower</span> <span class="string">10</span></span><br><span class="line"><span class="meta">active-defrag-threshold-upper</span> <span class="string">100</span></span><br><span class="line"></span><br><span class="line"><span class="meta">active-defrag-cycle-min</span> <span class="string">1</span></span><br><span class="line"><span class="meta">active-defrag-cycle-max</span> <span class="string">25</span></span><br><span class="line"></span><br><span class="line"><span class="meta">active-defrag-max-scan-fields</span> <span class="string">1000</span></span><br><span class="line"><span class="meta">jemalloc-bg-thread</span> <span class="string">yes</span></span><br><span class="line"></span><br><span class="line"><span class="attr">server_cpulist</span> <span class="string">0-7:2</span></span><br><span class="line"><span class="attr">bio_cpulist</span> <span class="string">1,3</span></span><br><span class="line"><span class="attr">aof_rewrite_cpulist</span> <span class="string">8-11</span></span><br><span class="line"><span class="attr">bgsave_cpulist</span> <span class="string">1,10-11</span></span><br><span class="line"><span class="meta">ignore-warnings</span> <span class="string">ARM64-COW-BUG</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="2-支持操作"><a href="#2-支持操作" class="headerlink" title="2. 支持操作"></a>2. 支持操作</h3><p>使用<code>redis-cli -h 127.0.0.1 -p 6379</code>便可以连接对应的redis实例，然后所有的操作（原子操作）都可以通过命令来进行，当然redis的命令肯定不止下面这些，更多的命令及其操作可以查询官网相关文档</p>
-<p><strong>db 操作：</strong>
-    <table width=100%>
+<p><strong>db 操作：</strong><br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=15%><code>select 3</code></td>
+            <td width=15%> select 3 </td>
             <td>切换数据库</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>dbsize</code></td>
+            <td> dbsize </td>
             <td>查看当前库大小</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>flush db</code></td>
+            <td> flush db </td>
             <td>清空当前数据库</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>flushall</code></td>
+            <td> flushall </td>
             <td>清空所有数据库</td>
         </tr>
     </table></p>
-<p><strong>key 操作：</strong>
-    <table width=100%>
+<p><strong>key 操作：</strong><br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=15%><code>keys *</code></td>
+            <td width=15%> keys * </td>
             <td>获取所有的key</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>exists key</code></td>
+            <td> exists key </td>
             <td>是否存在key</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>move key 1</code></td>
+            <td> move key 1 </td>
             <td>从数据库1中删除key</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>type key</code></td>
+            <td> type key </td>
             <td>查看key类型</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>expire key 10</code></td>
+            <td> expire key 10 </td>
             <td>设置key过期时间</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>ttl key</code></td>
+            <td> ttl key </td>
             <td>查看key剩余时间</td>
         </tr>
     </table></p>
-<h4 id="2-1-数据类型"><a href="#2-1-数据类型" class="headerlink" title="2.1. 数据类型"></a>2.1. 数据类型</h4><p><strong>String：</strong>
-    <table width=100%>
+<h4 id="2-1-数据类型"><a href="#2-1-数据类型" class="headerlink" title="2.1. 数据类型"></a>2.1. 数据类型</h4><p><strong>String：</strong><br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=25%><code>set key value</code></td>
+            <td width=25%> set key value </td>
             <td>设置key的值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>get key</code></td>
+            <td> get key </td>
             <td>获取key的值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>mset k1 v1 k2 v2 k3 v3</code></td>
+            <td> mset k1 v1 k2 v2 k3 v3 </td>
             <td>设置多值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>mget k1 k2 k3</code></td>
+            <td> mget k1 k2 k3 </td>
             <td>获取多值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>setnx key value</code></td>
+            <td> setnx key value </td>
             <td>如果当前key不存在，则设置成功</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>msetnx k1 v1 k2 v2</code></td>
+            <td> msetnx k1 v1 k2 v2 </td>
             <td>如果当前key不存在，则设置成功（一个失败则全部失败）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>getset key value</code></td>
+            <td> getset key value </td>
             <td>返回当前值，并设置新值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>setex key 10 value</code></td>
+            <td> setex key 10 value </td>
             <td>设置key的值，并设置10秒过期时间</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>strlen key</code></td>
+            <td> strlen key </td>
             <td>查看key对应值的长度</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>append key value</code></td>
+            <td> append key value </td>
             <td>在key的值后面拼接字符串，如果key不存在则相当于set</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>setrange key 2 value</code></td>
+            <td> setrange key 2 value </td>
             <td>设置key的值，并从位置2开始的地方进行覆盖</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>getrange key 0 5</code></td>
+            <td> getrange key 0 5 </td>
             <td>获取key的值，并截取位置0-5</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>incr key</code></td>
+            <td> incr key </td>
             <td>key的值+1</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>decr key</code></td>
+            <td> decr key </td>
             <td>key的值-1</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>incrby key 10</code></td>
+            <td> incrby key 10 </td>
             <td>key的值+10</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>decrby key 10</code></td>
+            <td> decrby key 10 </td>
             <td>ey的值-10</td>
         </tr>
     </table></p>
 <p>场景：使用mset/mget存取对象，相对直接存取json可以更灵活的操作，当然如果直接用下面的Map更好</p>
-<p>保存人员：<code>mset user:1:name shanhm user:1:age 30 user:1:sex man</code><br>获取人员属性：<code>mget user:1:name user:1:age user:1:sex</code></p>
-<p><strong>List</strong>
-    <table width=100%>
+<p>保存人员： mset user:1:name shanhm user:1:age 30 user:1:sex man<br>获取人员属性： mget user:1:name user:1:age user:1:sex </p>
+<p><strong>List</strong><br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=30%><code>lpush key v1 v2</code></td>
+            <td width=30%> lpush key v1 v2 </td>
             <td>从头部向列表中放入值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>rpush key v3 v4</code></td>
+            <td> rpush key v3 v4 </td>
             <td>从尾部向列表中放入值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>lpop key</code></td>
+            <td> lpop key </td>
             <td>从头部弹出值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>rpop key</code></td>
+            <td> rpop key </td>
             <td>从尾部弹出值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>lindex key index</code></td>
+            <td> lindex key index </td>
             <td>根据索引获取值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>lrange key 0 1</code></td>
+            <td> lrange key 0 1 </td>
             <td>按照索引（首尾）获取多值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>llen key</code></td>
+            <td> llen key </td>
             <td>获取列表长度</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>lrem key count value</code></td>
+            <td> lrem key count value </td>
             <td>从列表中移除指定个数(count)的值(value)</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>ltrim key index count</code></td>
+            <td> ltrim key index count </td>
             <td>根据下标(index)截取(count)个元素，改变原列表</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>lset key index value</code></td>
+            <td> lset key index value </td>
             <td>更新列表指定位置的值，前提key列表已经存在，且index存在</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>linsert key before|after v1 v2</code></td>
+            <td> linsert key before|after v1 v2 </td>
             <td>在v1的前后插入值v2</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>rpoplpush key1 key2</code></td>
+            <td> rpoplpush key1 key2 </td>
             <td>组合命令：将列表key1中的尾部元素移到列表key2头部</td>
         </tr>
     </table></p>
 <p>redis中的list本质上是一个双向链表，其结构如下：</p>
 <figure class="highlight c"><figcaption><span class="caption">list</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> &#123;</span></span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span>* <span class="title">prev</span>;</span> <span class="comment">//前驱节点</span></span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNodee</span>* <span class="title">next</span>;</span> <span class="comment">//后继结点</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">void</span>* value; <span class="comment">//节点值, 因为是void*类型,所以可以存储各种类型的值</span></span><br><span class="line">&#125; listNode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span></span><br><span class="line">    </span><br><span class="line">    listNode* head; <span class="comment">//头结点, prev为NULL</span></span><br><span class="line">    </span><br><span class="line">    listNode* tail; <span class="comment">//尾节点, next为NULL</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> len; <span class="comment">//链表长度</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">void</span> *(*dup)(<span class="keyword">void</span> *ptr); <span class="comment">//节点值复制函数duplicated</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">void</span> (*<span class="built_in">free</span>)(<span class="keyword">void</span> *ptr); <span class="comment">//节点值释放函数</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> (*match)(<span class="keyword">void</span> *ptr, <span class="keyword">void</span> *key); <span class="comment">//节点值对比函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Set</strong>
-    <table width=100%>
+<p><strong>Set</strong><br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=25%><code>sadd key value</code></td>
+            <td width=25%> sadd key value </td>
             <td>向set中添加元素，如果已存在则失败</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>srem key value</code></td>
+            <td> srem key value </td>
             <td>从set中移除值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>smembers key</code></td>
+            <td> smembers key </td>
             <td>查看set中所有元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>sismember key value</code></td>
+            <td> sismember key value </td>
             <td>查看set(key)中是否存在元素value</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>scard key</code></td>
+            <td> scard key </td>
             <td>查看set的元素个数</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>srandmember key</code></td>
+            <td> srandmember key </td>
             <td>从set中随机抽取1个元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>srandmember key n</code></td>
+            <td> srandmember key n </td>
             <td>从set中随机抽取n个元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>spop key</code></td>
+            <td> spop key </td>
             <td>随机删除一个元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>smove k1 k2 value</code></td>
+            <td> smove k1 k2 value </td>
             <td>将k1中的值移到k2中</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>sdiff k1 k2</code></td>
+            <td> sdiff k1 k2 </td>
             <td>取k1与k2的差集（在k1中，不在k2中）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>sinter k1 k2</code></td>
+            <td> sinter k1 k2 </td>
             <td>取k1和k2的交集</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>sunion k1 k2</code></td>
+            <td> sunion k1 k2 </td>
             <td>取k1和k2的并集</td>
         </tr>
     </table></p>
 <p><strong>Hash</strong></p>
-<p>map支持string中类似的操作，比如<code>setnx</code>对应<code>hsetnx</code>，<code>incrby</code>对应<code>hincrby</code>
-    <table width=100%>
+<p>map支持string中类似的操作，比如<code>setnx</code>对应<code>hsetnx</code>，<code>incrby</code>对应<code>hincrby</code><br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=40%><code>hset key field value</code></td>
+            <td width=40%> hset key field value </td>
             <td>设置map的字段值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hget key field</code></td>
+            <td> hget key field </td>
             <td>获取map指定字段的值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hgetall key</code></td>
+            <td> hgetall key </td>
             <td>获取map所有字段-值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hdel key field</code></td>
+            <td> hdel key field </td>
             <td>删除map指定的字段</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hmset key field1 value1 field2 value2</code></td>
+            <td> hmset key field1 value1 field2 value2 </td>
             <td>设置map多个字段值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hmget key field1 field2</code></td>
+            <td> hmget key field1 field2 </td>
             <td>获取map多个字段的值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hlen key</code></td>
+            <td> hlen key </td>
             <td>获取map的字段数</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hexists key field</code></td>
+            <td> hexists key field </td>
             <td>查看map是否存在字段</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hkeys key</code></td>
+            <td> hkeys key </td>
             <td>获取map所有字段</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>hvals key</code></td>
+            <td> hvals key </td>
             <td>获取map所有字段值</td>
         </tr>
     </table></p>
 <p><strong>Zset</strong></p>
-<p>zset即有序集合，可以给定score以便排序
-    <table width=100%>
+<p>zset即有序集合，可以给定score以便排序<br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=40%><code>zadd key score value</code></td>
+            <td width=40%> zadd key score value </td>
             <td>设置值，指定score</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>zadd key score1 value1 score2 value2</code></td>
+            <td> zadd key score1 value1 score2 value2 </td>
             <td>设置多个值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>zrange key 0 1 withscores</code></td>
+            <td> zrange key 0 1 withscores </td>
             <td>按索引排序获取</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>zrevrange key 0 -1 withscores</code></td>
+            <td> zrevrange key 0 -1 withscores </td>
             <td>按索引倒叙获取</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>zrangebyscore key -inf +inf withscores</code></td>
+            <td> zrangebyscore key -inf +inf withscores </td>
             <td>按score排序获取（指定区间）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>zrevrangebyscore key 500 100 withscores</code></td>
+            <td> zrevrangebyscore key 500 100 withscores </td>
             <td>按score倒叙获取（指定区间）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>zrem key value</code></td>
+            <td> zrem key value </td>
             <td>删除指定元素</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>zcard key</code></td>
+            <td> zcard key </td>
             <td>获取元素个数</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>acount key score1 score2</code></td>
+            <td> acount key score1 score2 </td>
             <td>获取指定区间元素个数</td>
         </tr>
     </table></p>
 <p><strong>geospatial</strong></p>
-<p>地理位置集合（经度 纬度 value），其底层也是通过zset来实现的，所以支持zset的所有命令，比如可以通过<code>zrange</code>排序获取位置，或者<code>zrem</code>删除位置
-    <table width=100%>
+<p>地理位置集合（经度 纬度 value），其底层也是通过zset来实现的，所以支持zset的所有命令，比如可以通过<code>zrange</code>排序获取位置，或者<code>zrem</code>删除位置<br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=50%><code>geoadd key 116.40 39.90 beijing</code></td>
+            <td width=50%> geoadd key 116.40 39.90 beijing </td>
             <td>添加城市北京</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>geopos key beijing</code></td>
+            <td> geopos key beijing </td>
             <td>获取指定城市位置</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>geodist key beijing shanghai 单位</code></td>
+            <td> geodist key beijing shanghai 单位 </td>
             <td>获取两个位置距离，单位（m/km/mi英里/ft英尺）</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>georadius geodist key 经度 纬度 半径 单位 withcoord count</code></td>
+            <td> georadius geodist key 经度 纬度 半径 单位 withcoord count </td>
             <td>获取指定位置（坐标）指定半径内的位置</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>georadius geodist key beijing 半径 单位 withcoord count</code></td>
+            <td> georadius geodist key beijing 半径 单位 withcoord count </td>
             <td>获取指定位置指定半径内的位置</td>
         </tr>
     </table></p>
 <p><strong>hyperloglog</strong></p>
-<p>hyperloglog 基数统计算法，即统计集合中不重复的元素个数，常见的集合也许可以通过set去重来count，但对超大集合的内存消耗显然是不能接受的，这时hyperloglog算法可以保证只消耗12kb内存的情况下估算出集合基数，而且出错率只有0.81%
-    <table width=100%>
+<p>hyperloglog 基数统计算法，即统计集合中不重复的元素个数，常见的集合也许可以通过set去重来count，但对超大集合的内存消耗显然是不能接受的，这时hyperloglog算法可以保证只消耗12kb内存的情况下估算出集合基数，而且出错率只有0.81%<br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=25%><code>pfadd key value ...</code></td>
+            <td width=25%> pfadd key value ... </td>
             <td>添加元素，可多值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>pfcount key</code></td>
+            <td> pfcount key </td>
             <td>获取基数</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>pfmerge key3 key1 key2</code></td>
+            <td> pfmerge key3 key1 key2 </td>
             <td>合并key1集合，key2集合，结果为key3集合</td>
         </tr>
     </table></p>
 <p><strong>bitmaps</strong></p>
-<p>位图，即位存储，只保存0和1两个状态
-    <table width=100%>
+<p>位图，即位存储，只保存0和1两个状态<br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td width=25%><code>setbit key 0 1</code></td>
+            <td width=25%> setbit key 0 1 </td>
             <td>设置第0位为1</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>setbit key 1 0</code></td>
+            <td> setbit key 1 0 </td>
             <td>设置第1位为0</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>getbit key 1</code></td>
+            <td> getbit key 1 </td>
             <td>获取第1位值</td>
         </tr>
         <tr style="border-bottom:0.01rem solid #ededed;">
-            <td><code>bitcount key</code></td>
+            <td> bitcount key </td>
             <td>统计值为1的位数</td>
         </tr>
     </table></p>
-<h4 id="2-2-事务"><a href="#2-2-事务" class="headerlink" title="2.2. 事务"></a>2.2. 事务</h4><p>redis事务即一组命令集合，其将所有命令序列化，然后按照顺序执行，所以只有在发起执行命令时事务才开始进行，它可以保证一次性、顺序性、排他性，但是没有事务隔离级别的概念。
-另外，如果命令错误则直接放弃，而如果是命令执行失败则正常进行。<br>其步骤也很简单：</p>
+<h4 id="2-2-事务"><a href="#2-2-事务" class="headerlink" title="2.2. 事务"></a>2.2. 事务</h4><p>redis事务即一组命令集合，其将所有命令序列化，然后按照顺序执行，所以只有在发起执行命令时事务才开始进行，它可以保证一次性、顺序性、排他性，但是没有事务隔离级别的概念。另外，如果命令错误则直接放弃，而如果是命令执行失败则正常进行。    </p>
+<p>其步骤也很简单：</p>
 <ul>
 <li>开启事务(multi)</li>
 <li>命令入队(…)</li>
@@ -505,19 +491,11 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
 </ul>
 <h3 id="3-Java连接"><a href="#3-Java连接" class="headerlink" title="3. Java连接"></a>3. Java连接</h3><p>Jedis是Redis官方推荐的Java驱动，其使用非常简单，只需在创建Jedis实例时指定host，port, password或更多参数即可。但是Jedis实例在使用完之后，需要进行关闭，否则会占用系统资源。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"127.0.0.1"</span>, <span class="number">6379</span>);  </span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">jedis.close();</span><br></pre></td></tr></table></figure>
-
 <p>每次操作都直接构造实例，显然是比较消耗的，于是更好的选择是使用连接池。Jedis连接池是基于apache commons-pool2实现的，只要线构造连接池实例，然后便可以从池中获取Jedis实例了</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">JedisPoolConfig config = <span class="keyword">new</span> JedisPoolConfig();</span><br><span class="line">config.setMaxIdle(<span class="number">8</span>);</span><br><span class="line">config.setMaxTotal(<span class="number">18</span>);</span><br><span class="line">JedisPool pool = <span class="keyword">new</span> JedisPool(config, <span class="string">"127.0.0.1"</span>, <span class="number">6379</span>, <span class="number">2000</span>, <span class="string">"password"</span>);</span><br><span class="line"></span><br><span class="line">Jedis jedis = pool.getResource();</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">jedis.close();</span><br><span class="line"></span><br><span class="line">pool.close();</span><br></pre></td></tr></table></figure>
-
 <p>其实区别就是基于DataSource改造了下Jedis实例的获取及关闭，可以看一下这里<code>getResource()</code>和<code>close()</code>的实现，</p>
 <figure class="highlight java"><figcaption><span class="caption">JedisPool.getResource()</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Jedis <span class="title">getResource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Jedis jedis = <span class="keyword">super</span>.getResource();   </span><br><span class="line">    jedis.setDataSource(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">return</span> jedis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight java"><figcaption><span class="caption">Jedis.close</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="keyword">if</span> (dataSource != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (client.isBroken()) &#123;</span><br><span class="line">            <span class="keyword">this</span>.dataSource.returnBrokenResource(<span class="keyword">this</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.dataSource.returnResource(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        client.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <p><br><strong>参考：</strong></p>
 <ol>
 <li><a href="https://redis.io/" target="_blank" rel="noopener">https://redis.io/</a></li>
@@ -568,24 +546,7 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
   </div>
 
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -666,5 +627,20 @@ redis是一个基于内存的key-value存储系统，类似Memcached，区别的
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

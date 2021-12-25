@@ -116,21 +116,18 @@
 <li>解决上网和ssh登录问题</li>
 </ol>
 <a id="more"></a>
-
 <h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>之前设置过ubuntu静态ip，这里设置centos就相对顺利很多了，参考<a href="https://www.linuxidc.com/Linux/2017-10/147449.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/147449.htm</a>  </p>
 <ol>
 <li>vmware的配置与之前一样，保持不变：</li>
 </ol>
 <p><img src="/img/20180503/20180503.1.jpg" alt=""> </p>
 <p><img src="/img/20180503/20180503.2.jpg" alt=""> </p>
-<ol start="2">
+<ol>
 <li>修改centos的配置：vim /etc/sysconfig/network-scripts</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#修改</span><br><span class="line">BOOTPROTO&#x3D;static #将dhcp改为static</span><br><span class="line">ONBOOT&#x3D;yes #将no改为yes</span><br><span class="line">#新增</span><br><span class="line">IPADDR&#x3D;192.168.141.21 #静态IP</span><br><span class="line">GATEWAY&#x3D;192.168.141.1 #默认网关</span><br><span class="line">NETMASK&#x3D;255.255.255.0 #子网掩码</span><br></pre></td></tr></table></figure>
-
 <p>改完后重启网络服务：service network restart，然后就好了，可以查看下ip addr：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link&#x2F;loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1&#x2F;8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1&#x2F;128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    link&#x2F;ether 00:0c:29:35:94:01 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.141.10&#x2F;24 brd 192.168.141.255 scope global noprefixroute dynamic ens33</span><br><span class="line">       valid_lft 1458sec preferred_lft 1458sec</span><br><span class="line">    inet 192.168.141.21&#x2F;24 brd 192.168.141.255 scope global secondary ens33</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::8a04:3629:1c8e:4e06&#x2F;64 scope link noprefixroute </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
-
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li><a href="https://www.linuxidc.com/Linux/2017-10/147449.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/147449.htm</a></li>
@@ -169,24 +166,7 @@
 
         
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -267,5 +247,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

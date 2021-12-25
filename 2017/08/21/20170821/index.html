@@ -6,8 +6,7 @@
   <title>《深入理解Java虚拟机》 类 &amp; Class对象/反射 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="在类加载成功之后，便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及字段修改。
-那么，便可以通过反射根据运行时获取的类型信息来创建实例，而且可以跳过访问权限的限制访问字段和方法">
+  <meta name="description" content="在类加载成功之后，便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及字段修改。那么，便可以通过反射根据运行时获取的类型信息来创建实例，而且可以跳过访问权限的限制访问字段和方法">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -117,61 +116,40 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>在类加载成功之后，便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及字段修改。
-那么，便可以通过反射根据运行时获取的类型信息来创建实例，而且可以跳过访问权限的限制访问字段和方法</p>
-<a id="more"></a>
-
-<h3 id="1-Class"><a href="#1-Class" class="headerlink" title="1. Class"></a>1. Class</h3><p>Class对象被用来描述某种类型，但是类型有很多种，那么如何区分描述的是哪种类型？其实觉得这里<font color="#E51508">可以将Class对象理解成一个类型属性的容器</font>，
-其中包括了构造器<code>Constructor</code>，字段<code>Field</code>，方法<code>Method</code>，注解等信息，而至于是哪种类型，则可以通过泛型来表示</p>
+        <p>在类加载成功之后，便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及字段修改。那么，便可以通过反射根据运行时获取的类型信息来创建实例，而且可以跳过访问权限的限制访问字段和方法<br><a id="more"></a></p>
+<h3 id="1-Class"><a href="#1-Class" class="headerlink" title="1. Class"></a>1. Class</h3><p>Class对象被用来描述某种类型，但是类型有很多种，那么如何区分描述的是哪种类型？其实觉得这里<font color="#E51508">可以将Class对象理解成一个类型属性的容器</font>，其中包括了构造器<code>Constructor</code>，字段<code>Field</code>，方法<code>Method</code>，注解等信息，而至于是哪种类型，则可以通过泛型来表示</p>
 <ul>
 <li>关于Class对象的获取</li>
 </ul>
 <ol>
-<li><p>如果在编译期间类型已知，则可以直接通过类型字面量获取，比如<code>Class&lt;Object&gt; clazz = Object.class;</code>，不过使用类型字面量的方式并不会触发Class对象的初始化，
-它被延迟到首次对静态域，或者静态方法的引用（构造器也是静态调用）</p>
+<li><p>如果在编译期间类型已知，则可以直接通过类型字面量获取，比如<code>Class&lt;Object&gt; clazz = Object.class;</code>，不过使用类型字面量的方式并不会触发Class对象的初始化，它被延迟到首次对静态域，或者静态方法的引用（构造器也是静态调用）</p>
 </li>
 <li><p>如果已经存在类型对应的实例，则可以直接通过实例调用<code>Object</code>提供的<code>getClass()</code>方法，因为在使用类型信息创建对象时，会在对象头中（直接指针的方式）保留指向类型信息的引用</p>
 </li>
-<li><p>如果上面信息都没有，那么可以通过类的全限定名由类加载器进行加载，Class提供了接口<code>Class.forName()</code>，由其帮忙调用加载器进行加载，当然也可以自己主动指定加载器。
-但是，这里的加载就会立即进行初始化了（如果没有加载过）。另外，对于加载器而言，它无法知道加载的是那种具体的类型信息，只知道是某种确定的类型，因此只能用Class&lt;?&gt;来接收</p>
+<li><p>如果上面信息都没有，那么可以通过类的全限定名由类加载器进行加载，Class提供了接口<code>Class.forName()</code>，由其帮忙调用加载器进行加载，当然也可以自己主动指定加载器。但是，这里的加载就会立即进行初始化了（如果没有加载过）。另外，对于加载器而言，它无法知道加载的是那种具体的类型信息，只知道是某种确定的类型，因此只能用Class&lt;?&gt;来接收</p>
 </li>
 </ol>
-<h3 id="2-反射"><a href="#2-反射" class="headerlink" title="2. 反射"></a>2. 反射</h3><p>反射是Java作为动态语言的手段或者体现，为Java赋予了更多的灵活性，它是很多框架（比如spring、mybatis），以及动态代理实现的基础。在Class对象中，我们可以拿到类型的种种信息，
-比如构造器，字段和方法等，而这些信息也各自定义了对应的类型来表示，其中定义了各自可以支持的操作和使用方式，当然这些信息类型以及Class对象自己所属的类型都由虚拟机自身所定义。</p>
-<p>下面简单整理一下常见的反射使用场景</p>
-<h4 id="2-1-Constructor"><a href="#2-1-Constructor" class="headerlink" title="2.1. Constructor"></a>2.1. Constructor</h4><p>最常见的就是通过反射创建实例，如果是默认构造器，则可以直接通过Calss对象提供的<code>newInstance()</code>创建，否则需要获取对应的构造器，而构造器通过<code>Constructor</code>来封装，
-Class对象提供了<code>getConstructors()</code>以及<code>getDeclaredConstructor()</code>接口来获取类型实例的构造器列表，区别在于获取的是public还是所有的，
-有了构造器之后便可以调用其<code>newInstance(..)</code>来创建对应的实例</p>
-<h4 id="2-2-Method"><a href="#2-2-Method" class="headerlink" title="2.2. Method"></a>2.2. Method</h4><p>一般情况下，是先有对象，然后再调用其方法，但Method提供了<code>invoke(...)</code>接口，它本身表示一个方法实例，但它可以帮忙通过指定的实例来调用。同样的，
-Class对象也提供了<code>getMethods()</code>以及<code>getDeclaredMethods()</code>接口来获取方法列表</p>
-<h4 id="2-3-Field"><a href="#2-3-Field" class="headerlink" title="2.3. Field"></a>2.3. Field</h4><p>对于字段也是类似的，获取到类型中定义的字段<code>Field</code>之后，便可以为对应的实例进行赋值，但是要求先判断字段本身的所属类型，另外如果字段本身并不可见，
-则先要通过<code>setAccessible(true)</code>来设置其可访问</p>
-<h4 id="2-4-注解"><a href="#2-4-注解" class="headerlink" title="2.4. 注解"></a>2.4. 注解</h4><p>对于类<code>Class</code>、方法<code>Method</code>、以及字段<code>Field</code>上的注解，各自都提供了<code>getAnnotation(XX.class)</code>接口来获取，注解可以简单理解成一种附属在字段或方法上的只读标记，
-通常这些注解信息可以表示某种处理方式获取其它含义。</p>
+<h3 id="2-反射"><a href="#2-反射" class="headerlink" title="2. 反射"></a>2. 反射</h3><p>反射是Java作为动态语言的手段或者体现，为Java赋予了更多的灵活性，它是很多框架（比如spring、mybatis），以及动态代理实现的基础。在Class对象中，我们可以拿到类型的种种信息，比如构造器，字段和方法等，而这些信息也各自定义了对应的类型来表示，其中定义了各自可以支持的操作和使用方式，当然这些信息类型以及Class对象自己所属的类型都由虚拟机自身所定义。</p>
+<p>下面简单整理一些常见的反射使用场景</p>
+<h4 id="2-1-Constructor"><a href="#2-1-Constructor" class="headerlink" title="2.1. Constructor"></a>2.1. Constructor</h4><p>最常见的就是通过反射创建实例，如果是默认构造器，则可以直接通过Calss对象提供的<code>newInstance()</code>创建，否则需要获取对应的构造器，而构造器通过<code>Constructor</code>来封装，Class对象提供了<code>getConstructors()</code>以及<code>getDeclaredConstructor()</code>接口来获取类型实例的构造器列表，区别在于获取的是public还是所有的，有了构造器之后便可以调用其<code>newInstance(..)</code>来创建对应的实例</p>
+<h4 id="2-2-Method"><a href="#2-2-Method" class="headerlink" title="2.2. Method"></a>2.2. Method</h4><p>一般情况下，是先有对象，然后再调用其方法，但Method提供了<code>invoke(...)</code>接口，它本身表示一个方法实例，但它可以帮忙通过指定的实例来调用。同样的，Class对象也提供了<code>getMethods()</code>以及<code>getDeclaredMethods()</code>接口来获取方法列表</p>
+<h4 id="2-3-Field"><a href="#2-3-Field" class="headerlink" title="2.3. Field"></a>2.3. Field</h4><p>对于字段也是类似的，获取到类型中定义的字段<code>Field</code>之后，便可以为对应的实例进行赋值，但是要求先判断字段本身的所属类型，另外如果字段本身并不可见，则先要通过<code>setAccessible(true)</code>来设置其可访问</p>
+<h4 id="2-4-注解"><a href="#2-4-注解" class="headerlink" title="2.4. 注解"></a>2.4. 注解</h4><p>对于类<code>Class</code>、方法<code>Method</code>、以及字段<code>Field</code>上的注解，各自都提供了<code>getAnnotation(XX.class)</code>接口来获取，注解可以简单理解成一种附属在字段或方法上的只读标记，通常这些注解信息可以表示某种处理方式获取其它含义。</p>
 <h4 id="2-5-泛型"><a href="#2-5-泛型" class="headerlink" title="2.5. 泛型"></a>2.5. 泛型</h4><p>其实，相比于类型Class，还有更高层的抽象<code>Type</code>，它包括原始类型、参数化类型、数组类型、类型变量以及基本类型等</p>
 <figure class="highlight java"><figcaption><span class="caption">java.lang.reflect.Type</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Type</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> String <span class="title">getTypeName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>对于参数化类型，可以通过反射获取其类型参数，比如：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Class clazz = Person<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">TypeVariable type = clazz.getTypeParameters()[<span class="number">0</span>]; <span class="comment">// T</span></span><br></pre></td></tr></table></figure>
-
 <p>在继承参数化类型时，可以选择保留或者使用具体类型，比如</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">Person</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>或者</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">extends</span> <span class="title">Person</span>&lt;<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>此时可能希望通过父类获取其实际使用的参数类型</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Type type = clazz.getGenericSuperclass();</span><br><span class="line"><span class="keyword">if</span>(type <span class="keyword">instanceof</span> ParameterizedType)&#123;</span><br><span class="line">	ParameterizedType p = (ParameterizedType)type;</span><br><span class="line">	Type t = p.getActualTypeArguments()[<span class="number">0</span>]; <span class="comment">// T 或者 java.lang.String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>类似的，对于泛型接口的实现也一样，比如<code>HashMap</code>中判断目标实例是否为<code>Comparable</code>并且符号自限定类型的判断</p>
 <figure class="highlight java"><figcaption><span class="caption">java.util.HashMap</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> Class&lt;?&gt; comparableClassFor(Object x) &#123;</span><br><span class="line">    <span class="keyword">if</span> (x <span class="keyword">instanceof</span> Comparable) &#123;</span><br><span class="line">        Class&lt;?&gt; c; Type[] ts, as; Type t; ParameterizedType p;</span><br><span class="line">        <span class="keyword">if</span> ((c = x.getClass()) == String<span class="class">.<span class="keyword">class</span>)</span>&#123; <span class="comment">// 如果是String直接返回</span></span><br><span class="line">            <span class="keyword">return</span> c;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ((ts = c.getGenericInterfaces()) != <span class="keyword">null</span>) &#123;  <span class="comment">// 获取并遍历所有实现的接口</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ts.length; ++i) &#123; </span><br><span class="line">                <span class="keyword">if</span> (((t = ts[i]) <span class="keyword">instanceof</span> ParameterizedType) <span class="comment">// 是参数化类型接口</span></span><br><span class="line">                        &amp;&amp; ((p = (ParameterizedType)t).getRawType() == Comparable<span class="class">.<span class="keyword">class</span>) // 接口是<span class="title">Comparable</span></span></span><br><span class="line"><span class="class">                        &amp;&amp; (<span class="title">as</span> </span>= p.getActualTypeArguments()) != <span class="keyword">null</span> <span class="comment">// 类型参数不为空</span></span><br><span class="line">                        &amp;&amp; as.length == <span class="number">1</span>  <span class="comment">// 类型参数只有一个</span></span><br><span class="line">                        &amp;&amp; as[<span class="number">0</span>] == c) <span class="comment">// 类型参数为自己</span></span><br><span class="line">                    <span class="keyword">return</span> c; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-6-CallerSensitive"><a href="#2-6-CallerSensitive" class="headerlink" title="2.6. CallerSensitive"></a>2.6. CallerSensitive</h4><p>在反射Api中，即<code>java.lang.reflect</code>下面，经常会看到注解<code>@CallerSensitive</code>，其目的是找到真正的调用者，但由于嵌套调用的关系，它需要忽略掉api自身的调用，
-因此就给自己定义的方法添加<code>@CallerSensitive</code>进行标记，这样在检查调用链时发现<code>@CallerSensitive</code>就直接跳过，直到发现真正的调用者。 </p>
-<p>以前的做法是检查固定深度，这样有一个问题，如果本来调用者没有访问权限，他可以修改调用链深度来骗过检查。比如：调用者-&gt;反射1-&gt;反射2 这样的调用链上，
-反射2检查权限时如果检查深度固定为1，那么看到的将是反射1的类，这就被欺骗了，而反射相关的类通常有很高的权限，容易导致安全漏洞。</p>
+<h4 id="2-6-CallerSensitive"><a href="#2-6-CallerSensitive" class="headerlink" title="2.6. CallerSensitive"></a>2.6. CallerSensitive</h4><p>在反射Api中，即<code>java.lang.reflect</code>下面，经常会看到注解<code>@CallerSensitive</code>，其目的是找到真正的调用者，但由于嵌套调用的关系，它需要忽略掉api自身的调用，因此就给自己定义的方法添加<code>@CallerSensitive</code>进行标记，这样在检查调用链时发现<code>@CallerSensitive</code>就直接跳过，直到发现真正的调用者。 </p>
+<p>以前的做法是检查固定深度，这样有一个问题，如果本来调用者没有访问权限，他可以修改调用链深度来骗过检查。比如：调用者-&gt;反射1-&gt;反射2 这样的调用链上，反射2检查权限时如果检查深度固定为1，那么看到的将是反射1的类，这就被欺骗了，而反射相关的类通常有很高的权限，容易导致安全漏洞。</p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《深入理解java虚拟机》</li>
@@ -214,24 +192,7 @@ Class对象也提供了<code>getMethods()</code>以及<code>getDeclaredMethods()
   </div>
 
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -312,5 +273,20 @@ Class对象也提供了<code>getMethods()</code>以及<code>getDeclaredMethods()
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

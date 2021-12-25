@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 3 | Archives: 2018 | Echo</title>
+  <title>Page 14 | Echo</title>
   <meta name="author" content="shanhm1991">
   
   
@@ -60,140 +60,329 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-<h2 class="archive-title">2018</h2>
+  <article id="post-20170930" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-09-29T16:00:00.000Z"><a href="/2017/09/30/20170930/">2017-09-30</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2017/09/30/20170930/">《深入理解Java虚拟机》 运行时数据区</a>
+    </h1>
+    
+  
+  
 
 
-  <div class="archive">
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-04-02T16:00:00.000Z"><a href="/2018/04/03/20180403/">2018-04-03</a></time>
-            
-              <h2 class="title"><a href="/2018/04/03/20180403/">JUC ThreadPoolExecutor</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-03-31T16:00:00.000Z"><a href="/2018/04/01/20180401/">2018-04-01</a></time>
-            
-              <h2 class="title"><a href="/2018/04/01/20180401/">JUC AbstractQueuedSynchronizer</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-03-14T16:00:00.000Z"><a href="/2018/03/15/20180315/">2018-03-15</a></time>
-            
-              <h2 class="title"><a href="/2018/03/15/20180315/">JUC Thread（TODO）</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-03-09T16:00:00.000Z"><a href="/2018/03/10/20180310/">2018-03-10</a></time>
-            
-              <h2 class="title"><a href="/2018/03/10/20180310/">Linux I/O模型</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-03-04T16:00:00.000Z"><a href="/2018/03/05/20180305/">2018-03-05</a></time>
-            
-              <h2 class="title"><a href="/2018/03/05/20180305/">vim 常用操作</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-02-28T16:00:00.000Z"><a href="/2018/03/01/20180301/">2018-03-01</a></time>
-            
-              <h2 class="title"><a href="/2018/03/01/20180301/">Linux 常用操作</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-02-11T16:00:00.000Z"><a href="/2018/02/12/20180212/">2018-02-12</a></time>
-            
-              <h2 class="title"><a href="/2018/02/12/20180212/">《计算机组成原理》 并行组织与结构</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-02-09T16:00:00.000Z"><a href="/2018/02/10/20180210/">2018-02-10</a></time>
-            
-              <h2 class="title"><a href="/2018/02/10/20180210/">《计算机组成原理》 输入输出系统</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-02-07T16:00:00.000Z"><a href="/2018/02/08/20180208/">2018-02-08</a></time>
-            
-              <h2 class="title"><a href="/2018/02/08/20180208/">《计算机组成原理》 总线系统</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2018-02-01T16:00:00.000Z"><a href="/2018/02/02/20180202/">2018-02-02</a></time>
-            
-              <h2 class="title"><a href="/2018/02/02/20180202/">《计算机组成原理》 存储系统</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/09/30/20170930/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
   </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20170915" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-09-14T16:00:00.000Z"><a href="/2017/09/15/20170915/">2017-09-15</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2017/09/15/20170915/">《深入理解Java虚拟机》 编译 &amp; 优化</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Java的编译过程可以分为两个阶段，首先是将<code>.java</code>文件编译为<code>.class</code>文件的过程，称为前端编译，比如javac；然后在运行期，可能即时编译器（JIT）又会将字节码转变为本地机器码，比如HotSopt的C1、C2编译器，或者Graal编译器。</p>
+<p>对于优化处理，Java虚拟机团队选择将<font color="#E51508">性能优化的措施全部集中在运行期的即时编译器中，以便让那些不是由 javac 产生的 Class 文件也能享受到性能优化的好处</font>，至于 <font color="#E51508">javac 中则做了一些针对Java语言编码过程的优化，用来降低开发者的编码复杂度、提高编码效率</font>。可以这样认为，即时编译器在运行期的优化过程，支撑了程序执行效率的不断提升，而javac在编译期的优化过程，则支撑了开发者的编码效率和语言使用者的体验。<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/09/15/20170915/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20170912" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-09-11T16:00:00.000Z"><a href="/2017/09/12/20170912/">2017-09-12</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2017/09/12/20170912/">JUC ConcurrentHashMap（TODO）</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+
+      
+    </div>
+	
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20170911" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-09-10T16:00:00.000Z"><a href="/2017/09/11/20170911/">2017-09-11</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2017/09/11/20170911/">Java Map</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>java容器中一般最常用的就是List、Set、Map，<a href="https://shanhm1991.github.io/2017/09/10/20170910/">List</a>的实现前面已经介绍过，本文主要讨论下Map的几个实现，至于Set则比较简单，它们仅仅是依赖Map做了层封装而已。</p>
+<p>在讨论之前，还是先看下Map的继承结构</p>
+<p><img src="/img/20170911/20170911.1.png" alt=""><br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/09/11/20170911/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20170910" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-09-09T16:00:00.000Z"><a href="/2017/09/10/20170910/">2017-09-10</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2017/09/10/20170910/">Java List</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>根据实现的接口可以将java容器分为Collection和Map两部分，其中还可以按照是否线程安全来继续划分，大部分线程安全的实现在JDK1.5之后新增的concurrent包中。  </p>
+<p>本文先讨论Collection中比较基础的两个List实现<code>ArrayList</code>和<code>LinkedList</code>，前者通过数组，后者通过链表。数组的好处在于有位置索引，可以按下标任意访问，并且由于数组在内存上的连续性，因此访问会更快，但前提是元素必须排列紧凑， 这样在进行插入删除时就免不了要进行移动，而且由于数组长度不可变，在添加元素时可能需要扩容和复制处理。链表可以弥补数组在插入删除上的缺陷，但代价是牺牲查询的效率，尤其是按位置索引访问时，它只能选择从头或者从尾开始依次遍历。</p>
+<p>在讨论之前先整体看下Collection的体系结构，可以看到其实有很多的实现类，它们分别用来应付各种不同的场景</p>
+<p><img src="/img/20170910/20170910.1.png" alt=""><br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/09/10/20170910/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20170906" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2017-09-05T16:00:00.000Z"><a href="/2017/09/06/20170906/">2017-09-06</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2017/09/06/20170906/">JUC ThreadLocal</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值并且互不影响，其非常适合用来作为线程上下文变量，比如在一些连接池或者事务的场景中。</p>
+<p>其思路是<font style="color:red;">让每个Thread都持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是共享的ThreadLocal实例，因此每个ThreadLocal也就对应一个本地变量。</font>。但是，如果这个本地变量本身就是一个线程共享的对象，那么就算使用ThreadLocal也不是线程安全的。另外，设计者将具体的map操作都封装在了ThreadLocal中，然后提供统一的get/set接口，好让开发更加简洁方便。<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2017/09/06/20170906/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
 
 
 <nav id="pagination">
   
-    <a href="/archives/2018/page/2/" class="alignleft prev">Prev</a>
+    <a href="/page/13/" class="alignleft prev">Prev</a>
   
   
-    <a href="/archives/2018/page/4/" class="alignright next">Next</a>
+    <a href="/page/15/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
@@ -287,5 +476,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

@@ -6,8 +6,7 @@
   <title>《深入理解Java虚拟机》 Jvm故障定位工具 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="JDK的bin目录下提供了很多命令行工具，这些工具都非常稳定并且功能强大，能在处理应用程序性能问题、故障定位时发挥很大的作用。事实上，这些命令大多只是jdk/lib/tools.jar的一层包装，
-如果能借助tools中提供的接口，我们也可以在应用程序中实现功能强大的监控分析功能。">
+  <meta name="description" content="JDK的bin目录下提供了很多命令行工具，这些工具都非常稳定并且功能强大，能在处理应用程序性能问题、故障定位时发挥很大的作用。其实这些命令大多只是jdk/lib/tools.jar的一层包装，如果能借助tools中提供的接口，我们也可以在应用程序中实现功能强大的监控分析功能。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -117,148 +116,143 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>JDK的bin目录下提供了很多命令行工具，这些工具都非常稳定并且功能强大，能在处理应用程序性能问题、故障定位时发挥很大的作用。事实上，<font color="#E51508">这些命令大多只是jdk/lib/tools.jar的一层包装</font>，
-如果能借助tools中提供的接口，我们也可以在应用程序中实现功能强大的监控分析功能。</p>
-<a id="more"></a>
-
+        <p>JDK的bin目录下提供了很多命令行工具，这些工具都非常稳定并且功能强大，能在处理应用程序性能问题、故障定位时发挥很大的作用。其实<font color="#E51508">这些命令大多只是jdk/lib/tools.jar的一层包装</font>，如果能借助tools中提供的接口，我们也可以在应用程序中实现功能强大的监控分析功能。<br><a id="more"></a></p>
 <h3 id="1-命令行工具"><a href="#1-命令行工具" class="headerlink" title="1. 命令行工具"></a>1. 命令行工具</h3><h4 id="1-1-jps"><a href="#1-1-jps" class="headerlink" title="1.1. jps"></a>1.1. jps</h4><p>JVM Process Status Tool，虚拟机进程状况工具，其功能与unix的ps类似，可以列出正在运行的虚拟机进程，并显示主类名称等信息</p>
-<p>命令格式：<code>jps [options] [hostid]</code><br>    <table>
+<p>命令格式：<code>jps [options] [hostid]</code> </p>
+<table>
         <tr>
-            <td><code>-q</code></td>
+            <td>-q</td>
             <td>：只输出LVMID，省略主类的名称</td>
         </tr>
         <tr>
-            <td><code>-m</code></td>
+            <td>-m</td>
             <td>：输出虚拟机进程启动时传递给主类Main()函数的参数</td>
         </tr>
         <tr>
-            <td><code>-l</code></td>
+            <td>-l</td>
             <td>：输出主类的全名，如果进程执行的是jar包，输出jar路径</td>
         </tr>
         <tr>
-            <td><code>-v</code></td>
+            <td>-v</td>
             <td>：输出虚拟机进程启动时JVM参数</td>
         </tr>
-    </table></p>
+    </table>    
+
 <h4 id="1-2-jstat"><a href="#1-2-jstat" class="headerlink" title="1.2. jstat"></a>1.2. jstat</h4><p>JVM Statistics Monitoring Tool，虚拟机统计信息监视工具，监视虚拟机各种运行状态，可以显示本地或远程虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行信息</p>
-<p>命令格式：<code>jstat [option vmid [ interval [s|ms] [count] ] ]</code><br>    <table>
+<p>命令格式：<code>jstat [option vmid [ interval [s|ms] [count] ] ]</code>   </p>
+<table>
         <tr>
-            <td><code>-class</code></td>
+            <td>-class</td>
             <td>：监视类装载、卸载数量、总空间及类装载所耗费的时间</td>
         </tr>
         <tr>
-            <td><code>-gc</code></td>
+            <td>-gc</td>
             <td>：监视Java堆状态，包括Eden区、2个Survivor区、老年代等容量、已用空间、GC时间合计等信息</td>
         </tr>
         <tr>
-            <td><code>-gccapacity</code></td>
-            <td>：与<code>-gc</code>类似，但输出主要关注Java堆各个区域使用到的最大和最小空间</td>
+            <td>-gccapacity</td>
+            <td>：与 -gc 类似，但输出主要关注Java堆各个区域使用到的最大和最小空间</td>
         </tr>
         <tr>
-            <td><code>-gcutil</code></td>
-            <td>：与<code>-gc</code>类似，但输出主要关注已使用空间占总空间的百分比</td>
+            <td>-gcutil</td>
+            <td>：与 -gc 类似，但输出主要关注已使用空间占总空间的百分比</td>
         </tr>
         <tr>
-            <td><code>-gccause</code></td>
-            <td>：与<code>-gcutil</code>类似，但会额外输出导致上一次gc产生的原因</td>
+            <td>-gccause</td>
+            <td>：与 -gcutil 类似，但会额外输出导致上一次gc产生的原因</td>
         </tr>
         <tr>
-            <td><code>-gcnew</code></td>
+            <td>-gcnew</td>
             <td>：监视新生代gc的状况</td>
         </tr>
         <tr>
-            <td><code>-gcnewcapacity</code></td>
-            <td>：与<code>-gcnew</code>类似，但输出主要关注使用到的最大和最小空间</td>
+            <td>-gcnewcapacity</td>
+            <td>：与 -gcnew 类似，但输出主要关注使用到的最大和最小空间</td>
         </tr>
         <tr>
-            <td><code>-gcold</code></td>
+            <td>-gcold</td>
             <td>：监视老年代gc的状况</td>
         </tr>
         <tr>
-            <td><code>-gcoldcapacity</code></td>
-            <td>：与<code>-gcold</code>类似，但输出主要关注使用到的最大和最小空间</td>
+            <td>-gcoldcapacity</td>
+            <td>：与 -gcold 类似，但输出主要关注使用到的最大和最小空间</td>
         </tr>
         <tr>
-            <td><code>-compiler</code></td>
+            <td>-compiler</td>
             <td>：输出JIT编译器编译过的方法、耗时等信息</td>
         </tr>
-    </table></p>
+    </table>    
+
 <p>对于本地虚拟机进程而言，VMID和LVMID是一致的，参数interval和count分别表示查询的间隔和次数，缺省表示只查询一次    </p>
 <p>例如，每隔100ms查询一次进程8724的gc情况，共查询5次(-h3表示每3行打印一次列头，-t表示第一列输出时间戳，距离jvm启动时)</p>
 <figure class="highlight plain"><figcaption><span class="fileDir">C:\Users\</span><span class="caption">shanhm1991>jstat -gc -h3 -t 8724 100 5</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">         3160.3  0.0   8192.0  0.0   8192.0 111616.0 61440.0   142336.0   109216.3  135340.0 122862.0 18944.0 15504.8     25    0.307   4      0.564    0.872</span><br><span class="line">         3160.4  0.0   8192.0  0.0   8192.0 111616.0 61440.0   142336.0   109216.3  135340.0 122862.0 18944.0 15504.8     25    0.307   4      0.564    0.872</span><br><span class="line">         3160.5  0.0   8192.0  0.0   8192.0 111616.0 61440.0   142336.0   109216.3  135340.0 122862.0 18944.0 15504.8     25    0.307   4      0.564    0.872</span><br><span class="line">Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">         3160.6  0.0   8192.0  0.0   8192.0 111616.0 61440.0   142336.0   109216.3  135340.0 122862.0 18944.0 15504.8     25    0.307   4      0.564    0.872</span><br><span class="line">         3160.7  0.0   8192.0  0.0   8192.0 111616.0 61440.0   142336.0   109216.3  135340.0 122862.0 18944.0 15504.8     25    0.307   4      0.564    0.872</span><br><span class="line">		 </span><br><span class="line">各字段含义：</span><br><span class="line">S0C：年轻代第一个survivor区的容量(字节)</span><br><span class="line">S1C：年轻代第二个survivor区的容量(字节)</span><br><span class="line">S0U：年轻代第一个survivor区的已使用容量(字节)</span><br><span class="line">S1U：年轻代第二个survivor区的已使用容量(字节)</span><br><span class="line">EC： 年轻代Eden区的容量(字节)</span><br><span class="line">EU： 年轻代Eden区的已使用容量(字节)</span><br><span class="line">OC： 老年代的容量(字节)</span><br><span class="line">OU： 老年代的已使用容量(字节)</span><br><span class="line">MC： 方法区的容量(字节)</span><br><span class="line">MU： 方法区的已使用容量(字节)</span><br><span class="line">CCSC: 压缩类空间大小</span><br><span class="line">CCSU: 压缩类空间使用大小</span><br><span class="line">YGC： 年轻代gc次数</span><br><span class="line">YGCT：年轻代gc消耗时间</span><br><span class="line">FGC： 老年代gc次数</span><br><span class="line">FGCT：老年代gc消耗时间</span><br><span class="line">GCT： gc总消耗时间</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><figcaption><span class="fileDir">C:\Users\</span><span class="caption">shanhm1991>jstat -gcutil -h3 -t 8724 100 5</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Timestamp         S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">         3195.1   0.00 100.00  55.05  76.73  90.78  81.85     25    0.307     4    0.564    0.872</span><br><span class="line">         3195.3   0.00 100.00  55.05  76.73  90.78  81.85     25    0.307     4    0.564    0.872</span><br><span class="line">         3195.3   0.00 100.00  55.05  76.73  90.78  81.85     25    0.307     4    0.564    0.872</span><br><span class="line">Timestamp         S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">         3195.4   0.00 100.00  55.05  76.73  90.78  81.85     25    0.307     4    0.564    0.872</span><br><span class="line">         3195.6   0.00 100.00  55.05  76.73  90.78  81.85     25    0.307     4    0.564    0.872</span><br><span class="line">		 </span><br><span class="line">各字段含义：</span><br><span class="line">S0：  年轻代第一个survivor区使用率</span><br><span class="line">S1：  年轻代第二个survivor区使用率</span><br><span class="line">E：   年轻代Eden区使用率</span><br><span class="line">O：   老年代使用率</span><br><span class="line">M：   方法区使用率</span><br><span class="line">CCS： 压缩类空间使用率</span><br><span class="line">YGC： 年轻代gc次数</span><br><span class="line">YGCT：年轻代gc消耗时间</span><br><span class="line">FGC： 老年代gc次数</span><br><span class="line">FGCT：老年代gc消耗时间</span><br><span class="line">GCT： gc总消耗时间</span><br></pre></td></tr></table></figure>
-
 <p>其它比如</p>
 <figure class="highlight plain"><figcaption><span class="fileDir">C:\Users\</span><span class="caption">shanhm1991>jstat -gcnew 8724</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> S0C    S1C    S0U    S1U   TT MTT  DSS      EC       EU     YGC     YGCT</span><br><span class="line">   0.0 7168.0    0.0 7168.0 15  15 6144.0  96256.0  27648.0     27    0.398</span><br><span class="line"> </span><br><span class="line">各字段含义：</span><br><span class="line">S0C： 年轻代第一个survivor区大小</span><br><span class="line">S1C： 年轻代第二个survivor区的大小</span><br><span class="line">S0U： 年轻代第一个survivor区的使用大小</span><br><span class="line">S1U： 年轻代第二个survivor区的使用大小</span><br><span class="line">TT:   对象在年轻代存活的次数</span><br><span class="line">MTT:  对象在年轻代存活的最大次数</span><br><span class="line">DSS:  期望的survivor区大小</span><br><span class="line">EC：  Eden区的大小</span><br><span class="line">EU：  Eden区的使用大小</span><br><span class="line">YGC： 年轻代gc次数</span><br><span class="line">YGCT：年轻代gc消耗时间</span><br></pre></td></tr></table></figure>
-
 <h4 id="1-3-jinfo"><a href="#1-3-jinfo" class="headerlink" title="1.3. jinfo"></a>1.3. jinfo</h4><p>Configuration Info for Java，配置信息工具，实时查看和调整JVM的各项参数</p>
-<p>命令格式：<code>jinfo [option] pid</code>
-    <table>
+<p>命令格式：<code>jinfo [option] pid</code></p>
+<table>
         <tr>
-            <td><code>-flags</code></td>
+            <td> -flags </td>
             <td>：打印传递给JVM命令行参数</td>
         </tr>
         <tr>
-            <td><code>-flag name</code></td>
+            <td> -flag name </td>
             <td>：输出指定name的JVM参数</td>
         </tr>
         <tr>
-            <td><code>-flag name=value</code></td>
+            <td> -flag name=value </td>
             <td>：设置指定name的JVM参数</td>
         </tr>
         <tr>
-            <td><code>-flag [+|-]name</code></td>
+            <td> -flag [+|-]name </td>
             <td>：启用或禁用指定name的JVM参数</td>
         </tr>
-    </table></p>
+    </table>
+
 <h4 id="1-4-jmap"><a href="#1-4-jmap" class="headerlink" title="1.4. jmap"></a>1.4. jmap</h4><p>Memory Map for Java，内存映像工具，用于生成堆转储快照，查询finalize执行队列，Java堆等详细信息</p>
-<p>命令格式：<code>jmap [option] vmid</code><br>    <table>
+<p>命令格式：<code>jmap [option] vmid</code>    </p>
+<table>
         <tr>
-            <td><code>-dump</code></td>
+            <td> -dump </td>
             <td>：生成Java堆转储快照</td>
         </tr>
         <tr>
-            <td><code>-heap</code></td>
+            <td> -heap </td>
             <td>：打印Java堆详细信息，比如使用哪种回收器、参数配置、分代状况等</td>
         </tr>
         <tr>
-            <td><code>-histo</code></td>
+            <td> -histo </td>
             <td>：打印堆中对象统计信息，包括类、实例数量和合计容量</td>
         </tr>
         <tr>
-            <td><code>-finalizerinfo</code></td>
+            <td> -finalizerinfo </td>
             <td>：打印在F-Queue中等待Finalizer线程执行finalize方法的对象</td>
         </tr>
-    </table></p>
+    </table>
+
 <p>比如转储堆快照文件：<code>jmap -dump:format=b,file=heap.dump 8724</code>，或者打印堆的详细情况</p>
 <figure class="highlight plain"><figcaption><span class="fileDir">C:\Users\</span><span class="caption">shanhm1991>jmap -heap 8724</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">Attaching to process ID 8724, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.11-b03</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Garbage-First (G1) GC with 4 thread(s)</span><br><span class="line"></span><br><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         &#x3D; 40</span><br><span class="line">   MaxHeapFreeRatio         &#x3D; 70</span><br><span class="line">   MaxHeapSize              &#x3D; 1073741824 (1024.0MB)</span><br><span class="line">   NewSize                  &#x3D; 1363144 (1.2999954223632812MB)</span><br><span class="line">   MaxNewSize               &#x3D; 643825664 (614.0MB)</span><br><span class="line">   OldSize                  &#x3D; 5452592 (5.1999969482421875MB)</span><br><span class="line">   NewRatio                 &#x3D; 2</span><br><span class="line">   SurvivorRatio            &#x3D; 8</span><br><span class="line">   MetaspaceSize            &#x3D; 21807104 (20.796875MB)</span><br><span class="line">   CompressedClassSpaceSize &#x3D; 1073741824 (1024.0MB)</span><br><span class="line">   MaxMetaspaceSize         &#x3D; 17592186044415 MB</span><br><span class="line">   G1HeapRegionSize         &#x3D; 1048576 (1.0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">G1 Heap:</span><br><span class="line">   regions  &#x3D; 1024</span><br><span class="line">   capacity &#x3D; 268435456 (256.0MB)</span><br><span class="line">   used     &#x3D; 196886512 (187.76560974121094MB)</span><br><span class="line">   free     &#x3D; 71548944 (68.23439025878906MB)</span><br><span class="line">   73.34594130516052% used</span><br><span class="line">G1 Young Generation:</span><br><span class="line">Eden Space:</span><br><span class="line">   regions  &#x3D; 67</span><br><span class="line">   capacity &#x3D; 98566144 (94.0MB)</span><br><span class="line">   used     &#x3D; 70254592 (67.0MB)</span><br><span class="line">   free     &#x3D; 28311552 (27.0MB)</span><br><span class="line">   71.27659574468085% used</span><br><span class="line">Survivor Space:</span><br><span class="line">   regions  &#x3D; 7</span><br><span class="line">   capacity &#x3D; 7340032 (7.0MB)</span><br><span class="line">   used     &#x3D; 7340032 (7.0MB)</span><br><span class="line">   free     &#x3D; 0 (0.0MB)</span><br><span class="line">   100.0% used</span><br><span class="line">G1 Old Generation:</span><br><span class="line">   regions  &#x3D; 117</span><br><span class="line">   capacity &#x3D; 162529280 (155.0MB)</span><br><span class="line">   used     &#x3D; 118243312 (112.76560974121094MB)</span><br><span class="line">   free     &#x3D; 44285968 (42.23439025878906MB)</span><br><span class="line">   72.75200628465221% used</span><br><span class="line"></span><br><span class="line">67252 interned Strings occupying 7558272 bytes.</span><br></pre></td></tr></table></figure>
-
 <h4 id="1-5-jhat"><a href="#1-5-jhat" class="headerlink" title="1.5. jhat"></a>1.5. jhat</h4><p>JVM Heap Analysis Tool，虚拟机堆转储快照分析工具，与jmap搭配使用，其提供web访问入口<a href="http://localhost:7000/" target="_blank" rel="noopener">http://localhost:7000/</a></p>
 <p>命令格式：<code>jhat [ options ] &lt;heap-dump-file&gt;</code></p>
 <h4 id="1-6-jstack"><a href="#1-6-jstack" class="headerlink" title="1.6. jstack"></a>1.6. jstack</h4><p>Stack Trace for Java，堆栈跟踪工具，用于生成虚拟机当前线程快照，即当前虚拟机内每一条线程正在执行的方法堆栈集合，目的是为了定位线程出现长时间停顿的原因，比如死锁，死循环或者等待资源。 </p>
 <p>命令格式：<code>jstack [option] vmid</code><br>    <table>
         <tr>
-            <td><code>-F</code></td>
+            <td> -F </td>
             <td>：当正常输出的请求不被响应时，强制输出线程堆栈</td>
         </tr>
         <tr>
-            <td><code>-l</code></td>
+            <td> -l </td>
             <td>：除堆栈外，显示关于锁的附加信息</td>
         </tr>
         <tr>
-            <td><code>-m</code></td>
+            <td> -m </td>
             <td>：如果调用到本地方法的话，可以显示C/C++的堆栈</td>
         </tr>
     </table></p>
-<p>JDK 1.5之后，Thread类新增方法<code>getAllStackTraces()</code>用于获取虚拟机中所有线程的<code>StackTraceElement</code>对象，通过这个方法可以完成jstack大部分的功能，
-因此可以做一个管理员页面，通过浏览器来实时查看线程堆栈。</p>
+<p>JDK 1.5之后，Thread类新增方法<code>getAllStackTraces()</code>用于获取虚拟机中所有线程的<code>StackTraceElement</code>对象，通过这个方法可以完成jstack大部分的功能，因此可以做一个管理员页面，通过浏览器来实时查看线程堆栈。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Thread, StackTraceElement[]&gt; map = Thread.getAllStackTraces();</span><br><span class="line"><span class="keyword">for</span>(Entry&lt;Thread, StackTraceElement[]&gt; stackTrace : map.entrySet())&#123;</span><br><span class="line">    Thread thread = stackTrace.getKey();</span><br><span class="line">    StackTraceElement[] stack = stackTrace.getValue();</span><br><span class="line">    System.out.println(<span class="string">"线程："</span> + thread.getName());</span><br><span class="line">    <span class="keyword">for</span>(StackTraceElement element : stack)&#123;</span><br><span class="line">        System.out.println(<span class="string">"\t"</span> + element);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="1-7-HSDIS"><a href="#1-7-HSDIS" class="headerlink" title="1.7. HSDIS"></a>1.7. HSDIS</h4><p>java虚拟机规范中，详细描述了虚拟机指令集中每条的执行过程、执行前后对操作数栈、局部变量表的影响等细节。但是随着技术发展，
-高性能虚拟机真正的细节实现方式已经渐渐与虚拟机规范所描述的内容产生了越来越大的差距，虚拟机规范中的描述逐渐成了虚拟机实现的“概念模型”——即实现只能保证与规范描述等效。因此，
-我们分析程序的执行语义问题时(虚拟机做了什么)时，在字节码层面上分析完全可行，但分析程序的执行行为问题(虚拟机具体怎样做)时，在字节码层面上分析就没有意义了。</p>
+<h4 id="1-7-HSDIS"><a href="#1-7-HSDIS" class="headerlink" title="1.7. HSDIS"></a>1.7. HSDIS</h4><p>java虚拟机规范中，详细描述了虚拟机指令集中每条的执行过程、执行前后对操作数栈、局部变量表的影响等细节。但是随着技术发展，高性能虚拟机真正的细节实现方式已经渐渐与虚拟机规范所描述的内容产生了越来越大的差距，虚拟机规范中的描述逐渐成了虚拟机实现的“概念模型”——即实现只能保证与规范描述等效。因此，我们分析程序的执行语义问题时(虚拟机做了什么)时，在字节码层面上分析完全可行，但分析程序的执行行为问题(虚拟机具体怎样做)时，在字节码层面上分析就没有意义了。</p>
 <p>HSDIS是Sun推荐的HotSpot虚拟机JIT编译代码的反汇编插件，它包含在HotSpot虚拟机的源码之中，但是没有提供编译后的程序</p>
 <p>例如对下面代码的class文件进行反汇编</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> d1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;  </span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a + b;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Test().sum(<span class="number">5</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -270,10 +264,8 @@
 <li>打印要执行字节码指令</li>
 </ol>
 <figure class="highlight plain"><figcaption><span class="caption">java -XX:+UnlockDiagnosticVMOptions -XX:+PrintAssembly -XX:PrintAssemblyOptions=hsdis-print-bytes -XX:CompileCommand=print d1.Test</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Loaded disassembler from hsdis-amd64.so</span><br><span class="line">Decoding compiled method 0x00007fccc5108510:</span><br><span class="line">Code:</span><br><span class="line">Argument 0 is unknown.RIP: 0x7fccc5108680 Code size: 0x00000290</span><br><span class="line">[Disassembling for mach&#x3D;&#39;amd64&#39;]</span><br><span class="line">[Entry Point]</span><br><span class="line">[Constants]</span><br><span class="line">  # &#123;method&#125; &#123;0x00007fccd8996000&#125; &#39;hashCode&#39; &#39;()I&#39; in &#39;java&#x2F;lang&#x2F;String&#39;</span><br><span class="line">  #           [sp+0x40]  (sp of caller)</span><br><span class="line">  0x00007fccc5108680: mov     0x8(%rsi),%r10d   ;...44</span><br><span class="line">                                                ;...8b</span><br><span class="line">                                                ;...56</span><br><span class="line">                                                ;...08</span><br><span class="line">  0x00007fccc5108684: shl     $0x3,%r10         ;...49</span><br><span class="line">                                                ;...c1</span><br><span class="line">                                                ;...e2</span><br><span class="line">                                                ;...03</span><br><span class="line">  0x00007fccc5108688: cmp     %rax,%r10         ;...4c</span><br><span class="line">  </span><br><span class="line">  ........</span><br></pre></td></tr></table></figure>
-
 <h3 id="2-可视化工具"><a href="#2-可视化工具" class="headerlink" title="2. 可视化工具"></a>2. 可视化工具</h3><p>VisualVM（多合一故障处理工具）可以用来监视远程JVM的详细状态，只需要在jvm启动时配置Jmx连接</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote</span><br><span class="line">-Dcom.sun.management.jmxremote.port&#x3D;8099</span><br><span class="line">-Dcom.sun.management.jmxremote.ssl&#x3D;false </span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate&#x3D;false</span><br><span class="line"></span><br><span class="line">-Dcom.sun.management.jmxremote.rmi.port&#x3D;8099 </span><br><span class="line">-Djava.rmi.server.hostname&#x3D;192.168.180.1</span><br></pre></td></tr></table></figure>
-
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
@@ -317,24 +309,7 @@
   </div>
 
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -415,5 +390,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

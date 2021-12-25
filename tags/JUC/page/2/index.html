@@ -69,42 +69,6 @@
         <div class="post-content">
           <header>
             <div class="icon"></div>
-            <time datetime="2017-10-29T16:00:00.000Z"><a href="/2017/10/30/20171030/">2017-10-30</a></time>
-            
-              <h2 class="title"><a href="/2017/10/30/20171030/">《深入理解Java虚拟机》Java线程与锁优化</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2017-09-11T16:00:00.000Z"><a href="/2017/09/12/20170912/">2017-09-12</a></time>
-            
-              <h2 class="title"><a href="/2017/09/12/20170912/">JUC ConcurrentHashMap（TODO）</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2017-09-05T16:00:00.000Z"><a href="/2017/09/06/20170906/">2017-09-06</a></time>
-            
-              <h2 class="title"><a href="/2017/09/06/20170906/">JUC ThreadLocal</a></h2>
-            
-          </header>
-        </div>
-      </article>
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
             <time datetime="2017-09-04T16:00:00.000Z"><a href="/2017/09/05/20170905/">2017-09-05</a></time>
             
               <h2 class="title"><a href="/2017/09/05/20170905/">JUC Unsafe</a></h2>
@@ -213,5 +177,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

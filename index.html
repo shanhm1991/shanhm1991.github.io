@@ -90,7 +90,7 @@
         <blockquote>
 <p><a href="https://github.com/shanhm1991/spring-fom-demo" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom-demo</a></p>
 </blockquote>
-<p>根据设计文档中描述的设计和实现，这里提供了一些常见场景下的使用示例，但是 spring-fom 的使用必须要依赖于spring应用上下文</p>
+<p>根据设计文档中描述的设计和实现，这里提供了一些常见场景下的使用示例，但是 spring-fom 的使用必须要依赖于spring应用上下文<br>
       
     </div>
 	
@@ -145,11 +145,8 @@
         <blockquote>
 <p><a href="https://github.com/shanhm1991/spring-fom" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom</a></p>
 </blockquote>
-<p>写这个工具一开始只是为了解决各种离线数据文件的处理，其中涉及到一些定时任务处理。当时刚进XXX公司参与第一个项目，但是意识到公司的产品业务基本上都是围绕数据做一些信息或线索的挖掘，
-尤其是离线数据，所以应该会有很多各种各样的任务式场景，而后来参与的各种项目也印证了自己的想法，确实可以在很多项目中发挥作用，能够提高工作中的开发效率和质量，以及运维的能力。</p>
-<p>目标是想设计一个通用的轻量级任务管理框架，包括各种定时任务以及手动创建的任务，在功能上除了能支持常见的场景外，也希望能支持一定的实时监控管理，
-而在结构上要有足够的扩展性以方便进行一些定制，同时在使用方式上希望能简洁清晰，对原有代码尽量少的侵入。
-由于当时是设计用来处理文件的，又是基于 spring 进行管理的，所以取名为 spring-fom。</p>
+<p>写这个工具一开始只是为了解决各种离线数据文件的处理，其中涉及到一些定时任务处理。当时刚进XXX公司参与第一个项目，但是意识到公司的产品业务基本上都是围绕数据做一些信息或线索的挖掘，尤其是离线数据，所以应该会有很多各种各样的任务式场景，而后来参与的各种项目也印证了自己的想法，确实可以在很多项目中发挥作用，能够提高工作中的开发效率和质量，以及运维的能力。</p>
+<p>目标是想设计一个通用的轻量级任务管理框架，包括各种定时任务以及手动创建的任务，在功能上除了能支持常见的场景外，也希望能支持一定的实时监控管理，而在结构上要有足够的扩展性以方便进行一些定制，同时在使用方式上希望能简洁清晰，对原有代码尽量少的侵入。由于当时是设计用来处理文件的，又是基于 spring 进行管理的，所以取名为 spring-fom。<br>
       
     </div>
 	
@@ -158,61 +155,6 @@
         
           <div class="alignleft">
             <a href="/2019/07/02/20190702/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190613" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-12T16:00:00.000Z"><a href="/2019/06/13/20190613/">2019-06-13</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/06/13/20190613/">数据结构 B树</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>前面讨论2-3树时已经提到过，B树就是一颗平衡M叉树，其插入删除操作都可以与2-3树作类似处理。这里也不过多赘述，可以简单讨论下其实际意义：<br>之前讨论过的各种二叉树都有一个共同假设：即数据全部存储在内存中，因此讨论时只需关心在找到目标之前需要比较多少次数。但是当数据量大到内存放不下，需要借助磁盘来保存时，
-就需要另外考虑磁盘访问问题了，而且磁盘访问相对内存操作肯定要慢得多，因此，这时更应该关心是如何减少磁盘访问操作。<br>思路是将数据（有序）分为N批，并用M叉平衡树来组织，即访问磁盘时每批返回至多M-1项数据，那么当访问某项数据时，至多需要访问磁盘的次数为：logN，底数为M。</p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/11/20190611/">数据结构. 2-3树</a>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/06/13/20190613/#more" class="more-link">more</a>
           </div>
         
         
@@ -256,19 +198,14 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>定义：红黑树是Avl树的一个变种，它也是在二叉树的基础上添加平衡条件，只是它对平衡条件的定义不像AVl树那样直接，而是转化成对节点颜色规则的描述。</p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/05/20190605/">数据结构. 二叉树</a></li>
-<li><a href="https://shanhm1991.github.io/2019/06/08/20190608/">数据结构. Avl树</a></li>
-</ul>
-<p>颜色规则：   </p>
+        <p>定义：红黑树是Avl树的一个变种，它也是在二叉树的基础上添加平衡条件，只是它对平衡条件的定义不像AVl树那样直接，而是转化成对节点颜色规则的描述：</p>
 <ol>
 <li>对于任意节点，要么是红色，要么是黑色；</li>
 <li>根节点是黑色的；</li>
 <li>如果一个节点是红色的，那么它的子节点必须是黑色的（即不能有两个连续的红色节点）；</li>
 <li>任意节点到其下面各个空结点（后面称为nil节点，并约定其颜色为黑色）的路径上都包含相同数目的黑色节点（称为黑高）；</li>
 </ol>
-<p>通过对任何一条从根到空节点的路径上各个结点的颜色进行约束，红黑树可以确保没有一条路径会比其他路径长出2倍，因而红黑树是近似平衡的。</p>
+<p>通过对任何一条从根到空节点的路径上各个结点的颜色进行约束，红黑树可以确保没有一条路径会比其他路径长出2倍，因而红黑树是近似平衡的。<br>
       
     </div>
 	
@@ -277,117 +214,6 @@
         
           <div class="alignleft">
             <a href="/2019/06/10/20190610/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190605" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-04T16:00:00.000Z"><a href="/2019/06/05/20190605/">2019-06-05</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/06/05/20190605/">数据结构 二叉树</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>前面介绍线性数据结构时提到，如果数据本身有序，那么可以用二分法来降低查找的时间复杂度，但是在线性结构上实现二分法总有一些局限，比如链表不好定位中间元素，而数组又免不了拷贝成本。</p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2019/06/01/20190601/">数据结构. 线性结构</a></li>
-</ul>
-<p>因此，有人提出了树这种结构，<font color="#E51508">树本身也是一种链式数据结构，但它巧妙地解决了链式数据只能从头或者从尾开始查找的问题，而是从中间开始向两边查找。
-不管是下文要介绍的二叉树，还是后面的Avl树、红黑树或者B树，其基本思想都是二分法，区别只在于通过不同的规则来维持树的平衡，以便使查找的复杂度更接近于二分法。</font></p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/06/05/20190605/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180405" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-04-04T16:00:00.000Z"><a href="/2018/04/05/20180405/">2018-04-05</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/04/05/20180405/">JUC FutureTask</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>前面整理线程池时说过<code>Executor</code>是执行任务的抽象，而<code>Runnable</code>是任务的抽象，但实际上在具体提交任务时，它会将任务统一适配成<code>FutureTask</code>，它是实现了接口<code>RunnableFuture</code>，
-相当于是<code>Runnable</code>和<code>Future</code>的一个整合，但在实现中它又依赖于<code>Callable</code>，可以这样理解，它以<code>Runnable</code>的身份对外提供执行调用，然后在执行过程再委托给依赖的<code>Callable</code>处理，
-另外它以<code>Future</code>的身份提供一些接口服务。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/04/05/20180405/#more" class="more-link">more</a>
           </div>
         
         
@@ -484,13 +310,10 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，
-确保状态的改变是安全的。通过内置的FIFO（First In First Out）队列来完成资源获取线程的排队工作。</p>
-<p>AQS同步与synchronized同步是采用的两种不同的机制：<br>synchronized在编译后，会在同步块的前后分别添加monitorenter和monitorexit两个字节码指令，这两个指令需要关联一个监视对象，当线程执行monitorenter指令时，
-需要首先获得获得监视对象的锁，即进入同步块的凭证，才能进入同步块，当线程离开同步块时，执行monitorexit指令，释放对象锁。<br>AQS同步中，使用一个int类型的变量state来表示当前同步块的状态。以独占式同步为例，state的有效值为0和1，其中0表示当前同步块中没有线程，1表示同步块中已经有线程在执行。
-当线程要进入同步块时，需要首先判断state的值是否为0，假设为0，会尝试将state修改为1，只有修改成功了之后，线程才可以进入同步块，并通过CAS操作确保同一时刻只有一个线程操作成功。
-当线程离开同步块时，会修改state的值为0，并唤醒等待的线程。所以<font style="color:red;">在AQS同步中，线程获得锁实际上是指线程成功修改了状态变量state，
-而释放锁就是是指线程将状态变量置为了可修改的状态，以便其他线程可以再次尝试修改状态变量</font></p>
+        <p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，确保状态的改变是安全的。通过内置的FIFO（First In First Out）队列来完成资源获取线程的排队工作。</p>
+<p>AQS同步与synchronized同步是采用的两种不同的机制：  </p>
+<p>synchronized在编译后，会在同步块的前后分别添加monitorenter和monitorexit两个字节码指令，这两个指令需要关联一个监视对象，当线程执行monitorenter指令时，需要首先获得获得监视对象的锁，即进入同步块的凭证，才能进入同步块，当线程离开同步块时，执行monitorexit指令，释放对象锁。    </p>
+<p>AQS同步中，使用一个int类型的变量state来表示当前同步块的状态。以独占式同步为例，state的有效值为0和1，其中0表示当前同步块中没有线程，1表示同步块中已经有线程在执行。当线程要进入同步块时，需要首先判断state的值是否为0，假设为0，会尝试将state修改为1，只有修改成功了之后，线程才可以进入同步块，并通过CAS操作确保同一时刻只有一个线程操作成功。当线程离开同步块时，会修改state的值为0，并唤醒等待的线程。所以<font style="color:red;">在AQS同步中，线程获得锁实际上是指线程成功修改了状态变量state，而释放锁就是是指线程将状态变量置为了可修改的状态，以便其他线程可以再次尝试修改状态变量</font><br>
       
     </div>
 	
@@ -515,20 +338,20 @@
 
 
 
-  <article id="post-20170911" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20210506" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-09-10T16:00:00.000Z"><a href="/2017/09/11/20170911/">2017-09-11</a></time>
+        <time class="dt-published" datetime="2021-05-05T16:00:00.000Z"><a href="/2021/05/06/20210506/">2021-05-06</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/09/11/20170911/">Java Map</a>
+       <a href="/2021/05/06/20210506/">算法设计 排序</a>
     </h1>
     
   
@@ -542,10 +365,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>java容器中一般最常用的就是List、Set、Map，<a href="https://shanhm1991.github.io/2017/09/10/20170910/">List</a>的实现前面已经介绍过，本文主要讨论下Map的几个实现，至于Set则比较简单，
-它们仅仅是依赖Map做了层封装而已。</p>
-<p>在讨论之前，还是先看下Map的实现结构</p>
-<p><img src="/img/20170911/20170911.1.png" alt=""></p>
+        <p>排序即将一组对象按照某种逻辑顺序重新排列的过程，通常，整理数据的第一步就是进行排序，在早期时代，大家普遍认为30%的计算周期都用在了排序上，如今这个比例降低了，可能的原因之一是如今的排序算法更加高效，而并非排序的重要性降低了。<br>
       
     </div>
 	
@@ -553,62 +373,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/09/11/20170911/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20170906" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2017-09-05T16:00:00.000Z"><a href="/2017/09/06/20170906/">2017-09-06</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2017/09/06/20170906/">JUC ThreadLocal</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p><code>ThreadLocal</code>从其命名上就可以知道其意图是创建线程本地变量，就是希望同一个变量在不同的线程中拥有各自的值并且互不影响，其非常适合用来作为线程上下文变量，
-比如在一些连接池或者事务的场景中。至于其思路，则是<font style="color:red;">让每个Thread都持有一个私有的ThreadLocalMap，然后使用共享的key来保存值，而这个key就是共享的ThreadLocal实例，
-因此每个ThreadLocal也就对应一个本地变量。</font>。但是，如果这个本地变量本身就是一个线程共享的对象，那么就算使用ThreadLocal也不是线程安全的。
-另外，这里设计者将具体的map操作都封装在了ThreadLocal中，然后提供统一的get/set接口，好让开发更加简洁方便</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2017/09/06/20170906/#more" class="more-link">more</a>
+            <a href="/2021/05/06/20210506/#more" class="more-link">more</a>
           </div>
         
         
@@ -723,5 +488,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

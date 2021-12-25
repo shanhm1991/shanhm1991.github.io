@@ -60,20 +60,20 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article id="post-20170930" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180603" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-09-29T16:00:00.000Z"><a href="/2017/09/30/20170930/">2017-09-30</a></time>
+        <time class="dt-published" datetime="2018-06-02T16:00:00.000Z"><a href="/2018/06/03/20180603/">2018-06-03</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/09/30/20170930/">《深入理解Java虚拟机》 运行时数据区</a>
+       <a href="/2018/06/03/20180603/">《spring源码深度解析》spring BeanDefinition解析（自定义标签）</a>
     </h1>
     
   
@@ -87,8 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及各自的创建和销毁时间，
-有的区域随虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁</p>
+        <p>之前梳理了<code>XmlBeanDefinitionReader</code>解析配置文件的过程，但是主要是针对默认标签的解析，所以本文主要介绍下其对于自定义标签的解析策略。</p>
       
     </div>
 	
@@ -96,7 +95,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/09/30/20170930/#more" class="more-link">more</a>
+            <a href="/2018/06/03/20180603/#more" class="more-link">more</a>
           </div>
         
         
@@ -113,20 +112,20 @@
 
 
 
-  <article id="post-20170915" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-09-14T16:00:00.000Z"><a href="/2017/09/15/20170915/">2017-09-15</a></time>
+        <time class="dt-published" datetime="2018-05-31T16:00:00.000Z"><a href="/2018/06/01/20180601/">2018-06-01</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/09/15/20170915/">《深入理解Java虚拟机》 编译 &amp; 优化</a>
+       <a href="/2018/06/01/20180601/">《spring源码深度解析》spring BeanDefinition解析（XmlBeanDefinitionReader）</a>
     </h1>
     
   
@@ -140,11 +139,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>Java的编译过程可以分为两个阶段，首先是将<code>.java</code>文件编译为<code>.class</code>文件的过程，称为前端编译，比如javac；然后在运行期，可能即时编译器（JIT）又会将字节码转变为本地机器码，
-比如HotSopt的C1、C2编译器，或者Graal编译器。</p>
-<p>对于优化处理，Java虚拟机团队选择将<font color="#E51508">性能优化的措施全部集中在运行期的即时编译器中，以便让那些不是由 javac 产生的 Class 文件也能享受到性能优化的好处</font>，
-至于 <font color="#E51508">javac 中则做了一些针对Java语言编码过程的优化，用来降低开发者的编码复杂度、提高编码效率</font>。可以这样认为，即时编译器在运行期的优化过程，
-支撑了程序执行效率的不断提升，而javac在编译期的优化过程，则支撑了开发者的编码效率和语言使用者的体验。</p>
+        <p>spring从xml中解析及注册<code>BeanDefinition</code>的过程主要由<code>XmlBeanDefinitionReader</code>主导，其相当于一个组织者的角色，将解析的工作委托给<code>BeanDefinitionDocumentReader</code>，注册工作则分配给<code>BeanDefinitionRegistry</code>。      并且，在真正开始解析前，它将自己以及<code>Resource</code>，<code>ReaderEventListener</code>等接口打包成<code>XmlReaderContext</code>交给<code>BeanDefinitionDocumentReader</code>，以便在解析过程中可以回调<code>ReaderEventListener</code>中的事件接口，以及在解析完成时，可以拿到<code>BeanDefinitionRegistry</code>进行注册。实际上当所有<code>BeanDefinition</code>注册完成时，它的使命也就结束了，剩下的就交给<code>BeanFactory</code>了。<br>
       
     </div>
 	
@@ -152,7 +147,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/09/15/20170915/#more" class="more-link">more</a>
+            <a href="/2018/06/01/20180601/#more" class="more-link">more</a>
           </div>
         
         
@@ -169,20 +164,20 @@
 
 
 
-  <article id="post-20170912" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180527" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-09-11T16:00:00.000Z"><a href="/2017/09/12/20170912/">2017-09-12</a></time>
+        <time class="dt-published" datetime="2018-05-26T16:00:00.000Z"><a href="/2018/05/27/20180527/">2018-05-27</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/09/12/20170912/">JUC ConcurrentHashMap（TODO）</a>
+       <a href="/2018/05/27/20180527/">ubuntu安装mysql</a>
     </h1>
     
   
@@ -196,61 +191,13 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <a id="more"></a>
-
-
-      
-    </div>
-	
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20170910" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2017-09-09T16:00:00.000Z"><a href="/2017/09/10/20170910/">2017-09-10</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2017/09/10/20170910/">Java List</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>根据实现的接口可以将java容器分为Collection和Map两部分，其中还可以按照是否线程安全来继续划分，大部分线程安全的实现在JDK1.5之后新增的concurrent包中。<br>本文先讨论Collection中比较基础的两个List实现<code>ArrayList</code>和<code>LinkedList</code>，前者通过数组，后者通过链表。<font color="#E51508">数组的好处在于有位置索引，可以按下标任意访问，
-并且由于数组在内存上的连续性，因此访问会更快，但前提是元素必须排列紧凑， 这样在进行插入删除时就免不了要进行移动，而且由于数组长度不可变，在添加元素时可能需要扩容和复制处理。
-链表可以弥补数组在插入删除上的缺陷，但代价是牺牲查询的效率，尤其是按位置索引访问时，它只能选择从头或者从尾开始依次遍历。</font></p>
-<p>在讨论之前先整体看下Collection的体系结构，可以看到其实有很多的实现类，它们分别用来应付各种不同的场景，具体后面有机会再讨论</p>
-<p><img src="/img/20170910/20170910.1.png" alt=""></p>
+        <p>ubuntu版本：16.04<br>MySQL版本：8.0.11  </p>
+<p>问题：</p>
+<ol>
+<li>安装mysql及配置</li>
+<li>root无法登录</li>
+<li>客户端认证失败</li>
+</ol>
       
     </div>
 	
@@ -258,7 +205,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/09/10/20170910/#more" class="more-link">more</a>
+            <a href="/2018/05/27/20180527/#more" class="more-link">more</a>
           </div>
         
         
@@ -275,20 +222,20 @@
 
 
 
-  <article id="post-20170905" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180518" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-09-04T16:00:00.000Z"><a href="/2017/09/05/20170905/">2017-09-05</a></time>
+        <time class="dt-published" datetime="2018-05-17T16:00:00.000Z"><a href="/2018/05/18/20180518/">2018-05-18</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/09/05/20170905/">JUC Unsafe</a>
+       <a href="/2018/05/18/20180518/">ubuntu使用yum安装软件问题</a>
     </h1>
     
   
@@ -302,10 +249,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>Unsafe位于sun.misc包下，主要提供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升Java运行效率、增强Java语言底层资源操作能力方面起到了很大的作用。
-但由于Unsafe类使Java语言拥有了类似C语言指针一样操作内存空间的能力，如果过度或者不正确地使用Unsafe类将会使得增加程序出错的风险，使得Java这种安全的语言变得不再安全，因此使用时需要慎重。</p>
-<p>这里并不打算作深入探讨，只是简单列举一些Unsafe中提供的常见api，方便在讨论其它内容时进行引用，对于其提供的api大致则可以按如下分类：</p>
-<p><img src="/img/20170905/20170905.1.png" alt=""> </p>
+        <p>结论：ubuntu本身不支持用yum来管理软件安装的，是自己无知</p>
       
     </div>
 	
@@ -313,7 +257,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/09/05/20170905/#more" class="more-link">more</a>
+            <a href="/2018/05/18/20180518/#more" class="more-link">more</a>
           </div>
         
         
@@ -330,20 +274,20 @@
 
 
 
-  <article id="post-20170901" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180515" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-31T16:00:00.000Z"><a href="/2017/09/01/20170901/">2017-09-01</a></time>
+        <time class="dt-published" datetime="2018-05-14T16:00:00.000Z"><a href="/2018/05/15/20180515/">2018-05-15</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/09/01/20170901/">Java Exception</a>
+       <a href="/2018/05/15/20180515/">ubuntu中rc.local不执行问题</a>
     </h1>
     
   
@@ -357,12 +301,12 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <font color="#E51508">
-发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
-java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离。</font>     
-
-<p>另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。java使用异常来提供统一的错误报告模型，使得构件能够与客户端代码可靠的沟通问题。
-其目的在于通过少数代码来简化大型、可靠的程序的生成，并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。 </p>
+        <ol>
+<li><p>首先排除脚本自身问题，可以手动执行下试试，</p>
+</li>
+<li><p>脚本确定没问题后，放到开机启动程序引用的路径下</p>
+</li>
+</ol>
       
     </div>
 	
@@ -370,7 +314,7 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
       
         
           <div class="alignleft">
-            <a href="/2017/09/01/20170901/#more" class="more-link">more</a>
+            <a href="/2018/05/15/20180515/#more" class="more-link">more</a>
           </div>
         
         
@@ -387,20 +331,20 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
 
 
 
-  <article id="post-20170831" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20180513" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-30T16:00:00.000Z"><a href="/2017/08/31/20170831/">2017-08-31</a></time>
+        <time class="dt-published" datetime="2018-05-12T16:00:00.000Z"><a href="/2018/05/13/20180513/">2018-05-13</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/08/31/20170831/">Java 泛型</a>
+       <a href="/2018/05/13/20180513/">windows 常用操作</a>
     </h1>
     
   
@@ -414,20 +358,7 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>一般的类和方法，只能使用具体的类型，如果要编写可以应用于多种类型的代码，这种刻板的限制对代码的限制就会很大。</p>
-<font color="#E51508">
-在面向对象编程语言中，多态算是一种泛化机制。可以将方法的参数类型设为基类，那么该方法就可以接受从这个基类导出的任何类作为参数。
-但程序还是会受到继承的限制，比如java中就是单继承体系。如果将方法的参数设为一个接口，那么限制会松很多，任何实现了该接口的类都能满足该方法，
-包括暂时那些还不存在的类。    
-但有时即便使用了接口，对程序的约束还是太强。因为一旦指明了接口，它就要求你的代码必须使用特定的接口。而我们希望能编写更通用的代码，
-能够应用于"某种不具体的类型"，而不是一个具体的接口或者类。
-</font>
-
-<p>泛型实现了”参数化类型”的概念，使代码可以应用于多种类型。其最初的目的是希望类或方法能够具备最广泛的表达能力，
-通过解耦类或方法与所使用的类型直接的约束。<br><font color="#E51508">
-java中对泛型并没有这样高的追求，它的目的只是用来告诉编译器类或方法希望使用的参数类型，以便编译器能够确保编译时参数都是期望的类型。
-实际上在编译之后参数的类型信息都会被擦除成边界类型，这样保证在运行时不会出现类型错误。
-</font></p>
+        <p>本文只是整理了下工作中在cmd终端下常见的命令，其实windows的终端一直被开发人员鄙视，虽然win10之后推出了号称很好用的window  terminal，但实际体验之后感觉一言难尽，还不如第三方的git bash<br>
       
     </div>
 	
@@ -435,166 +366,7 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
       
         
           <div class="alignleft">
-            <a href="/2017/08/31/20170831/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20170829" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-28T16:00:00.000Z"><a href="/2017/08/29/20170829/">2017-08-29</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2017/08/29/20170829/">《深入理解Java虚拟机》 动态类型语言支持</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>Java虚拟机的字节码指令集自Sun公司推出第一款Java虚拟机至今，二十余年间只新增过一条指令，它就是随着JDK 7一起发布的 invokedynamic 指令。这条新增指令是JDK 7的项目目标：实现动态类型语言支持而进行的改进之一，
-也是为JDK 8中可以顺利实现 Lambda 表达式而做的技术储备。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2017/08/29/20170829/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20170827" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-26T16:00:00.000Z"><a href="/2017/08/27/20170827/">2017-08-27</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2017/08/27/20170827/">《深入理解Java虚拟机》 方法调用 重载 &amp; 重写</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p><font color="#E51508">Java虚拟机以方法作为最基本的执行单元，而栈帧则是用于支持虚拟机进行方法调用和方法执行背后的数据结构</font>，它也是虚拟机运行时数据区中的虚拟机栈的栈元素。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2017/08/27/20170827/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20170825" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-24T16:00:00.000Z"><a href="/2017/08/25/20170825/">2017-08-25</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2017/08/25/20170825/">《深入理解Java虚拟机》 字节码指令</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>Java虚拟机的指令由一个字节长度（0 ~ 255）、代表着某种特定操作含义的数字（操作码），以及其后跟随的零至多个参数（操作数）构成。由于<font color="#E51508">Java虚拟机采用面向操作数栈而不是面向寄存器的架构</font>，
-所以大多数指令都不包含操作数，只有一个操作码，指令参数都存放在操作数栈中。</p>
-<p>采用一个字节来代表操作码，也是为了尽可能获得短小精干的编译代码，这种追求尽可能小数据量、高传输效率的设计，也是由于Java语言设计之初，主要面向网络、智能家电的技术背景所决定的，并一直沿用至今。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2017/08/25/20170825/#more" class="more-link">more</a>
+            <a href="/2018/05/13/20180513/#more" class="more-link">more</a>
           </div>
         
         
@@ -711,5 +483,20 @@ java中对泛型并没有这样高的追求，它的目的只是用来告诉编�
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

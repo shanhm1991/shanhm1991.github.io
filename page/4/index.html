@@ -60,20 +60,20 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article id="post-20190111" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190605" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-10T16:00:00.000Z"><a href="/2019/01/11/20190111/">2019-01-11</a></time>
+        <time class="dt-published" datetime="2019-06-04T16:00:00.000Z"><a href="/2019/06/05/20190605/">2019-06-05</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/01/11/20190111/">《Java并发编程实战》 非阻塞的同步</a>
+       <a href="/2019/06/05/20190605/">数据结构 二叉树</a>
     </h1>
     
   
@@ -87,8 +87,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>非阻塞算法可以使多个线程在竞争共享的数据时不发生阻塞，因此它能在粒度更细的层次上进行协调，并且极大地减少调度开销。在基于锁的算法中，如果一个线程在休眠或者自旋时持有锁，
-那么其他线程都无法执行下去，而非阻塞算法则不会受到单个线程失败的影响。</p>
+        <p>前面介绍线性数据结构时提到，如果数据本身有序，那么可以用二分法来降低查找的时间复杂度，但是在线性结构上实现二分法总有一些局限，比如链表不好定位中间元素，而数组又免不了拷贝成本。</p>
+<p>因此，有人提出了树这种结构，<font color="#E51508">树本身也是一种链式数据结构，但它巧妙地解决了链式数据只能从头或者从尾开始查找的问题，而是从中间开始向两边查找</font>。不管是下文要介绍的二叉树，还是后面的Avl树、红黑树或者B树，其<font color="#E51508">基本思想都是二分法</font>，区别只在于通过不同的规则来维持树的平衡，以便使查找的复杂度更接近于二分法。<br>
       
     </div>
 	
@@ -96,7 +96,7 @@
       
         
           <div class="alignleft">
-            <a href="/2019/01/11/20190111/#more" class="more-link">more</a>
+            <a href="/2019/06/05/20190605/#more" class="more-link">more</a>
           </div>
         
         
@@ -113,20 +113,20 @@
 
 
 
-  <article id="post-20190110" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-09T16:00:00.000Z"><a href="/2019/01/10/20190110/">2019-01-10</a></time>
+        <time class="dt-published" datetime="2019-05-31T16:00:00.000Z"><a href="/2019/06/01/20190601/">2019-06-01</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/01/10/20190110/">《Java并发编程实战》 同步工具类的设计</a>
+       <a href="/2019/06/01/20190601/">数据结构 线性结构</a>
     </h1>
     
   
@@ -140,349 +140,13 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>创建状态依赖类最简单的方法通常是在类库中现有状态依赖类的基础上进行构造，如果类库不支持，则可以使用Java语言和类库提供的底层机制来构造自己的同步机制，
-包括内置的条件队列、显示的<code>Condition</code>对象以及<code>AbstractQueuedSynchronizer</code>框架。</p>
-<p>在单线程的程序中调用方法时，如果基于某个状态的前提条件未得到满足，那么这个条件永远无法成真。而在并发程序中，基于状态的条件可能会由于其他线程的操作而改变。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/10/20190110/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190109" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-08T16:00:00.000Z"><a href="/2019/01/09/20190109/">2019-01-09</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/09/20190109/">《Java并发编程实战》 显式锁的使用</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>在java 5.0之前，协调共享对象的访问可以使用的机制有<code>synchronized</code>和<code>volatile</code>，java 5.0中新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置锁不再适用时，作为一种可选择的高级功能。
-在java 6.0中，也使用了与<code>ReentrantLock</code>类似的算法对内置锁本身进行了改进，有效地提高了内置锁的可伸缩性。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/09/20190109/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190108" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-07T16:00:00.000Z"><a href="/2019/01/08/20190108/">2019-01-08</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/08/20190108/">《Java并发编程实战》 同步的性能问题</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>在<font color="#E51508">安全性</font>与<font color="#E51508">活跃性</font>之间通常存在着某种制衡，我们可以使用加锁机制来确保线程安全，但如果过度的使用加锁，则可能导致死锁。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/08/20190108/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190106" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-05T16:00:00.000Z"><a href="/2019/01/06/20190106/">2019-01-06</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/06/20190106/">《Java并发编程实战》 任务的取消</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>如果外部代码能在某个操作正常完成之前将其置入完成状态，那么这个操作就可以称为可取消的，<font color="#E51508">行为良好的软件都应该能很完善地处理失败、关闭和取消等过程。</font> 
-一个可取消的任务必须拥有取消策略，在这个策略中定义：</p>
-<ul>
-<li>其他代码如何请求取消该任务；</li>
-<li>任务在何时检查是否已经请求了取消；</li>
-<li>在响应取消请求时应该执行哪些操作；</li>
-</ul>
-<p><font color="#E51508">Java中并没有提供任何机制来安全地终止线程，但它提供了一种协作机制，即通过设置某个已请求取消的标志，然后任务执行过程中定期地查看该标志，如果设置了，那么任务提前结束。</font></p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/06/20190106/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190105" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-04T16:00:00.000Z"><a href="/2019/01/05/20190105/">2019-01-05</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/05/20190105/">《Java并发编程实战》 任务的执行</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>任务通常是一些抽象且离散的工作单元，通过把程序中的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，并提供一种自然的并行工作结构来提升并发性。</p>
-<p>在正常的负载下，服务器应用程序应该同时表现出<font color="#E51508">良好的吞吐量</font>和<font color="#E51508">快速的响应性</font> 。程序提供商希望程序支持尽可能多的用户，
-从而降低每个用户的服务成本，而用户则希望获得尽快的响应。当负荷过载时，程序的性能应该是逐渐降低，而不是直接失败。</p>
-<p>理想情况下，可以找出清晰的任务边界，各个任务之间是相互独立的，即任务不依赖于其他任务的状态、结果或边界效应。<font color="#E51508">独立性有助于并发</font>，
-因为如果存在足够多的处理资源，那么这些独立的任务就可以并行执行，这也为调度与负载均衡等的实现提供了更好的灵活性。  </p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/05/20190105/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190104" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-03T16:00:00.000Z"><a href="/2019/01/04/20190104/">2019-01-04</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/04/20190104/">《Java并发编程实战》 线程安全性的委托</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p><font color="#E51508">委托是创建线程安全类的一个最有效策略：只需让现有的线程安全类管理所有的状态即可。</font>
-Java类库包含丰富的并发构建模块，如线程安全容器以及各种用于协调多个相互协作的线程的同步工具类。</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/01/04/20190104/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190103" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-02T16:00:00.000Z"><a href="/2019/01/03/20190103/">2019-01-03</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/01/03/20190103/">《Java并发编程实战》 线程安全类的设计</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>在设计线程安全类的过程中，需要包含以下三个基本要素： </p>
+        <p>从百科中可以找到定义：数据结构即计算机存储、组织数据的方式，它的目标是反映数据元素之间的逻辑关系，其中的逻辑关系是指数据元素之间的前后关系，而与他们在计算机中的存储位置无关。</p>
+<p>常见的数据结构可以分为四种：</p>
 <ol>
-<li>找出构成对象状态的所有变量；   </li>
-<li>找出约束状态变量的不变性条件；   </li>
-<li>建立对象状态的并发访问管理策略；</li>
-</ol>
-<p>对象封装它拥有的状态，并拥有这些状态的所有权或者说控制权，它决定采用何种加锁策略来维持变量状态的完整性，然而，如果发布了某个可变对象的引用，那么就不再拥有独占的控制权，
-最多是共享控制权。</p>
-<p>一般对于从构造器或者从方法中传递进来的对象，类并不拥有这些对象，除非这些方法是被专门设计来转移传递进来的对象的所有权，例如容器。
-容器通常表现出一种所有权分离的形式，其中容器拥有其自身的状态，而客户代码则拥有容器中各个对象的状态。</p>
-<p>比如<code>Servlet</code>框架中的<code>ServletContext</code>，<code>ServletContext</code>为<code>Servlet</code>提供了类似于<code>Map</code>形式的对象容器服务，在<code>ServletContext</code>中可以通过名称来注册或获取应用程序的<code>Attribute</code>对象，
-但这些对象由应用程序拥有，<code>ServletContext</code>容器只是替应用程序保管它们。</p>
-<p><code>ServletContext</code>必须是线程安全的，因为它肯定会被多个线程同时访问。因此当调用<code>setAttribute</code>或<code>getAttribute</code>时，<code>Servlet</code>不需要使用同步。
-而如果<code>Attribute</code>对象本身不是线程安全的，那么在<code>getAttribute</code>之后为防止多线程并发访问，访问者依然需要使用同步。</p>
-<p><code>HttpSession</code>与<code>ServletContext</code>有类似的功能，但它可能更加严格，会要求保存的<code>Attribute</code>对象是线程安全的，因为<code>Servlet</code>容器可能与Web Application同时访问<code>HttpSession</code>中的对象，
-而且对于<code>Session</code>通常会有复制或持久化之类的操作，所以要求这些对象是线程安全的。</p>
+<li>集合：数据结构中的元素之间除了“同属一个集合” 的相互关系外，别无其他关系；</li>
+<li>线性结构：数据结构中的元素存在一对一的相互关系；</li>
+<li>树形结构：数据结构中的元素存在一对多的相互关系；</li>
+<li>图形结构：数据结构中的元素存在多对多的相互关系。
       
     </div>
 	
@@ -490,7 +154,7 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
       
         
           <div class="alignleft">
-            <a href="/2019/01/03/20190103/#more" class="more-link">more</a>
+            <a href="/2019/06/01/20190601/#more" class="more-link">more</a>
           </div>
         
         
@@ -507,20 +171,20 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
 
 
 
-  <article id="post-20190102" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190215" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-01-01T16:00:00.000Z"><a href="/2019/01/02/20190102/">2019-01-02</a></time>
+        <time class="dt-published" datetime="2019-02-14T16:00:00.000Z"><a href="/2019/02/15/20190215/">2019-02-15</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/01/02/20190102/">《Java并发编程实战》 线程安全之可见性</a>
+       <a href="/2019/02/15/20190215/">设计模式 代理模式</a>
     </h1>
     
   
@@ -534,9 +198,7 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>要编写正确的并发程序，关键在于：在访问共享的可变状态时进行正确的管理。<font color="#E51508">同步的另一个重要目的是内存可见性，我们不仅希望防止某个线程正在使用的对象状态
-被另一个线程同时修改，而且希望当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。</font></p>
-<p><font color="Gray">后面介绍Jvm内存模型时会提到java线程之间内存可见性的必要条件：满足Happens-Before规则</font></p>
+        <p>代理模式：即给某个对象提供一个代理，并由代理对象来控制对真实对象的访问。它的方式就是让代理类持有目标类的实例，然后在对目标类进行操作的前后加入一层代理操作。</p>
       
     </div>
 	
@@ -544,7 +206,7 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
       
         
           <div class="alignleft">
-            <a href="/2019/01/02/20190102/#more" class="more-link">more</a>
+            <a href="/2019/02/15/20190215/#more" class="more-link">more</a>
           </div>
         
         
@@ -561,20 +223,20 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
 
 
 
-  <article id="post-20190101" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190131" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-12-31T16:00:00.000Z"><a href="/2019/01/01/20190101/">2019-01-01</a></time>
+        <time class="dt-published" datetime="2019-01-30T16:00:00.000Z"><a href="/2019/01/31/20190131/">2019-01-31</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/01/01/20190101/">《Java并发编程实战》 线程安全之原子性</a>
+       <a href="/2019/01/31/20190131/">设计模式 原型模式</a>
     </h1>
     
   
@@ -588,8 +250,13 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p><font color="#E51508">如果多个线程访问某个类时，这个类始终都能表现正确的行为，则可以称这个类是线程安全的。</font>所以一个对象是否要考虑线程安全问题，取决于它是否被多个线程访问，以及是否存在多种状态。
-反之如果一个对象是无状态的，既它不包含任何域，也不包含任何对其他类中域的引用，那么它一定是线程安全的。否则，一般会在类中会封装必要的同步机制来保证操作的原子性，以便保证类在被多线程访问时的线程安全。</p>
+        <p>通过给定的原型对象，获取所要创建的对象类型，然后复制这个原型对象创建出更多同类型的对象。</p>
+<h3 id="1-结构"><a href="#1-结构" class="headerlink" title="1. 结构"></a>1. 结构</h3><ul>
+<li>客户角色(Client)：客户类提出创建对象的请求。</li>
+<li>抽象原型角色(Prototype)：给出具体原型类需要的所有接口。</li>
+<li>具体原型角色(ConcretePrototype)：被复制的对象。</li>
+</ul>
+<p>原型模式的关键在于如何实现克隆方法。<br>
       
     </div>
 	
@@ -597,7 +264,111 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
       
         
           <div class="alignleft">
-            <a href="/2019/01/01/20190101/#more" class="more-link">more</a>
+            <a href="/2019/01/31/20190131/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190128" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-27T16:00:00.000Z"><a href="/2019/01/28/20190128/">2019-01-28</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/28/20190128/">设计模式 建造者模式</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>有时，一个对象会由不同的部件组成，一些情况下，在某些部件没有恰当的值之前，对象不能作为一个完整的产品使用，甚至有时候，一个对象的组成部件必须按照某个顺序赋值才有意义。建造者模式利用导演者对象以及具体建造者对象，将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/28/20190128/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190118" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-17T16:00:00.000Z"><a href="/2019/01/18/20190118/">2019-01-18</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/18/20190118/">设计模式 工厂模式</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>工厂模式负责将大量拥有共同接口的类实例化，它可以动态决定将哪一个类实例化</p>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/18/20190118/#more" class="more-link">more</a>
           </div>
         
         
@@ -714,5 +485,20 @@ Java类库包含丰富的并发构建模块，如线程安全容器以及各种�
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

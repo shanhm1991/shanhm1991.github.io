@@ -120,7 +120,6 @@
 <li>线性结构：数据结构中的元素存在一对一的相互关系；</li>
 <li>树形结构：数据结构中的元素存在一对多的相互关系；</li>
 <li>图形结构：数据结构中的元素存在多对多的相互关系。<a id="more"></a>
-
 </li>
 </ol>
 <h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h3><p>这里要讨论的列表、栈、队列都属于线性结构，区别只在于对插入和删除作了不同的限制。</p>
@@ -129,15 +128,16 @@
 <p><strong>栈：</strong>栈是限制插入和删除都只能在一端进行的表，该位置也叫栈顶。其基本操作有<code>push</code>和<code>pop</code>，特点是后进先出。</p>
 <h3 id="2-jdk实现"><a href="#2-jdk实现" class="headerlink" title="2. jdk实现"></a>2. jdk实现</h3><p>线性结构其实相对比较容易，就不打算展开赘述了，java集合框架中提供了很多数据结构的实现，下图列出了部分与线性结构相关的类（这里不扩散问题，暂时忽略线程安全相关的类）</p>
 <p><img src="/img/20190601/20190601.1.png" alt=""> </p>
-<p>其中<code>Vector</code>和<code>Stack</code>灰色表示其已经被废弃，保留至今除了兼容早期已经使用了这两个类的应用之外，应该只剩纪念意义了；
-<code>TreeSet</code>其实是树结构，不过它实现了<code>Collection</code>接口，刚好弥补了其它实现类没有的按照大小排序的能力；
-<code>HashSet</code>其实是个散列表集合，不过子类<code>LinkedHashSet</code>在其基础上维护了一个链表结构；
-<code>ArrayList</code>和<code>ArrayDeque</code>分别是数组实现的列表和队列；
-<code>LinkedList</code>则是使用链表同时实现了列表和队列，如果需要，也完全可以代替<code>Stack</code>当成栈使用。</p>
-<h3 id="3-SortedArrayList"><a href="#3-SortedArrayList" class="headerlink" title="3. SortedArrayList"></a>3. SortedArrayList</h3><p><font color="#E51508">线性数据结构有一个问题：即如果想从列表中寻找一个特定的元素，那么免不了要进行遍历，其时间复杂度将是O(N)。不过如果是有序的，那么便可以用二分法将查找的复杂度将为O(logN)。</font></p>
-<p>上面类图中，只有<code>TreeSet</code>拥有排序的特性，但其限制了元素不可重复，其它类最多只是维护了插入的先后顺序，想按照大小排序则需要借助<code>Collections</code>工具自己手动排下序。因此，
-我们可以自己添加这样一个列表：每次添加或删除之后维持列表的有序。<br>至于实现，肯定不会基于<code>LinkedList</code>，因为它的元素没有下标，使用二分法每次要想获取中间元素，都要先进行遍历，这显然得不偿失，所以只能借助<code>ArrayList</code>了，但是<code>ArrayList</code>在设计上
-并没有考虑给让别人扩展，所以除了用二分法修改<code>indexOf(Object o)</code>和<code>add(E e)</code>两个方法外，其它代码基本都要复制一遍。</p>
+<ul>
+<li>其中<code>Vector</code>和<code>Stack</code>灰色表示其已经被废弃，保留至今除了兼容早期已经使用了这两个类的应用之外，应该只剩纪念意义了；</li>
+<li><code>TreeSet</code>其实是树结构，不过它实现了<code>Collection</code>接口，刚好弥补了其它实现类没有的按照大小排序的能力；</li>
+<li><code>HashSet</code>其实是个散列表集合，不过子类<code>LinkedHashSet</code>在其基础上维护了一个链表结构；</li>
+<li><code>ArrayList</code>和<code>ArrayDeque</code>分别是数组实现的列表和队列；</li>
+<li><code>LinkedList</code>则是使用链表同时实现了列表和队列，如果需要，也完全可以代替<code>Stack</code>当成栈使用。</li>
+</ul>
+<h3 id="3-SortedArrayList"><a href="#3-SortedArrayList" class="headerlink" title="3. SortedArrayList"></a>3. SortedArrayList</h3><p>线性数据结构有一个问题：<font color="#E51508">如果想从列表中寻找一个特定的元素，那么免不了要进行遍历，其时间复杂度将是O(N)。不过如果是有序的，那么便可以用二分法将查找的复杂度降为 $O(\log_{2} {n})$</font></p>
+<p>上面类图中，只有<code>TreeSet</code>拥有排序的特性，但其限制了元素不可重复，其它类最多只是维护了插入的先后顺序，想按照大小排序则需要借助<code>Collections</code>工具自己手动排下序。因此，我们可以自己添加这样一个列表：每次添加或删除之后维持列表的有序。   </p>
+<p>至于实现，肯定不会基于<code>LinkedList</code>，因为它的元素没有下标，使用二分法每次要想获取中间元素，都要先进行遍历，这显然得不偿失，所以只能借助<code>ArrayList</code>了，但是<code>ArrayList</code>在设计上并没有考虑给让别人扩展，所以除了用二分法修改<code>indexOf(Object o)</code>和<code>add(E e)</code>两个方法外，其它代码基本都要复制一遍。</p>
 <figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/Echo/blob/master/src/main/java/io/github/echo/structure/</span><span class="caption">SortedArrayList.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortedArrayList</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;? <span class="title">super</span> <span class="title">E</span>&gt;&gt; <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> asc;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(size == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        E e = (E)o;</span><br><span class="line">        <span class="keyword">if</span>(e.compareTo((E)elementData[<span class="number">0</span>]) == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> index = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> right = size - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> middle = (left + right) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">while</span>(middle != left)&#123;</span><br><span class="line">            <span class="keyword">if</span>(e.compareTo((E)elementData[middle]) == <span class="number">0</span>)&#123;</span><br><span class="line">                index = middle;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(asc == e.compareTo((E)elementData[middle]) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                right = middle;</span><br><span class="line">                middle = (left + right) / <span class="number">2</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(asc == e.compareTo((E)elementData[middle]) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                left = middle;</span><br><span class="line">                middle = (left + right) / <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(index == -<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(e.compareTo((E)elementData[--index]) == <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> ++index;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">        ensureCapacityInternal(size + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span>(size == <span class="number">0</span>)&#123;</span><br><span class="line">            elementData[<span class="number">0</span>] = e;</span><br><span class="line">            size++;</span><br><span class="line">            modCount++;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> right = size - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(e.compareTo((E)elementData[left]) == <span class="number">0</span>)&#123;</span><br><span class="line">            System.arraycopy(elementData, <span class="number">0</span>, elementData, <span class="number">1</span>, size);</span><br><span class="line">            elementData[<span class="number">0</span>] = e;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(e.compareTo((E)elementData[right]) == <span class="number">0</span>)&#123;</span><br><span class="line">            elementData[right + <span class="number">1</span>] = e;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(asc == e.compareTo((E)elementData[left]) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            System.arraycopy(elementData, <span class="number">0</span>, elementData, <span class="number">1</span>, size);</span><br><span class="line">            elementData[<span class="number">0</span>] = e;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(asc == e.compareTo((E)elementData[right]) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            elementData[right + <span class="number">1</span>] = e;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">int</span> middle = (left + right) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">while</span>(e.compareTo((E)elementData[middle]) != <span class="number">0</span> &amp;&amp; middle != left)&#123;</span><br><span class="line">                <span class="keyword">if</span>(asc == e.compareTo((E)elementData[middle]) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                    right = middle;</span><br><span class="line">                    middle = (left + right) / <span class="number">2</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(asc == e.compareTo((E)elementData[middle]) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                    left = middle;</span><br><span class="line">                    middle = (left + right) / <span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> index = middle + <span class="number">1</span>; </span><br><span class="line">            System.arraycopy(elementData, index, elementData, index + <span class="number">1</span>, size - index);</span><br><span class="line">            elementData[index] = e;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        size++;</span><br><span class="line">        modCount++;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
@@ -172,24 +172,7 @@
 
         
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -270,5 +253,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

@@ -60,20 +60,20 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article id="post-20180605" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190108" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-04T16:00:00.000Z"><a href="/2018/06/05/20180605/">2018-06-05</a></time>
+        <time class="dt-published" datetime="2019-01-07T16:00:00.000Z"><a href="/2019/01/08/20190108/">2019-01-08</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/06/05/20180605/">《spring源码深度解析》spring Bean加载（BeanFactory）</a>
+       <a href="/2019/01/08/20190108/">《Java并发编程实战》 同步的性能问题</a>
     </h1>
     
   
@@ -87,8 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>之前梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了，不过bean加载的实现过程要比<code>BeanDefinition</code>的解析注册复杂得多，
-下面还是以之前示例中的<code>User user = (User)beanFactory.getBean(&quot;test&quot;)</code>作为入口进行分析，并配合一些简单的流程图进行说明，抓住主要矛盾，主要梳理出一些关键的步骤，以及对循环依赖问题的处理。</p>
+        <p>在<font color="#E51508">安全性</font>与<font color="#E51508">活跃性</font>之间通常存在着某种制衡，我们可以使用加锁机制来确保线程安全，但如果过度的使用加锁，则可能导致死锁。<br>
       
     </div>
 	
@@ -96,7 +95,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/06/05/20180605/#more" class="more-link">more</a>
+            <a href="/2019/01/08/20190108/#more" class="more-link">more</a>
           </div>
         
         
@@ -113,20 +112,20 @@
 
 
 
-  <article id="post-20180603" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190106" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-06-02T16:00:00.000Z"><a href="/2018/06/03/20180603/">2018-06-03</a></time>
+        <time class="dt-published" datetime="2019-01-05T16:00:00.000Z"><a href="/2019/01/06/20190106/">2019-01-06</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/06/03/20180603/">《spring源码深度解析》spring BeanDefinition解析（自定义标签）</a>
+       <a href="/2019/01/06/20190106/">《Java并发编程实战》 任务的取消</a>
     </h1>
     
   
@@ -140,7 +139,13 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>之前梳理了<code>XmlBeanDefinitionReader</code>解析配置文件的过程，但是主要是针对默认标签的解析，所以本文主要介绍下其对于自定义标签的解析策略。</p>
+        <p>如果外部代码能在某个操作正常完成之前将其置入完成状态，那么这个操作就可以称为可取消的，<font color="#E51508">行为良好的软件都应该能很完善地处理失败、关闭和取消等过程。</font> 一个可取消的任务必须拥有取消策略，在这个策略中定义：</p>
+<ul>
+<li>其他代码如何请求取消该任务；</li>
+<li>任务在何时检查是否已经请求了取消；</li>
+<li>在响应取消请求时应该执行哪些操作；</li>
+</ul>
+<p>Java中<font color="#E51508">并没有提供任何机制来安全地终止线程，但它提供了一种协作机制，即通过设置某个已请求取消的标志，然后任务执行过程中定期地查看该标志，如果设置了，那么任务提前结束</font>。</p>
       
     </div>
 	
@@ -148,7 +153,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/06/03/20180603/#more" class="more-link">more</a>
+            <a href="/2019/01/06/20190106/#more" class="more-link">more</a>
           </div>
         
         
@@ -165,20 +170,20 @@
 
 
 
-  <article id="post-20180601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190105" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-31T16:00:00.000Z"><a href="/2018/06/01/20180601/">2018-06-01</a></time>
+        <time class="dt-published" datetime="2019-01-04T16:00:00.000Z"><a href="/2019/01/05/20190105/">2019-01-05</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/06/01/20180601/">《spring源码深度解析》spring BeanDefinition解析（XmlBeanDefinitionReader）</a>
+       <a href="/2019/01/05/20190105/">《Java并发编程实战》 任务的执行</a>
     </h1>
     
   
@@ -192,9 +197,9 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>spring从xml中解析及注册<code>BeanDefinition</code>的过程主要由<code>XmlBeanDefinitionReader</code>主导，其相当于一个组织者的角色，将解析的工作委托给<code>BeanDefinitionDocumentReader</code>，注册工作则分配给<code>BeanDefinitionRegistry</code>。      
-并且，在真正开始解析前，它将自己以及<code>Resource</code>，<code>ReaderEventListener</code>等接口打包成<code>XmlReaderContext</code>交给<code>BeanDefinitionDocumentReader</code>，以便在解析过程中可以回调<code>ReaderEventListener</code>中的事件接口，以及在解析完成时，
-可以拿到<code>BeanDefinitionRegistry</code>进行注册。实际上当所有<code>BeanDefinition</code>注册完成时，它的使命也就结束了，剩下的就交给<code>BeanFactory</code>了。</p>
+        <p>任务通常是一些抽象且离散的工作单元，通过把程序中的工作分解到多个任务中，可以简化程序的组织结构，提供一种自然的事务边界来优化错误恢复过程，并提供一种自然的并行工作结构来提升并发性。</p>
+<p>在正常的负载下，服务器应用程序应该同时表现出<font color="#E51508">良好的吞吐量</font>和<font color="#E51508">快速的响应性</font> 。程序提供商希望程序支持尽可能多的用户，从而降低每个用户的服务成本，而用户则希望获得尽快的响应。当负荷过载时，程序的性能应该是逐渐降低，而不是直接失败。</p>
+<p>理想情况下，可以找出清晰的任务边界，各个任务之间是相互独立的，即任务不依赖于其他任务的状态、结果或边界效应。<font color="#E51508">独立性有助于并发</font>，因为如果存在足够多的处理资源，那么这些独立的任务就可以并行执行，这也为调度与负载均衡等的实现提供了更好的灵活性。<br>
       
     </div>
 	
@@ -202,7 +207,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/06/01/20180601/#more" class="more-link">more</a>
+            <a href="/2019/01/05/20190105/#more" class="more-link">more</a>
           </div>
         
         
@@ -219,20 +224,20 @@
 
 
 
-  <article id="post-20180527" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190104" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-26T16:00:00.000Z"><a href="/2018/05/27/20180527/">2018-05-27</a></time>
+        <time class="dt-published" datetime="2019-01-03T16:00:00.000Z"><a href="/2019/01/04/20190104/">2019-01-04</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/05/27/20180527/">ubuntu安装mysql</a>
+       <a href="/2019/01/04/20190104/">《Java并发编程实战》 线程安全性的委托</a>
     </h1>
     
   
@@ -246,13 +251,69 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>ubuntu版本：16.04<br>MySQL版本：8.0.11  </p>
-<p>问题：</p>
+        <p><font color="#E51508">委托是创建线程安全类的一个最有效策略：只需让现有的线程安全类管理所有的状态即可</font>。Java类库包含丰富的并发构建模块，如线程安全容器以及各种用于协调多个相互协作的线程的同步工具类。<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/01/04/20190104/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190103" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-01-02T16:00:00.000Z"><a href="/2019/01/03/20190103/">2019-01-03</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/01/03/20190103/">《Java并发编程实战》 线程安全类的设计</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>在设计线程安全类的过程中，需要包含以下三个基本要素： </p>
 <ol>
-<li>安装mysql及配置</li>
-<li>root无法登录</li>
-<li>客户端认证失败</li>
+<li>找出构成对象状态的所有变量；   </li>
+<li>找出约束状态变量的不变性条件；   </li>
+<li>建立对象状态的并发访问管理策略；</li>
 </ol>
+<p>对象封装它拥有的状态，并拥有这些状态的所有权或者说控制权，它决定采用何种加锁策略来维持变量状态的完整性，然而，如果发布了某个可变对象的引用，那么就不再拥有独占的控制权，最多是共享控制权。</p>
+<p>一般对于从构造器或者从方法中传递进来的对象，类并不拥有这些对象，除非这些方法是被专门设计来转移传递进来的对象的所有权。例如容器，容器通常表现出一种所有权分离的形式，其中容器拥有其自身的状态，而客户代码则拥有容器中各个对象的状态。</p>
+<p>比如<code>Servlet</code>框架中的<code>ServletContext</code>，<code>ServletContext</code>为<code>Servlet</code>提供了类似于<code>Map</code>形式的对象容器服务，在<code>ServletContext</code>中可以通过名称来注册或获取应用程序的<code>Attribute</code>对象，但这些对象由应用程序拥有，<code>ServletContext</code>容器只是替应用程序保管它们。</p>
+<p><code>ServletContext</code>必须是线程安全的，因为它肯定会被多个线程同时访问。因此当调用<code>setAttribute</code>或<code>getAttribute</code>时，<code>Servlet</code>不需要使用同步。而如果<code>Attribute</code>对象本身不是线程安全的，那么在<code>getAttribute</code>之后为防止多线程并发访问，访问者依然需要使用同步。</p>
+<p><code>HttpSession</code>与<code>ServletContext</code>有类似的功能，但它可能更加严格，会要求保存的<code>Attribute</code>对象是线程安全的，因为<code>Servlet</code>容器可能与Web Application同时访问<code>HttpSession</code>中的对象，而且对于<code>Session</code>通常会有复制或持久化之类的操作，所以要求这些对象是线程安全的。<br>
       
     </div>
 	
@@ -260,7 +321,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/05/27/20180527/#more" class="more-link">more</a>
+            <a href="/2019/01/03/20190103/#more" class="more-link">more</a>
           </div>
         
         
@@ -277,20 +338,20 @@
 
 
 
-  <article id="post-20180518" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20190102" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-17T16:00:00.000Z"><a href="/2018/05/18/20180518/">2018-05-18</a></time>
+        <time class="dt-published" datetime="2019-01-01T16:00:00.000Z"><a href="/2019/01/02/20190102/">2019-01-02</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2018/05/18/20180518/">ubuntu使用yum安装软件问题</a>
+       <a href="/2019/01/02/20190102/">《Java并发编程实战》 线程安全之可见性</a>
     </h1>
     
   
@@ -304,7 +365,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>结论：ubuntu本身不支持用yum来管理软件安装的，是自己无知</p>
+        <p>要编写正确的并发程序，关键在于：在访问共享的可变状态时进行正确的管理。<font color="#E51508">同步的另一个重要目的是内存可见性，我们不仅希望防止某个线程正在使用的对象状态被另一个线程同时修改，而且希望当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。</font></p>
+<p>.<font color="Gray">后面介绍Jvm内存模型时会提到java线程之间内存可见性的必要条件：满足Happens-Before规则</font>。<br>
       
     </div>
 	
@@ -312,281 +374,7 @@
       
         
           <div class="alignleft">
-            <a href="/2018/05/18/20180518/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180515" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-14T16:00:00.000Z"><a href="/2018/05/15/20180515/">2018-05-15</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/05/15/20180515/">ubuntu中rc.local不执行问题</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <ol>
-<li><p>首先排除脚本自身问题，可以手动执行下试试，</p>
-</li>
-<li><p>脚本确定没问题后，放到开机启动程序引用的路径下</p>
-</li>
-</ol>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/05/15/20180515/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180513" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-12T16:00:00.000Z"><a href="/2018/05/13/20180513/">2018-05-13</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/05/13/20180513/">windows 常用操作</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>本文只是整理了下工作中在cmd终端下常见的命令，其实windows的终端一直被开发人员鄙视，虽然win10之后推出了号称很好用的window  terminal，但实际体验之后感觉一言难尽，还不如第三方的git bash</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/05/13/20180513/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180510" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-09T16:00:00.000Z"><a href="/2018/05/10/20180510/">2018-05-10</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/05/10/20180510/">vmware设置centos静态ip</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>vmware版本：14.1.1<br>centos版本：7    </p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
-<li>安装centos并将ip改为静态</li>
-<li>解决上网和ssh登录问题</li>
-</ol>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/05/10/20180510/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180503" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-05-02T16:00:00.000Z"><a href="/2018/05/03/20180503/">2018-05-03</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/05/03/20180503/">vmware设置ubuntu静态ip</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>vmware版本：14.1.1<br>ubuntu版本：16.0.4  </p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
-<li>以nat方式设置ubuntu的静态ip</li>
-<li>域名无法解析</li>
-<li>ssh无法登录</li>
-</ol>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/05/03/20180503/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180315" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-03-14T16:00:00.000Z"><a href="/2018/03/15/20180315/">2018-03-15</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/03/15/20180315/">JUC Thread（TODO）</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>内容需要C++源码部分的梳理，后面整理好了再回来</p>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/03/15/20180315/#more" class="more-link">more</a>
+            <a href="/2019/01/02/20190102/#more" class="more-link">more</a>
           </div>
         
         
@@ -703,5 +491,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

@@ -6,22 +6,14 @@
   <title>《深入理解Java虚拟机》 内存模型 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="多任务处理在现代计算机操作系统中是一项必备功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大，
-更重要的原因是计算机的运算速度与它的存储和通信子系统速度的差距巨大，
-大量的时间都花费在磁盘I/O，网络通信或者数据库访问上，因此处理器在大部分时间里都处于等待其他资源的状态。    
-那么让计算机并发执行若干个运算任务便可以更充分地利用计算机处理器的效能，但复杂性在于绝大多数的运算任务都不可能只靠处理器计算就能完成，
-处理器至少要与内存交互，如读取运算数据、存储运算结果等，这个I/O操作是无法消除的。
-所以现代计算机通过加入一层读写速度尽可能接近处理器运算速度的高速缓存来作为内存与处理器之间的缓冲：
-将运算需要使用的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。
+  <meta name="description" content="多任务处理在现代计算机操作系统中是一项必备功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大，更重要的原因是计算机的运算速度与它的存储和通信子系统速度的差距巨大，大量的时间都花费在磁盘I/O，网络通信或者数据库访问上，因此处理器在大部分时间里都处于等待其他资源的状态。    
+那么让计算机并发执行若干个运算任务便可以更充分地利用计算机处理器的效能，但复杂性在于绝大多数的运算任务都不可能只靠处理器计算就能完成，处理器至少要与内存交互，如读取运算数据、存储运算结果等，这个I/O操作是无法消除的。
+所以现代计算机通过加入一层读写速度尽可能接近处理器运算速度的高速缓存来作为内存与处理器之间的缓冲：将运算需要使用的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。
 基于高速缓存的存储交互很好地解决了处理器与内存之间的速度矛盾，但是引入了复杂度更高的一个问题：缓存一致性。
-在多处理器系统中，每个处理器都有自己的高速缓存，它们共享同一主内存。当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致，
-那么在将数据同步回主内存时应该以谁的缓存数据为准呢？
-为了解决一致性问题，就需要各个处理器访问缓存时遵循一些协议，在读写时要根据协议来进行操作。因此，
-内存模型可以理解为：在特定的操作协议下，对特定的内存或高速缓存进行读写访问的过程抽象
-除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，处理器会在计算之后将乱序执行的结果重组，
-保证该结果与顺序执行的结果一致，但并不保证程序中的各个语句计算的先后顺序与输入的代码顺序一致。
-因此，如果存在一个计算任务依赖另外一个计算任务的中间结果，那么其顺序性并不能依靠代码的先后顺序来保证。
-与处理器的乱序执行优化器类似，Java虚拟机的即时编译器中也有类似的指令重排序优化。">
+在多处理器系统中，每个处理器都有自己的高速缓存，它们共享同一主内存。当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致，那么在将数据同步回主内存时应该以谁的缓存数据为准呢？
+为了解决一致性问题，就需要各个处理器访问缓存时遵循一些协议，在读写时要根据协议来进行操作。因此，内存模型可以理解为：在特定的操作协议下，对特定的内存或高速缓存进行读写访问的过程抽象
+除了增加高速缓存外，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化，处理器会在计算之后将乱序执行的结果重组，保证该结果与顺序执行的结果一致，但并不保证程序中的各个语句计算的先后顺序与输入的代码顺序一致。
+因此，如果存在一个计算任务依赖另外一个计算任务的中间结果，那么其顺序性并不能依靠代码的先后顺序来保证。与处理器的乱序执行优化器类似，Java虚拟机的即时编译器中也有类似的指令重排序优化。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -131,65 +123,54 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>多任务处理在现代计算机操作系统中是一项必备功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大，
-更重要的原因是<font color="#E51508">计算机的运算速度与它的存储和通信子系统速度的差距巨大</font>，
-大量的时间都花费在磁盘I/O，网络通信或者数据库访问上，因此处理器在大部分时间里都处于等待其他资源的状态。    </p>
-<p>那么让计算机并发执行若干个运算任务便可以更充分地利用计算机处理器的效能，但复杂性在于绝大多数的运算任务都不可能只靠处理器计算就能完成，
-处理器至少要与内存交互，如读取运算数据、存储运算结果等，这个I/O操作是无法消除的。</p>
-<p>所以现代计算机通过加入一层读写速度尽可能接近处理器运算速度的高速缓存来作为内存与处理器之间的缓冲：
-将运算需要使用的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。</p>
-<p><font color="#E51508">基于高速缓存的存储交互很好地解决了处理器与内存之间的速度矛盾，但是引入了复杂度更高的一个问题：缓存一致性。</font></p>
-<p>在多处理器系统中，每个处理器都有自己的高速缓存，它们共享同一主内存。当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致，
-那么在将数据同步回主内存时应该以谁的缓存数据为准呢？</p>
-<p>为了解决一致性问题，就需要各个处理器访问缓存时遵循一些协议，在读写时要根据协议来进行操作。因此，
-<font color="#E51508">内存模型可以理解为：在特定的操作协议下，对特定的内存或高速缓存进行读写访问的过程抽象</font></p>
-<p>除了增加高速缓存外，<font color="#E51508">为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化</font>，处理器会在计算之后将乱序执行的结果重组，
-保证该结果与顺序执行的结果一致，但并不保证程序中的各个语句计算的先后顺序与输入的代码顺序一致。</p>
-<p>因此，如果存在一个计算任务依赖另外一个计算任务的中间结果，那么其顺序性并不能依靠代码的先后顺序来保证。
-与处理器的乱序执行优化器类似，Java虚拟机的即时编译器中也有类似的指令重排序优化。</p>
-<a id="more"></a>
-
+        <p>多任务处理在现代计算机操作系统中是一项必备功能，让计算机同时去做几件事情，不仅是因为计算机的运算能力强大，更重要的原因是<font color="#E51508">计算机的运算速度与它的存储和通信子系统速度的差距巨大</font>，大量的时间都花费在磁盘I/O，网络通信或者数据库访问上，因此处理器在大部分时间里都处于等待其他资源的状态。    </p>
+<p>那么让计算机并发执行若干个运算任务便可以更充分地利用计算机处理器的效能，但复杂性在于绝大多数的运算任务都不可能只靠处理器计算就能完成，处理器至少要与内存交互，如读取运算数据、存储运算结果等，这个I/O操作是无法消除的。</p>
+<p>所以现代计算机通过加入一层读写速度尽可能接近处理器运算速度的高速缓存来作为内存与处理器之间的缓冲：将运算需要使用的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。</p>
+<p>基于高速缓存的存储交互很好地解决了处理器与内存之间的速度矛盾，但是引入了复杂度更高的一个问题：<font color="#E51508">缓存一致性</font>。</p>
+<p>在多处理器系统中，每个处理器都有自己的高速缓存，它们共享同一主内存。当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致，那么在将数据同步回主内存时应该以谁的缓存数据为准呢？</p>
+<p>为了解决一致性问题，就需要各个处理器访问缓存时遵循一些协议，在读写时要根据协议来进行操作。因此，<font color="#E51508">内存模型可以理解为：在特定的操作协议下，对特定的内存或高速缓存进行读写访问的过程抽象</font></p>
+<p>除了增加高速缓存外，<font color="#E51508">为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入代码进行乱序执行优化</font>，处理器会在计算之后将乱序执行的结果重组，保证该结果与顺序执行的结果一致，但并不保证程序中的各个语句计算的先后顺序与输入的代码顺序一致。</p>
+<p>因此，如果存在一个计算任务依赖另外一个计算任务的中间结果，那么其顺序性并不能依靠代码的先后顺序来保证。与处理器的乱序执行优化器类似，Java虚拟机的即时编译器中也有类似的指令重排序优化。<br><a id="more"></a></p>
 <h3 id="1-Java内存模型"><a href="#1-Java内存模型" class="headerlink" title="1. Java内存模型"></a>1. Java内存模型</h3><p>Java虚拟机规范试图定义一种内存模型来屏蔽掉各种硬件和操作系统之间的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果</p>
-<p>因此，Java内存模型规定：所有的变量都存储在主内存中，每条线程有自己的工作内存，线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，
-线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存中的变量。不同的线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成。</p>
-<h3 id="2-内存间交互操作"><a href="#2-内存间交互操作" class="headerlink" title="2. 内存间交互操作"></a>2. 内存间交互操作</h3><p>对于一个变量如何从主内存拷贝到工作内存、如何从工作内存同步回主内存的问题，Java内存模型中定义了8种操作：
-    <table>
+<p>因此，Java内存模型规定：所有的变量都存储在主内存中，每条线程有自己的工作内存，线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存中的变量。不同的线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成。</p>
+<h3 id="2-内存间交互操作"><a href="#2-内存间交互操作" class="headerlink" title="2. 内存间交互操作"></a>2. 内存间交互操作</h3><p>对于一个变量如何从主内存拷贝到工作内存、如何从工作内存同步回主内存的问题，Java内存模型中定义了8种操作：</p>
+<table>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
-            <td><code>lock</code></td>
-            <td>：作用于主内存的变量，它把一个变量标识为一条线程独占的状态</td>
+            <td> lock： </td>
+            <td>作用于主内存的变量，它把一个变量标识为一条线程独占的状态</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
-            <td><code>unlock</code></td>
-            <td>：作用于主内存的变量，它把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定</td>
+            <td> unlock： </td>
+            <td>作用于主内存的变量，它把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
-            <td><code>read</code></td>
-            <td>：作用于主内存的变量，它把一个变量的值从主内存传输到线程的工作内存中，以便随后的<code>load</code>动作使用</td>
+            <td> read： </td>
+            <td>作用于主内存的变量，它把一个变量的值从主内存传输到线程的工作内存中，以便随后的 load 动作使用</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
-            <td><code>load</code></td>
-            <td>：作用于工作内存的变量，它把<code>read</code>操作从主内存中得到的变量值放入工作内存的变量副本中</td>
+            <td> load： </td>
+            <td>作用于工作内存的变量，它把 read 操作从主内存中得到的变量值放入工作内存的变量副本中</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
-            <td><code>use</code></td>
-            <td>：作用于工作内存的变量，它把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用到变量的值的字节码指令时将会执行这个操作</td>
+            <td> use： </td>
+            <td>作用于工作内存的变量，它把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用到变量的值的字节码指令时将会执行这个操作</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
-            <td><code>assign</code></td>
-            <td>：作用于工作内存的变量，它把一个从执行引擎接收到的值赋给工作内存的变量，每当虚拟机遇到一个给变量赋值的字节码指令时将会执行这个操作</td>
+            <td> assign： </td>
+            <td>作用于工作内存的变量，它把一个从执行引擎接收到的值赋给工作内存的变量，每当虚拟机遇到一个给变量赋值的字节码指令时将会执行这个操作</td>
         </tr>
         <tr style="border-bottom:0.01rem solid rgba(102,102,102,0.1);">
-            <td><code>store</code></td>
-            <td>：作用于工作内存的变量，它把工作内存中一个变量的值传送到主内存中，以便随后的<code>write</code>操作使用</td>
+            <td> store： </td>
+            <td>作用于工作内存的变量，它把工作内存中一个变量的值传送到主内存中，以便随后的 write 操作使用</td>
         </tr>
         <tr>
-            <td><code>write</code></td>
-            <td>：作用于主内存的变量，它把<code>store</code>操作从工作内存中得到的变量的值写入主内存的变量中</td>
+            <td> write： </td>
+            <td>作用于主内存的变量，它把 store 操作从工作内存中得到的变量的值写入主内存的变量中</td>
         </tr>
-    </table></p>
-<p>如果要把一个变量从主内存复制到工作内存，需要依次执行<code>read</code>和<code>load</code>操作，如果要把变量从工作内存同步回主内存，需要依次执行<code>store</code>和<code>write</code>。
-但<font color="#E51508">Java内存模型只要求两个操作是顺序执行，没有要求必须是连续执行，所以在两个操作之间可以插入执行其他指令</font></p>
-<p>另外，java内存模型规定了执行上述8种操作时必须满足的规则：</p>
+    </table>    
+
+<p>如果要把一个变量从主内存复制到工作内存，需要依次执行<code>read</code>和<code>load</code>操作，如果要把变量从工作内存同步回主内存，需要依次执行<code>store</code>和<code>write</code>。但<font color="#E51508">Java内存模型只要求两个操作是顺序执行，没有要求必须是连续执行，所以在两个操作之间可以插入执行其他指令</font>。</p>
+<p>另外，java内存模型规定了执行上述 8 种操作时还必须满足如下规则：</p>
 <ol>
 <li><p>不允许<code>read</code>和<code>load</code>、<code>store</code>和<code>write</code>操作之一单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者从工作内存发起回写了但主内存不接受的情况；</p>
 </li>
@@ -213,58 +194,38 @@
 </ul>
 <p>假定<code>T</code>表示一个线程，<code>V</code>表示volatile变量，那么在进行<code>read</code>、<code>load</code>、<code>use</code>、<code>assign</code>、<code>store</code>和<code>write</code>操作时需要满足如下规则：</p>
 <ol>
-<li>只有当线程<code>T</code>对变量<code>V</code>执行的前一个动作是<code>load</code>的时候，线程<code>T</code>才能对变量<code>V</code>执行<code>use</code>动作；
-并且只有当线程<code>T</code>对变量<code>V</code>执行的后一个动作是<code>use</code>的时候，线程<code>T</code>才能对变量<code>V</code>执行<code>load</code>操作； </li>
+<li><p>只有当线程<code>T</code>对变量<code>V</code>执行的前一个动作是<code>load</code>的时候，线程<code>T</code>才能对变量<code>V</code>执行<code>use</code>动作；并且只有当线程<code>T</code>对变量<code>V</code>执行的后一个动作是<code>use</code>的时候，线程<code>T</code>才能对变量<code>V</code>执行<code>load</code>操作；<br>也就是说线程<code>T</code>对变量<code>V</code>的<code>use</code>动作必须和线程<code>T</code>对变量<code>V</code>的<code>load</code>、<code>read</code>动作相关联，必须连续一起出现。这样就要求在工作内存中，每次使用<code>V</code>前都必须先从主内存刷新最新的值，用于保证能看见其他线程对变量<code>V</code>所做的修改。</p>
+</li>
+<li><p>只有当线程<code>T</code>对变量<code>V</code>执行的前一个动作是<code>assign</code>的时候，线程<code>T</code>才能对变量<code>V</code>执行<code>store</code>动作；并且，只有当线程<code>T</code>对变量<code>V</code>执行的后一个动作是<code>store</code>的时候，线程<code>T</code>才能对变量<code>V</code>执行<code>assign</code>动作；<br>也就是说线程<code>T</code>对变量<code>V</code>的<code>assign</code>动作必须和线程<code>T</code>对变量的<code>store</code>、<code>write</code>动作相关联，必须连续一起出现。这样就要求在工作内存中，每次修改<code>V</code>后都必须立即同步回主内存中，用于保证其他线程可以看到自己对变量<code>V</code>的修改。</p>
+</li>
 </ol>
-<p>也就是说线程<code>T</code>对变量<code>V</code>的<code>use</code>动作必须和线程<code>T</code>对变量<code>V</code>的<code>load</code>、<code>read</code>动作相关联，必须连续一起出现。
-这样就要求在工作内存中，每次使用<code>V</code>前都必须先从主内存刷新最新的值，用于保证能看见其他线程对变量<code>V</code>所做的修改。</p>
-<ol start="2">
-<li>只有当线程<code>T</code>对变量<code>V</code>执行的前一个动作是<code>assign</code>的时候，线程<code>T</code>才能对变量<code>V</code>执行<code>store</code>动作；
-并且，只有当线程<code>T</code>对变量<code>V</code>执行的后一个动作是<code>store</code>的时候，线程<code>T</code>才能对变量<code>V</code>执行<code>assign</code>动作；</li>
-</ol>
-<p>也就是说线程<code>T</code>对变量<code>V</code>的<code>assign</code>动作必须和线程<code>T</code>对变量的<code>store</code>、<code>write</code>动作相关联，必须连续一起出现。
-这样就要求在工作内存中，每次修改<code>V</code>后都必须立即同步回主内存中，用于保证其他线程可以看到自己对变量<code>V</code>的修改。</p>
-<p>以上两个规则确保了volatile的可见性，volatile变量在各个线程的工作内存中不存在一致性问题。但如果运算并非原子操作，那么并发情况下一样是不安全的。</p>
-<p>虽然从主内存获取变量值到交给执行引擎为止都是没问题的，但是执行引擎在执行时不是原子操作，那么线程<code>T1</code>在修改变量值的时候，
-线程<code>T2</code>可以继续获取变量的旧值并交给自己的执行引擎，这样线程<code>T1</code>的修改对线程<code>T2</code>就不可见。</p>
-<p>由于volatile变量只能保证可见性，所以在不符合以下两条规则的运算场景中，仍然要通过加锁来保证原子性</p>
+<p>以上两个规则确保了volatile的可见性，volatile变量在各个线程的工作内存中不存在一致性问题。<font color="#E51508">但如果运算并非原子操作，那么并发情况下一样是不安全的</font>。比如线程<code>T1</code>从主内存获取变量值到交给执行引擎为止都是没问题的，但是执行引擎在执行时不是原子操作，那么线程<code>T1</code>在修改变量值的时候，线程<code>T2</code>可以继续获取变量的旧值并交给自己的执行引擎，这样线程<code>T1</code>的修改对线程<code>T2</code>就不可见。</p>
+<p>由于volatile变量只能保证可见性，所以可能仍然要通过加锁来保证原子性，除非在符合以下两条规则的运算场景中：</p>
 <ul>
 <li>运算结果不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值；</li>
 <li>变量不需要与其他的状态变量共同参与不变约束；</li>
 </ul>
 <p>另外，volatile变量还有另一个语义：<font color="#E51508">禁止指令重排序</font></p>
-<p>普通变量仅仅会保证在方法的执行过程中，所有依赖赋值结果的地方都能获得正确的结果，但不能保证变量赋值操作的顺序与程序代码中的执行顺序一致。
-因为在一个线程的方法执行过程中无法感知到这点，也就java内存模型中描述的：线程内表现为串行的语义。</p>
+<p>普通变量仅仅会保证在方法的执行过程中，所有依赖赋值结果的地方都能获得正确的结果，但不能保证变量赋值操作的顺序与程序代码中的执行顺序一致。因为在一个线程的方法执行过程中无法感知到这点，也就java内存模型中描述的：线程内表现为串行的语义。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Map configOptions;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span>[] configText;</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">boolean</span> initialized = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//假设以下代码在线程A中执行，读取配置信息，读取完后将initialized设置为true以通知其他线程配置可用。</span></span><br><span class="line">configOptions = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">configText = readConfigFile(fileName);</span><br><span class="line"></span><br><span class="line">processConfigOptions(configText,configOptions);</span><br><span class="line"></span><br><span class="line">initialized = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//假设以下代码在线程B中执行，等待initialized为true,代表线程A已经把配置信息初始化完成。</span></span><br><span class="line"><span class="keyword">while</span>(!initialized)&#123;</span><br><span class="line"></span><br><span class="line">   sleep();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doSomethingWithConfig();</span><br></pre></td></tr></table></figure>
-
-<p>如果定义<code>initialized</code>变量时没有使用volatile修饰，就可能由于指令重排序的优化，
-导致位于线程<code>A</code>中最后一句的代码<code>initialized=true</code>被提前执行，这样线程<code>B</code>中使用配置信息的代码就可能出现错误。</p>
-<p>volatile变量<font color="#E51508">相当于在操作指令中的一个内存屏障，在指令重排序时不能把后面的指令重排序到内存屏障之前的位置。</font>
-只有一个cpu访问内存时，并不需要内存屏障；但如果有多个cpu访问同一块内存，且其中有一个在观测另一个，就需要内存屏障来保证一致性了。</p>
-<p>由于虚拟机对锁实行的消除和优化，使得我们很难量化地认为volatile就会比synchronize快多少。
-volatile变量读操作的性能消耗与普通变量几乎没有什么差别，但是写操作则可能会慢一些，
-因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。不过在大多数场景下volatile的总开销仍然要比锁低。
-因此，我们在volatile与锁之间选择的唯一依据仅仅是volatile的语义能否满足使用场景的需求。</p>
-<h3 id="3-原子性、可见性、有序性"><a href="#3-原子性、可见性、有序性" class="headerlink" title="3. 原子性、可见性、有序性"></a>3. 原子性、可见性、有序性</h3><p><font color="#E51508">java内存模型是围绕着在并发过程中如何处理原子性、可见性、有序性这个三个特征来建立的</font></p>
+<p>如果定义<code>initialized</code>变量时没有使用volatile修饰，就可能由于指令重排序的优化，导致位于线程<code>A</code>中最后一句的代码<code>initialized=true</code>被提前执行，这样线程<code>B</code>中使用配置信息的代码就可能出现错误。</p>
+<p>volatile变量<font color="#E51508">相当于在操作指令中的一个内存屏障，在指令重排序时不能把后面的指令重排序到内存屏障之前的位置。</font>只有一个cpu访问内存时，并不需要内存屏障；但如果有多个cpu访问同一块内存，且其中有一个在观测另一个，就需要内存屏障来保证一致性了。</p>
+<p>由于虚拟机对锁实行的消除和优化，使得我们很难量化地认为volatile就会比synchronize快多少。volatile变量读操作的性能消耗与普通变量几乎没有什么差别，但是写操作则可能会慢一些，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。不过在大多数场景下volatile的总开销仍然要比锁低。因此，我们在volatile与锁之间选择的唯一依据仅仅是volatile的语义能否满足使用场景的需求。</p>
+<h3 id="3-原子性、可见性、有序性"><a href="#3-原子性、可见性、有序性" class="headerlink" title="3. 原子性、可见性、有序性"></a>3. 原子性、可见性、有序性</h3><p>java内存模型就是围绕着在并发过程中如何处理原子性、可见性、有序性这个三个特征来建立的</p>
 <ul>
 <li>原子性：</li>
 </ul>
-<p>由Java内存模型来直接保证的原子性变量操作包括<code>read</code>、<code>load</code>、<code>assign</code>、<code>use</code>、<code>store</code>、和<code>write</code>，大致可以认为基本数据类型的访问读写是具备原子性的。
-对于更大范围的原子性保证，Java内存模型提供了<code>lock</code>和<code>unlock</code>操作来满足这种需求。</p>
+<p>由Java内存模型来直接保证的原子性变量操作包括<code>read</code>、<code>load</code>、<code>assign</code>、<code>use</code>、<code>store</code>、和<code>write</code>，大致可以认为基本数据类型的访问读写是具备原子性的。对于更大范围的原子性保证，Java内存模型提供了<code>lock</code>和<code>unlock</code>操作来满足这种需求。</p>
 <ul>
 <li>可见性：</li>
 </ul>
-<p>Java内存模型是通过在变量修改后将新值同步回主内存，并在变量读取前从主内存刷新变量值，这种依赖主内存作为传递介质的方式来实现可见性的。
-无论是普通变量还是volatile变量都是如此，区别是volatile的特殊规则保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新。</p>
-<p>除了volatile之外，Java还有两个关键字能实现可见性，即<code>syncharonized</code>和<code>final</code>。同步块的可见性由“对一个变量执行<code>unlock</code>操作之前，必须先把此变量同步回主内存中(<code>store</code>，<code>write</code>)”来保证。
-而<code>final</code>的可见性是指，被<code>final</code>修饰的字段在构造器中一旦初始化完成，并且构造器没有把<code>this</code>的引用传递出去，那么在其他线程中就能看见<code>final</code>字段的值。</p>
+<p>Java内存模型是通过在变量修改后将新值同步回主内存，并在变量读取前从主内存刷新变量值，这种依赖主内存作为传递介质的方式来实现可见性的。无论是普通变量还是volatile变量都是如此，区别是volatile的特殊规则保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新。</p>
+<p>除了volatile之外，Java还有两个关键字能实现可见性，即<code>syncharonized</code>和<code>final</code>。同步块的可见性由“对一个变量执行<code>unlock</code>操作之前，必须先把此变量同步回主内存中(<code>store</code>，<code>write</code>)”来保证。而<code>final</code>的可见性是指，被<code>final</code>修饰的字段在构造器中一旦初始化完成，并且构造器没有把<code>this</code>的引用传递出去，那么在其他线程中就能看见<code>final</code>字段的值。</p>
 <ul>
 <li>有序性：</li>
 </ul>
-<p>Java程序中天然的有序性可以总结为：如果在本线程内观察，所有的操作都是有序的；如果在一个线程中观察另一个线程，所有的操作都是无序的。
-前半句指“线程内表现为串行语义”，后半句指“指令重排序和工作内存与主内存的同步延时”。</p>
-<p>Java提供了<code>volatile</code>和<code>synchronized</code>两个关键字来保证线程之间操作的有序性，volatile本身就包含了禁止指令重排序的语义，
-而synchaonized则有“一个变量在同一个时刻只允许一条线程对其进行lock操作”，且lock之后只有自己能unlock，然后将自己的结果同步到主内存中</p>
+<p>Java程序中天然的有序性可以总结为：如果在本线程内观察，所有的操作都是有序的；如果在一个线程中观察另一个线程，所有的操作都是无序的。前半句指“线程内表现为串行语义”，后半句指“指令重排序和工作内存与主内存的同步延时”。</p>
+<p>Java提供了<code>volatile</code>和<code>synchronized</code>两个关键字来保证线程之间操作的有序性，volatile本身就包含了禁止指令重排序的语义，而synchaonized则有“一个变量在同一个时刻只允许一条线程对其进行lock操作”，且lock之后只有自己能unlock，然后将自己的结果同步到主内存中。</p>
 <h3 id="4-先行发生规则（happens-before）"><a href="#4-先行发生规则（happens-before）" class="headerlink" title="4. 先行发生规则（happens-before）"></a>4. 先行发生规则（happens-before）</h3><p>先行发生规则是指Java内存模型中定义的两项操作之间的偏序关系。如果说操作<code>A</code>先行发生于操作<code>B</code>，那么就是说在发生操作<code>B</code>之前，操作<code>A</code>产生的影响能被<code>B</code>观察到。</p>
 <p>Java内存模型中有一些天然的先行发生关系，这些先行发生关系无须任何同步器协助就已经存在，它们与上面的<code>volatile</code>和<code>synchronized</code>一起保证了操作的有序性。</p>
 <ul>
@@ -319,24 +280,7 @@ volatile变量读操作的性能消耗与普通变量几乎没有什么差别，
   </div>
 
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -417,5 +361,20 @@ volatile变量读操作的性能消耗与普通变量几乎没有什么差别，
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

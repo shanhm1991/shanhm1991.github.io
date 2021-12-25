@@ -88,7 +88,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 325  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 322  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -116,17 +116,14 @@
 </li>
 </ol>
 <a id="more"></a>
-
-<p>2.1. 查看系统的运行级别</p>
+<p>查看系统的运行级别</p>
 <p><img src="/img/20180515/20180515.1.jpg" alt=""> </p>
-<p>2.2. 到对应运行的rcX.d的目录找到指向rc.local的软连接，将rc.locad放到指向的地址，重启后发现问题解决。</p>
+<p>到对应运行的 rcX.d 的目录找到指向 rc.local 的软连接，将 rc.locad 放到指向的地址，重启后发现问题解决。</p>
 <p><img src="/img/20180515/20180515.2.jpg" alt=""> </p>
 <p>文件如下：</p>
 <p><img src="/img/20180515/20180515.3.jpg" alt=""> </p>
-<p>刚开始我是照着参考文章在rc5.d目录下添加了一个<code>S99local -&gt; /etc/rc.d/ec.local</code>，然后发现问题并没有解决，我本来以为启动时它会遍历rc5.d下所有初始化文件，
-可能是我错了，它这些软链接名应该是在系统中注册好的。我安装的版本是ubuntu 16，默认软链接名是S14rc.local，于是我又将rc.local从/etc/rc.d中移到了/etc下面，发现问题终于解决。</p>
-<p>其实一开始rc.local文件就在/etc下面，只是我脚本写的有问题导致没执行，然后我看网上文章说要将它移到/etc/rc.d下面，我照做了发现还是不行，在浪费了很多时间后，
-直到遇到下面这篇文章才理解了问题的原因。</p>
+<p>刚开始我是照着参考文章在rc5.d目录下添加了一个<code>S99local -&gt; /etc/rc.d/ec.local</code>，然后发现问题并没有解决，我本来以为启动时它会遍历rc5.d下所有初始化文件，可能是我错了，它这些软链接名应该是在系统中注册好的。我安装的版本是ubuntu 16，默认软链接名是S14rc.local，于是我又将rc.local从/etc/rc.d中移到了/etc下面，发现问题终于解决。</p>
+<p>其实一开始rc.local文件就在/etc下面，只是我脚本写的有问题导致没执行，然后我看网上文章说要将它移到/etc/rc.d下面，我照做了发现还是不行，在浪费了很多时间后，直到遇到下面这篇文章才理解了问题的原因。</p>
 <p><br><strong>参考：</strong>   </p>
 <ol>
 <li><a href="http://www.cnblogs.com/montya/archive/2011/09/09/2172001.html" target="_blank" rel="noopener">http://www.cnblogs.com/montya/archive/2011/09/09/2172001.html</a> </li>
@@ -164,24 +161,7 @@
 
         
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -262,5 +242,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

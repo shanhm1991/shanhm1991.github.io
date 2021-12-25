@@ -90,7 +90,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 3.6k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 13min</font>
+   <font style="color: #999;"> words: 3.5k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 13min</font>
    
    
   
@@ -116,39 +116,28 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p><font color="#E51508">Java虚拟机以方法作为最基本的执行单元，而栈帧则是用于支持虚拟机进行方法调用和方法执行背后的数据结构</font>，它也是虚拟机运行时数据区中的虚拟机栈的栈元素。</p>
-<a id="more"></a>
-
-<h3 id="1-运行时栈帧"><a href="#1-运行时栈帧" class="headerlink" title="1. 运行时栈帧"></a>1. 运行时栈帧</h3><p>栈帧存储了方法的局部变量表、操作数栈、动态连接和返回地址等信息，在Java代码编译的时候，需要多深的操作数栈就已经确定下来，并写入到方法表的Code属性之中。
-每一个方法从调用开始到执行结束的过程，都对应着一个栈帧在虚拟机栈里面从入栈到出栈的过程。</p>
+        <p><font color="#E51508">Java虚拟机以方法作为最基本的执行单元，而栈帧则是用于支持虚拟机进行方法调用和方法执行背后的数据结构</font>，它也是虚拟机运行时数据区中的虚拟机栈的栈元素。<br><a id="more"></a></p>
+<h3 id="1-运行时栈帧"><a href="#1-运行时栈帧" class="headerlink" title="1. 运行时栈帧"></a>1. 运行时栈帧</h3><p>栈帧存储了方法的局部变量表、操作数栈、动态连接和返回地址等信息，在Java代码编译的时候，需要多深的操作数栈就已经确定下来，并写入到方法表的Code属性之中。每一个方法从调用开始到执行结束的过程，都对应着一个栈帧在虚拟机栈里面从入栈到出栈的过程。</p>
 <p><img src="/img/20170827/20170827.1.jpg" alt=""></p>
 <ul>
 <li><strong>局部变量表</strong></li>
 </ul>
 <p>局部变量表用于存放方法参数和方法内部定义的局部变量，在编译Class文件时，就已经在方法Code属性max_locals中确定了该方法的局部变量表的最大容量。</p>
 <p>局部变量表以槽Slot为单位进行存储，虚拟机规范中并没有明确指出一个Slot应该占用的内存大小，只要能存放一个boolean、byte、char、short、int、float、reference或returnAddress类型的数据。</p>
-<p>其中reference表示对一个对象实例的引用，一般来说，虚拟机实现至少应该能通过引用做到两件事，一是根据引用能直接或间接地查找到对象在Java堆中的数据存放的起始地址或索引，
-二是根据引用能直接或间接地查找到对象所属类型数据在方法区中地址，否则将无法实现《Java语言规范》中定义的语法约定。
-<font color="gray">并不是所有语言的对象引用都能满足这两点，比如C++语言，默认情况下只能满足第一点，这也是为何C++中无法提供像Java一样的反射机制。</font></p>
+<p>其中reference表示对一个对象实例的引用，一般来说，虚拟机实现至少应该能通过引用做到两件事，一是根据引用能直接或间接地查找到对象在Java堆中的数据存放的起始地址或索引，二是根据引用能直接或间接地查找到对象所属类型数据在方法区中地址，否则将无法实现《Java语言规范》中定义的语法约定。<font color="gray">并不是所有语言的对象引用都能满足这两点，比如C++语言，默认情况下只能满足第一点，这也是为何C++中无法提供像Java一样的反射机制</font>。</p>
 <p>为了尽可能节省栈帧所占用的内存，局部变量表中的Slot被设计成可以重用的。不过这样的设计除了节省栈帧空间外，在某些情况下还会影响垃圾收集的行为。</p>
 <p>示例1：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">byte</span>[] placeholder = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</span><br><span class="line">    System.gc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0.098: [GC (System.gc())  66213K-&gt;66120K(129024K), 0.0007262 secs]</span><br><span class="line">0.098: [Full GC (System.gc())  66120K-&gt;66041K(129024K), 0.0046690 secs]</span><br></pre></td></tr></table></figure>
-
 <p>示例中，<code>System.gc()</code>并没有回收掉变量<code>placeholder</code>所占的内存，这是因为变量<code>placeholder</code>还处于作用域范围之内，虚拟机自然不敢进行回收。</p>
 <p>示例2：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">byte</span>[] placeholder = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    System.gc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0.115: [GC (System.gc())  66246K-&gt;66136K(129024K), 0.0006681 secs]</span><br><span class="line">0.115: [Full GC (System.gc())  66136K-&gt;66041K(129024K), 0.0150705 secs]</span><br></pre></td></tr></table></figure>
-
 <p>将示例改一下，将变量<code>placeholder</code>的作用域限制到花括号中，这样在<code>System.gc()</code>时，变量<code>placeholder</code>将无法再被访问。但是执行GC之后会发现，虚拟机依然没有进行回收。</p>
 <p>示例3：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">byte</span>[] placeholder = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">    System.gc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0.132: [GC (System.gc())  66208K-&gt;66120K(129024K), 0.0006794 secs]</span><br><span class="line">0.133: [Full GC (System.gc())  66120K-&gt;505K(129024K), 0.0040512 secs]</span><br></pre></td></tr></table></figure>
-
-<p>再改下示例，在<code>System.gc();</code>之前增加一个变量赋值<code>int a = 0;</code>，然后发现内存真的被回收了。所以，<code>placeholder</code>能否被回收的根本原因是局部变量表中的变量槽是否还有关于placeholder数组对象的引用。</p>
+<p>再改下示例，在<code>System.gc();</code>之前增加一个变量赋值<code>int a = 0;</code>，然后发现内存真的被回收了。所以，<code>placeholder</code><font color="#E51508">能否被回收的根本原因是局部变量表中的变量槽是否还有关于placeholder数组对象的引用</font>。</p>
 <ul>
 <li><strong>操作栈</strong></li>
 </ul>
@@ -156,19 +145,15 @@
 <ul>
 <li><strong>动态连接</strong></li>
 </ul>
-<p>每个栈帧都包含一个指向运行时常量池中对应方法的引用，持有这个引用是为了支持方法调用过程中的动态连接。在Class的常量池中存在大量的符号引用，字节码中的方法调用指令就是以常量池中的符号引用作为参数，
-这些符号引用一部分在类加载阶段或第一次使用时会被转化为直接引用，这种转化称为<font color="#E51508">静态解析</font>。另一部分则在每次运行时都进行转化，这部分就称为<font color="#E51508">动态连接</font>。</p>
+<p>每个栈帧都包含一个指向运行时常量池中对应方法的引用，持有这个引用是为了支持方法调用过程中的动态连接。在Class的常量池中存在大量的符号引用，字节码中的方法调用指令就是以常量池中的符号引用作为参数，这些符号引用一部分在类加载阶段或第一次使用时会被转化为直接引用，这种转化称为<font color="#E51508">静态解析</font>。另一部分则在每次运行时都进行转化，这部分就称为<font color="#E51508">动态连接</font>。</p>
 <ul>
 <li><strong>方法返回地址</strong></li>
 </ul>
 <p>方法的退出只有两种方式，即遇到返回指令或者有异常抛出，无论采用何种方式，在退出之后，都必须返回到最初方法被调用时的位置，可能也需要在栈帧中保存一些信息，用来帮助恢复它上层调用方法的执行状态。</p>
 <p>方法的退出过程想当与将当前栈帧出栈，因此退出时可能的操作有：恢复上层方法的局部变量表和操作数栈，把返回值压入调用者栈帧的操作数栈中，调整PC计数器的值以指向方法调用指令后面的一条指令等。</p>
-<h3 id="2-方法调用"><a href="#2-方法调用" class="headerlink" title="2. 方法调用"></a>2. 方法调用</h3><p><font color="#E51508">方法调用阶段唯一的任务就是确定被调用方法的版本</font>，即调用哪一个方法，暂时还未涉及到方法内部的具体运行过程。在程序运行的过程中，方法调用是最普遍、最频繁地操作之一，
-但在Class的编译过程中并不包含传统语言编译的连接步骤，一切方法调用在Class文件中存储的都只是符号引用，而不是方法在实际运行时内存布局中的入口地址。这个特性给Java带来了更强大的动态扩展能力，
-但也使得Java方法的调用过程变得相对复杂，某些调用需要在类加载期间，甚至到运行期间才能确定目标方法的直接引用。</p>
+<h3 id="2-方法调用"><a href="#2-方法调用" class="headerlink" title="2. 方法调用"></a>2. 方法调用</h3><p><font color="#E51508">方法调用阶段唯一的任务就是确定被调用方法的版本</font>，即调用哪一个方法，暂时还未涉及到方法内部的具体运行过程。在程序运行的过程中，方法调用是最普遍、最频繁地操作之一，但在Class的编译过程中并不包含传统语言编译的连接步骤，一切方法调用在Class文件中存储的都只是符号引用，而不是方法在实际运行时内存布局中的入口地址。这个特性给Java带来了更强大的动态扩展能力，但也使得Java方法的调用过程变得相对复杂，某些调用需要在类加载期间，甚至到运行期间才能确定目标方法的直接引用。</p>
 <h4 id="2-1-解析"><a href="#2-1-解析" class="headerlink" title="2.1. 解析"></a>2.1. 解析</h4><p>在类加载阶段，会将其中的一部分符号引用转化为直接引用，这种解析能够成立的前提是：方法在程序运行之前就有一个可确定的调用版本，并且这个方法的调用版本在运行期不可改变。</p>
-<p>在Java语言中符号“<font color="#E51508">编译器可知，运行期不可变</font>”要求的，主要有静态方法和私有方法两大类，前者直接与类型关联，后者在外部不可访问，这两种方法各自的特点决定了它们都不可能通过继承或别的方式重写出其他版本，
-因此它们都适合在类加载阶段进行解析。</p>
+<p>在Java语言中符号“<font color="#E51508">编译器可知，运行期不可变</font>”要求的，主要有静态方法和私有方法两大类，前者直接与类型关联，后者在外部不可访问，这两种方法各自的特点决定了它们都不可能通过继承或别的方式重写出其他版本，因此它们都适合在类加载阶段进行解析。</p>
 <p>字节码指令集设计了不同的指令，来调用不同类型的方法</p>
 <ul>
 <li>invokevirtual 调用虚方法 </li>
@@ -177,26 +162,19 @@
 <li>invokeinterface 调用接口方法，会在运行时再确定一个实现该接口的对象</li>
 <li>invokedynamic 区别于前4条调用指令将分派逻辑固化在Java虚拟机内部，invokedynamic将分派逻辑交给用户来决定</li>
 </ul>
-<p>只要能被 invokestatic 和 invokespecial 调用的方法，都可以在解析阶段中确定唯一的调用版本，在Java语言中符号这个条件的方法有<font color="#E51508">静态方法</font>、<font color="#E51508">私有方法</font>、
-<font color="#E51508">实例构造器</font>、<font color="#E51508">父类方法</font>4种，统称为非虚方法，相反，其他方法就称为虚方法。</p>
-<p>另外还有一种就是<font color="#E51508">final方法</font>，虽然由于历史设计的原因，final方法是通过 invokevirtual 进行调用，但是因为它无法被覆盖，没有其他版本的可能，所以也无须对方法接收者进行多态选择，
-又或者说多态选择的结果是唯一的。《Java语言规范》中明确定义了final方法就是一种非虚方法。</p>
-<p><font color="#E51508">解析调用一定是一个静态的过程，在编译期间就完全确定，在类加载阶段就会把涉及的符号引用全部转变为明确的直接引用，而不必延迟到运行期再去完成</font></p>
+<p>只要能被 invokestatic 和 invokespecial 调用的方法，都可以在解析阶段中确定唯一的调用版本，在Java语言中符号这个条件的方法有<font color="#E51508">静态方法</font>、<font color="#E51508">私有方法</font>、<font color="#E51508">实例构造器</font>、<font color="#E51508">父类方法</font>4种，统称为非虚方法，相反，其他方法就称为虚方法。</p>
+<p>另外还有一种就是<font color="#E51508">final方法</font>，虽然由于历史设计的原因，final方法是通过 invokevirtual 进行调用，但是因为它无法被覆盖，没有其他版本的可能，所以也无须对方法接收者进行多态选择，又或者说多态选择的结果是唯一的。《Java语言规范》中明确定义了final方法就是一种非虚方法。</p>
+<p><font color="#E51508">解析调用一定是一个静态的过程，在编译期间就完全确定，在类加载阶段就会把涉及的符号引用全部转变为明确的直接引用，而不必延迟到运行期再去完成</font>。</p>
 <h4 id="2-2-分派"><a href="#2-2-分派" class="headerlink" title="2.2. 分派"></a>2.2. 分派</h4><h5 id="2-2-1-静态分派-amp-重载"><a href="#2-2-1-静态分派-amp-重载" class="headerlink" title="2.2.1. 静态分派 &amp; 重载"></a>2.2.1. 静态分派 &amp; 重载</h5><p>所有依赖静态类型来决定方法执行版本的分派动作，都称为静态分派。静态分派发生在编译阶段，因此确定静态分派的动作实际上不是有虚拟机来执行的，这也是有些地方将静态分派归入解析而不是分派的原因。</p>
 <p>静态分派的最典型应用就是方法重载，比如下面示例</p>
 <figure class="highlight java"><figcaption><span class="caption">StaticDispatch</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticDispatch</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Human</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Woman</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Human guy)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello, guy!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Man guy)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello, gentleman!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Woman guy)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello, lady!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Human man = <span class="keyword">new</span> Man();</span><br><span class="line">        Human woman = <span class="keyword">new</span> Woman();</span><br><span class="line">        </span><br><span class="line">        StaticDispatch dispatch = <span class="keyword">new</span> StaticDispatch();</span><br><span class="line">        dispatch.sayHello(man);</span><br><span class="line">        dispatch.sayHello(woman);</span><br><span class="line">        dispatch.sayHello((Man)man);</span><br><span class="line">        dispatch.sayHello((Woman)woman);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//hello, guy!</span></span><br><span class="line"><span class="comment">//hello, guy!</span></span><br><span class="line"><span class="comment">//hello, gentleman!</span></span><br><span class="line"><span class="comment">//hello, lady!</span></span><br></pre></td></tr></table></figure>
-
-<p>对于示例中的<code>Human man = new Man();</code>，我们将<code>Human</code>称为变量的静态类型，也叫外观类型，而<code>Man</code>则称为变量的实际类型，也叫运行时类型。静态类型和实际类型在程序中都可能发生变化，区别是静态类型在编译期是可知的，
-而实际类型的变化结果要在运行期才能确定。</p>
-<p>实例中对于方法<code>sayHello</code>重载版本的选择，完全取决于传入参数的数量和类型。代码中故意定义了两个静态类型相同，而实际类型不同的变量<code>man</code>和<code>woman</code>，
-但<font color="#E51508">编译器在选择重载版本时是根据参数的静态类型而不是实际类型作为依据的</font>，因此都选择了<code>sayHello(Human guy)</code>作为调用目标，并将方法的符号引用作为 invokevirtual 的参数写到字节码中。</p>
+<p>对于示例中的<code>Human man = new Man();</code>，我们将<code>Human</code>称为变量的静态类型，也叫外观类型，而<code>Man</code>则称为变量的实际类型，也叫运行时类型。静态类型和实际类型在程序中都可能发生变化，区别是静态类型在编译期是可知的，而实际类型的变化结果要在运行期才能确定。</p>
+<p>实例中对于方法<code>sayHello</code>重载版本的选择，完全取决于传入参数的数量和类型。代码中故意定义了两个静态类型相同，而实际类型不同的变量<code>man</code>和<code>woman</code>，但<font color="#E51508">编译器在选择重载版本时是根据参数的静态类型而不是实际类型作为依据的</font>，因此都选择了<code>sayHello(Human guy)</code>作为调用目标，并将方法的符号引用作为 invokevirtual 的参数写到字节码中。</p>
 <p>要注意的是，Javac编译器虽然能确定出方法的重载版本，但在很多情况下这个重载版本并不是唯一的，这时往往只能确定一个“相对更合适”的版本。</p>
 <h5 id="2-2-2-动态分配-amp-重写"><a href="#2-2-2-动态分配-amp-重写" class="headerlink" title="2.2.2. 动态分配 &amp; 重写"></a>2.2.2. 动态分配 &amp; 重写</h5><p>下面看一下Java语言中动态分派的实现，它与Java语言多态性的另外一个重要体现：重写，有着密切的关联，下面还是先看一个与上面相似的示例：</p>
 <figure class="highlight java"><figcaption><span class="caption">StaticDispatch</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticDispatch</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"Human say hello!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"Man say hello!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Woman</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"Woman say hello!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Human man = <span class="keyword">new</span> Man();</span><br><span class="line">        Human woman = <span class="keyword">new</span> Woman();</span><br><span class="line">        man.sayHello();</span><br><span class="line">        woman.sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Man say hello!</span></span><br><span class="line"><span class="comment">//Woman say hello!</span></span><br></pre></td></tr></table></figure>
-
-<p>显然，这里对于调用方法版本的选择不再是根据静态类型来决定的，那么虚拟机是如何根据实际类型类分派方法执行的版本呢？<br>这里我们先尝试通过字节码找下答案</p>
-<figure class="highlight plain"><figcaption><span class="caption"> javap -verbose StaticDispatch.class</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">   descriptor: ([Ljava&#x2F;lang&#x2F;String;)V</span><br><span class="line">   flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">   Code:</span><br><span class="line">     stack&#x3D;2, locals&#x3D;3, args_size&#x3D;1</span><br><span class="line">        0: new           #16                 &#x2F;&#x2F; class test&#x2F;StaticDispatch$Man</span><br><span class="line">        3: dup</span><br><span class="line">        4: invokespecial #18                 &#x2F;&#x2F; Method test&#x2F;StaticDispatch$Man.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">        7: astore_1</span><br><span class="line">        8: new           #19                 &#x2F;&#x2F; class test&#x2F;StaticDispatch$Woman</span><br><span class="line">       11: dup</span><br><span class="line">       12: invokespecial #21                 &#x2F;&#x2F; Method test&#x2F;StaticDispatch$Woman.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       15: astore_2</span><br><span class="line marked">       16: aload_1</span><br><span class="line marked">       17: invokevirtual #22                 &#x2F;&#x2F; Method test&#x2F;StaticDispatch$Human.sayHello:()V</span><br><span class="line marked">       20: aload_2</span><br><span class="line marked">       21: invokevirtual #22                 &#x2F;&#x2F; Method test&#x2F;StaticDispatch$Human.sayHello:()V</span><br><span class="line">       24: return</span><br></pre></td></tr></table></figure>
-
+<p>显然，这里对于调用方法版本的选择不再是根据静态类型来决定的，那么虚拟机是如何根据实际类型类分派方法执行的版本呢？这里我们先尝试通过字节码找下答案</p>
+<figure class="highlight c"><figcaption><span class="caption"> javap -verbose StaticDispatch.class</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.<span class="keyword">String</span>[])</span></span>;</span><br><span class="line">   descriptor: ([Ljava/lang/<span class="keyword">String</span>;)V</span><br><span class="line">   flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">   Code:</span><br><span class="line">     <span class="built_in">stack</span>=<span class="number">2</span>, locals=<span class="number">3</span>, args_size=<span class="number">1</span></span><br><span class="line">        <span class="number">0</span>: <span class="keyword">new</span>           #<span class="number">16</span>                 <span class="comment">// class test/StaticDispatch$Man</span></span><br><span class="line">        <span class="number">3</span>: dup</span><br><span class="line">        <span class="number">4</span>: invokespecial #<span class="number">18</span>                 <span class="comment">// Method test/StaticDispatch$Man."&lt;init&gt;":()V</span></span><br><span class="line">        <span class="number">7</span>: astore_1</span><br><span class="line">        <span class="number">8</span>: <span class="keyword">new</span>           #<span class="number">19</span>                 <span class="comment">// class test/StaticDispatch$Woman</span></span><br><span class="line">       <span class="number">11</span>: dup</span><br><span class="line">       <span class="number">12</span>: invokespecial #<span class="number">21</span>                 <span class="comment">// Method test/StaticDispatch$Woman."&lt;init&gt;":()V</span></span><br><span class="line">       <span class="number">15</span>: astore_2</span><br><span class="line marked">       <span class="number">16</span>: aload_1</span><br><span class="line marked">       <span class="number">17</span>: invokevirtual #<span class="number">22</span>                 <span class="comment">// Method test/StaticDispatch$Human.sayHello:()V</span></span><br><span class="line marked">       <span class="number">20</span>: aload_2</span><br><span class="line marked">       <span class="number">21</span>: invokevirtual #<span class="number">22</span>                 <span class="comment">// Method test/StaticDispatch$Human.sayHello:()V</span></span><br><span class="line">       <span class="number">24</span>: <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
 <p>单从调用指令 invokevirtual 及其参数根本无法出来，因为都完全一样，但是这两条指令最终执行的目标方法却不相同，所以还必须从 invokevirtual 指令本身入手。</p>
 <p>《Java虚拟机规范》中，invokevirtual 指令的运行时解析过程大致分为以下几步：</p>
 <ol>
@@ -205,11 +183,9 @@
 <li>否则，按照继承关系从下往上依次对C的各个父类进行第二步的搜索和验证过程；</li>
 <li>如果始终没有找到合适的方法，则抛出 java.lang.AbstractMehtodError 异常；</li>
 </ol>
-<p>显然，invokevirtual 的第一步就是确定实际类型，所以两次调用时并不是把常量中方法的符号引用解析到直接引用上就结束了，还会根据方法接收者的实际类型来选择方法版本，这个过程就是<font color="#E51508">Java语言中方法重写的本质</font>。
-我们将这种在运行期根据实际类型确定方法执行版本的分派过程称为动态分派。</p>
-<p>上述分派过程，只能作为对Java虚拟机概念模型的理解，具体怎样实现则可能因各种虚拟机的不同而有所差别。主要因为动态分派是非常频繁地操作，而且动态分派的方法版本选择过程需要运行时在接收者类型的方法元数据中搜索合适的目标方法，
-因此，Java虚拟机出于性能考虑，真正运行时一般不会频繁地去反复搜索类型元数据。</p>
-<p>一种基础而且常见的办法是<font color="#E51508">为类型在方法区中建立一个虚方法表</font>，称为 vtable，与此对应的，在 invokeinterface 执行时也会用到接口方法表，简称 itable，目的是使用虚方法表索引来代替元数据查找以提高性能。<br>虚方法表中存放着各个方法的实际入口地址，如果某个方法在子类中没有被重写，那么子类虚方法表中的入口地址就与父类是一致的，都指向父类的实现入口。如果子类重写了这个方法，那么子类虚方法表中的地址就会被替换为指向子类实现版本的入口地址。</p>
+<p>显然，invokevirtual 的第一步就是确定实际类型，所以两次调用时并不是把常量中方法的符号引用解析到直接引用上就结束了，还会根据方法接收者的实际类型来选择方法版本，这个过程就是<font color="#E51508">Java语言中方法重写的本质</font>。我们将这种在运行期根据实际类型确定方法执行版本的分派过程称为动态分派。</p>
+<p>上述分派过程，只能作为对Java虚拟机概念模型的理解，具体怎样实现则可能因各种虚拟机的不同而有所差别。主要因为动态分派是非常频繁地操作，而且动态分派的方法版本选择过程需要运行时在接收者类型的方法元数据中搜索合适的目标方法，因此，Java虚拟机出于性能考虑，真正运行时一般不会频繁地去反复搜索类型元数据。</p>
+<p>一种基础而且常见的办法是<font color="#E51508">为类型在方法区中建立一个虚方法表</font>，称为 vtable，与此对应的，在 invokeinterface 执行时也会用到接口方法表，简称 itable，目的是使用虚方法表索引来代替元数据查找以提高性能。      虚方法表中存放着各个方法的实际入口地址，如果某个方法在子类中没有被重写，那么子类虚方法表中的入口地址就与父类是一致的，都指向父类的实现入口。如果子类重写了这个方法，那么子类虚方法表中的地址就会被替换为指向子类实现版本的入口地址。</p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>Copyright&nbsp;&copy;《深入理解java虚拟机》</li>
@@ -252,24 +228,7 @@
   </div>
 
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -350,5 +309,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

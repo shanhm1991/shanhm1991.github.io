@@ -6,9 +6,7 @@
   <title>Linux I/O模型 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
-为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为内核空间，
-一部分为用户空间。">
+  <meta name="description" content="操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，即内核空间和用户空间。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -114,82 +112,54 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。
-为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，一部分为<font style="color:#E51508;">内核空间</font>，
-一部分为<font style="color:#E51508;">用户空间</font>。</p>
-<a id="more"></a>
-
-<p>一个进程通过调用内核打开相应的文件，告诉内核它想访问某个 I/O 设备，内核返回一个非负整数，称为<font style="color:red;">描述符</font>。后续对此文件的所有操作通过这个描述符进行，
-内核会记录有关这个打开文件的所有信息，而应用进程只需记住这个描述符。其中，Linux内核用三个相关的数据结构来表示打开的文件：</p>
+        <p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，即<font style="color:#E51508;">内核空间</font>和<font style="color:#E51508;">用户空间</font>。<br><a id="more"></a></p>
+<p>一个进程通过调用内核打开相应的文件，告诉内核它想访问某个 I/O 设备，内核返回一个非负整数，称为<font style="color:red;">描述符</font>。后续对此文件的所有操作通过这个描述符进行，内核会记录有关这个打开文件的所有信息，而应用进程只需记住这个描述符。其中，Linux内核用三个相关的数据结构来表示打开的文件：</p>
 <ul>
 <li><p><strong>描述符表：</strong>每个进程都有它独立的描述符表，它的表项是由进程打开的文件描述符来索引的，每个打开的描述符表项指向文件表中的一个表项</p>
 </li>
-<li><p><strong>文件表：</strong><font style="color:#E51508;">打开文件的集合由一张文件表来表示，所有的进程共享这张表。</font>每个文件表的表项组成包括当前文件的位置、引用计数（指向当前表项的描述符数目）、
-以及一个指向 v-node 表中对应表项的指针。关闭一个描述符会减少相应的文件表表项中的引用计数，内核不会删除这个文件表表项，直到它的引用计数为零</p>
+<li><p><strong>文件表：</strong><font style="color:#E51508;">打开文件的集合由一张文件表来表示，所有的进程共享这张表。</font>每个文件表的表项组成包括当前文件的位置、引用计数（指向当前表项的描述符数目）、以及一个指向 v-node 表中对应表项的指针。关闭一个描述符会减少相应的文件表表项中的引用计数，内核不会删除这个文件表表项，直到它的引用计数为零</p>
 </li>
 <li><p><strong>v-node表：</strong>与文件表一样，所有进程共享 v-node 表。每个表项包含 stat 结构中的大多数信息，包括 st_mode 和 st_size 成员</p>
 </li>
 </ul>
 <p><img src="/img/20180202/20180202.12.jpg" alt=""> </p>
-<p>多个描述符也可以通过不同的文件表项来引用同一个文件，例如以同一个 filename 调用 open 函数两次，就会发生这种情况。另外，Linux shell创建的每个进程开始时都有三个打开的文件：
-标准输入（STDIN_FILENO=0）、标准输出（STDOUT_FILENO=1）和标准错误（STDERR_FILENO=2）</p>
-<h3 id="1-磁盘IO"><a href="#1-磁盘IO" class="headerlink" title="1. 磁盘IO"></a>1. 磁盘IO</h3><h4 id="1-1-缓存IO"><a href="#1-1-缓存IO" class="headerlink" title="1.1. 缓存IO"></a>1.1. 缓存IO</h4><p>大多数文件系统的默认 I/O 操作都是缓存 I/O，所以一般也称为标准 I/O 操作。以读操作为例，应用程序需要走 read 系统调用，这样数据会先拷贝到操作系统的内核缓存，
-然后再从内核拷贝到应用进程空间。反之写操作，需要走 write 调用，也是类似的。</p>
+<p>多个描述符也可以通过不同的文件表项来引用同一个文件，例如以同一个 filename 调用 open 函数两次，就会发生这种情况。另外，Linux shell创建的每个进程开始时都有三个打开的文件：标准输入（STDIN_FILENO=0）、标准输出（STDOUT_FILENO=1）和标准错误（STDERR_FILENO=2）</p>
+<h3 id="1-磁盘IO"><a href="#1-磁盘IO" class="headerlink" title="1. 磁盘IO"></a>1. 磁盘IO</h3><h4 id="1-1-缓存IO"><a href="#1-1-缓存IO" class="headerlink" title="1.1. 缓存IO"></a>1.1. 缓存IO</h4><p>大多数文件系统的默认 I/O 操作都是缓存 I/O，所以一般也称为标准 I/O 操作。以读操作为例，应用程序需要走 read 系统调用，这样数据会先拷贝到操作系统的内核缓存，然后再从内核拷贝到应用进程空间。反之写操作，需要走 write 调用，也是类似的。</p>
 <p><img src="/img/20180202/20180202.8.jpg" alt=""> </p>
-<p>根据程序的<font style="color:#E51508;">局部性原理</font>，最近被访问的信息很可能还要被访问（时间局部性），以及与最近被访问数据邻近的数据也可能被访问（空间局部性）。
-因此实际读取时，操作系统会帮进程作一部分预读，这样的好处是可以减少对 I/O 设备的实际访问次数，但由于读写操作都要先经过内核缓存，然后再复制到用户空间，因此也多了一次内存复制操作。</p>
-<h4 id="1-2-页缓存-PageCache"><a href="#1-2-页缓存-PageCache" class="headerlink" title="1.2. 页缓存 PageCache"></a>1.2. 页缓存 PageCache</h4><p>PageCache 是操作系统对文件的缓存，用来减少对磁盘的 I/O 操作，以页为单位的，内容就是磁盘上的物理块，页缓存能让程序对文件进行顺序读写时的速度几乎接近于内存的读写速度，
-主要原因就是由于 OS 使用 PageCache 机制对读写访问操作进行了一下缓冲。</p>
+<p>根据程序的<font style="color:#E51508;">局部性原理</font>，最近被访问的信息很可能还要被访问（时间局部性），以及与最近被访问数据邻近的数据也可能被访问（空间局部性）。因此实际读取时，操作系统会帮进程作一部分预读，这样的好处是可以减少对 I/O 设备的实际访问次数，但由于读写操作都要先经过内核缓存，然后再复制到用户空间，因此也多了一次内存复制操作。</p>
+<h4 id="1-2-页缓存-PageCache"><a href="#1-2-页缓存-PageCache" class="headerlink" title="1.2. 页缓存 PageCache"></a>1.2. 页缓存 PageCache</h4><p>PageCache 是操作系统对文件的缓存，用来减少对磁盘的 I/O 操作，以页为单位的，内容就是磁盘上的物理块，页缓存能让程序对文件进行顺序读写时的速度几乎接近于内存的读写速度，主要原因就是由于 OS 使用 PageCache 机制对读写访问操作进行了一下缓冲。</p>
 <ul>
-<li><p>页缓存读取策略：当进程发起一个 read 调用时，系统首先会检查需要的数据是否在页缓存中，如果在，则直接从页缓存中读取，否则内核调度块 I/O 操作从磁盘去读取数据，
-并预读其后的几个页面（一般是三个页面），然后将数据放入页缓存中。</p>
+<li><p>页缓存读取策略：当进程发起一个 read 调用时，系统首先会检查需要的数据是否在页缓存中，如果在，则直接从页缓存中读取，否则内核调度块 I/O 操作从磁盘去读取数据，并预读其后的几个页面（一般是三个页面），然后将数据放入页缓存中。</p>
 </li>
-<li><p>页缓存写策略：当进程发起 write 调用时，会先写到页缓存，然后方法返回。此时数据并没有真正保存到文件中，Linux 只是将页缓存中的这一页数据标记为 “脏”，并且被加入到脏页链表中。
-然后，由 flusher 回写线程周期性将脏页链表中的页写到磁盘，让磁盘中的数据和内存中保持一致，最后再清理“脏”标识。</p>
+<li><p>页缓存写策略：当进程发起 write 调用时，会先写到页缓存，然后方法返回。此时数据并没有真正保存到文件中，Linux 只是将页缓存中的这一页数据标记为 “脏”，并且被加入到脏页链表中。然后，由 flusher 回写线程周期性将脏页链表中的页写到磁盘，让磁盘中的数据和内存中保持一致，最后再清理“脏”标识。</p>
 </li>
 </ul>
 <p>一般导致脏页回写的情况有三种：即当空闲内存低于一个特定阈值时；或者脏页在内存中驻留超过特定时间；再就是进程发起了 sync() 或 fsync() 系统调用。</p>
 <h4 id="1-3-直接IO"><a href="#1-3-直接IO" class="headerlink" title="1.3. 直接IO"></a>1.3. 直接IO</h4><p>直接IO是相对缓存IO来说的，在Linux中打开文件，如果不指定flags为O_DIRECT，那么就是使用缓存I/O来对文件进行读写操作。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * pathname：指定要打开的文件路径</span></span><br><span class="line"><span class="comment"> * flags：指定打开文件的标志</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<p>O_DIRECT (Since Linux 2.4.10)<br>Try to minimize cache effects of the I/O to and from this file.  In general this
-will degrade performance, but it is useful in special situations, such  as  when
-applications do their own caching.  File I/O is done directly to/from user space
-buffers.  The I/O is synchronous, that is, at the completion  of  a  read(2)  or
-write(2), data is guaranteed to have been transferred.  </p>
+<p>O_DIRECT (Since Linux 2.4.10)<br>Try to minimize cache effects of the I/O to and from this file.  In general this will degrade performance, but it is useful in special situations,<br>such  as  when applications do their own caching.  File I/O is done directly to/from user space buffers.  The I/O is synchronous, that is, at the<br>completion  of  a  read(2) or write(2), data is guaranteed to have been transferred.  </p>
 </blockquote>
-<p>意思是，为了写文件或者读文件的 I/O 高度缓存开销的最小化。一般情况下，该标志会降低性能，但是，在特殊情况下，还是有作用的。例如当应用程序使用自己的高速缓存的时候，
-文件 I/O 直接接触到用户内存，I/O 操作是同步的，也就是说，一旦 read(2) 或者 write(2) 完成，数据可以保证传输完毕。</p>
-<p><font style="color:#E51508;">直接 I/O 省去了与内核缓存的复制过程，这样虽然使单次 I/O 访问效率高了，但由于没有了缓存，将导致访问 I/O 设备的操作更加频繁，而访问 I/O 设备的延迟要远高于内存间的复制的，
-因此需要应用自己去权衡。</font>一般的在数据库服务中，会更倾向于建立自己的缓存机制，因为它们往往比操作系统更了解磁盘中存放的数据，
-从而可以提供一种更加有效的缓存机制来提高数据库中数据的存取性能。</p>
-<h4 id="1-4-内存映射IO"><a href="#1-4-内存映射IO" class="headerlink" title="1.4. 内存映射IO"></a>1.4. 内存映射IO</h4><p>操作系统一般都会采用虚拟内存（参考笔记：<a href="https://shanhm1991.github.io/2018/02/02/20180202/">计算机 存储系统</a>），比如对于32位操作系统，应用进程可以拥有3G的空间，
-但是对于同时存在的进程，如何让每个进程都感觉自己拥有整个的内存空间，而且互相不影响呢？其实<font style="color:#E51508;">每个进程都有自己的内存映射表，
-维护着虚地址与内存物理地址的映射关系，进程在实际运行时，可能只需对少部分地址进行映射，即只占用实际物理内存的一部分，这样对于CPU而言，当发生进程切换时，
-只需要切换进程对应的地址映射表，就能访问到对应的进程空间了</font>。</p>
-<p><font style="color:#E51508;">内存映射就是走的虚拟内存方式，而不再像上面一样先打开文件然后再进行读写了。其过程是先建立磁盘文件地址与进程虚拟内存的映射，然后访问文件就相当于访问内存，
-当然真正访问时还要通过 MMU 将逻辑地址转换成物理地址，如果 MMU 在地址映射表中无法找到对应的物理地址，将产生一个缺页中断，然后将尝试从 swap 中寻找对应的页面，
-如果还找不到则根据前面建立的映射关系从磁盘读取。但是之后的读写就完全是对内存的操作了，而对应的修改会触发脏页回写，从而保证数据更新到磁盘。</font></p>
+<p>意思是，为了写文件或者读文件的 I/O 高度缓存开销的最小化。一般情况下，该标志会降低性能，但是，在特殊情况下，还是有作用的。例如当应用程序使用自己的高速缓存的时候，文件 I/O 直接接触到用户内存，I/O 操作是同步的，也就是说，一旦 read(2) 或者 write(2) 完成，数据可以保证传输完毕。</p>
+<p>直接 I/O 省去了与内核缓存的复制过程，这样<font style="color:#E51508;">虽然使单次 I/O 访问效率高了，但由于没有了缓存，将导致访问 I/O 设备的操作更加频繁，而访问 I/O 设备的延迟要远高于内存间的复制的，因此需要应用自己去权衡。</font>一般的在数据库服务中，会更倾向于建立自己的缓存机制，因为它们往往比操作系统更了解磁盘中存放的数据，从而可以提供一种更加有效的缓存机制来提高数据库中数据的存取性能。</p>
+<h4 id="1-4-内存映射IO"><a href="#1-4-内存映射IO" class="headerlink" title="1.4. 内存映射IO"></a>1.4. 内存映射IO</h4><p>操作系统一般都会采用虚拟内存（参考笔记：<a href="https://shanhm1991.github.io/2018/02/02/20180202/">计算机 存储系统</a>），比如对于32位操作系统，应用进程可以拥有3G的空间，但是对于同时存在的进程，如何让每个进程都感觉自己拥有整个的内存空间，而且互相不影响呢？其实<font style="color:#E51508;">每个进程都有自己的内存映射表，维护着虚地址与内存物理地址的映射关系，进程在实际运行时，可能只需对少部分地址进行映射，即只占用实际物理内存的一部分，这样对于CPU而言，当发生进程切换时，只需要切换进程对应的地址映射表，就能访问到对应的进程空间了</font>。</p>
+<p>内存映射就是走的<font style="color:#E51508;">虚拟内存方式</font>，而不再像上面一样先打开文件然后再进行读写了。其过程是先建立磁盘文件地址与进程虚拟内存的映射，然后访问文件就相当于访问内存，当然真正访问时还要通过 MMU 将逻辑地址转换成物理地址，如果 MMU 在地址映射表中无法找到对应的物理地址，将产生一个缺页中断，然后将尝试从 swap 中寻找对应的页面，如果还找不到则根据前面建立的映射关系从磁盘读取。但是之后的读写就完全是对内存的操作了，而对应的修改会触发脏页回写，从而保证数据更新到磁盘。</p>
 <p>对应的，Linux提供了相关的系统调用：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 建立映射</span></span><br><span class="line"><span class="comment"> * addr：指定映射的起始地址, 通常设为NULL, 由系统指定</span></span><br><span class="line"><span class="comment"> * len： 映射到内存的文件长度</span></span><br><span class="line"><span class="comment"> * prot：映射区的保护方式</span></span><br><span class="line"><span class="comment"> *       PROT_EXEC: 映射区可被执行</span></span><br><span class="line"><span class="comment"> *       PROT_READ: 映射区可被读取</span></span><br><span class="line"><span class="comment"> *       PROT_WRITE: 映射区可被写入</span></span><br><span class="line"><span class="comment"> * flags：映射区的特性</span></span><br><span class="line"><span class="comment"> *        MAP_SHARED：写入映射区的数据会复制回文件, 且允许其他映射该文件的进程共享</span></span><br><span class="line"><span class="comment"> *        MAP_PRIVATE：对映射区的写入操作会产生一个映射区的复制(copy-on-write), 对此区域所做的修改不会写回原文件</span></span><br><span class="line"><span class="comment"> * fd：   由open返回的文件描述符，代表要映射的文件</span></span><br><span class="line"><span class="comment"> * offset：以文件开始处的偏移量，必须是分页大小的整数倍，通常为0，表示从文件头开始映射</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">mmap</span> <span class="params">( <span class="keyword">void</span> * addr , <span class="keyword">size_t</span> len , <span class="keyword">int</span> prot , <span class="keyword">int</span> flags ,<span class="keyword">int</span> fd , <span class="keyword">off_t</span> offset )</span></span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 解除映射，成功返回0，否则返回－1</span></span><br><span class="line"><span class="comment"> * start：指向的映射内存</span></span><br><span class="line"><span class="comment"> * length：表示欲取消的内存大小</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *start,<span class="keyword">size_t</span> length)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<h4 id="命令：iostat"><a href="#命令：iostat" class="headerlink" title="命令：iostat"></a>命令：iostat</h4><p>Linux上可以通过命令<code>iostat</code>来系统设备的IO负载情况，其首次运行时显示自系统启动开始的各项统计信息，之后的运行将显示自上次运行该命令以后的统计信息。
-一般用来查看磁盘的活动统计情况，但是它只能对系统的整体情况进行分析，而不能针对某个进程分析（可以通过命令<code>iotop</code>）。</p>
+<h4 id="命令：iostat"><a href="#命令：iostat" class="headerlink" title="命令：iostat"></a>命令：iostat</h4><p>Linux上可以通过命令<code>iostat</code>来系统设备的IO负载情况，其首次运行时显示自系统启动开始的各项统计信息，之后的运行将显示自上次运行该命令以后的统计信息。一般用来查看磁盘的活动统计情况，但是它只能对系统的整体情况进行分析，而不能针对某个进程分析（可以通过命令<code>iotop</code>）。</p>
 <p>示例：</p>
 <figure class="highlight java"><figcaption><span class="caption">root@ubuntu:~# iostat -p -x</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Linux <span class="number">4.4</span><span class="number">.0</span>-<span class="number">62</span>-generic (ubuntu) 	<span class="number">06</span>/<span class="number">18</span>/<span class="number">2021</span> 	_x86_64_	(<span class="number">4</span> CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           <span class="number">0.06</span>    <span class="number">0.00</span>    <span class="number">0.10</span>    <span class="number">0.01</span>    <span class="number">0.00</span>   <span class="number">99.84</span></span><br><span class="line"></span><br><span class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">sda               <span class="number">0.00</span>     <span class="number">0.44</span>    <span class="number">0.28</span>    <span class="number">0.34</span>     <span class="number">2.67</span>     <span class="number">8.16</span>    <span class="number">34.95</span>     <span class="number">0.00</span>    <span class="number">1.20</span>    <span class="number">0.31</span>    <span class="number">1.96</span>   <span class="number">0.45</span>   <span class="number">0.03</span></span><br><span class="line">sda1              <span class="number">0.00</span>     <span class="number">0.44</span>    <span class="number">0.28</span>    <span class="number">0.34</span>     <span class="number">2.66</span>     <span class="number">8.16</span>    <span class="number">34.93</span>     <span class="number">0.00</span>    <span class="number">1.21</span>    <span class="number">0.31</span>    <span class="number">1.96</span>   <span class="number">0.45</span>   <span class="number">0.03</span></span><br><span class="line">sda2              <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">2.00</span>     <span class="number">0.00</span>    <span class="number">2.00</span>    <span class="number">2.00</span>    <span class="number">0.00</span>   <span class="number">2.00</span>   <span class="number">0.00</span></span><br><span class="line">sda5              <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.01</span>     <span class="number">0.00</span>    <span class="number">88.16</span>     <span class="number">0.00</span>    <span class="number">0.72</span>    <span class="number">0.72</span>    <span class="number">0.00</span>   <span class="number">0.24</span>   <span class="number">0.00</span></span><br></pre></td></tr></table></figure>
-
 <p>%user：  CPU处在用户模式下的时间百分比<br>%nice：  CPU处在带NICE值的用户模式下的时间百分比<br>%system：CPU处在系统模式下的时间百分比<br>%iowait：CPU等待输入输出完成时间的百分比<br>%steal： 管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比<br>%idle：  CPU空闲时间百分比     </p>
-<p>Device：    监测设备名称<br>rrqm/s：    每秒需要读取需求的数量<br>wrqm/s：    每秒需要写入需求的数量<br>r/s：     每秒实际读取需求的数量<br>w/s：     每秒实际写入需求的数量<br>rsec/s：    每秒读取区段的数量<br>wsec/s：    每秒写入区段的数量<br>rkB/s：    每秒实际读取的大小，单位为KB<br>wkB/s：    每秒实际写入的大小，单位为KB<br>avgrq-sz：    平均每次设备I/O操作的数据大小<br><font style="color:#E51508;">avgqu-sz</font>：    平均I/O等待队列长度<br>await：    平均每次设备I/O操作的等待时间 (毫秒)<br><font style="color:#E51508;">svctm</font>：    平均每次设备I/O操作的服务时间 (毫秒)<br>%util：    被I/O需求消耗的CPU百分比     </p>
-<p><code>await</code>就是应用进程每次等待I/O操作的时间，一般取决于服务时间<code>svctm</code>以及I/O队列的长度<code>avgqu-sz</code>和I/O请求的发出模式。如果是操作时间<code>svctm</code>过长，一般跟磁盘的性能有关，
-可以考虑更换更快的磁盘。如果<code>avgqu-sz</code>过高，说明I/O负荷较重，但由于它是算的平均值，不能反映瞬间的I/O洪水。</p>
-<h3 id="2-网络I-O"><a href="#2-网络I-O" class="headerlink" title="2. 网络I/O"></a>2. 网络I/O</h3><p>对于网络 I/O，由于网络上数据分组到达的延时比较高，因此主要考虑的是如何降低网络延迟对应用进程的阻塞影响。<br>在具体讨论之前，需要先搞清楚同步和阻塞的概念：</p>
+<p>Device：    监测设备名称<br>rrqm/s：    每秒需要读取需求的数量<br>wrqm/s：    每秒需要写入需求的数量<br>r/s：     每秒实际读取需求的数量<br>w/s：     每秒实际写入需求的数量<br>rsec/s：    每秒读取区段的数量<br>wsec/s：    每秒写入区段的数量<br>rkB/s：    每秒实际读取的大小，单位为KB<br>wkB/s：    每秒实际写入的大小，单位为KB<br>avgrq-sz：    平均每次设备I/O操作的数据大小      </p>
+<p><font style="color:#E51508;">avgqu-sz</font>：    平均I/O等待队列长度<br>await：    平均每次设备I/O操作的等待时间 (毫秒)     </p>
+<p><font style="color:#E51508;">svctm</font>：    平均每次设备I/O操作的服务时间 (毫秒)<br>%util：    被I/O需求消耗的CPU百分比     </p>
+<p><code>await</code>就是应用进程每次等待I/O操作的时间，一般取决于服务时间<code>svctm</code>以及I/O队列的长度<code>avgqu-sz</code>和I/O请求的发出模式。如果是操作时间<code>svctm</code>过长，一般跟磁盘的性能有关，可以考虑更换更快的磁盘。如果<code>avgqu-sz</code>过高，说明I/O负荷较重，但由于它是算的平均值，不能反映瞬间的I/O洪水。</p>
+<h3 id="2-网络I-O"><a href="#2-网络I-O" class="headerlink" title="2. 网络I/O"></a>2. 网络I/O</h3><p>对于网络 I/O，由于网络上数据分组到达的延时比较高，因此主要考虑的是如何降低网络延迟对应用进程的阻塞影响。      </p>
+<p>在具体讨论之前，需要先搞清楚同步和阻塞的概念：</p>
 <ul>
-<li><p><font style="font-weight:bold; color:#E51508;">同步与异步</font>：描述的是用户线程的处理方式，同步指用户线程发起IO请求后需要等待或者轮询，直到内核 I/O 操作完成后才能继续执行；
-而异步是指用户线程发起 I/O 请求后仍然继续执行，当内核 I/O 操作完成后会通知用户线程，或者调用用户线程注册的回调函数。</p>
+<li><p><font style="font-weight:bold; color:#E51508;">同步与异步</font>：描述的是用户线程的处理方式，同步指用户线程发起IO请求后需要等待或者轮询，直到内核 I/O 操作完成后才能继续执行；而异步是指用户线程发起 I/O 请求后仍然继续执行，当内核 I/O 操作完成后会通知用户线程，或者调用用户线程注册的回调函数。</p>
 </li>
-<li><p><font style="font-weight:bold; color:#E51508;">阻塞与非阻塞</font>：描述是内核 I/O 的处理方式，阻塞是内核等待 I/O 操作需要彻底完成后才返回；
-而非阻塞是指 I/O 操作被调用后立即返回给用户一个状态值，无需等到 I/O 操作彻底完成。</p>
+<li><p><font style="font-weight:bold; color:#E51508;">阻塞与非阻塞</font>：描述是内核 I/O 的处理方式，阻塞是内核等待 I/O 操作需要彻底完成后才返回；而非阻塞是指 I/O 操作被调用后立即返回给用户一个状态值，无需等到 I/O 操作彻底完成。</p>
 </li>
 </ul>
 <p><font style="color:#E51508;">对于网络 I/O 操作，可以抽象成对 Socket 流的读写，分为两个阶段：</font></p>
@@ -201,12 +171,10 @@ write(2), data is guaranteed to have been transferred.  </p>
 <p>其优点是可以及时返回数据，无延迟，而且实现简单，而缺点则是进程一直处于阻塞等待，程序性能较低。</p>
 <h4 id="2-2-非阻塞IO"><a href="#2-2-非阻塞IO" class="headerlink" title="2.2. 非阻塞IO"></a>2.2. 非阻塞IO</h4><p>即内核在进程发出调用后会立即响应一个状态，但这个状态可能是数据还没准备好，因此需要进程自己处理轮询检测状态。   </p>
 <p>其优点是进程可以在等待期间去做一些其它事情，而缺点是数据接收可能有延迟。</p>
-<h4 id="2-3-多路复用IO"><a href="#2-3-多路复用IO" class="headerlink" title="2.3. 多路复用IO"></a>2.3. 多路复用IO</h4><p>这种方式<font style="color:#E51508;">相当于内核为进程提供了一个状态的轮询服务，进程将对应的socket流注册到轮询服务，这样由操作系统统一负责对多个sockect进行轮询</font>。站在进程的角度，这种方式依然是阻塞的，
-区别在于之前是直接阻塞在socket上，而现在是阻塞在轮询服务上。这样的方式可以节约计算机资源，因为进程可以用一个线程来同时服务多个socket请求了。</p>
+<h4 id="2-3-多路复用IO"><a href="#2-3-多路复用IO" class="headerlink" title="2.3. 多路复用IO"></a>2.3. 多路复用IO</h4><p>这种方式<font style="color:#E51508;">相当于内核为进程提供了一个状态的轮询服务，进程将对应的socket流注册到轮询服务，这样由操作系统统一负责对多个sockect进行轮询</font>。站在进程的角度，这种方式依然是阻塞的，区别在于之前是直接阻塞在socket上，而现在是阻塞在轮询服务上。这样的方式可以节约计算机资源，因为进程可以用一个线程来同时服务多个socket请求了。</p>
 <p>具体的，Linux提供了三种轮询服务：</p>
 <ul>
-<li><p><font style="font-weight:bold; color:red;">select</font>：select系统调用允许程序同时在多个底层文件描述符上，等待输入的到达或输出完成。它以数组的形式组织文件描述符（64位机器默认2048个），
-当有数据准备好时，无法感知具体是哪个流OK了，所以需要一个一个的遍历，函数的时间复杂度为O(n)。</p>
+<li><p><font style="font-weight:bold; color:red;">select</font>：select系统调用允许程序同时在多个底层文件描述符上，等待输入的到达或输出完成。它以数组的形式组织文件描述符（64位机器默认2048个），当有数据准备好时，无法感知具体是哪个流OK了，所以需要一个一个的遍历，函数的时间复杂度为O(n)。</p>
 </li>
 <li><p><font style="font-weight:bold; color:red;">poll</font>：本质与select相同，只是以链表形式存储文件描述符，没有长度限制，时间复杂度也是O(n)。</p>
 </li>
@@ -219,7 +187,6 @@ write(2), data is guaranteed to have been transferred.  </p>
 <p>其在整个阶段都是非阻塞的，直接由内核完成后通知进程。</p>
 <h3 id="3-Linux零拷贝-sendfile"><a href="#3-Linux零拷贝-sendfile" class="headerlink" title="3. Linux零拷贝 sendfile"></a>3. Linux零拷贝 sendfile</h3><p>sendfile 系统调用在内核 2.1 引入，它可以直接在文件描述符与Socket描述符之间传递数据，即直接在内核中操作，从而避免了在内核区与用户区之间的拷贝，因此被称为零拷贝。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendfile(socket, file, len);</span><br></pre></td></tr></table></figure>
-
 <p>其流程大概如下：</p>
 <ol>
 <li><p>sendfile系统调用，文件数据被copy至内核缓冲区</p>
@@ -229,8 +196,7 @@ write(2), data is guaranteed to have been transferred.  </p>
 <li><p>最后再从socket缓冲区copy到协议引擎</p>
 </li>
 </ol>
-<p>内核在 2.4 之后，文件描述符结构被改变，引入了 gather机制， sendfile 实现了更简单的方式，当文件数据被拷贝到内核缓冲区时，不再将数据 copy 到 socket 缓冲区，
-而是只将记录数据位置和长度相关的数据保存到 socket 缓存，而实际的数据则由 DMA 模块直接发送到协议引擎，再次省去了一次 copy 操作。</p>
+<p>内核在 2.4 之后，文件描述符结构被改变，引入了 gather机制， sendfile 实现了更简单的方式，当文件数据被拷贝到内核缓冲区时，不再将数据 copy 到 socket 缓冲区，而是只将记录数据位置和长度相关的数据保存到 socket 缓存，而实际的数据则由 DMA 模块直接发送到协议引擎，再次省去了一次 copy 操作。</p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《计算机组成原理》</li>
@@ -275,24 +241,7 @@ write(2), data is guaranteed to have been transferred.  </p>
   </div>
 
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -373,5 +322,20 @@ write(2), data is guaranteed to have been transferred.  </p>
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

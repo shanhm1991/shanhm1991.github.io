@@ -86,7 +86,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-   <font style="color: #999;"> words: 476  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 455  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
    
    
   
@@ -109,8 +109,7 @@
       
         <p>结论：ubuntu本身不支持用yum来管理软件安装的，是自己无知</p>
 <a id="more"></a>
-
-<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>一开始是想把windows桌面上的文件拖到xshell登录的ubuntu的目录中，但是没成功，参考<a href="https://blog.csdn.net/liuao107329/article/details/49994935" target="_blank" rel="noopener">https://blog.csdn.net/liuao107329/article/details/49994935</a><br>要先安装下lrasz软件，并且作者好心地直接贴出了命令：<code>yum -y install lrasz</code>，于是我也这么干了，但是：</p>
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>一开始是想把windows桌面上的文件拖到xshell登录的ubuntu的目录中，但是没成功，<br>参考：<a href="https://blog.csdn.net/liuao107329/article/details/49994935" target="_blank" rel="noopener">https://blog.csdn.net/liuao107329/article/details/49994935</a> ，要先安装下lrasz软件：<code>yum -y install lrasz</code>，但是：</p>
 <p><img src="/img/20180518/20180518.1.png" alt=""> </p>
 <p>提示意思应该是没有可用的仓库，确认下确实是没有</p>
 <p><img src="/img/20180518/20180518.2.png" alt=""> </p>
@@ -124,10 +123,9 @@
 <p><img src="/img/20180518/20180518.6.png" alt=""> </p>
 <p>其实本来看到404，一直以为自己编辑的文件有问题，搞了很久后来找到一个别人写的很完整的下载过来，单还是不行，<br>后来参考<a href="http://www.opstool.com/article/294" target="_blank" rel="noopener">http://www.opstool.com/article/294</a> ，发现yum要获取当前系统的发行版本，但是它从ubuntu中获取不到，就是下面这个releasever</p>
 <p><img src="/img/20180518/20180518.7.png" alt=""> </p>
-<p>对于正常的CentOS系统。执行yum whatprovides redhat-release可以系统的发行版本，但我是ubuntu..</p>
+<p>对于正常的CentOS系统。执行<code>yum whatprovides redhat-release</code>可以系统的发行版本，但我是ubuntu..</p>
 <p><img src="/img/20180518/20180518.8.png" alt=""> </p>
-<p>最后看到这篇<a href="https://blog.csdn.net/luke_wang/article/details/71512530" target="_blank" rel="noopener">https://blog.csdn.net/luke_wang/article/details/71512530</a> ，终于释然了，这个问题只是ubuntu不支持yum而已，linux的各个发行版本是有分派的，
-难怪上面下载的repo文件名上看到centos字眼，人家是给centos用的啊。所以总结是ubuntu装软件apt管理就行了，而在centos上是用yum比较合适。</p>
+<p>最后看到这篇<a href="https://blog.csdn.net/luke_wang/article/details/71512530" target="_blank" rel="noopener">https://blog.csdn.net/luke_wang/article/details/71512530</a> ，终于释然了，这个问题只是ubuntu不支持yum而已，linux的各个发行版本是有分派的，难怪上面下载的repo文件名上看到centos字眼，人家是给centos用的啊。所以总结是ubuntu装软件apt管理就行了，而在centos上是用yum比较合适。</p>
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li><a href="https://blog.csdn.net/liuao107329/article/details/49994935" target="_blank" rel="noopener">https://blog.csdn.net/liuao107329/article/details/49994935</a></li>
@@ -169,24 +167,7 @@
 
         
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -267,5 +248,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

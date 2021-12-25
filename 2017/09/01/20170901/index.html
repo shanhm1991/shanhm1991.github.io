@@ -6,11 +6,8 @@
   <title>Java Exception | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
-java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离。     
-
-另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。java使用异常来提供统一的错误报告模型，使得构件能够与客户端代码可靠的沟通问题。
-其目的在于通过少数代码来简化大型、可靠的程序的生成，并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。">
+  <meta name="description" content="发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，希望通过某种方式，让错误源能够传递给适当的接收者，该接收者知道如何正确地处理这个问题，java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离。
+另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。可以通过异常建立供统一的错误报告模型，使得构件能够与客户端代码可靠地沟通，最终目的在于通过少数代码来简化大型、可靠程序的生成，并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -116,14 +113,8 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <font color="#E51508">
-发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，希望通过某种方式，让错误源能够将适当的接收者，该接收者知道如何正确地处理这个问题。因此，
-java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离。</font>     
-
-<p>另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。java使用异常来提供统一的错误报告模型，使得构件能够与客户端代码可靠的沟通问题。
-其目的在于通过少数代码来简化大型、可靠的程序的生成，并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。 </p>
-<a id="more"></a>
-
+        <p>发现错误的理想时机是在编译阶段，即在运行程序之前。然而，编译期间并不能找出所有的错误，有些问题只能在运行期间解决。那么，希望通过某种方式，让错误源能够传递给适当的接收者，该接收者知道如何正确地处理这个问题，<font color="#E51508">java中异常处理的一个重要目标就是把错误处理的代码与错误发生的位置相分离</font>。</p>
+<p>另外，java的主要目标之一就是创建供他人使用的程序构件，要想创建健壮的系统，其每一个构件都必须是健壮的。可以通过异常建立供统一的错误报告模型，使得构件能够与客户端代码可靠地沟通，最终目的在于通过少数代码来简化大型、可靠程序的生成，并且通过这种方式可以使你更加自信，即程序中没有未处理的错误。<br><a id="more"></a></p>
 <h3 id="1-异常分类"><a href="#1-异常分类" class="headerlink" title="1. 异常分类"></a>1. 异常分类</h3><p><img src="/img/20170901/20170901.1.jpg" alt=""></p>
 <p><code>Throwable</code>为所有异常的超类，可以分为两组：<code>Error</code>表示编译时或系统错误，其不能被程序员通过代码处理；<code>Exception</code>是可以被抛出的异常，可以被Java异常处理机制使用，所以通常更加一些关注。</p>
 <ul>
@@ -133,61 +124,53 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
 <ul>
 <li>检查异常：</li>
 </ul>
-<p>对于其它的<code>Exception</code>，编译器强制要求做一些预备处理工作，可以使用try-catch捕获处理，或者用throws声明抛出，否则编译不通过。这样的异常一般由于程序的运行环境导致。<br>与非检查异常的区别在于，通常情况下检查异常在运行时可以在不干预的情况下自行恢复，而非检查异常则不可能自行恢复，当然也可以使用try-catch作相关处理进行恢复，但不建议尝试从Error错误中恢复程序。</p>
+<p>对于其它的<code>Exception</code>，编译器强制要求做一些预备处理工作，可以使用try-catch捕获处理，或者用throws声明抛出，否则编译不通过。这样的异常一般由于程序的运行环境导致。      </p>
+<p>与非检查异常的区别在于，通常情况下检查异常在运行时可以在不干预的情况下自行恢复，而非检查异常则不可能自行恢复，当然也可以使用try-catch作相关处理进行恢复，但不建议尝试从Error错误中恢复程序。</p>
 <ul>
 <li><strong>ClassNotFoundException</strong>与<strong>NoClassDefFoundError</strong></li>
 </ul>
-<p>ClassNotFoundException与NoClassDefFoundError的区别如同检查异常与非检查异常，ClassNotFoundException一般发生在尝试动态加载类的情况下，比如反射Class.forName，这时可能找不到指定名称的类，因此编译器要求作预备处理，
-实现者可以自行决策加载不到类时如何处理，这种情况一般可以通过改变程序本身之外的条件来恢复。
-发生NoClassDefFoundError是因为类在编译的时候是存在的（已经加载过了），但是运行的时候却找不到了，可能是编译完成之后又删除了依赖的class所致。<br>概括起来，加载阶段时从外部存储找不到需要的class时就会出现ClassNotFoundException，而连接阶段从内存找不到需要的class时就会出现NoClassDefFoundError，前者可以调整外部存储来恢复，而后者则不行。</p>
+<p>ClassNotFoundException与NoClassDefFoundError的区别如同检查异常与非检查异常，ClassNotFoundException一般发生在尝试动态加载类的情况下，比如反射Class.forName，这时可能找不到指定名称的类，因此编译器要求作预备处理，实现者可以自行决策加载不到类时如何处理，这种情况一般可以通过改变程序本身之外的条件来恢复。</p>
+<p>发生NoClassDefFoundError是因为类在编译的时候是存在的（已经加载过了），但是运行的时候却找不到了，可能是编译完成之后又删除了依赖的class所致。     </p>
+<p>概括起来，即加载阶段时从外部存储找不到需要的class时就会出现ClassNotFoundException，而连接阶段从内存找不到需要的class时就会出现NoClassDefFoundError，前者可以调整外部存储来恢复，而后者则不行。</p>
 <ul>
 <li><strong>InterruptedException</strong></li>
 </ul>
 <p>InterruptedException一般用于线程取消通知，这在多线程协作时非常有用，详细内容可以参考笔记：<a href="https://shanhm1991.github.io/2019/01/06/20190106/#2-%E4%B8%AD%E6%96%AD">任务的取消与关闭-中断</a></p>
 <h3 id="2-异常处理"><a href="#2-异常处理" class="headerlink" title="2. 异常处理"></a>2. 异常处理</h3><p>关于异常处理很简单：使用try-catch-finally捕获处理，或者通过throws进行声明。不过如果想妥善的处理好异常，最好遵从一些通用的原则，以下摘自《Effective Java》中的一些处理建议：</p>
-<ol>
-<li>只针对不正常的情况才使用异常</li>
-</ol>
-<p>异常机制的设计初衷就是用于应对不正常的情况，所以很少有JVM会试图对它们进行性能优化。也就是说，把代码放在try-catch中返将阻止JVM对要执行的代码的优化，因此会降低运行性能。</p>
-<ol start="2">
+<ul>
+<li><p>只针对不正常的情况才使用异常，异常机制的设计初衷就是用于应对不正常的情况，所以很少有JVM会试图对它们进行性能优化。也就是说，把代码放在try-catch中返将阻止JVM对要执行的代码的优化，因此会降低运行性能。</p>
+</li>
 <li><p>对于可恢复的条件错误使用检查型异常，对于程序错误使用运行时异常</p>
 </li>
-<li><p>避免不必要的使用被检查的异常</p>
+<li><p>避免不必要的使用被检查的异常，过分使用被检查异常会使API用起来非常不方便，如果一个方法抛出被检查的异常，那么调用方必须catch或者throws声明抛出。无论怎样都给调用方增加了不可忽略的负担。适用于”检查型异常”应该满足两个条件：即使正确使用API也不能阻止异常发生；如果产生异常，调用方能够进行处理。</p>
 </li>
-</ol>
-<p>过分使用被检查异常会使API用起来非常不方便，如果一个方法抛出被检查的异常，那么调用方必须catch或者throws声明抛出。无论怎样都给调用方增加了不可忽略的负担。<br>适用于”检查型异常”应该满足两个条件：即使正确使用API也不能阻止异常发生；如果产生异常，调用方能够进行处理。</p>
-<ol start="4">
-<li>尽量使用标准的异常</li>
-</ol>
-<p>首先，代码重用，这样能让程序的可读性更好，以及让API更易于学习和使用；另外，异常类越少，意味着内存占用越小，转载这些类的时间开销也就越小。</p>
-<ol start="5">
-<li>抛出的异常要适合于相应的抽象</li>
-</ol>
-<p>如果一个方法抛出的异常与它执行的任务没有明显的关联关系，这种情形会让人不知所措。当一个方法传递一个由低层抽象抛出的异常时，往往会发生这种情况。这种情况发生时，不仅让人困惑，而且也”污染”了高层API。<br>为了避免这个问题，高层实现应该捕获低层的异常，同时抛出一个可以按照高层抽象进行介绍的异常，这种做法称为”异常转译(exception translation)”。</p>
+<li><p>尽量使用标准的异常，首先，代码重用，这样能让程序的可读性更好，以及让API更易于学习和使用；另外，异常类越少，意味着内存占用越小，转载这些类的时间开销也就越小。</p>
+</li>
+<li><p>抛出的异常要适合于相应的抽象，如果一个方法抛出的异常与它执行的任务没有明显的关联关系，这种情形会让人不知所措。当一个方法传递一个由低层抽象抛出的异常时，往往会发生这种情况。这种情况发生时，不仅让人困惑，而且也”污染”了高层API。为了避免这个问题，高层实现应该捕获低层的异常，同时抛出一个可以按照高层抽象进行介绍的异常，这种做法称为”异常转译(exception translation)”。</p>
+</li>
+</ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> listIterator(index).next();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchElementException exc) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span>+index);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="6">
+<ul>
 <li>每个方法抛出的异常都应该有文档</li>
-</ol>
+</ul>
 <p>要单独声明被检查的异常，并利用Javadoc的@throws标记，准确地记录下每个异常被抛出的条件。    如果一个类中的许多方法处于同样的原因而抛出同一个异常，那么在该类的文档注释中对这个异常做文档，而不是为每个方法单独做文档。</p>
-<ol start="7">
-<li><p>在细节消息中包含失败 – 捕获消息</p>
+<ul>
+<li><p>在细节消息中包含失败 — 捕获消息</p>
 </li>
 <li><p>努力使失败保持原子性</p>
 </li>
-</ol>
+</ul>
 <p>一个失败的方法调用应该使对象保持在”它在被调用之前的状态”，就是说既然方法调用失败了，那就不用改变对象状态了。通常的做法是，在改变对象状态之前，进行条件检测，如果失败则提前异常返回。 </p>
-<ol start="9">
+<ul>
 <li>不要忽略异常</li>
-</ol>
-<p>不要捕获了异常而什么事情也不做，如果不知道如果处理则应该声明抛出，通常只有在知道如何处理异常的的情况下才可以捕获。如果异常事实上不用处理，也应该日志记录一下异常信息。<br>有时，我们可能会遇到一些检查异常，不知道如何处理，但又不能忽略，同时也不想声明抛给调用者，那么一种做法是将其转化为运行时异常，
-即捕获异常后，抛出一个运行时异常，并在构造时带上异常信息。<br>通常在业务中，会在处理流程中选择一些节点，在这些节点中统一进行异常捕获处理，而在具体的处理中则直接向上声明抛出，以便保持代码结构清晰。</p>
+</ul>
+<p>不要捕获了异常而什么事情也不做，如果不知道如果处理则应该声明抛出，通常只有在知道如何处理异常的的情况下才可以捕获。如果异常事实上不用处理，也应该日志记录一下异常信息。      </p>
+<p>有时，我们可能会遇到一些检查异常，不知道如何处理，但又不能忽略，同时也不想声明抛给调用者，那么一种做法是将其转化为运行时异常，即捕获异常后，抛出一个运行时异常，并在构造时带上异常信息。    </p>
+<p>通常在业务中，会在处理流程中选择一些节点，在这些节点中统一进行异常捕获处理，而在具体的处理中则直接向上声明抛出，以便保持代码结构清晰。</p>
 <p><strong>注意fianlly</strong></p>
 <p>java的异常实现也是有缺陷的：<font color="#E51508">如果在finally中抛出异常，则可能造成异常丢失。fianlly应该仅仅用来释放资源最合适，不要在其中做一些其它的事情，尤其不要抛出异常或者进行return。</font></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun1</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"fun1"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun2</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException(<span class="string">"fun2"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, IOException</span>&#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		fun1();</span><br><span class="line">	&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">		fun2();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>比如上面的代码，调用者将丢失原本想捕获的fun1的异常，原因在于方法返回或抛出时，都会覆盖方法栈顶的值，而方法最后退出时只能返回一个栈顶的值。
-可以从字节码层面分析，具体参考相关笔记：<a href="https://shanhm1991.github.io/2017/08/19/20170819/#1-7-%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88">类文件结构-异常表</a></p>
+<p>比如上面的代码，调用者将丢失原本想捕获的fun1的异常，原因在于方法返回或抛出时，都会覆盖方法栈顶的值，而方法最后退出时只能返回一个栈顶的值。可以从字节码层面分析，具体参考相关笔记：<a href="https://shanhm1991.github.io/2017/08/19/20170819/#1-7-%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88">类文件结构-异常表</a></p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《Java编程思想》</li>
@@ -232,24 +215,7 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
   </div>
 
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style ">
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-
-    
-	
-    
-	
-    
-
-    <a class="addthis_counter addthis_pill_style"></a>
-	
-  </div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
- 		        
+         		        
       
       <div class="clearfix"></div>
     </footer>
@@ -330,5 +296,20 @@ java中异常处理的一个重要目标就是把错误处理的代码与错误�
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
