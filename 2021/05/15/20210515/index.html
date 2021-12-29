@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>算法 堆排序 &amp; PriorityQueue | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="有些场景中，并不一定要求所有元素有序，而只需知道其中最大或最小的K个元素，比如在优先队列中，只要每次获取的是元素中最大或最小的即可，于是有人想到了用树形数据结构来组织数据，这里称为堆。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="算法 堆排序 &amp; PriorityQueue"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">心怀热爱，不问终点，凛冬散尽，星河长明</span>
+  <h2><font style="color: #999;">articles:  100 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20210515" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-05-14T16:00:00.000Z"><a href="/2021/05/15/20210515/">2021-05-15</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        算法 堆排序 &amp; PriorityQueue
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 1.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 8min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/算法设计/">算法设计</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/PriorityQueue/">PriorityQueue</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>有些场景中，并不一定要求所有元素有序，而只需知道其中最大或最小的K个元素，比如在优先队列中，只要每次获取的是元素中最大或最小的即可，于是有人想到了用树形数据结构来组织数据，这里称为堆。<br><a id="more"></a></p>
+<h3 id="1-二叉堆"><a href="#1-二叉堆" class="headerlink" title="1. 二叉堆"></a>1. 二叉堆</h3><blockquote>
+<p>二叉堆定义：当一颗二叉树中的每个节点都不小于它的子节点时，就称其为堆有序；</p>
+</blockquote>
+<p>比如对于给定的数组：[5,2,10,7,6,3,8,4]，可以将其表示成二叉堆，那么其一定是一颗<font color="#E51508">完全二叉树</font>：</p>
+<p><img src="/img/20210515/20210515.1.jpg" alt=""></p>
+<p>这样如果<font color="#E51508">将数组中元素的位置与堆中的节点对应</font>，那么对于任意位置 k 的元素，则有：<br>父结点位置为：(k-1)/2<br>左子节点位置为：2k + 1<br>右子节点位置为：2k + 2</p>
+<p>但我们目标是希望将其转化为有序堆，根据比较关系分为大根堆或者小根堆</p>
+<p><img src="/img/20210515/20210515.2.jpg" alt=""></p>
+<h4 id="1-1-插入"><a href="#1-1-插入" class="headerlink" title="1.1. 插入"></a>1.1. 插入</h4><p>类似于二叉查找树，也是从末尾树叶插入，然后由树叶向上进行比较交换，即上浮操作</p>
+<p><img src="/img/20210515/20210515.3.jpg" alt=""></p>
+<p>这样如果插入的末尾位置为 k，那么我们可以如下对其进行调整</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(k &gt; <span class="number">0</span> &amp;&amp; comp(array, (k-<span class="number">1</span>)/<span class="number">2</span>, k) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">    swap(array, (k-<span class="number">1</span>)/<span class="number">2</span>, k);</span><br><span class="line">    k = (k-<span class="number">1</span>)/<span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="1-2-删除"><a href="#1-2-删除" class="headerlink" title="1.2. 删除"></a>1.2. 删除</h4><p>同样类似于二叉查找树，可以先将对顶与树叶对换，将删除操作转化为对树叶的删除，然后由堆顶向下进行比较交换，即下沉操作</p>
+<p><img src="/img/20210515/20210515.4.jpg" alt=""></p>
+<p>那么在对换删除之后，对堆顶的下沉操作可以表示如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> parent = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> child; </span><br><span class="line"><span class="keyword">while</span>((child = <span class="number">2</span> * parent + <span class="number">1</span>)  &lt; length)&#123;</span><br><span class="line">    <span class="keyword">if</span> (child + <span class="number">1</span> &lt; length &amp;&amp; comp(array, child, child + <span class="number">1</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        child++;    <span class="comment">// 从左右子节点中选取一个较大值</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (comp(array, parent, child) &gt; <span class="number">0</span>)&#123; </span><br><span class="line">        <span class="keyword">break</span>;     <span class="comment">// 如果父结点已经不小于左右子节点，则结束</span></span><br><span class="line">    &#125;</span><br><span class="line">            </span><br><span class="line">    swap(array, parent, child);  <span class="comment">// 父节点下沉，子节点上浮</span></span><br><span class="line">    parent = child;              <span class="comment">// 继续向下比较  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-转化"><a href="#1-3-转化" class="headerlink" title="1.3. 转化"></a>1.3. 转化</h4><p>有时对于任意给定的数组，我们希望将其初始化为有序堆，那么思路是从下到上，从右向左，对每个非叶子节点进行遍历，将小节点下沉，大节点上浮</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = length / <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--) &#123; </span><br><span class="line">    fix(array, i, length);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fix</span><span class="params">(Object[] array, <span class="keyword">int</span> parent, <span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> child; </span><br><span class="line">    <span class="keyword">while</span> ((child = <span class="number">2</span> * parent + <span class="number">1</span>)  &lt; length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (child + <span class="number">1</span> &lt; length &amp;&amp; comp(array, child, child + <span class="number">1</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            child++;   </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (comp(array, parent, child) &gt; <span class="number">0</span>)&#123; </span><br><span class="line">            <span class="keyword">break</span>;      </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        swap(array, parent, child); </span><br><span class="line">        parent = child;           </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="1-4-复杂度分析"><a href="#1-4-复杂度分析" class="headerlink" title="1.4. 复杂度分析"></a>1.4. 复杂度分析</h4><p>对于 插入 和 删除，最坏的情况就是一直从堆顶交换到树叶，而由于堆是一颗完全二叉树，所以其复杂度都不超过 $\log_{2} {n}$</p>
+<p>对于转换操作，最差的情况就是从下到上每个非叶子都需要与两个字节点进行比较并一直下沉到树叶位置</p>
+<p>这样假设节点数为 $n$ 的堆（完全二叉树）高度为 $h$，那么在第 $k$ 层，最多有 $2^{k-1}$ 个节点，每个节点最多向下移动 $h-k$ 次，而每次移动对应 $2$ 次比较操作，那么 $k$ 层节点累计所需的比较次数应该是：$S_k=\sum^{h-1}_{k=1}{2^{k-1} \times 2 \times (h-k)}=\sum^{h-1}_{k=1}{2^k \times (h-k)}$ </p>
+<p>于是表达式展开为： $\:\:\: S_k=2(h-1) + 2^2(h-2) + 2^3(h-3) + … + 2^{h-1} \times 1$</p>
+<p>再将表达式乘2则有：$2S_k=\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\: 2^2(h-1) + 2^3(h-2) + … + 2^{h-1} \times 2 + 2^h \times 1$</p>
+<p>令两式相减，得：$\:\:\:\:\:\:\:\: S_k=-2(h-1) + (2^2 + 2^3 + … + 2^{h-1}) + 2^h=-2(h-1) + 2^{h+1} - 4=2^{h+1}-2h-2$</p>
+<p>又因为高度为 $h$ 的堆对应的节点数 $n$ 不超过 $2^h-1$，所以有：$n \leq 2^h-1 &lt; 2^h$</p>
+<p>因此，$S_k=2^{h+1}-2h-2 &gt; 2^{h+1} &gt; 2n \in O(n)$</p>
+<h3 id="2-示例"><a href="#2-示例" class="headerlink" title="2. 示例"></a>2. 示例</h3><p>下面用数组尝试实现一个容量固定的优先级队列<code>LimitPriorityQueue</code>，支持基本的<code>put</code>和<code>take</code>操作</p>
+<p>考虑到数组实现，如果像上面一样每次插入删除都转化为对叶子节点的操作，那么免不了要进行一些移动操作（删除堆顶之后整体需要向前挪一位，方便下一次进行插入），所以想到添加一个索引<code>head</code></p>
+<p>这样让<code>head</code>始终指向当前堆顶，如果删除堆顶，直接<code>head++</code>，而添加元素时，如果<code>head &gt; 0</code>，就将其放到<code>--head</code>位置，然后再对以<code>head</code>为起点，<code>size</code>为终点的子数组进行堆排序操作即可，这样就省去了可能的数组移动操作，但代价是增加了每次堆调整过程的操作</p>
+<p><img src="/img/20210515/20210515.5.jpg" alt=""></p>
+<figure class="highlight java"><figcaption><span class="caption">LimitPriorityQueue</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LimitPriorityQueue</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;? <span class="title">super</span> <span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Comparator&lt;? <span class="keyword">super</span> T&gt; comp; <span class="comment">// 比较器</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Object[] array; <span class="comment">// 元素数组</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> head; <span class="comment">// head 左边为无效数据，take操作会导致head右移一位</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size; <span class="comment">// 元素个数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LimitPriorityQueue</span><span class="params">(<span class="keyword">int</span> capacity, Comparator&lt;? <span class="keyword">super</span> T&gt; comp)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.comp = comp;</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Object[capacity + <span class="number">1</span>]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LimitPriorityQueue</span><span class="params">(<span class="keyword">int</span> capacity, List&lt;T&gt; list, Comparator&lt;? <span class="keyword">super</span> T&gt; comp)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.comp = comp;</span><br><span class="line">        <span class="keyword">this</span>.array = <span class="keyword">new</span> Object[capacity + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        Object[] arr = list.toArray(); </span><br><span class="line">        reset(arr, arr.length, <span class="number">0</span>);</span><br><span class="line">        size = capacity &gt; list.size() ? list.size() : capacity;</span><br><span class="line">        System.arraycopy(arr, <span class="number">0</span>, array, <span class="number">0</span>, size);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">reset</span><span class="params">(Object[] array, <span class="keyword">int</span> length, <span class="keyword">int</span> head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = length / <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--) &#123; </span><br><span class="line">            fix(array, i, length, head);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fix</span><span class="params">(Object[] array, <span class="keyword">int</span> parent, <span class="keyword">int</span> length, <span class="keyword">int</span> head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> child; </span><br><span class="line">        <span class="keyword">while</span> ((child = <span class="number">2</span> * parent + <span class="number">1</span>)  &lt; length) &#123;</span><br><span class="line">            <span class="keyword">if</span> (child + <span class="number">1</span> &lt; length &amp;&amp; comp(array, child + head, child + head + <span class="number">1</span>, comp) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                child++;    </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (comp(array, parent + head, child + head, comp) &gt; <span class="number">0</span>)&#123; </span><br><span class="line">                <span class="keyword">break</span>;      </span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            swap(array, parent + head, child + head); </span><br><span class="line">            parent = child;             </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (T)(array[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">take</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(size == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        T t = (T)(array[head]);</span><br><span class="line">        head++;</span><br><span class="line">        size--;</span><br><span class="line">        <span class="keyword">if</span>(size == <span class="number">0</span>)&#123;</span><br><span class="line">            head = <span class="number">0</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            reset(array, size, head);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="number">0</span>)&#123;</span><br><span class="line">            array[size] = t;</span><br><span class="line">            reset(array, size + <span class="number">1</span>, head);</span><br><span class="line">            <span class="keyword">if</span>(size &lt; array.length - <span class="number">1</span>)&#123;</span><br><span class="line">                size++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            array[--head] = t;</span><br><span class="line">            size++;</span><br><span class="line">            reset(array, size, head);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = head; i &lt; head + size; i++)&#123;</span><br><span class="line">            System.out.print(array[i] + <span class="string">", "</span>); </span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(Object[] array, <span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        Object t = array[a];</span><br><span class="line">        array[a] = array[b];</span><br><span class="line">        array[b] = t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">comp</span><span class="params">(Object[] array, <span class="keyword">int</span> a, <span class="keyword">int</span> b, Comparator comp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(comp != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> comp.compare(array[a], array[b]);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> ((Comparable)array[a]).compareTo(array[b]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-应用-PriorityQueue"><a href="#3-应用-PriorityQueue" class="headerlink" title="3. 应用 PriorityQueue"></a>3. 应用 PriorityQueue</h3><p>堆排序在Java中最典型的应用便是优先级队列<code>PriorityQueue</code>，它也是基于数组实现的，但是它的数组是可扩容的，这样就可以将插入删除操作都放在队尾进行。<br>新增时先增加到对尾，然后再进行上浮操作，就算新增时发现即将造成数组越界，那么对数组进行扩容即可；<br>删除时先将队首和队尾互换，转换为对队尾的删除，然后再对队首（堆顶）进行下沉操作；<br>这样就保证了堆顶的位置永远在数组头部，并且将插入删除过程中的操作降到了最低，而代价只是在必要时对数组进行一下扩容操作。</p>
+<p>至于扩容的规则则类似于 <code>ArrayList</code>：如果数组长度小于64，直接扩为2倍，否则扩容为1.5倍；</p>
+<p>在<code>PriorityQueue</code>的基础上，还有可阻塞、线程安全版的<code>PriorityBlockingQueue</code>；以及<code>DelayQueue</code>，其获取操作在阻塞的基础上又增加了一个等待时间的限制；类似的，定时任务执行器<code>ScheduledThreadPoolExecutor</code>也是基于一个内部<code>DelayedWorkQueue</code>来实现的。</p>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li>《算法》</li>
+<li><a href="https://www.cnblogs.com/jingmoxukong/p/4303826.html" target="_blank" rel="noopener">https://www.cnblogs.com/jingmoxukong/p/4303826.html</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/341249538" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/341249538</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2021/05/26/20210526/">
+		    算法 TopK问题
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2021/05/06/20210506/">
+		    算法 关于排序
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/算法设计/">算法设计</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/PriorityQueue/">PriorityQueue</a>
+  </div>
+
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-二叉堆"><span class="toc-text">1. 二叉堆</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-插入"><span class="toc-text">1.1. 插入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-删除"><span class="toc-text">1.2. 删除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-转化"><span class="toc-text">1.3. 转化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-复杂度分析"><span class="toc-text">1.4. 复杂度分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-示例"><span class="toc-text">2. 示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-应用-PriorityQueue"><span class="toc-text">3. 应用 PriorityQueue</span></a></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2021 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
