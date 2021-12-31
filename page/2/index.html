@@ -87,18 +87,16 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <a id="more"></a>
-<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p><br><strong>参考：</strong></p>
-<ol>
-<li>《算法》</li>
-<li><a href="https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/solution/tu-jie-top-k-wen-ti-de-liang-chong-jie-fa-you-lie-/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/solution/tu-jie-top-k-wen-ti-de-liang-chong-jie-fa-you-lie-/</a></li>
-</ol>
-
+        <p>这里考虑一个具体问题：有大约40万个数字(数字范围：0～200000000000000），数字没有重复，求这些数字中，最大的100个数字之和<br>
       
     </div>
 	
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2021/05/26/20210526/#more" class="more-link">more</a>
+          </div>
         
         
       
@@ -141,7 +139,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>有些场景中，并不一定要求所有元素有序，而只需知道其中最大或最小的K个元素，比如在优先队列中，只要每次获取的是元素中最大或最小的即可，于是有人想到了用树形数据结构来组织数据，这里称为堆。<br>
+        <p>在有些场景中，并不一定要求所有元素有序，而只需知道其中最大或最小的 K 个元素，比如在优先级队列中，只要每次都能获取到队列中最大或最小的的元素即可，于是有人想到了利用树的形式来组织数据，这里称为堆。<br>
       
     </div>
 	
@@ -193,7 +191,9 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>排序即将一组对象按照某种逻辑顺序重新排列的过程，通常，整理数据的第一步就是进行排序，在早期时代，大家普遍认为30%的计算周期都用在了排序上，如今这个比例降低了，可能的原因之一是如今的排序算法更加高效，而并非排序的重要性降低了。<br>
+        <p>排序即将一组对象按照某种逻辑顺序重新排列的过程，通常，整理数据的第一步就是进行排序，因此它是后面很多其它算法和数据结构的基础。在计算机早期年代，据说大约有30%的计算周期都花在了排序操作上，如今这个比例有所降低，并非排序的重要性降低了，而是前辈们不懈的研究，使得如今的排序算法更加高效。</p>
+<p>在不同的场景下选择合适的排序算法其实是很重要的，比如下面是使用文章中的几种排序策略对同样的1000个随机数进行排序的结果，可以看出来差距还是比较大的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT         comp=<span class="number">511566</span>  swap=<span class="number">251579</span>  cost=<span class="number">16355</span>ms</span><br><span class="line">INSERT         comp=<span class="number">252594</span>  wap=<span class="number">251584</span>   cost=<span class="number">16449</span>ms</span><br><span class="line">INSERT_BINARY  comp=<span class="number">14294</span>   move=<span class="number">1011</span>    cost=<span class="number">111</span>ms</span><br><span class="line">INSERT_XIER    comp=<span class="number">13576</span>   swap=<span class="number">8453</span>    cost=<span class="number">578</span>ms</span><br><span class="line">MERGE          comp=<span class="number">9413</span>    swap=<span class="number">0</span>       cost=<span class="number">68</span>ms</span><br><span class="line">QUICK          comp=<span class="number">15391</span>   swap=<span class="number">2225</span>    cost=<span class="number">191</span>ms</span><br><span class="line">QUICK2         comp=<span class="number">13857</span>   swap=<span class="number">13853</span>   cost=<span class="number">905</span>ms</span><br></pre></td></tr></table></figure>
       
     </div>
 	
