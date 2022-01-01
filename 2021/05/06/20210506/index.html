@@ -7,7 +7,7 @@
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="排序即将一组对象按照某种逻辑顺序重新排列的过程，通常，整理数据的第一步就是进行排序，因此它是后面很多其它算法和数据结构的基础。在计算机早期年代，据说大约有30%的计算周期都花在了排序操作上，如今这个比例有所降低，并非排序的重要性降低了，而是前辈们不懈的研究，使得如今的排序算法更加高效。
-在不同的场景下选择合适的排序算法其实是很重要的，比如下面是使用文章中的几种排序策略对同样的1000个随机数进行排序的结果，可以看出来差距还是比较大的
+在不同的场景下选择合适的排序算法其实是很重要的，比如下面是使用文中的几种排序策略对同样的1000个随机数进行排序的结果，可以看出来差距还是比较大的
 1234567SELECT         comp=511566  swap=251579  cost=16355msINSERT         comp=252594  wap=251584   cost=16449msINSERT_BINARY  comp=14294   move=1011    cost=111msINSERT_XIER    comp=13576   swap=8453    cost=578msMERGE          comp=9413    swap=0       cost=68msQUICK          comp=15391   swap=2225    cost=191msQUICK2         comp=13857   swap=13853   cost=905ms">
   
   
@@ -90,7 +90,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 4.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 20min</font>
+   <font style="color: #999;"> words: 5.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 23min</font>
    
    
   
@@ -112,7 +112,7 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <p>排序即将一组对象按照某种逻辑顺序重新排列的过程，通常，整理数据的第一步就是进行排序，因此它是后面很多其它算法和数据结构的基础。在计算机早期年代，据说大约有30%的计算周期都花在了排序操作上，如今这个比例有所降低，并非排序的重要性降低了，而是前辈们不懈的研究，使得如今的排序算法更加高效。</p>
-<p>在不同的场景下选择合适的排序算法其实是很重要的，比如下面是使用文章中的几种排序策略对同样的1000个随机数进行排序的结果，可以看出来差距还是比较大的</p>
+<p>在不同的场景下选择合适的排序算法其实是很重要的，比如下面是使用文中的几种排序策略对同样的1000个随机数进行排序的结果，可以看出来差距还是比较大的</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT         comp=<span class="number">511566</span>  swap=<span class="number">251579</span>  cost=<span class="number">16355</span>ms</span><br><span class="line">INSERT         comp=<span class="number">252594</span>  wap=<span class="number">251584</span>   cost=<span class="number">16449</span>ms</span><br><span class="line">INSERT_BINARY  comp=<span class="number">14294</span>   move=<span class="number">1011</span>    cost=<span class="number">111</span>ms</span><br><span class="line">INSERT_XIER    comp=<span class="number">13576</span>   swap=<span class="number">8453</span>    cost=<span class="number">578</span>ms</span><br><span class="line">MERGE          comp=<span class="number">9413</span>    swap=<span class="number">0</span>       cost=<span class="number">68</span>ms</span><br><span class="line">QUICK          comp=<span class="number">15391</span>   swap=<span class="number">2225</span>    cost=<span class="number">191</span>ms</span><br><span class="line">QUICK2         comp=<span class="number">13857</span>   swap=<span class="number">13853</span>   cost=<span class="number">905</span>ms</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>为了方便说明和比较各种排序算法，这里先设计一个排序工具类<code>Sorts</code>，其提供对<code>List</code>进行排序的接口，同时支持对排序策略的选择，还可以通过给定比较器<code>Comparator</code>来设置排序的顺序</p>
@@ -120,7 +120,7 @@
 <p>然后在内部定义两个统一的操作，即比较<code>comp</code>和交换<code>swap</code>，这样方便查看排序的过程，以及比较各个排序算法的复杂度</p>
 <figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/Echo/blob/master/src/main/java/io/github/echo/algorithms/</span><span class="caption">Sorts.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">comp</span><span class="params">(Object[] array, <span class="keyword">int</span> a, <span class="keyword">int</span> b, Comparator comp)</span> </span>&#123;</span><br><span class="line">    times_compare++;</span><br><span class="line">    LOGGER.debug(String.format(<span class="string">"%60s %2s comp：%2s&lt;&gt;%2s ([%2s]&lt;&gt;[%2s])"</span>, <span class="string">" "</span>, times_compare, array[a], array[b], a, b)); </span><br><span class="line">    <span class="keyword">if</span>(comp != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> comp.compare(array[a], array[b]);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ((Comparable)array[a]).compareTo(array[b]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(Object[] array, <span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    Object t = array[a];</span><br><span class="line">    array[a] = array[b];</span><br><span class="line">    array[b] = t;</span><br><span class="line">    times_swap++;</span><br><span class="line">    LOGGER.debug(String.format(<span class="string">"%2s swap： %2s&lt;&gt;%2s ([%2s]&lt;&gt;[%2s]) = %s"</span>, times_swap, array[b], array[a], a, b, Arrays.toString(array))); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>下面构造一个<code>List[5, 2, 10, 7, 6, 3, 8, 4]</code>，然后分别使用不同的排序算法来对其进行排序和复杂度分析比较 </p>
-<h4 id="1-选择排序"><a href="#1-选择排序" class="headerlink" title="1. 选择排序"></a>1. 选择排序</h4><p>选择排序是一种很容易理解和简单的一种排序：即每次从剩下的元素中找出最小的元素进行排定</p>
+<h4 id="1-选择排序"><a href="#1-选择排序" class="headerlink" title="1. 选择排序"></a>1. 选择排序</h4><p>选择排序是很容易理解和简单的一种排序：即每次从剩下的元素中找出最小的元素进行排定</p>
 <figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/Echo/blob/master/src/main/java/io/github/echo/algorithms/</span><span class="caption">Sorts.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort_select</span><span class="params">(Object[] array, Comparator comp)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; array.length; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(comp(array, i, j, comp) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                swap(array, i ,j);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>.<font color="gray">这里写的冒泡实现，思路是一样的，只是没有用一个临时变量来记录最小值，区别就是交换次数偏多，但比较次数一样</font></p>
 <p><img src="/img/20210506/20210506.1.jpg" alt=""></p>
@@ -182,9 +182,55 @@
 <p>而在一些实际应用场景中，可能会存在大量重复的元素，这时如果使用标准快速排序，那么每次还是只选定一个切分元素将数组切分为两部分，但是如果能<font color="#E51508">以切分元素为界，将数组分为小于、等于、大于三部分，那么就可以降低下一次递归子数组的长度，也就降低了后续切分和比较的次数</font>，称为三向切分的快速排序。</p>
 <p>其思路是从两侧将元素向中间靠，通过巧妙的设计三个索引<code>lt</code>,<code>i</code>,<code>gt</code>，其中<code>lt</code>是切分元素，<code>i</code>则是下一个要比较的元素<br>对于左端元素，如果小于切分元素就进行位置对调，<br>对于右端元素，每次比较前先与<code>i</code>交换位置，然后与<code>i</code>位置比较，如果等于直接将<code>i</code>右移一位，接着再对新的右端元素进行同样的操作 </p>
 <p>这样就保证<code>i</code>位置就是切分元素，而且与其重复的元素都在左侧附近，并以<code>lt</code>和<code>gt</code>为左右边界</p>
-<p>.<font color="gray">书中的示例有些问题，并不能正确排序，不过如果能看明白作者的意图，可以修正一下。另外，需要知道三向切分能提升性能的前提是数组中存在大量重复元素，因为其降低切分和比较次的背后，是以提高交换次数为代价的。</font></p>
+<p>.<font color="gray">《算法》一书中的这个示例应该是有些问题，并不能正确排序，不过如果能看明白作者的意图，可以修正一下。另外，需要知道三向切分能提升性能的前提是数组中存在大量重复元素，因为其降低切分和比较次的背后，是以提高交换次数为代价的。</font></p>
 <figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/Echo/blob/master/src/main/java/io/github/echo/algorithms/</span><span class="caption">Sorts.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort_quick2</span><span class="params">(Object[] array, Comparator comp)</span> </span>&#123;</span><br><span class="line">    recursion_partition2(array, <span class="number">0</span>, array.length - <span class="number">1</span>, comp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">recursion_partition2</span><span class="params">(Object[] array, <span class="keyword">int</span> low, <span class="keyword">int</span> high, Comparator comp)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(high &lt;= low)&#123; <span class="comment">// high - low &lt;= 8 改为插入排序</span></span><br><span class="line">        <span class="keyword">return</span>; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> lt = low, i = low + <span class="number">1</span>, gt = high;</span><br><span class="line">    <span class="keyword">while</span>(i &lt;= gt)&#123;</span><br><span class="line">        <span class="keyword">int</span> cmp = comp(array, i, lt, comp);</span><br><span class="line">        <span class="keyword">if</span>(cmp &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            swap(array, lt++, i++);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(cmp &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            swap(array, i, gt--);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    recursion_partition2(array, low, lt - <span class="number">1</span>, comp);</span><br><span class="line">    recursion_partition2(array, gt + <span class="number">1</span>, high, comp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对于标准的快速排序，随着数组规模的增大其运行时间会趋于平均运行时间，大幅偏离的情况非常罕见，因此可以肯定三向切分快速排序的运行时间与输入信息量 N 是成正比的。在实际应用中这个性质很重要，因为对于包含大量重复元素的数组，它将排序时间从线性对数级降低到了线性级别。</p>
+<h3 id="关于空间复杂度"><a href="#关于空间复杂度" class="headerlink" title="关于空间复杂度"></a>关于空间复杂度</h3><p>上面的讨论只是站在时间复杂度的问题上对各种排序算法进行了分析，但在实际应用中还有一个需要考虑的问题就是空间复杂度，即内存使用</p>
+<p>java最重要的特性之一就是其内存分配系统，它的目标就是希望将开发者从对内存的操作之中解脱出来。而基本思路就通过对象来封装数据，并在对象头中记录一些额外的信息，比如类引用、锁信息以及垃圾收集信息，然后对内存的申请或释放操作就可以以对象为单位进行。</p>
+<p>对应的java中定义了8种基本数据类型，以及一个引用类型 reference，指向一个地址</p>
+<table width=100%>
+        <tr style="border-bottom:0.01rem solid grey;">
+            <th width=15%>类型</th>
+            <th>字节</th>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td>boolean</td>
+            <td>1</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td>byte</td>
+            <td>1</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td>short</td>
+            <td>2</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td>int</td>
+            <td>4</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td>float</td>
+            <td>4</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td>long</td>
+            <td>8</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td>double</td>
+            <td>8</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td>reference</td>
+            <td>8</td>
+        </tr>
+    </table>
+
+<p>对于一个java对象，其内存消耗等于它所有实例变量使用的内存加上对象本身（对象头，一般是16字节）开销，以及对其填充（比如在64位机器上，一般会将对象的内存使用填充为8的倍数）。</p>
+<p>比如一个<code>int</code>所需的内存为4个字节，而对应的一个<code>Integer</code>则需要24个字节（数据4字节，对象头16字节，对其填充4字节）。对于一个长度为 N 的<code>int</code>数组，其所需的内存为 24 + 4N（数组对象头为24字节，需要额外4字节存储数组长度，以及4字节的填充），而对于一个长度为 N 的<code>Integer</code>数组则需要 24 + 32N 字节（数组对象头开销24字节，每个<code>Integer</code>元素24字节，以及引用消耗8字节）</p>
+<p>一般在设计一个通用的容器或者排序工具时，会选择使用泛型，而java中对于泛型是通过在编译时进行简单的类型擦除和强制转换来实现的，这就导致了其无法支持基本数据类型（因为基本类型与<code>Object</code>之间无法强制转换），不过java通过实现基本类型的自动装箱拆箱操作来解决了这个问题，但是这样的代价就是消耗更多的内存。</p>
+<p>所以，java在为开发者提供便利的背后其实是以性能和更大的内存消耗为代价的，当然这些都只是取舍问题，而且我们也没法站到语言设计者的高度去考虑权衡他们遇到的问题。聊到这里似乎有点跑题了，本来是想聊各个排序算法的空间复杂度问题，但是却说了半天java中的内存消耗，不过对于一个使用java作为第一开发语言的人来讲，这两者其实都是一样的问题，因为在用java实现各种算法或数据结构时，我们一般都是先将数据封装成对象，比如链表中的节点<code>Node</code>，如果要考虑内存消耗，那么就是计算其中有多少属性数据以及哪些引用。</p>
 <p><br><strong>参考：</strong></p>
 <ol>
 <li>《算法》</li>
@@ -268,7 +314,7 @@
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-选择排序"><span class="toc-text">1. 选择排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-插入排序"><span class="toc-text">2. 插入排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-希尔排序"><span class="toc-text">3. 希尔排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-归并排序"><span class="toc-text">4. 归并排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-快速排序"><span class="toc-text">5. 快速排序</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引言"><span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-选择排序"><span class="toc-text">1. 选择排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-插入排序"><span class="toc-text">2. 插入排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-希尔排序"><span class="toc-text">3. 希尔排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-归并排序"><span class="toc-text">4. 归并排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-快速排序"><span class="toc-text">5. 快速排序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于空间复杂度"><span class="toc-text">关于空间复杂度</span></a></li></ol>
 </div>
 
 
@@ -281,7 +327,7 @@
 
   
   
-      &copy; 2021 shanhm1991 
+      &copy; 2022 shanhm1991 
   
   
   
