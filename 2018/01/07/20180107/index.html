@@ -8,7 +8,11 @@
   
   <meta name="description" content="对于网络I/O通信，其实站在应用程序的角度，就是面向Socket进行读写的过程，至于如何建立连接，数据包如何传输等问题则由TCP/IP以及更底层的协议保障，这些通常由操作系统和底层硬件负责实现，它们的目的就是希望能简化应用程序的开发。
 在Linux系统中，一切皆文件，所以Socket也统一抽象为一个文件描述符，那么对应用程序来讲，收发消息就是对一个文件描述符进行读写。但是它与读写普通的本地磁盘文件也有区别，由于网络的延迟和不可靠性，在读Socket的过程中可能会有大量的时间花在等待数据包的到达上，因此如何提高应用程序在读写Socket过程中的响应性，就成了网络通信编程中一个很重要的问题。
-针对网络I/O，Linux提供了五种IO模型，具体可以参考笔记[Linux I/O模型]，不过Java并没有全部支持，而是逐步选择支持了三种模型：在JDK1.4之前，Java的IO模型只支持阻塞式IO(Blocking IO)，简称为BIO；在JDK1.4时，Java支持了I/O多路复用模型， 简称NIO，即新IO模型，不过现在JDK1.8早已成为主流版本，已经没什么新鲜了，所以更多的人愿意将它理解为非阻塞I/O，即None-Blocking IO；在JDK1.7时，Java对NIO包进行了升级，支持异步I/O(Asynchronous IO)，简称为AIO，因为是对nio包的升级，所有也称为NIO2.0；">
+针对网络I/O，Linux提供了五种IO模型，具体可以参考笔记
+
+Linux I/O模型
+
+不过Java并没有全部支持，而是逐步选择支持了三种模型：在JDK1.4之前，Java的IO模型只支持阻塞式IO(Blocking IO)，简称为BIO；在JDK1.4时，Java支持了I/O多路复用模型， 简称NIO，即新IO模型，不过现在JDK1.8早已成为主流版本，已经没什么新鲜了，所以更多的人愿意将它理解为非阻塞I/O，即None-Blocking IO；在JDK1.7时，Java对NIO包进行了升级，支持异步I/O(Asynchronous IO)，简称为AIO，因为是对nio包的升级，所有也称为NIO2.0；">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -118,7 +122,11 @@
       
         <p>对于网络I/O通信，其实站在应用程序的角度，就是面向Socket进行读写的过程，至于如何建立连接，数据包如何传输等问题则由TCP/IP以及更底层的协议保障，这些通常由操作系统和底层硬件负责实现，它们的目的就是希望能简化应用程序的开发。</p>
 <p>在Linux系统中，一切皆文件，所以Socket也统一抽象为一个文件描述符，那么对应用程序来讲，收发消息就是对一个文件描述符进行读写。但是它与读写普通的本地磁盘文件也有区别，由于网络的延迟和不可靠性，在读Socket的过程中可能会有大量的时间花在等待数据包的到达上，因此如何提高应用程序在读写Socket过程中的响应性，就成了网络通信编程中一个很重要的问题。</p>
-<p>针对网络I/O，Linux提供了五种IO模型，具体可以参考笔记[<a href="https://shanhm1991.github.io/2018/03/10/20180310/">Linux I/O模型</a>]，不过Java并没有全部支持，而是逐步选择支持了三种模型：<br>在JDK1.4之前，Java的IO模型只支持阻塞式IO(Blocking IO)，简称为BIO；<br>在JDK1.4时，Java支持了I/O多路复用模型， 简称NIO，即新IO模型，不过现在JDK1.8早已成为主流版本，已经没什么新鲜了，所以更多的人愿意将它理解为非阻塞I/O，即None-Blocking IO；<br>在JDK1.7时，Java对NIO包进行了升级，支持异步I/O(Asynchronous IO)，简称为AIO，因为是对nio包的升级，所有也称为NIO2.0；<br><a id="more"></a></p>
+<p>针对网络I/O，Linux提供了五种IO模型，具体可以参考笔记</p>
+<ul>
+<li><a href="https://shanhm1991.github.io/2018/03/10/20180310/">Linux I/O模型</a></li>
+</ul>
+<p>不过Java并没有全部支持，而是逐步选择支持了三种模型：<br>在JDK1.4之前，Java的IO模型只支持阻塞式IO(Blocking IO)，简称为BIO；<br>在JDK1.4时，Java支持了I/O多路复用模型， 简称NIO，即新IO模型，不过现在JDK1.8早已成为主流版本，已经没什么新鲜了，所以更多的人愿意将它理解为非阻塞I/O，即None-Blocking IO；<br>在JDK1.7时，Java对NIO包进行了升级，支持异步I/O(Asynchronous IO)，简称为AIO，因为是对nio包的升级，所有也称为NIO2.0；<br><a id="more"></a></p>
 <h3 id="1-Bio"><a href="#1-Bio" class="headerlink" title="1. Bio"></a>1. Bio</h3><p>最简单的办法是每建立一个连接，就创建一个连接处理线程，但这样问题是当连接数很多时，必然会耗尽服务器资源。于是好一点的做法是将连接处理丢给线程池，这样可以对使用的资源做一个限制，比如当大量连接过来时，如果线程池任务队列已满，那么可以拒绝处理。</p>
 <p>这样的处理方式是直接<font color="#E51508">面向连接</font>的，也就是一旦建立连接，服务端就创建对应的处理，并且整个过程是同步阻塞的，因此很难应付高并发场景。</p>
 <h4 id="1-1-BioClient"><a href="#1-1-BioClient" class="headerlink" title="1.1. BioClient"></a>1.1. BioClient</h4><p><code>BioClient</code>中的逻辑很简单，就是循环向指定服务发送消息，不过这里采用的短连接，客户端每次发消息都重新建立连接，发送消息后同步等待响应，然后由服务端在写回响应后负责关闭。另外，为了模拟并发场景，这里创建了多个客户端，并用了一个栅栏，尽量等到一批客户端都准备好时，再同时发起连接</p>

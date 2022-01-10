@@ -351,7 +351,7 @@
   
   
     <h1 class="title">
-       <a href="/2021/08/01/20210801/">Netty 编解码（ByteToMessageDecoder）</a>
+       <a href="/2021/08/01/20210801/">Netty Channel</a>
     </h1>
     
   
@@ -365,7 +365,15 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>todo</p>
+        <p>Netty 中的通道是对Java原生网络编程Api的封装，以TCP编程为例 ，在java中，有两种常用方式：</p>
+<ul>
+<li>基于BIO，在JDK1.4之前，可以使用 java.net 包中的<code>ServerSocket</code>/<code>Socket</code>来代表服务端和客户端;</li>
+<li>基于NIO，在Jdk1.4引入Nio之后，可以使用 java.nio.channels 包中的<code>ServerSocketChannel</code>/<code>SocketChannel</code>来代表服务端与客户端；</li>
+</ul>
+<p>在Netty中，分别进行了封装：</p>
+<ul>
+<li>使用<code>OioServerSocketChannel</code>/<code>OioSocketChannel</code>对<code>ServerSocket</code>/<code>Socket</code>进行了封装；</li>
+<li>使用<code>NioServerSocketChannel</code>/<code>NioSocketChannel</code>对<code>ServerSocketChannel</code>/<code>SocketChannel</code>进行了封装；
       
     </div>
 	
