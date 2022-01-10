@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>NIO Buffer | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="缓冲区 Buffer 是一个固定容量的数组，其作用是一个作为存储器，或者分段运输区，用于存储和检索数据。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="NIO Buffer"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
+  <h2><font style="color: #999;">articles:  102 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20210701" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-06-30T16:00:00.000Z"><a href="/2021/07/01/20210701/">2021-07-01</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        NIO Buffer
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 2.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 9min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/Java-基础/">Java 基础</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/I-O/">I/O</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>缓冲区 Buffer 是一个固定容量的数组，其作用是一个作为存储器，或者分段运输区，用于存储和检索数据。<br><a id="more"></a></p>
+<h3 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h3><p><img src="/img/20210701/20210701.1.jpg" alt=""></p>
+<p>上图是 Buffer 的类继承结构，顶部<code>Buffer</code>中定义了所有缓冲区需要实现的方法，下面列出这些方法的签名</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.Buffer</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Buffer</span> </span>&#123;</span><br><span class="line">    <span class="comment">//JDK1.4引入</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">capacity</span><span class="params">()</span></span>;              <span class="comment">// 返回此缓冲区的容量</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">position</span><span class="params">()</span></span>;              <span class="comment">// 返回此缓冲区的位置</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">position</span> <span class="params">(<span class="keyword">int</span> newPositio)</span></span>; <span class="comment">// 设置此缓冲区的位置</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">limit</span><span class="params">()</span></span>;                 <span class="comment">//返回此缓冲区的限制</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">limit</span> <span class="params">(<span class="keyword">int</span> newLimit)</span></span>; <span class="comment">//设置此缓冲区的限制</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">mark</span><span class="params">()</span></span>;               <span class="comment">//在此缓冲区的位置设置标记</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">reset</span><span class="params">()</span></span>;              <span class="comment">//将此缓冲区的位置重置为以前标记的位置</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">clear</span><span class="params">()</span></span>;              <span class="comment">//清除此缓冲区</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span></span>;               <span class="comment">//反转此缓冲区</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">rewind</span><span class="params">()</span></span>;             <span class="comment">//重绕此缓冲区</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">remaining</span><span class="params">()</span></span>;             <span class="comment">//返回当前位置与限制之间的元素数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">hasRemaining</span><span class="params">()</span></span>;      <span class="comment">//告知在当前位置和限制之间是否有元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">boolean</span> <span class="title">isReadOnly</span><span class="params">()</span></span>;     <span class="comment">//告知此缓冲区是否为只读缓冲区</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">//JDK1.6引入</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">boolean</span> <span class="title">hasArray</span><span class="params">()</span></span>; <span class="comment">// 告知此缓冲区是否具有可访问的底层实现数组</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> Object <span class="title">array</span><span class="params">()</span></span>;     <span class="comment">// 返回此缓冲区的底层实现数组</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">arrayOffset</span><span class="params">()</span></span>;  <span class="comment">// 返回此缓冲区的底层实现数组中第一个缓冲区元素的偏移量</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">boolean</span> <span class="title">isDirect</span><span class="params">()</span></span>; <span class="comment">// 告知此缓冲区是否为直接缓冲区</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实<code>Buffer</code>就是<font color="#E51508">由数据，以及操作这些数据的四个索引组成</font>，而且无论如何操作，会始终保证这些索引满足关系：<br>0 &lt;= mark &lt;= position &lt;= limit &lt;= capacity</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Buffer</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Invariants: mark &lt;= position &lt;= limit &lt;= capacity</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mark = -<span class="number">1</span>;     <span class="comment">// 自定义的标记位置，默认是0，用于记录当前position的前一个位置，一般配合reset使用</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> position = <span class="number">0</span>;  <span class="comment">// 位置，即下一个要操作的数据元素的位置</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> limit;         <span class="comment">// 界限，即缓冲区数组中不可操作的下一个元素的位置</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity;      <span class="comment">// 容量，即缓冲区数组的总长度</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>下面结合具体的读写操作，简单演示一下这些索引的变化过程</li>
+</ul>
+<p>1.首先申请缓存，通过<code>allocate() / allocateDirect()</code>，此时 <strong>position</strong> 指向开头，<strong>limit</strong> 和 <strong>capacity</strong> 则指向末尾</p>
+<p><img src="/img/20180101/20180101.3.jpg" alt=""> </p>
+<p>2.通过<code>put()</code>写入或者通过<code>read()</code>读入数据，但是如果写入的长度大于当前可用长度，则会抛出<code>BufferOverflowException</code>异常，不过可以通过<code>remaining()</code>来查看当前的剩余可用长度以避免这种情况，在写入数据之后，<strong>position</strong> 将指向写入数据的下一个位置</p>
+<p><img src="/img/20180101/20180101.4.jpg" alt=""> </p>
+<p>3.调用<code>flip()</code>，会将 <strong>position</strong> 复位为0，同时将 <strong>limit</strong> 指向 <strong>position</strong> 之前所在位置，这样 <strong>position</strong> 和 <strong>limit</strong> 之间就可读取的有效数据。另外，如果调用<code>rewind()</code>，将仅仅复位 <strong>position</strong>，而不修改 <strong>limit</strong></p>
+<p><img src="/img/20180101/20180101.5.jpg" alt=""> </p>
+<p>4.调用<code>get()</code>相关方法可以读取相应字节数的数据，比如<code>ByteBuffer.get(byte[])</code>即将数据字节读入给定的数组中，当然也可以根据数据类型进行读取，比如<code>getInt()</code>读取4个字节，读取后 <strong>position</strong> 会指向已读数据的下一位</p>
+<p><img src="/img/20180101/20180101.6.jpg" alt=""> </p>
+<p>5.由于Buffer是非阻塞的， 那么在<code>put</code>时就无法确定之前放入数据是否已经读完，这时候可以调用<code>compact()</code>，它会将 <strong>position</strong> 与 <strong>limit</strong> 之间还未读取的数据拷贝到Buffer最前面，然后将 <strong>position</strong> 指向这些数据之后的一位，并将 <strong>limit</strong> 移动至 <strong>capacity</strong>，这样 <strong>position</strong> 与 <strong>limit</strong> 之间就是已读数据或初始化数据了，从而可以安全地写入覆盖</p>
+<p><img src="/img/20180101/20180101.7.jpg" alt=""> </p>
+<p>6.当数据读完之后，可以调用<code>clear()</code>，将Buffer还原成初始状态，以便下次使用</p>
+<h4 id="ByteBuffer"><a href="#ByteBuffer" class="headerlink" title="ByteBuffer"></a>ByteBuffer</h4><p><code>Buffer</code>的实现有很多种，不过api都是相似的，这里以<code>ByteBuffer</code>为例进行说明，因为在NIO网络编程中，通道就是从ByteBuffer中读取的数据，比如在了解了上面的操作之后，对于一般的读写操作就可以如下进行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将bytes中字节写入ByteBuffer</span></span><br><span class="line">ByteBuffer buffer = ByteBuffer.allocate(<span class="number">4096</span>);</span><br><span class="line">buffer.put(bytes); <span class="comment">// byte[] bytes</span></span><br><span class="line">buffer.flip();</span><br><span class="line">channel.write(buffer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将ByteBuffer数据读取到bytes中</span></span><br><span class="line">ByteBuffer buffer = ByteBuffer.allocate(<span class="number">4096</span>);</span><br><span class="line">channel.read(buffer)</span><br><span class="line">buffer.flip();</span><br><span class="line">buffer.get(bytes); <span class="comment">// byte[] bytes</span></span><br></pre></td></tr></table></figure>
+<p>但是 Buffer 对应的七种数据类型实现都是抽象的，也就不能够直接实例化，不过它们各自提供了自己的静态工厂</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.ByteBuffer</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ByteBuffer</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 缓冲区创建</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title">allocateDirect</span><span class="params">(<span class="keyword">int</span> capacity)</span></span>; <span class="comment">// 申请堆外内存作为存储</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title">allocate</span><span class="params">(<span class="keyword">int</span> capacity)</span></span>;       <span class="comment">// 申请堆内存作为存储</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title">wrap</span><span class="params">(<span class="keyword">byte</span>[] array)</span></span>;                         <span class="comment">// 使用提供的数组作为存储</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title">wrap</span><span class="params">(<span class="keyword">byte</span>[] array, <span class="keyword">int</span> offset, <span class="keyword">int</span> length)</span></span>; <span class="comment">// 使用提供数组的指定部分作为存储</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 缓冲区存取</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">byte</span> <span class="title">get</span><span class="params">( )</span></span>;                        <span class="comment">// 从当前位置(position)上get，然后position自动+1</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">byte</span> <span class="title">get</span> <span class="params">(<span class="keyword">int</span> index)</span></span>;               <span class="comment">// 从绝对位置get</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> ByteBuffer <span class="title">put</span> <span class="params">(<span class="keyword">byte</span> b)</span></span>;            <span class="comment">// 从当前位置上put，然后position自动+1</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> ByteBuffer <span class="title">put</span> <span class="params">(<span class="keyword">int</span> index, <span class="keyword">byte</span> b)</span></span>; <span class="comment">// 从绝对位置上put</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="DirectByteBuffer"><a href="#DirectByteBuffer" class="headerlink" title="DirectByteBuffer"></a>DirectByteBuffer</h5><p>为了避免频繁的在用户空间与内核空间拷贝数据，通常会直接从内核空间中申请内存作为缓存</p>
+<p>在Java中，直接内存的申请与释放需要手动调用 Unsafe 类的<code>allocateMemory</code>和<code>freeMemory</code>，不过 DirectByteBuffer 帮我们简化了操作</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.DirectBuffer</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DirectByteBuffer</span> <span class="keyword">extends</span> <span class="title">MappedByteBuffer</span> <span class="keyword">implements</span> <span class="title">DirectBuffer</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ....</span></span><br><span class="line">	</span><br><span class="line">    DirectByteBuffer(<span class="keyword">int</span> cap) &#123;                   </span><br><span class="line">    </span><br><span class="line">        <span class="keyword">super</span>(-<span class="number">1</span>, <span class="number">0</span>, cap, cap);</span><br><span class="line">        <span class="keyword">boolean</span> pa = VM.isDirectMemoryPageAligned();</span><br><span class="line">        <span class="keyword">int</span> ps = Bits.pageSize();</span><br><span class="line">        <span class="keyword">long</span> size = Math.max(<span class="number">1L</span>, (<span class="keyword">long</span>)cap + (pa ? ps : <span class="number">0</span>)); <span class="comment">// 计算申请的内存大小</span></span><br><span class="line">        Bits.reserveMemory(size, cap);</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">long</span> base = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line marked">            base = unsafe.allocateMemory(size); <span class="comment">// 申请内存，返回首地址 </span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (OutOfMemoryError x) &#123;</span><br><span class="line">            Bits.unreserveMemory(size, cap);</span><br><span class="line">            <span class="keyword">throw</span> x;</span><br><span class="line">        &#125;</span><br><span class="line">        unsafe.setMemory(base, size, (<span class="keyword">byte</span>) <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (pa &amp;&amp; (base % ps != <span class="number">0</span>)) &#123;</span><br><span class="line">            <span class="comment">// Round up to page boundary</span></span><br><span class="line">            address = base + ps - (base &amp; (ps - <span class="number">1</span>));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            address = base;</span><br><span class="line">        &#125;</span><br><span class="line marked">        cleaner = Cleaner.create(<span class="keyword">this</span>, <span class="keyword">new</span> Deallocator(base, size, cap)); <span class="comment">//注册钩子，释放内存</span></span><br><span class="line">        att = <span class="keyword">null</span>;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，其在构造器中也是通过<code>Unsafe.allocateMemory()</code>申请的内存，然后由于其自身也一个Java对象，因此在不再使用后可以由JVM自动GC，于是注册一个钩子，在GC回收时回调释放内存操作</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.DirectBuffer</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Deallocator</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> address;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> size;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Deallocator</span><span class="params">(<span class="keyword">long</span> address, <span class="keyword">long</span> size, <span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">assert</span> (address != <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">this</span>.address = address;</span><br><span class="line">        <span class="keyword">this</span>.size = size;</span><br><span class="line">        <span class="keyword">this</span>.capacity = capacity;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (address == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// Paranoia</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line marked">        unsafe.freeMemory(address); <span class="comment">// 释放内存</span></span><br><span class="line">        address = <span class="number">0</span>;</span><br><span class="line">        Bits.unreserveMemory(size, capacity);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关于System.gc对直接内存释放的影响 </li>
+</ul>
+<p>上面在申请和释放内存时有两个操作<code>reserveMemory</code>和<code>unreserveMemory</code>，其用来记录申请的内存总量，并检查是否超过了限制</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.Bits</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">long</span> maxMemory = VM.maxDirectMemory();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> AtomicLong reservedMemory = <span class="keyword">new</span> AtomicLong();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> AtomicLong totalCapacity = <span class="keyword">new</span> AtomicLong();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> AtomicLong count = <span class="keyword">new</span> AtomicLong();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reserveMemory</span><span class="params">(<span class="keyword">long</span> size, <span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!memoryLimitSet &amp;&amp; VM.isBooted()) &#123;</span><br><span class="line">        maxMemory = VM.maxDirectMemory();</span><br><span class="line">        memoryLimitSet = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// optimist!</span></span><br><span class="line">    <span class="keyword">if</span> (tryReserveMemory(size, cap)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> JavaLangRefAccess jlra = SharedSecrets.getJavaLangRefAccess();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// retry while helping enqueue pending Reference objects</span></span><br><span class="line">    <span class="comment">// which includes executing pending Cleaner(s) which includes</span></span><br><span class="line">    <span class="comment">// Cleaner(s) that free direct buffer memory</span></span><br><span class="line">    <span class="keyword">while</span> (jlra.tryHandlePendingReference()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (tryReserveMemory(size, cap)) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line marked">    System.gc(); <span class="comment">//申请失败，即内存不够，那么先进行垃圾回收</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重试几次，每次等一段时间，如果等待超过限制后还是申请失败，则抛出内存溢出异常 </span></span><br><span class="line">    <span class="keyword">boolean</span> interrupted = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">long</span> sleepTime = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> sleeps = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (tryReserveMemory(size, cap)) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (sleeps &gt;= MAX_SLEEPS) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (!jlra.tryHandlePendingReference()) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(sleepTime);</span><br><span class="line">                    sleepTime &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">                    sleeps++;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    interrupted = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// no luck</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> OutOfMemoryError(<span class="string">"Direct buffer memory"</span>);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (interrupted) &#123;</span><br><span class="line">            <span class="comment">// don't swallow interrupts</span></span><br><span class="line">            Thread.currentThread().interrupt();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -XX:MaxDirectMemorySize限制</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">tryReserveMemory</span><span class="params">(<span class="keyword">long</span> size, <span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> totalCap;</span><br><span class="line">    <span class="keyword">while</span> (cap &lt;= maxMemory - (totalCap = totalCapacity.get())) &#123;</span><br><span class="line">        <span class="keyword">if</span> (totalCapacity.compareAndSet(totalCap, totalCap + cap)) &#123;</span><br><span class="line">            reservedMemory.addAndGet(size);</span><br><span class="line">            count.incrementAndGet();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//释放内存时，减少引用直接内存的计数</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">unreserveMemory</span><span class="params">(<span class="keyword">long</span> size, <span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> cnt = count.decrementAndGet();</span><br><span class="line">    <span class="keyword">long</span> reservedMem = reservedMemory.addAndGet(-size);</span><br><span class="line">    <span class="keyword">long</span> totalCap = totalCapacity.addAndGet(-cap);</span><br><span class="line">    <span class="keyword">assert</span> cnt &gt;= <span class="number">0</span> &amp;&amp; reservedMem &gt;= <span class="number">0</span> &amp;&amp; totalCap &gt;= <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据上面的实现，可以知道<code>Bits</code>其实就是直接内存的分配担保，当有足够的内存可以用时，直接修改计数，否则调用System.gc。</p>
+<p>虽然System.gc只会回收堆内存中的对象，但是 DirectByteBuffer 对象在回收时会触发其对应的钩子释放直接内存，这样就可以让已经使用完的DirectByteBuffer得到及时的回收，从而再次尝试时就可能申请成功。</p>
+<p>所以有的地方在讲解Nio使用的时候，建议不要禁用System.gc，因为这样更容易造成直接内存溢出。但这也不是绝对的，因为毕竟 System.gc 导致的是 FullGC，可能会暂停应用线程。因此可以根据实际情况调大直接内存的使用限制，然后禁用 System.gc 即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+DisableExplicitGC -XX:MaxDirectMemorySize&#x3D;256M</span><br></pre></td></tr></table></figure>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li><a href="http://www.tianshouzhi.com/api/tutorials/netty/315" target="_blank" rel="noopener">http://www.tianshouzhi.com/api/tutorials/netty/315</a></li>
+<li><a href="http://www.tianshouzhi.com/api/tutorials/netty/331" target="_blank" rel="noopener">http://www.tianshouzhi.com/api/tutorials/netty/331</a></li>
+<li><a href="https://blog.csdn.net/helloHuaKai/article/details/81457083" target="_blank" rel="noopener">https://blog.csdn.net/helloHuaKai/article/details/81457083</a> </li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2021/07/05/20210705/">
+		    NIO Channel &amp; Selector
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2021/05/31/20210531/">
+		    算法 雪花算法 &amp; IdGenerator
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/Java-基础/">Java 基础</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/I-O/">I/O</a>
+  </div>
+
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer"><span class="toc-text">Buffer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ByteBuffer"><span class="toc-text">ByteBuffer</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#DirectByteBuffer"><span class="toc-text">DirectByteBuffer</span></a></li></ol></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2022 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

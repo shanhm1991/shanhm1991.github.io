@@ -41,7 +41,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
-  <h2><font style="color: #999;">articles:  100 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  102 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -60,6 +60,110 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20190629" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-06-28T16:00:00.000Z"><a href="/2019/06/29/20190629/">2019-06-29</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/06/29/20190629/">借助poi解析Excel 二 SAX解决内存溢出问题</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>继续上文，Excel的数据存在Xml中，所以解析Excel也就是解析xml。对于文本文件，可以通过换行符来确定一行的结束。而对于xml，其描述数据的单位是节点，并且可以嵌套，因此读取时就是以节点结束来进行确定，不过除非事先知道xml的节点规则，即节点结构或相互之间的关系，否则无法正确读取。Excel中的Xml规则即由Excel规范来描述，而poi正是在这个规范的基础上提供了一套基于事件解析的api。<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/06/29/20190629/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20190628" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2019-06-27T16:00:00.000Z"><a href="/2019/06/28/20190628/">2019-06-28</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2019/06/28/20190628/">借助poi解析Excel 一 实现readLine读取</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>一般读取文本时会使用<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上进行了装饰，提供<code>readLine()</code>来简化文本行的读取。使得行数据的读取可以像流水线一样，每当读取完一行后，它就自动准备好下一行并等待获取，直至全部读取结束。所以这里也<font color="#E51508">希望能够在poi的基础上提供一个类似<code>readLine()</code>的接口来读取Excel，并可以比较方便地获取行数据中的字段。</font><br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2019/06/28/20190628/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20190615" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -272,117 +376,6 @@
 
 
 
-  <article id="post-20190605" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-04T16:00:00.000Z"><a href="/2019/06/05/20190605/">2019-06-05</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/06/05/20190605/">数据结构 二叉树</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>前面介绍线性数据结构时提到，如果数据本身有序，那么可以用二分法来降低查找的时间复杂度，但是在线性结构上实现二分法总有一些局限，比如链表不好定位中间元素，而数组又免不了拷贝成本。</p>
-<p>因此，有人提出了树这种结构，<font color="#E51508">树本身也是一种链式数据结构，但它巧妙地解决了链式数据只能从头或者从尾开始查找的问题，而是从中间开始向两边查找</font>。不管是下文要介绍的二叉树，还是后面的Avl树、红黑树或者B树，其<font color="#E51508">基本思想都是二分法</font>，区别只在于通过不同的规则来维持树的平衡，以便使查找的复杂度更接近于二分法。<br>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/06/05/20190605/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20190601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2019-05-31T16:00:00.000Z"><a href="/2019/06/01/20190601/">2019-06-01</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2019/06/01/20190601/">数据结构 线性结构</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>从百科中可以找到定义：数据结构即计算机存储、组织数据的方式，它的目标是反映数据元素之间的逻辑关系，其中的逻辑关系是指数据元素之间的前后关系，而与他们在计算机中的存储位置无关。</p>
-<p>常见的数据结构可以分为四种：</p>
-<ol>
-<li>集合：数据结构中的元素之间除了“同属一个集合” 的相互关系外，别无其他关系；</li>
-<li>线性结构：数据结构中的元素存在一对一的相互关系；</li>
-<li>树形结构：数据结构中的元素存在一对多的相互关系；</li>
-<li>图形结构：数据结构中的元素存在多对多的相互关系。
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2019/06/01/20190601/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
 
 <nav id="pagination">
   
@@ -415,7 +408,7 @@
   
   
   
-    <li><a href="/categories/Java-基础/">Java 基础</a><small>7</small></li>
+    <li><a href="/categories/Java-基础/">Java 基础</a><small>9</small></li>
   
   
   
@@ -873,7 +866,7 @@
   
   <div class="widget tag">
     <h3 class="title">Achives</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">11</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">2021-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">11</span></li></ul>
   </div>
 
 

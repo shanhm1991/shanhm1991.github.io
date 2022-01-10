@@ -1,0 +1,314 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>NIO Channel &amp; Selector | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="Channel 与之前的 流Stream 是差不多一个等级的，只不过 Stream 都是单向的，比如InputStream或OutputStream，而 Channel 可以是单向的，也可以是双向的，既可以同时支持读写操作，具体由其实现的接口所决定
+java.nio.channels1234567public interface ReadableByteChannel extends Channel &amp;#123;    public int read(ByteBuffer dst) throws IOException;&amp;#125; public interface WritableByteChannel extends Channel&amp;#123;    public int write(ByteBuffer src) throws IOException;&amp;#125;
+可以看到 read 和 write 方法接受的都是一个 ByteBuffer 参数，其中 read 就是 Channel 往 ByteBuffer 中 put 数据，而 write 就是 Channel 从 ByteBuffer 中 get 数据，以便发送给其他远程主机。两者均返回已传输的字节数，可能比缓冲区的字节数少甚至可能为零，缓冲区的position位置也会前移对应的字节数，如果只进行了部分传输，缓冲区可以被重新提交给通道并从上次中断的地方继续传输，该过程可以重复进行直到缓冲区的hasRemaining()方法返回 false 值。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="NIO Channel &amp; Selector"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
+  <h2><font style="color: #999;">articles:  102 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20210705" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-07-04T16:00:00.000Z"><a href="/2021/07/05/20210705/">2021-07-05</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        NIO Channel &amp; Selector
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 2.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 7min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/Java-基础/">Java 基础</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/I-O/">I/O</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Channel 与之前的 流Stream 是差不多一个等级的，只不过 Stream 都是单向的，比如<code>InputStream</code>或<code>OutputStream</code>，而 Channel 可以是单向的，也可以是双向的，既可以同时支持读写操作，具体由其实现的接口所决定</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.channels</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReadableByteChannel</span> <span class="keyword">extends</span> <span class="title">Channel</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(ByteBuffer dst)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">WritableByteChannel</span> <span class="keyword">extends</span> <span class="title">Channel</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">write</span><span class="params">(ByteBuffer src)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到 read 和 write 方法接受的都是一个 ByteBuffer 参数，其中 <font color="#E51508">read 就是 Channel 往 ByteBuffer 中 put 数据</font>，而 <font color="#E51508">write 就是 Channel 从 ByteBuffer 中 get 数据</font>，以便发送给其他远程主机。两者均返回已传输的字节数，可能比缓冲区的字节数少甚至可能为零，缓冲区的position位置也会前移对应的字节数，如果只进行了部分传输，缓冲区可以被重新提交给通道并从上次中断的地方继续传输，该过程可以重复进行直到缓冲区的<code>hasRemaining()</code>方法返回 false 值。<br><a id="more"></a></p>
+<h3 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h3><p><img src="/img/20210701/20210701.2.jpg" alt=""></p>
+<p>上图是 Channel 的类继承机构，类似于I/O的分类，通道也可以分为文件file通道，和套接字socket通道。</p>
+<h4 id="Socket-通道"><a href="#Socket-通道" class="headerlink" title="Socket 通道"></a>Socket 通道</h4><p>在 socket 通道类中，DatagramChannel 和 SocketChannel 实现读和写接口，而 ServerSocketChannel 不实现，它负责监听传入的连接和创建新的 SocketChannel 对象，本身不传输数据。</p>
+<p>它们在创建时都会创建一个对应的 socket 对象，即 Socket、 ServerSocket 和 DatagramSocket，可以通过<code>socket()</code>方法获取其关联的socket对象。反过来通过 socket 也可以通过<code>getChannel()</code>获取其对应的通道，但前提是这个socket对象必须是由通道类创建的，而不是直接<code>new</code>的。</p>
+<h5 id="ServerSocketChannel"><a href="#ServerSocketChannel" class="headerlink" title="ServerSocketChannel"></a>ServerSocketChannel</h5><p>ServerSocketChannel 是一个基于通道的 socket 监听器，其任务与 java.net.ServerSocket 相同，只是增加了通道语义，能够在非阻塞模式下运行。</p>
+<p>通过静态工厂<code>open()</code>可以创建一个新的 ServerSocketChannel 实例，但是它没有绑定端口，需要获取其对应的 ServerSocket 进行端口绑定以及一些其它一些设置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ServerSocketChannel serverChannel = ServerSocketChannel.open();</span><br><span class="line">ServerSocket serverSocket = serverChannel.socket();</span><br><span class="line">serverSocket.bind(<span class="keyword">new</span> InetSocketAddress(port));</span><br></pre></td></tr></table></figure>
+<p>如果在 ServerSocket 上调用<code>accept()</code>，那么总是阻塞直到返回一个 Socket 对象，如果在 ServerSocketChannel 上调用<code>accept()</code>，则会返回一个 SocketChannel，但它支持非阻塞模式运行，即如果没有连接接入，<code>accept()</code>会立即返回 null。</p>
+<h5 id="SocketChannel"><a href="#SocketChannel" class="headerlink" title="SocketChannel"></a>SocketChannel</h5><p>SocketChannel 作用与 Socket 一样，用于封装点对点、有序的网络连接，即 TCP/IP。它们负责发起一个到监听服务的连接，直到连接成功，才能收到数据并且只会从连接到的地址接收。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SocketChannel socketChannel = SocketChannel.open();</span><br><span class="line">socketChannel.configureBlocking(<span class="keyword">true</span>); <span class="comment">// 默认</span></span><br><span class="line">socketChannel.connect(<span class="keyword">new</span> InetSocketAddress(host, port));</span><br></pre></td></tr></table></figure>
+<p>类似的，通过静态工厂<code>open()</code>可以创建一个 SocketChannel，并且每个 SocketChannel 在创建时都会与一个 java.net.Socket 关联。只是 SocketChannel 提供了非阻塞创建连接的能力，也就是不等连接建立完成就立即返回，然后调用线程继续干别的事情，并将其注册到选择器上，然后等连接建立成功了，再进行对应的处理。</p>
+<h3 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h3><p>Selector 是NIO能提高服务并发能力的关键，它使得应用可以用单个线程来监听多个连接的事件，比如连接建立，数据到达等。它其实是操作系统提供的一个轮询服务接口，这样由操作系统统一负责对多个sockect连接进行监听。当发现有Socket准备好之后再返回应用线程，应用线程在拿到对应的 SocketChannel 后再通过 Buffer 进行数据读取和响应写回。</p>
+<ul>
+<li><strong>创建</strong></li>
+</ul>
+<p>Selector 也提供了对应的静态工厂方法<code>open()</code>来负责创建，其向 SPI 发出请求，通过默认的 SelectorProvider 获取一个新的实例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Selector selector = Selector.open( );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line"><span class="comment">// SelectorProvider provider = SelectorProvider.provider();</span></span><br><span class="line"><span class="comment">// Selector abstractSelector = provider.openSelector();</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>注册通道</strong></li>
+</ul>
+<p>通道是支持非阻塞模式的，那么就需要一种方式来知道通道在什么时候操作就绪，而方式就是将其注册到 Selector 上。</p>
+<p>要注意的是，在将通道注册到 Selector 上时，其必须处于非阻塞模式，否则将抛出 IllegalBlockingModeException 异常，并且一旦被注册，就不能再回到阻塞模式。</p>
+<p>另外，在注册时需要指定感兴趣的事件 SelectonKey，其预定义了以下4种事件</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.channels.SelectionKey</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">SelectionKey</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OP_READ = <span class="number">1</span> &lt;&lt; <span class="number">0</span>;     <span class="comment">// 读</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OP_WRITE = <span class="number">1</span> &lt;&lt; <span class="number">2</span>;    <span class="comment">// 写</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OP_CONNECT = <span class="number">1</span> &lt;&lt; <span class="number">3</span>;  <span class="comment">// 连接建立</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OP_ACCEPT = <span class="number">1</span> &lt;&lt; <span class="number">4</span>;   <span class="comment">// 接收连接</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一个通道可以被注册到多个选择器上，但对每个选择器而言，最好只注册一次。如果一个 Selector 上多次注册同一个 Channel，返回的 SelectionKey 总是同一个实例，即后面注册的感兴趣的操作类型会覆盖之前的。如果一个 channel 在不同的 selector 上注册，那么每次返回的 selectorKey 都是一个不同的实例。</p>
+<h4 id="SelectionKey"><a href="#SelectionKey" class="headerlink" title="SelectionKey"></a>SelectionKey</h4><p>SelectionKey 可以由<code>register()</code>返回，其提供了一些方法来获取注册时相关的信息</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.channels.SelectionKey</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> SelectableChannel <span class="title">channel</span><span class="params">( )</span></span>; <span class="comment">// 获取SelectionKey关联的channel</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> Selector <span class="title">selector</span><span class="params">( )</span></span>;         <span class="comment">// 获取selectionKey关联的Selector</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">interestOps</span><span class="params">( )</span></span>;  <span class="comment">// 感兴趣的操作</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">readyOps</span><span class="params">( )</span></span>;     <span class="comment">// 感兴趣的操作中，已经就绪的操作</span></span><br></pre></td></tr></table></figure>
+<p>另外提供了一些接口来检查指定的操作是否就绪，比如<code>isWritable()</code>或<code>isReadable()</code>，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (key.isWritable( )) <span class="comment">// 等价于 if ((key.readyOps( ) &amp; SelectionKey.OP_WRITE) != 0)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>选择</strong></li>
+</ul>
+<p>每一个 Selector 都维护三个键集合</p>
+<p><strong>已注册的键集合(Registered key set)：</strong>与选择器关联的已经注册的键集合，并不是所有注册过的键都仍然有效。这个集合可以通过<code>keys()</code>方法返回，并且可能是空的。但这个键集合不可以直接修改，试图这么做的话会抛出 UnsupportedOperationException 异常。</p>
+<p><strong>已选择的键的集合(Selected key set)：</strong>已注册键集合的子集，通过<code>selectedKeys()</code>方法返回，其中每个键对应的通道都被选择器（在选择时）判断为已就绪的。</p>
+<p><strong>已取消的键的集合(Cancelled key set)：</strong>已注册键集合的子集，包含了调用过<code>cancel()</code>方法的键，这些键已经被无效化，但它们还没有被注销。该集合为选择器私有，无法直接访问。</p>
+<p>对于选择操作，Selector提供了三种方式：</p>
+<figure class="highlight java"><figcaption><span class="caption">java.nio.channels.Selector</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">select</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;               <span class="comment">// 阻塞直到有通道准备就绪</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">select</span> <span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> IOException</span>;  <span class="comment">// 阻塞直到有通道准备就绪，或者超过指定时间</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">selectNow</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;            <span class="comment">// 非阻塞，立即返回</span></span><br></pre></td></tr></table></figure>
+<p><font color="#E51508">选择是累积的</font>，一旦选择器将一个键添加到它的已选择的键集合中，它就不会再移除这个键。并且，一旦一个键处于已选择的键集合中，这个键的 readyOPS 将只会被设置，而不会被清理。这样就将键的管理操作交给了开发人员，比如移除那些已处理过的键，或者重新注册。</p>
+<ul>
+<li><strong>停止选择</strong></li>
+</ul>
+<p>有三种方式可以唤醒阻塞在<code>select()</code>方法上的线程</p>
+<p><strong>wakeup()：</strong>使得选择器上的第一个还没有返回的选择操作立即返回，如果当前没有在进行中的选择，那么下一次对 select()方法的调用将立即返回，而后续的选择操作则正常进行。</p>
+<p><strong>close()：</strong>使得所有在选择操作中阻塞的线程都被唤醒，就像wakeup()方法被调用了一样。另外，与选择器相关的通道将会被注销，而键将被取消，注意<font color="#E51508">这里并没有说会关闭通道连接</font>。</p>
+<p><strong>interrupt()：</strong>即中断线程的语义，这里不再赘述。</p>
+<ul>
+<li><strong>线程安全</strong></li>
+</ul>
+<p>要注意的是，<font color="#E51508">选择器是线程安全的，但它们包含的键集合不是</font>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> Set&lt;SelectionKey&gt; selectedKeys = <span class="keyword">new</span> HashSet();                   <span class="comment">// sun.nio.ch.SelectorImpl</span></span><br><span class="line"><span class="keyword">protected</span> HashSet&lt;SelectionKey&gt; keys = <span class="keyword">new</span> HashSet();                       <span class="comment">// sun.nio.ch.SelectorImpl</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Set&lt;SelectionKey&gt; cancelledKeys = <span class="keyword">new</span> HashSet&lt;SelectionKey&gt;();<span class="comment">// java.nio.channels.spi.AbstractSelector</span></span><br></pre></td></tr></table></figure>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li><a href="http://www.tianshouzhi.com/api/tutorials/netty/316" target="_blank" rel="noopener">http://www.tianshouzhi.com/api/tutorials/netty/316</a></li>
+<li><a href="http://www.tianshouzhi.com/api/tutorials/netty/318" target="_blank" rel="noopener">http://www.tianshouzhi.com/api/tutorials/netty/318</a></li>
+<li><a href="https://stackoverflow.com/questions/24543675/does-selector-close-closes-all-client-sockets" target="_blank" rel="noopener">https://stackoverflow.com/questions/24543675/does-selector-close-closes-all-client-sockets</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2021/08/01/20210801/">
+		    Netty 编解码（ByteToMessageDecoder）
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2021/07/01/20210701/">
+		    NIO Buffer
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/Java-基础/">Java 基础</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/I-O/">I/O</a>
+  </div>
+
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Channel"><span class="toc-text">Channel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Socket-通道"><span class="toc-text">Socket 通道</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ServerSocketChannel"><span class="toc-text">ServerSocketChannel</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#SocketChannel"><span class="toc-text">SocketChannel</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Selector"><span class="toc-text">Selector</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SelectionKey"><span class="toc-text">SelectionKey</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2022 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
