@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Netty Reactor线程模型（NioEventLoop &amp; NioEventLoopGroup） | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="在Java中，任务执行的主要抽象不是Thread，而是Executor，它提供了一种标准的方式将任务的提交过程与执行过程解耦开来，为灵活而强大的异步任务执行框架提供了基础，线程池ThreadPoolExecutor便是在此基础上实现的一套异步执行框架。
+Netty也在Executor的基础上自定义实现了一套任务执行框架，本文尝试从I/O事件执行器NioEventLoopGroup作为切入点对其进行一些分析。建议在分析Netty中的线程机制之前先对Java中原生的任务执行框架有所了解，可以参考笔记：
+
+《Java并发编程实战》 任务的执行
+《Java并发编程实战》 任务的取消">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Netty Reactor线程模型（NioEventLoop &amp; NioEventLoopGroup）"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
+  <h2><font style="color: #999;">articles:  103 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20210805" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-08-04T16:00:00.000Z"><a href="/2021/08/05/20210805/">2021-08-05</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        Netty Reactor线程模型（NioEventLoop &amp; NioEventLoopGroup）
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 1.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/Netty/">Netty</a>
+  </div>
+
+
+   
+   
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>在Java中，任务执行的主要抽象不是<code>Thread</code>，而是<code>Executor</code>，它提供了一种标准的方式将任务的提交过程与执行过程解耦开来，为灵活而强大的异步任务执行框架提供了基础，线程池<code>ThreadPoolExecutor</code>便是在此基础上实现的一套异步执行框架。</p>
+<p>Netty也在<code>Executor</code>的基础上自定义实现了一套任务执行框架，本文尝试从I/O事件执行器<code>NioEventLoopGroup</code>作为切入点对其进行一些分析。建议在分析Netty中的线程机制之前先对Java中原生的任务执行框架有所了解，可以参考笔记：</p>
+<ul>
+<li><a href="https://shanhm1991.github.io/2019/01/05/20190105/">《Java并发编程实战》 任务的执行</a></li>
+<li><a href="https://shanhm1991.github.io/2019/01/06/20190106/">《Java并发编程实战》 任务的取消</a><a id="more"></a>
+</li>
+</ul>
+<h3 id="类继承结构"><a href="#类继承结构" class="headerlink" title="类继承结构"></a>类继承结构</h3><p><img src="/img/20210805/20210805.1.jpg" alt=""></p>
+<p>从结构上看，右边执行器其实是左边执行器的一个装饰器，它的任务是负责管理持有的子执行器的生命周期（即创建和关闭），以及给它们分配要执行任务，这样也就能理解作者起名时对右边的类都加个<code>Group</code>的用意了。这里讨论的只是<code>NioEventLoopGroup</code>和<code>NioEventLoop</code>，当然还是其他类型的执行器也可以复用这个组织结构。</p>
+<p>如下<code>AbstractEventExecutorGroup</code>中定义了如何执行任务，其实就是委托并均摊给子执行器，至于均摊逻辑由一个<code>chooser</code>负责实现，其在构造器中进行初始化</p>
+<figure class="highlight java"><figcaption><span class="caption">io.netty.util.concurrent.AbstractEventExecutorGroup</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractEventExecutorGroup</span> <span class="keyword">implements</span> <span class="title">EventExecutorGroup</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Future&lt;?&gt; submit(Runnable task) &#123;</span><br><span class="line">        <span class="keyword">return</span> next().submit(task);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">Future&lt;T&gt; <span class="title">submit</span><span class="params">(Runnable task, T result)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> next().submit(task, result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">Future&lt;T&gt; <span class="title">submit</span><span class="params">(Callable&lt;T&gt; task)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> next().submit(task);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> ScheduledFuture&lt;?&gt; schedule(Runnable command, <span class="keyword">long</span> delay, TimeUnit unit) &#123;</span><br><span class="line">        <span class="keyword">return</span> next().schedule(command, delay, unit);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;V&gt; <span class="function">ScheduledFuture&lt;V&gt; <span class="title">schedule</span><span class="params">(Callable&lt;V&gt; callable, <span class="keyword">long</span> delay, TimeUnit unit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> next().schedule(callable, delay, unit);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>&#123;</span><br><span class="line">        next().execute(command);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>MultithreadEventExecutorGroup</code>中定义了如何关闭执行器，其实就是关闭所有的子执行器，并返回一个<code>Future</code>表示关闭是否完成，其逻辑是通过一个关闭计数来判断，具体也是在构造器中进行初始化</p>
+<figure class="highlight java"><figcaption><span class="caption">io.netty.util.concurrent.MultithreadEventExecutorGroup</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">MultithreadEventExecutorGroup</span> <span class="keyword">extends</span> <span class="title">AbstractEventExecutorGroup</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Future&lt;?&gt; shutdownGracefully(<span class="keyword">long</span> quietPeriod, <span class="keyword">long</span> timeout, TimeUnit unit) &#123;</span><br><span class="line">        <span class="keyword">for</span> (EventExecutor l: children) &#123;</span><br><span class="line">            l.shutdownGracefully(quietPeriod, timeout, unit);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> terminationFuture();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Future&lt;?&gt; terminationFuture() &#123;</span><br><span class="line">        <span class="keyword">return</span> terminationFuture;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-NioEventLoopGroup"><a href="#1-NioEventLoopGroup" class="headerlink" title="1. NioEventLoopGroup"></a>1. NioEventLoopGroup</h3><p>这里从默认的构造器作为入口，查看其初始化过程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventLoopGroup eventGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br></pre></td></tr></table></figure>
+<p>通过调用关系，会发现其具体初始化逻辑在<code>MultithreadEventExecutorGroup</code>中，这里主要做了三件事：</p>
+<ol>
+<li>创建一个执行器实例<code>executor</code>，默认会对每个任务创建一个线程；</li>
+<li>创建子执行器，这里即创建<code>nThreads</code>个<code>NioEventLoop</code>；</li>
+<li>创建选择器，其实现了具体的<code>next()</code>逻辑，定义了如何选择下一个子执行器来执行任务；</li>
+</ol>
+<figure class="highlight java"><figcaption><span class="caption">io.netty.util.concurrent.MultithreadEventExecutorGroup</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nThreads = 2 * cpu, executor = null, chooserFactory = DefaultEventExecutorChooserFactory.INSTANCE</span></span><br><span class="line"><span class="comment">// args = [SelectorProvider.provider(), DefaultSelectStrategyFactory.INSTANCE, RejectedExecutionHandlers.reject()]</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="title">MultithreadEventExecutorGroup</span><span class="params">(<span class="keyword">int</span> nThreads, Executor executor,</span></span></span><br><span class="line"><span class="function"><span class="params">                                            EventExecutorChooserFactory chooserFactory, Object... args)</span> </span>&#123;</span><br><span class="line">    checkPositive(nThreads, <span class="string">"nThreads"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (executor == <span class="keyword">null</span>) &#123;</span><br><span class="line marked">        executor = <span class="keyword">new</span> ThreadPerTaskExecutor(newDefaultThreadFactory());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    children = <span class="keyword">new</span> EventExecutor[nThreads];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nThreads; i ++) &#123;</span><br><span class="line">        <span class="keyword">boolean</span> success = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line marked">            children[i] = newChild(executor, args);</span><br><span class="line">            success = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"failed to create a child event loop"</span>, e);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!success) &#123; <span class="comment">// 如果失败则关闭前面已经创建的</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j ++) &#123;</span><br><span class="line">                    children[j].shutdownGracefully();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j ++) &#123;</span><br><span class="line">                    EventExecutor e = children[j];</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">while</span> (!e.isTerminated()) &#123;</span><br><span class="line">                            e.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException interrupted) &#123;</span><br><span class="line">                        Thread.currentThread().interrupt();</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line marked">    chooser = chooserFactory.newChooser(children);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> FutureListener&lt;Object&gt; terminationListener = <span class="keyword">new</span> FutureListener&lt;Object&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operationComplete</span><span class="params">(Future&lt;Object&gt; future)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (terminatedChildren.incrementAndGet() == children.length) &#123;</span><br><span class="line">                terminationFuture.setSuccess(<span class="keyword">null</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (EventExecutor e: children) &#123;</span><br><span class="line">        e.terminationFuture().addListener(terminationListener);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Set&lt;EventExecutor&gt; childrenSet = <span class="keyword">new</span> LinkedHashSet&lt;EventExecutor&gt;(children.length);</span><br><span class="line">    Collections.addAll(childrenSet, children);</span><br><span class="line">    readonlyChildren = Collections.unmodifiableSet(childrenSet);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="1-1-newExecutor"><a href="#1-1-newExecutor" class="headerlink" title="1.1. newExecutor"></a>1.1. newExecutor</h4><p>默认创建的执行器是在每次执行任务时都创建一个新的线程</p>
+<figure class="highlight java"><figcaption><span class="caption">io.netty.util.concurrent.ThreadPerTaskExecutor</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPerTaskExecutor</span> <span class="keyword">implements</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>&#123;</span><br><span class="line marked">        threadFactory.newThread(command).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于创建的线程由默认的线程工厂定义，这里它将任务和线程分别包装成<code>FastThreadLocalRunnable</code>和<code>FastThreadLocalThread</code>，目的是为了优化性能，这个后面写个笔记单独整理，这里先不讨论</p>
+<figure class="highlight java"><figcaption><span class="caption">io.netty.util.concurrent.DefaultThreadFactory</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable r)</span> </span>&#123;</span><br><span class="line">    Thread t = newThread(FastThreadLocalRunnable.wrap(r), prefix + nextId.incrementAndGet());</span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Thread <span class="title">newThread</span><span class="params">(Runnable r, String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> FastThreadLocalThread(threadGroup, r, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="1-2-newChild"><a href="#1-2-newChild" class="headerlink" title="1.2. newChild"></a>1.2. newChild</h4><p>第二步就是创建子执行器，对于<code>NioEventLoopGroup</code>来说就是创建<code>NioEventLoop</code>，下面会讨论</p>
+<figure class="highlight java"><figcaption><span class="caption">io.netty.channel.nio.NioEventLoopGroup</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> EventLoop <span class="title">newChild</span><span class="params">(Executor executor, Object... args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">	</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> NioEventLoop(<span class="keyword">this</span>, executor, selectorProvider,</span><br><span class="line">            selectStrategyFactory.newSelectStrategy(),</span><br><span class="line">            rejectedExecutionHandler, taskQueueFactory, tailTaskQueueFactory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-newChooser"><a href="#1-3-newChooser" class="headerlink" title="1.3. newChooser"></a>1.3. newChooser</h4><p>初始化选择器，这里分了两种情况，即总数是否为2的幂，如果是则减一然后进行与运算即可，否则只能通过取余运算</p>
+<figure class="highlight java"><figcaption><span class="caption">io.netty.util.concurrent.DefaultEventExecutorChooserFactory</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultEventExecutorChooserFactory</span> <span class="keyword">implements</span> <span class="title">EventExecutorChooserFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DefaultEventExecutorChooserFactory INSTANCE = <span class="keyword">new</span> DefaultEventExecutorChooserFactory();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">DefaultEventExecutorChooserFactory</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> EventExecutorChooser <span class="title">newChooser</span><span class="params">(EventExecutor[] executors)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isPowerOfTwo(executors.length)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> PowerOfTwoEventExecutorChooser(executors);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> GenericEventExecutorChooser(executors);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isPowerOfTwo</span><span class="params">(<span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (val &amp; -val) == val;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">PowerOfTwoEventExecutorChooser</span> <span class="keyword">implements</span> <span class="title">EventExecutorChooser</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> EventExecutor <span class="title">next</span><span class="params">()</span> </span>&#123;</span><br><span class="line marked">            <span class="keyword">return</span> executors[idx.getAndIncrement() &amp; executors.length - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericEventExecutorChooser</span> <span class="keyword">implements</span> <span class="title">EventExecutorChooser</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">        <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> EventExecutor <span class="title">next</span><span class="params">()</span> </span>&#123;</span><br><span class="line marked">            <span class="keyword">return</span> executors[(<span class="keyword">int</span>) Math.abs(idx.getAndIncrement() % executors.length)];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-NioEventLoop"><a href="#2-NioEventLoop" class="headerlink" title="2. NioEventLoop"></a>2. NioEventLoop</h3><p><br><strong>参考：</strong></p>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+	  
+	  
+		  <a class="alignright next" href="/2021/08/01/20210801/">
+		    Netty 通道（Channel）
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/Netty/">Netty</a>
+  </div>
+
+
+        
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+  
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#类继承结构"><span class="toc-text">类继承结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-NioEventLoopGroup"><span class="toc-text">1. NioEventLoopGroup</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-newExecutor"><span class="toc-text">1.1. newExecutor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-newChild"><span class="toc-text">1.2. newChild</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-newChooser"><span class="toc-text">1.3. newChooser</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-NioEventLoop"><span class="toc-text">2. NioEventLoop</span></a></li></ol>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2022 shanhm1991 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
