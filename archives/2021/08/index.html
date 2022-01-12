@@ -71,7 +71,7 @@
             <div class="icon"></div>
             <time datetime="2021-08-04T16:00:00.000Z"><a href="/2021/08/05/20210805/">2021-08-05</a></time>
             
-              <h2 class="title"><a href="/2021/08/05/20210805/">Netty Reactor线程模型（NioEventLoop &amp; NioEventLoopGroup）</a></h2>
+              <h2 class="title"><a href="/2021/08/05/20210805/">Netty NioEventLoop &amp; NioEventLoopGroup</a></h2>
             
           </header>
         </div>
@@ -83,7 +83,7 @@
             <div class="icon"></div>
             <time datetime="2021-07-31T16:00:00.000Z"><a href="/2021/08/01/20210801/">2021-08-01</a></time>
             
-              <h2 class="title"><a href="/2021/08/01/20210801/">Netty 通道（Channel）</a></h2>
+              <h2 class="title"><a href="/2021/08/01/20210801/">Netty Channel</a></h2>
             
           </header>
         </div>
@@ -617,5 +617,20 @@
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
