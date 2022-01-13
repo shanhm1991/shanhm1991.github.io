@@ -351,7 +351,7 @@
   
   
     <h1 class="title">
-       <a href="/2021/08/05/20210805/">Netty NioEventLoopGroup &amp; NioEventLoop</a>
+       <a href="/2021/08/05/20210805/">Netty EventExecutorGroup &amp; EventExecutor</a>
     </h1>
     
   
@@ -366,7 +366,7 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <p>在Java中，任务执行的主要抽象不是<code>Thread</code>，而是<code>Executor</code>，它提供了一种标准的方式将任务的提交过程与执行过程解耦开来，为灵活而强大的异步任务执行框架提供了基础，线程池<code>ThreadPoolExecutor</code>便是在此基础上实现的一套异步执行框架。</p>
-<p>Netty也在<code>Executor</code>的基础上自定义实现了一套任务执行框架，本文尝试从I/O事件执行器<code>NioEventLoopGroup</code>作为切入点对其进行一些分析。建议在分析Netty中的线程机制之前先对Java中原生的任务执行框架有所了解，可以参考笔记：</p>
+<p>Netty也在<code>Executor</code>的基础上自定义实现了一套高效能的任务执行框架，本文尝试从I/O事件执行器<code>NioEventLoopGroup</code>作为切入点对其中的部分源码做一些分析。建议在分析Netty中的线程机制之前先对Java中原生的任务执行框架有所了解，可以参考笔记：</p>
 <ul>
 <li><a href="https://shanhm1991.github.io/2019/01/05/20190105/">《Java并发编程实战》 任务的执行</a></li>
 <li><a href="https://shanhm1991.github.io/2019/01/06/20190106/">《Java并发编程实战》 任务的取消</a>
