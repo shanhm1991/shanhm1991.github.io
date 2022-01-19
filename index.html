@@ -41,7 +41,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">凛冬散尽，星河长明</span>
-  <h2><font style="color: #999;">articles:  104 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  105 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -171,20 +171,20 @@
 
 
 
-  <article id="post-20190610" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20210821" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-06-09T16:00:00.000Z"><a href="/2019/06/10/20190610/">2019-06-10</a></time>
+        <time class="dt-published" datetime="2021-08-20T16:00:00.000Z"><a href="/2021/08/21/20210821/">2021-08-21</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/06/10/20190610/">数据结构 红黑树</a>
+       <a href="/2021/08/21/20210821/">Netty NioEventLoop</a>
     </h1>
     
   
@@ -198,14 +198,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>定义：红黑树是Avl树的一个变种，它也是在二叉树的基础上添加平衡条件，只是它对平衡条件的定义不像AVl树那样直接，而是转化成对节点颜色规则的描述：</p>
-<ol>
-<li>对于任意节点，要么是红色，要么是黑色；</li>
-<li>根节点是黑色的；</li>
-<li>如果一个节点是红色的，那么它的子节点必须是黑色的（即不能有两个连续的红色节点）；</li>
-<li>任意节点到其下面各个空结点（后面称为nil节点，并约定其颜色为黑色）的路径上都包含相同数目的黑色节点（称为黑高）；</li>
-</ol>
-<p>通过对任何一条从根到空节点的路径上各个结点的颜色进行约束，红黑树可以确保没有一条路径会比其他路径长出2倍，因而红黑树是近似平衡的。<br>
+        <p>。。。<br>
       
     </div>
 	
@@ -213,115 +206,7 @@
       
         
           <div class="alignleft">
-            <a href="/2019/06/10/20190610/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180403" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-04-02T16:00:00.000Z"><a href="/2018/04/03/20180403/">2018-04-03</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/04/03/20180403/">JUC ThreadPoolExecutor</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p><code>Executor</code>是java中任务执行的主要抽象，虽然它是一个简单的接口，但却为灵活而强大的异步任务执行框架提供了基础，它提供了一种标准的方法将任务的提交过程与执行过程解耦开来。</p>
-<figure class="highlight java"><figcaption><span class="caption">java.util.concurrent.Executor</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Executor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">excute</span><span class="params">(Runnable command)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/04/03/20180403/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20180401" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2018-03-31T16:00:00.000Z"><a href="/2018/04/01/20180401/">2018-04-01</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2018/04/01/20180401/">JUC AbstractQueuedSynchronizer</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>队列同步器 AbstractQueuedSynchronizer（AQS），是用来构建锁或者其他同步组件的基础框架。它使用一个int变量来表示同步状态，通过CAS操作对同步状态进行修改，确保状态的改变是安全的。通过内置的FIFO（First In First Out）队列来完成资源获取线程的排队工作。</p>
-<p>AQS同步与synchronized同步是采用的两种不同的机制：  </p>
-<p>synchronized在编译后，会在同步块的前后分别添加monitorenter和monitorexit两个字节码指令，这两个指令需要关联一个监视对象，当线程执行monitorenter指令时，需要首先获得获得监视对象的锁，即进入同步块的凭证，才能进入同步块，当线程离开同步块时，执行monitorexit指令，释放对象锁。    </p>
-<p>AQS同步中，使用一个int类型的变量state来表示当前同步块的状态。以独占式同步为例，state的有效值为0和1，其中0表示当前同步块中没有线程，1表示同步块中已经有线程在执行。当线程要进入同步块时，需要首先判断state的值是否为0，假设为0，会尝试将state修改为1，只有修改成功了之后，线程才可以进入同步块，并通过CAS操作确保同一时刻只有一个线程操作成功。当线程离开同步块时，会修改state的值为0，并唤醒等待的线程。所以<font style="color:red;">在AQS同步中，线程获得锁实际上是指线程成功修改了状态变量state，而释放锁就是是指线程将状态变量置为了可修改的状态，以便其他线程可以再次尝试修改状态变量</font><br>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/04/01/20180401/#more" class="more-link">more</a>
+            <a href="/2021/08/21/20210821/#more" class="more-link">more</a>
           </div>
         
         
@@ -351,7 +236,61 @@
   
   
     <h1 class="title">
-       <a href="/2021/08/14/20210814/">Netty DefaultChannelPromise</a>
+       <a href="/2021/08/14/20210814/">Netty Future &amp; Promise</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>在Java中，对于<font color="#E51508">异步操作结果的获取</font>抽象出了一个接口<code>Future&lt;V&gt;</code>，它提供了一些方法来检查或等待操作是否完成，以及获取操作的结果，同时还提供了取消操作的能力，以及提供了检测操作是正常结束还是被取消的方法。不过如果操作已经完成了，就不能再对其进行取消了。在某些场景下，如果只是想借助<code>Future</code>实现操作取消的能力，而不关心操作结果，那么可以返回空即可。</p>
+<blockquote>
+<p>A <code>Future</code> represents the result of an asynchronous computation. Methods are provided to check if the computation is complete, to wait for its completion, and to retrieve the result of the computation.<br>The result can only be retrieved using method <code>get</code> when the computation has completed, blocking if necessary until it is ready. Cancellation is performed by the <code>cancel</code> method. Additional methods are provided to determine if the task completed normally or was cancelled. Once a computation has completed, the computation cannot be cancelled. If you would like to use a <code>Future</code> for the sake of cancellability but not provide a usable result, you can declare types of the form <code>Future&lt;?&gt;</code> and return <code>null</code> as a result of the underlying task.<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2021/08/14/20210814/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20210805" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-08-04T16:00:00.000Z"><a href="/2021/08/05/20210805/">2021-08-05</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2021/08/05/20210805/">Netty NioEventLoopGroup</a>
     </h1>
     
   
@@ -366,6 +305,10 @@
     <div class="e-content entry" itemprop="articleBody">
       
         <p>在Java中，任务执行的主要抽象不是<code>Thread</code>，而是<code>Executor</code>，它提供了一种标准的方式将任务的提交过程与执行过程解耦开来，为灵活而强大的异步任务执行框架提供了基础，线程池<code>ThreadPoolExecutor</code>便是在此基础上实现的一套异步执行框架。</p>
+<p>Netty也在<code>Executor</code>的基础上自定义实现了一套高性能的任务执行框架，本文尝试从I/O事件执行器<code>NioEventLoopGroup</code>作为切入点对其中的部分源码做一些分析，希望能从别人的设计中汲取一些思路和启发。建议在分析Netty中的任务执行机制之前先对Java中原生的任务执行框架有所了解，可以参考笔记：</p>
+<ul>
+<li><a href="https://shanhm1991.github.io/2019/01/05/20190105/">《Java并发编程实战》 任务的执行</a></li>
+<li><a href="https://shanhm1991.github.io/2019/01/06/20190106/">《Java并发编程实战》 任务的取消</a>
       
     </div>
 	
@@ -373,7 +316,74 @@
       
         
           <div class="alignleft">
-            <a href="/2021/08/14/20210814/#more" class="more-link">more</a>
+            <a href="/2021/08/05/20210805/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20210801" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-07-31T16:00:00.000Z"><a href="/2021/08/01/20210801/">2021-08-01</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2021/08/01/20210801/">Netty Channel</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Netty 中的通道 Channel 是对Java原生网络编程Api的封装，以TCP编程为例 ，在java中，有两种常用方式：</p>
+<ul>
+<li>基于BIO，在JDK1.4之前，可以使用 java.net 包中的<code>ServerSocket</code>/<code>Socket</code>来代表服务端和客户端;</li>
+<li>基于NIO，在Jdk1.4引入Nio之后，可以使用 java.nio.channels 包中的<code>ServerSocketChannel</code>/<code>SocketChannel</code>来代表服务端与客户端；</li>
+</ul>
+<p>在Netty中，分别进行了封装：</p>
+<ul>
+<li>使用<code>OioServerSocketChannel</code>/<code>OioSocketChannel</code>对<code>ServerSocket</code>/<code>Socket</code>进行了封装；</li>
+<li>使用<code>NioServerSocketChannel</code>/<code>NioSocketChannel</code>对<code>ServerSocketChannel</code>/<code>SocketChannel</code>进行了封装；</li>
+</ul>
+<p>本文主要从 Channel 构造和组成的角度对其进行一些分析， 另外，在理解Netty中的Channel之前，建议先对Linux I/O模型，以及Java 原生Nio相关Api等有所了解，可以参考相关笔记：</p>
+<ul>
+<li><a href="https://shanhm1991.github.io/2018/03/10/20180310/">Linux I/O模型</a></li>
+<li><a href="https://shanhm1991.github.io/2018/01/07/20180107/">Java I/O 网络</a></li>
+<li><a href="https://shanhm1991.github.io/2021/07/01/20210701/">NIO Buffer</a></li>
+<li><a href="https://shanhm1991.github.io/2021/07/05/20210705/">NIO Channel &amp; Selector</a>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2021/08/01/20210801/#more" class="more-link">more</a>
           </div>
         
         
@@ -714,7 +724,7 @@
   
   
   
-    <li><a href="/categories/Netty/">Netty</a><small>3</small></li>
+    <li><a href="/categories/Netty/">Netty</a><small>4</small></li>
   
   
   
@@ -878,7 +888,7 @@
   
   <div class="widget tag">
     <h3 class="title">Achives</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">2021-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">11</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">2021-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">2019-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">2019-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">2019-07</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">2019-06</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">2019-01</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">2018-09</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018-06</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018-05</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018-03</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018-02</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018-01</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">2017-12</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017-11</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">2017-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017-08</a><span class="archive-list-count">11</span></li></ul>
   </div>
 
 
