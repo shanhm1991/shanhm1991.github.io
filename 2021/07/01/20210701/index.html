@@ -88,7 +88,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 2.3k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 9min</font>
+   <font style="color: #999;"> words: 2.2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 9min</font>
    
    
   
@@ -123,17 +123,19 @@
 <ul>
 <li>下面结合具体的读写操作，简单演示一下这些索引的变化过程</li>
 </ul>
-<p>1.首先申请缓存，通过<code>allocate() / allocateDirect()</code>，此时 <strong>position</strong> 指向开头，<strong>limit</strong> 和 <strong>capacity</strong> 则指向末尾</p>
+<p>1.<code>allocate()</code>/<code>allocateDirect()</code>，首先申请缓存，此时 <strong>position</strong> 指向开头，<strong>limit</strong> 和 <strong>capacity</strong> 则指向末尾</p>
 <p><img src="/img/20180101/20180101.3.jpg" alt=""> </p>
-<p>2.通过<code>put()</code>写入或者通过<code>read()</code>读入数据，但是如果写入的长度大于当前可用长度，则会抛出<code>BufferOverflowException</code>异常，不过可以通过<code>remaining()</code>来查看当前的剩余可用长度以避免这种情况，在写入数据之后，<strong>position</strong> 将指向写入数据的下一个位置</p>
+<p>2.<code>put()</code>/<code>read()</code>，然后写入或读入数据，之后 <strong>position</strong> 将指向数据的下一个位置</p>
+<p>注意如果数据的长度大于当前可用长度，将会抛出BufferOverflowException异常，可以通过<code>remaining()</code>查看当前的剩余可用长度来避免这种情况</p>
 <p><img src="/img/20180101/20180101.4.jpg" alt=""> </p>
-<p>3.调用<code>flip()</code>，会将 <strong>position</strong> 复位为0，同时将 <strong>limit</strong> 指向 <strong>position</strong> 之前所在位置，这样 <strong>position</strong> 和 <strong>limit</strong> 之间就可读取的有效数据。另外，如果调用<code>rewind()</code>，将仅仅复位 <strong>position</strong>，而不修改 <strong>limit</strong></p>
+<p>3.<code>flip()</code>，将 <strong>position</strong> 复位为0，同时将 <strong>limit</strong> 指向 <strong>position</strong> 之前所在位置，这样 <strong>position</strong> 和 <strong>limit</strong> 之间就是可读的有效数据</p>
+<p>另外，如果调用<code>rewind()</code>，将仅仅复位 <strong>position</strong>，而不修改 <strong>limit</strong></p>
 <p><img src="/img/20180101/20180101.5.jpg" alt=""> </p>
-<p>4.调用<code>get()</code>相关方法可以读取相应字节数的数据，比如<code>ByteBuffer.get(byte[])</code>即将数据字节读入给定的数组中，当然也可以根据数据类型进行读取，比如<code>getInt()</code>读取4个字节，读取后 <strong>position</strong> 会指向已读数据的下一位</p>
+<p>4.<code>get()</code>，读取相应字节数的数据，比如<code>get(byte[])</code>将数据字节读入给定的数组中，<code>getInt()</code>将读取4个字节，读取后 <strong>position</strong> 指向已读数据的下一位</p>
 <p><img src="/img/20180101/20180101.6.jpg" alt=""> </p>
-<p>5.由于Buffer是非阻塞的， 那么在<code>put</code>时就无法确定之前放入数据是否已经读完，这时候可以调用<code>compact()</code>，它会将 <strong>position</strong> 与 <strong>limit</strong> 之间还未读取的数据拷贝到Buffer最前面，然后将 <strong>position</strong> 指向这些数据之后的一位，并将 <strong>limit</strong> 移动至 <strong>capacity</strong>，这样 <strong>position</strong> 与 <strong>limit</strong> 之间就是已读数据或初始化数据了，从而可以安全地写入覆盖</p>
+<p>5.<code>compact()</code>，将 <strong>position</strong> 与 <strong>limit</strong> 之间还未读取的数据拷贝到Buffer最前面，然后将 <strong>position</strong> 指向数据的后一位，并将 <strong>limit</strong> 移动至 <strong>capacity</strong>，这样 <strong>position</strong> 与 <strong>limit</strong> 之间就是已读或脏数据，可以放心地覆盖了。由于Buffer是非阻塞的，那么在放入数据时可能无法确定之前的数据是否已经读完。</p>
 <p><img src="/img/20180101/20180101.7.jpg" alt=""> </p>
-<p>6.当数据读完之后，可以调用<code>clear()</code>，将Buffer还原成初始状态，以便下次使用</p>
+<p>6.<code>clear()</code>，将Buffer还原成初始状态，以便下次使用</p>
 <h4 id="ByteBuffer"><a href="#ByteBuffer" class="headerlink" title="ByteBuffer"></a>ByteBuffer</h4><p><code>Buffer</code>的实现有很多种，不过api都是相似的，这里以<code>ByteBuffer</code>为例进行说明，因为在NIO网络编程中，通道就是从ByteBuffer中读取的数据，比如在了解了上面的操作之后，对于一般的读写操作就可以如下进行</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将bytes中字节写入ByteBuffer</span></span><br><span class="line">ByteBuffer buffer = ByteBuffer.allocate(<span class="number">4096</span>);</span><br><span class="line">buffer.put(bytes); <span class="comment">// byte[] bytes</span></span><br><span class="line">buffer.flip();</span><br><span class="line">channel.write(buffer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将ByteBuffer数据读取到bytes中</span></span><br><span class="line">ByteBuffer buffer = ByteBuffer.allocate(<span class="number">4096</span>);</span><br><span class="line">channel.read(buffer)</span><br><span class="line">buffer.flip();</span><br><span class="line">buffer.get(bytes); <span class="comment">// byte[] bytes</span></span><br></pre></td></tr></table></figure>
 <p>但是 Buffer 对应的七种数据类型实现都是抽象的，也就不能够直接实例化，不过它们各自提供了自己的静态工厂</p>
