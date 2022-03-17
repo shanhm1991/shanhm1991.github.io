@@ -169,7 +169,7 @@ article.page .icon {
   display: none;
 }
 article.post .icon:before {
-  content: '\f044';
+  content: '\f016';
 }
 article.photo .icon:before {
   content: '\f030';
