@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Linux 常用操作 | Echo</title>
+  <title>Linux命令 iostat | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="…">
+  <meta name="description" content="iostat是I/O statistics（输入/输出统计）的缩写，iostat工具将对系统的磁盘操作活动进行监视。它的特点是汇报磁盘活动统计情况，同时也会汇报出CPU使用情况。
+但是与vmstat一样，iostat也有一个弱点，就是它不能对某个进程进行深入分析，仅对系统的整体情况进行分析。iostat属于sysstat软件包，可以用yum install sysstat直接安装。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Linux 常用操作"/>
+  <meta property="og:title" content="Linux命令 iostat"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -43,7 +44,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#ADA5A0; height:20px;line-height:30px;">It's a long long way to go</span>
-  <h2><font style="color: #999;">articles:  106 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #999;">articles:  107 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -74,7 +75,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        Linux 常用操作
+        Linux命令 iostat
     </h1>
     
     
@@ -88,7 +89,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 931  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 3min</font>
+   <font style="color: #999;"> words: 1.2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 5min</font>
    
    
   
@@ -109,89 +110,15 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>…</p>
-<a id="more"></a>
-<p><strong>查看版本：</strong><br>    <table>
-        <tr>
-            <td> uname -a </td>
-            <td>：查看Linux系统内核信息</td>
-        </tr>
-        <tr>
-            <td> cat /proc/version </td>
-            <td>：查看Linux系统版本信息</td>
-        </tr>
-        <tr>
-            <td> cat /etc/issue </td>
-            <td>：查看Linux系统发行版信息</td>
-        </tr>
-        <tr>
-            <td> cat /proc/cpuinfo </td>
-            <td>：查看cpu相关信息</td>
-        </tr>
-    </table></p>
-<h3 id="1-sed"><a href="#1-sed" class="headerlink" title="1. sed"></a>1. sed</h3><p>Stream Editor文本流编辑，一个非交互式的面向字符流的编辑器，它逐行处理内容，每次将当前处理的行存储到临时缓冲区（模式空间 pattern space），处理完成后并输出，接着处理下一行，直到文件结束。<br>sed作为常见的文本处理工具之一，是一个非常有用且重要的命令，也是写自动化shell脚本的基础。</p>
-<p><strong>语法</strong></p>
-<p><code>sed [options] &#39;scripts&#39; inputfile</code></p>
-<p><strong>-options</strong></p>
-<ul>
-<li><p>-n ：只打印匹配行</p>
-</li>
-<li><p>-e ：直接在命令行模式上进行sed动作编辑，默认选项</p>
-</li>
-<li><p>-f ：执行指定文件中的sed动作</p>
-</li>
-<li><p>-r ：支持扩展表达式</p>
-</li>
-<li><p>-i ：直接修改文件内容</p>
-</li>
-</ul>
-<p><strong>常见动作</strong></p>
-<ul>
-<li>a ：在当前行的下面新增一行内容；</li>
-<li>c ：替换匹配行</li>
-<li>d ：删除匹配行</li>
-<li>i ：在当前行的上面新增一行内容；</li>
-<li>p ：打印</li>
-<li>s ：替换匹配文本</li>
-</ul>
-<h4 id="1-1-文本替换"><a href="#1-1-文本替换" class="headerlink" title="1.1. 文本替换"></a>1.1. 文本替换</h4><p><code>sed -i &#39;s/old/new/&#39; m.txt</code>：将每行的第一个old替换为new</p>
-<p><code>sed -i &#39;s/old/new/3&#39; m.txt</code>：将每行的第三个old替换为new</p>
-<p><code>sed -i &#39;s/old/new/g&#39; m.txt</code>：将所有的old替换为new</p>
-<p><code>sed -i &#39;4,7s/^/#/&#39; m.txt</code>：第4-7行注释掉</p>
-<p><code>sed -ri &#39;s/^( )+//&#39; a.txt</code>：删除行首的空格</p>
-<p>其中，替换操作里的分割符<code>/</code>可改为其他字符，如<code>#</code>或<code>$</code>，在遇到文件路径替换时会比较方便</p>
-<h4 id="1-2-文本行打印"><a href="#1-2-文本行打印" class="headerlink" title="1.2. 文本行打印"></a>1.2. 文本行打印</h4><p><code>sed -n &#39;4,7p&#39; m.txt</code>：打印第4-7行</p>
-<p><code>sed -n &#39;4,+10p&#39; m.txt</code>：输出第4行及其下面10行的内容</p>
-<p><code>sed -n &#39;p;n&#39; m.txt</code>：输出奇数行</p>
-<p><code>sed -n &#39;n;p&#39; m.txt</code>：输出偶数行</p>
-<p><code>sed -n &#39;$=&#39; m.txt</code>：输出文件的行数</p>
-<h4 id="1-3-文本行添加"><a href="#1-3-文本行添加" class="headerlink" title="1.3. 文本行添加"></a>1.3. 文本行添加</h4><p><code>sed -i &#39;2iXX&#39; m.txt</code>：在第2行上面添加文本行XX</p>
-<p><code>sed -i &#39;2aXX&#39; m.txt</code>：在第2行下面添加一行文本行XX</p>
-<p><code>sed -i &#39;4,7aXX&#39; m.txt</code>：在第4-7行的每一行下面添加文本行XX</p>
-<p>如果是多行文本，可以用换行符\n分割</p>
-<h4 id="1-4-文本行替换"><a href="#1-4-文本行替换" class="headerlink" title="1.4. 文本行替换"></a>1.4. 文本行替换</h4><p><code>sed -i &#39;2cXX&#39; m.txt</code>：在第2行替换为文本行XX</p>
-<h4 id="1-5-文本行删除"><a href="#1-5-文本行删除" class="headerlink" title="1.5. 文本行删除"></a>1.5. 文本行删除</h4><p><code>sed -i &#39;3,5d&#39; m.txt</code>：删除第3-5行</p>
-<p><code>sed -i &#39;/xml/d&#39; m.txt</code>：删除所有包含xml的行</p>
-<p><code>sed -i &#39;/xml/!d&#39; m.txt</code>：删除所有不包含xml的行</p>
-<p><code>sed -i &#39;$d&#39; m.txt</code>：删除最后一行</p>
-<p><code>sed -i &#39;/^$/d&#39; m.txt</code>：删除空行</p>
-<h4 id="1-6-sed脚本"><a href="#1-6-sed脚本" class="headerlink" title="1.6. sed脚本"></a>1.6. sed脚本</h4><p>对于一些复杂的操作可以存为脚本，然后通过<code>-f</code>调用，比如</p>
-<figure class="highlight shell"><figcaption><span class="caption">test.sed</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s/pang/&amp;jing/</span><br><span class="line">s/[0-9]//g</span><br></pre></td></tr></table></figure>
-<p><code>sed -f test.sed  m.txt</code>：执行脚本中的动作</p>
-<h3 id="2-awk"><a href="#2-awk" class="headerlink" title="2. awk"></a>2. awk</h3><p>awk是一个强大的文本分析工具，相对于sed，awk在对数据分析并生成报告时显得尤为强大，awk也是将文件逐行读入，然后将每行分隔切片再进行各种分析处理。其名称取自三位创始人的首字符（Alfred Aho、Peter Weinberger、Family Name）。</p>
-<p><strong>语法</strong></p>
-<p><code>awk [options] &#39;script&#39; var=value inputfile</code></p>
-<p><strong>-options</strong></p>
-<ul>
-<li><p>-F：指定解析分隔符（默认空格），可以是字符串或者正则表达式</p>
-</li>
-<li><p>-v：赋值一个自定义变量</p>
-</li>
-<li><p>-f：从文件中读取awk命令</p>
-</li>
-</ul>
-<h4 id="2-1-获取字段"><a href="#2-1-获取字段" class="headerlink" title="2.1. 获取字段"></a>2.1. 获取字段</h4><p><code>awk &#39;{print $2}&#39; m.txt</code>：获取以空格分隔后，每行的第二个字段</p>
-<p><code>awk -F &#39;_&#39; &#39;{print $2}&#39; m.txt</code>：获取以<code>_</code>分隔后，每行的第二个字段</p>
+        <p>iostat是I/O statistics（输入/输出统计）的缩写，iostat工具将对系统的磁盘操作活动进行监视。它的特点是汇报磁盘活动统计情况，同时也会汇报出CPU使用情况。</p>
+<p>但是与vmstat一样，iostat也有一个弱点，就是它不能对某个进程进行深入分析，仅对系统的整体情况进行分析。iostat属于sysstat软件包，可以用<code>yum install sysstat</code>直接安装。<br><a id="more"></a></p>
+<h3 id="1-命令格式"><a href="#1-命令格式" class="headerlink" title="1. 命令格式"></a>1. 命令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iostat [参数] [时间] [次数]</span><br></pre></td></tr></table></figure>
+<h3 id="2-命令参数"><a href="#2-命令参数" class="headerlink" title="2. 命令参数"></a>2. 命令参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-c 显示CPU使用情况</span><br><span class="line">-d 显示磁盘使用情况</span><br><span class="line">-k 以 KB 为单位显示</span><br><span class="line">-m 以 M 为单位显示</span><br><span class="line">-N 显示磁盘阵列(LVM) 信息</span><br><span class="line">-n 显示NFS 使用情况</span><br><span class="line">-p [磁盘] 显示磁盘和分区的情况</span><br><span class="line">-t 显示终端和CPU的信息</span><br><span class="line">-x 显示详细信息</span><br><span class="line">-V 显示版本信息</span><br></pre></td></tr></table></figure>
+<h3 id="3-输出说明"><a href="#3-输出说明" class="headerlink" title="3. 输出说明"></a>3. 输出说明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">avg-cpu:</span><br><span class="line">%user：  CPU处在用户模式下的时间百分比     </span><br><span class="line">%nice：  CPU处在带NICE值的用户模式下的时间百分比     </span><br><span class="line">%system：CPU处在系统模式下的时间百分比     </span><br><span class="line">%iowait：CPU等待输入输出完成时间的百分比     </span><br><span class="line">%steal： 管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比     </span><br><span class="line">%idle：  CPU空闲时间百分比</span><br></pre></td></tr></table></figure>
+<p>如果<code>%iowait</code>过高，表示硬盘存在I/O瓶颈；如果<code>%idle</code>值高，表示CPU较空闲；<br>如果<code>%idle</code>值高但系统响应慢，则有可能是CPU等待分配内存，此时应加大内存容量；<br>如果<code>%idle</code>值持续低于10，那么可能系统的CPU处理能力相对较低，表明系统中最需要解决的资源是CPU；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Device：  监测设备名称   </span><br><span class="line"></span><br><span class="line">tps：     设备每秒的传输次数  </span><br><span class="line"></span><br><span class="line">rrqm&#x2F;s：  每秒进行的读操作次数    </span><br><span class="line">wrqm&#x2F;s：  每秒进行的写操作次数</span><br><span class="line">    </span><br><span class="line">r&#x2F;s：	  每秒完成的读I&#x2F;O设备次数     </span><br><span class="line">w&#x2F;s：	  每秒完成的写I&#x2F;O设备次数 </span><br><span class="line">   </span><br><span class="line">rkB&#x2F;s：	  每秒读取的字节数  </span><br><span class="line">wkB&#x2F;s：	  每秒写入的字节数  </span><br><span class="line"></span><br><span class="line">avgrq-sz：  平均每次设备I&#x2F;O操作的数据大小   </span><br><span class="line">avgqu-sz：  平均I&#x2F;O等待队列长度     </span><br><span class="line">await：	  平均每次设备I&#x2F;O操作的等待时间 (毫秒)     </span><br><span class="line">svctm：	  平均每次设备I&#x2F;O操作的服务时间 (毫秒)     </span><br><span class="line">%util：	  被I&#x2F;O需求消耗的CPU百分比</span><br></pre></td></tr></table></figure>
+<p>如果<code>%util</code>接近100，说明I/O请求太多，I/O系统已经满负荷，该磁盘可能存在瓶颈。<br>如果<code>svctm</code>接近<code>await</code>，说明I/O几乎没有等待时间；如果<code>await</code>远大于<code>svctm</code>，说明I/O队列太长，响应太慢，需要进行必要优化。</p>
+<h3 id="4-示例"><a href="#4-示例" class="headerlink" title="4. 示例"></a>4. 示例</h3><figure class="highlight java"><figcaption><span class="caption">[root@bogon ~]# iostat -x -p 1 3</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">Linux <span class="number">3.10</span><span class="number">.0</span>-<span class="number">862</span>.el7.x86_64 (bogon) 	<span class="number">03</span>/<span class="number">20</span>/<span class="number">22</span> 	_x86_64_	(<span class="number">4</span> CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           <span class="number">0.01</span>    <span class="number">0.00</span>    <span class="number">0.06</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">99.92</span></span><br><span class="line"></span><br><span class="line">Device:  rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">sda        <span class="number">0.00</span>     <span class="number">0.02</span>    <span class="number">0.13</span>    <span class="number">0.12</span>     <span class="number">3.93</span>     <span class="number">1.29</span>    <span class="number">43.04</span>     <span class="number">0.00</span>    <span class="number">1.94</span>    <span class="number">0.53</span>    <span class="number">3.48</span>   <span class="number">0.85</span>   <span class="number">0.02</span></span><br><span class="line">sda1       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.02</span>    <span class="number">0.00</span>     <span class="number">0.60</span>     <span class="number">0.05</span>    <span class="number">79.35</span>     <span class="number">0.00</span>    <span class="number">0.34</span>    <span class="number">0.32</span>    <span class="number">1.60</span>   <span class="number">0.27</span>   <span class="number">0.00</span></span><br><span class="line">sda2       <span class="number">0.00</span>     <span class="number">0.02</span>    <span class="number">0.11</span>    <span class="number">0.12</span>     <span class="number">3.30</span>     <span class="number">1.24</span>    <span class="number">40.29</span>     <span class="number">0.00</span>    <span class="number">2.06</span>    <span class="number">0.56</span>    <span class="number">3.48</span>   <span class="number">0.90</span>   <span class="number">0.02</span></span><br><span class="line">dm-<span class="number">0</span>       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.11</span>    <span class="number">0.13</span>     <span class="number">3.18</span>     <span class="number">1.24</span>    <span class="number">37.40</span>     <span class="number">0.00</span>    <span class="number">2.25</span>    <span class="number">0.59</span>    <span class="number">3.59</span>   <span class="number">0.85</span>   <span class="number">0.02</span></span><br><span class="line">dm-<span class="number">1</span>       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.08</span>     <span class="number">0.00</span>    <span class="number">48.41</span>     <span class="number">0.00</span>    <span class="number">0.25</span>    <span class="number">0.25</span>    <span class="number">0.00</span>   <span class="number">0.18</span>   <span class="number">0.00</span></span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           <span class="number">0.25</span>    <span class="number">0.00</span>    <span class="number">0.25</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">99.51</span></span><br><span class="line"></span><br><span class="line">Device:  rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">sda        <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line">sda1       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line">sda2       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line">dm-<span class="number">0</span>       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line">dm-<span class="number">1</span>       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>  <span class="number">100.00</span></span><br><span class="line"></span><br><span class="line">Device:  rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">sda        <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line">sda1       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line">sda2       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line">dm-<span class="number">0</span>       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br><span class="line">dm-<span class="number">1</span>       <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>    <span class="number">0.00</span>   <span class="number">0.00</span>   <span class="number">0.00</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -202,8 +129,8 @@
 	    
 	<nav id="pagination">
 	  
-		  <a class="alignleft prev" href="/2018/03/05/20180305/">
-		    vim 常用操作
+		  <a class="alignleft prev" href="/2018/03/02/20180302/">
+		    Linux命令 vmstat
 		  </a>
 	  
 	  
@@ -279,7 +206,7 @@ $("#db_ul").click(function(){ $("#db_li").toggle(); });
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-sed"><span class="toc-text">1. sed</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-文本替换"><span class="toc-text">1.1. 文本替换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-文本行打印"><span class="toc-text">1.2. 文本行打印</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-文本行添加"><span class="toc-text">1.3. 文本行添加</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-文本行替换"><span class="toc-text">1.4. 文本行替换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-文本行删除"><span class="toc-text">1.5. 文本行删除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-sed脚本"><span class="toc-text">1.6. sed脚本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-awk"><span class="toc-text">2. awk</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-获取字段"><span class="toc-text">2.1. 获取字段</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-命令格式"><span class="toc-text">1. 命令格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-命令参数"><span class="toc-text">2. 命令参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-输出说明"><span class="toc-text">3. 输出说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-示例"><span class="toc-text">4. 示例</span></a></li></ol>
 </div>
 
 
