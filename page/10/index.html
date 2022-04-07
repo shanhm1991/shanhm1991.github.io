@@ -139,7 +139,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>之前梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了，不过bean加载的实现过程要比<code>BeanDefinition</code>的解析注册复杂得多，下面还是以之前示例中的<code>User user = (User)beanFactory.getBean(&quot;test&quot;)</code>作为入口进行分析，并配合一些简单的流程图进行说明，抓住主要矛盾，主要梳理出一些关键的步骤，以及对循环依赖问题的处理。<br>
+        <p>前面已经梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了。不过相比解析注册，bean的加载过程要复杂得多。</p>
+<p>下面还是以之前示例中的<code>User user = (User)beanFactory.getBean(&quot;test&quot;)</code>作为入口进行分析，并配合一些简单的流程图，梳理出一些主要的实现步骤。<br>
       
     </div>
 	
@@ -191,7 +192,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>之前梳理了<code>XmlBeanDefinitionReader</code>解析配置文件的过程，但是主要是针对默认标签的解析，所以本文主要介绍下其对于自定义标签的解析策略。</p>
+        <p>上一篇梳理了<code>XmlBeanDefinitionReader</code>解析注册<code>BeanDefinition</code>的过程，但主要是针对默认标签的解析，这里主要介绍下其对于自定义标签的解析策略。</p>
       
     </div>
 	
@@ -1382,5 +1383,20 @@ $("#db_ul").click(function(){ $("#db_li").toggle(); });
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
