@@ -830,7 +830,7 @@ footer .addthis iframe {
   color: #258fb8;
 }
 figure.highlight {
-  background: #f0f0f0;
+  background: #f6f6f6;
   margin-top: 10px;
   padding: 0px;
   border-radius: 2px;
@@ -871,7 +871,7 @@ table {
   width: 768px;
   padding-left: 5px;
   border-left: 1px solid #fff;
-  color: #000;
+  color: #333;
 }
 .nine {
   display: inline-block;
@@ -881,7 +881,7 @@ table {
 }
 .marked {
   width: 100%;
-  background: #d6d6d6;
+  background: #e6e6e6;
 }
 figcaption {
   padding-left: 8px;
@@ -895,7 +895,7 @@ pre .doctype,
 pre .pi,
 pre .lisp .string,
 pre .javadoc {
-  color: #9393ad;
+  color: #8686a5;
   font-style: Roboto-Regular;
 }
 pre .keyword,

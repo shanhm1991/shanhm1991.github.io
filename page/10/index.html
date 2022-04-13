@@ -139,8 +139,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>前面已经梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了。不过相比解析注册，bean的加载过程要复杂得多。</p>
-<p>下面还是以之前示例中的<code>User user = (User)beanFactory.getBean(&quot;test&quot;)</code>作为入口进行分析，并配合一些简单的流程图，梳理出一些主要的实现步骤。<br>
+        <p>前面已经梳理了<code>BeanDefinition</code>的解析注册，接下来就是如何利用<code>BeanDefinition</code>生产bean了，不过相比解析注册，bean的加载过程要复杂得多。主要还是针对单例场景，因为在其整个创建过程中需要考虑缓存复用，线程安全，循环依赖，以及AOP处理等问题。</p>
+<p>下面就以<code>beanFactory.getBean(&quot;xxx&quot;)</code>作为入口进行分析，尽量梳理出主要的实现思路和步骤。<br>
       
     </div>
 	
