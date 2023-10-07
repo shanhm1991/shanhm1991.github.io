@@ -129,7 +129,7 @@ a:hover {
   margin: 50px auto;
 }
 #header a {
-  color: #999;
+  color: #736f6f;
 }
 #header a:hover {
   color: #258fb8;
@@ -169,7 +169,7 @@ article.page .icon {
   display: none;
 }
 article.post .icon:before {
-  content: '\f016';
+  content: '\f073';
 }
 article.photo .icon:before {
   content: '\f030';
@@ -262,9 +262,9 @@ article header .icon {
   height: 32px;
   margin-right: 25px;
   position: absolute;
-  top: 20px;
+  top: 22px;
   left: 20px;
-  color: #258fb8;
+  color: #736f6f;
 }
 @media screen and (max-width: 600px) {
   article header .icon {
@@ -273,7 +273,7 @@ article header .icon {
 }
 article header .icon:before {
   position: absolute;
-  font: 32px FontAwesome;
+  font: 28px FontAwesome;
   top: 0;
   left: 0;
   width: 32px;

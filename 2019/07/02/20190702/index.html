@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>基于线程池构建任务管理工具spring-fom 设计文档 | Echo</title>
+  <title>任务管理工具spring-fom 设计文档 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="https://github.com/shanhm1991/spring-fom
+  <meta name="description" content="写这个工具最开始只是为了解决各种离线数据文件的处理，其中涉及比较多的任务处理。当时刚进入公司参与第一个项目，但是意识到公司的产品业务基本上都是围绕着数据做一些信息挖掘，尤其是离线数据，所以后续应该还会有很多各种各样的任务式场景。后来参与的各种项目也确实印证了自己的想法，所以确实能在一些项目中发挥作用，提高工作中的开发效率和质量，以及运维的能力。
+目标是实现一个轻量级的通用任务管理框架，主要针对的是定时任务。在功能上除了能支持常见的场景外，希望也能支持一定的实时监控管理，而在结构设计上要有足够的扩展性以方便进行定制，同时在使用方式上要简洁清晰，对原代码尽量少的侵入。由于当时是设计用来处理文件的，又是基于spring容器管理的，所以取名为spring-fom。
 
-写这个工具一开始只是为了解决各种离线数据文件的处理，其中涉及到一些定时任务处理。当时刚进XXX公司参与第一个项目，但是意识到公司的产品业务基本上都是围绕数据做一些信息或线索的挖掘，尤其是离线数据，所以应该会有很多各种各样的任务式场景，而后来参与的各种项目也印证了自己的想法，确实可以在很多项目中发挥作用，能够提高工作中的开发效率和质量，以及运维的能力。
-目标是想设计一个通用的轻量级任务管理框架，包括各种定时任务以及手动创建的任务，在功能上除了能支持常见的场景外，也希望能支持一定的实时监控管理，而在结构上要有足够的扩展性以方便进行一些定制，同时在使用方式上希望能简洁清晰，对原有代码尽量少的侵入。由于当时是设计用来处理文件的，又是基于 spring 进行管理的，所以取名为 spring-fom。">
+https://github.com/shanhm1991/spring-fom">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="基于线程池构建任务管理工具spring-fom 设计文档"/>
+  <meta property="og:title" content="任务管理工具spring-fom 设计文档"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -45,8 +45,8 @@
   <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
-  <span style="color:#ADA5A0; height:20px;line-height:30px;">It's a long long way to go</span>
-  <h2><font style="color: #999;">articles:  109 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
+  <h2><font style="color: #736f6f;">articles:  109 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -70,14 +70,14 @@
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-07-01T16:00:00.000Z"><a href="/2019/07/02/20190702/">2019-07-02</a></time>
+        <time class="dt-published" datetime="2019-07-01T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2019/07/02/20190702/" style="color: #736f6f;">2019-07-02</a></time>
       
       
 
   
   
     <h1 class="p-name title" itemprop="headline name">
-        基于线程池构建任务管理工具spring-fom 设计文档
+        任务管理工具spring-fom 设计文档
     </h1>
     
     
@@ -91,12 +91,12 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 6k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 24min</font>
+   <font style="color: #999;"> words: 5.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 23min</font>
    
    
   
   <div class="categories">
-    <a href="/categories/开发随笔/">开发随笔</a>
+    <a href="/categories/开发笔记/">开发笔记</a>
   </div>
 
 
@@ -104,7 +104,7 @@
    
   
   <div class="tags">
-    <a href="/tags/ThreadPoolExecutor/">ThreadPoolExecutor</a>
+    <a href="/tags/Schedule/">Schedule</a>
   </div>
 
 
@@ -117,212 +117,219 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <blockquote>
+        <p>写这个工具最开始只是为了解决各种离线数据文件的处理，其中涉及比较多的任务处理。当时刚进入公司参与第一个项目，但是意识到公司的产品业务基本上都是围绕着数据做一些信息挖掘，尤其是离线数据，所以后续应该还会有很多各种各样的任务式场景。后来参与的各种项目也确实印证了自己的想法，所以确实能在一些项目中发挥作用，提高工作中的开发效率和质量，以及运维的能力。</p>
+<p>目标是实现一个轻量级的通用任务管理框架，主要针对的是定时任务。在功能上除了能支持常见的场景外，希望也能支持一定的实时监控管理，而在结构设计上要有足够的扩展性以方便进行定制，同时在使用方式上要简洁清晰，对原代码尽量少的侵入。由于当时是设计用来处理文件的，又是基于spring容器管理的，所以取名为spring-fom。</p>
+<blockquote>
 <p><a href="https://github.com/shanhm1991/spring-fom" target="_blank" rel="noopener">https://github.com/shanhm1991/spring-fom</a></p>
 </blockquote>
-<p>写这个工具一开始只是为了解决各种离线数据文件的处理，其中涉及到一些定时任务处理。当时刚进XXX公司参与第一个项目，但是意识到公司的产品业务基本上都是围绕数据做一些信息或线索的挖掘，尤其是离线数据，所以应该会有很多各种各样的任务式场景，而后来参与的各种项目也印证了自己的想法，确实可以在很多项目中发挥作用，能够提高工作中的开发效率和质量，以及运维的能力。</p>
-<p>目标是想设计一个通用的轻量级任务管理框架，包括各种定时任务以及手动创建的任务，在功能上除了能支持常见的场景外，也希望能支持一定的实时监控管理，而在结构上要有足够的扩展性以方便进行一些定制，同时在使用方式上希望能简洁清晰，对原有代码尽量少的侵入。由于当时是设计用来处理文件的，又是基于 spring 进行管理的，所以取名为 spring-fom。<br><a id="more"></a></p>
-<h3 id="1-思路"><a href="#1-思路" class="headerlink" title="1. 思路"></a>1. 思路</h3><p>下面主要从定时任务的角度进行说明，也并不是说只适用于定时任务场景，定时任务与手动创建任务的区别只是在于创建和提交的方式不同，前者由确定的定时线程负责创建和提交，而后者的创建和提交来自未知的外部线程。这里只说的是任务的创建和提交，而没有说创建执行，是因为任务的执行都委托给了线程池，提交就相当于执行的意思。</p>
-<p>其实本身就是基于线程池实现的，主要的任务调度逻辑都封装在<code>ScheduleContext</code>中，其内部维护了一个定时线程和一个线程池，以及一套自定义的状态转换机制。每个<code>ScheduleContext</code>就相当于一个独立的任务调度器，其生命周期，比如加载、启动、终止，完全委托给了 spring 的应用上下文。对于具体的任务则抽象为 <code>Task</code>，其实就是在 <code>Callable</code> 的基础上定义了一套任务执行模板，因此，整个 spring-fom 的功能，基本就是围绕 <code>ScheduleContext</code> 和 <code>Task</code> 实现的。</p>
+<a id="more"></a>
+<h3 id="1-思路"><a href="#1-思路" class="headerlink" title="1. 思路"></a>1. 思路</h3><p>主要的思路是基于线程池来实现，将任务的调度逻辑封装在<code>ScheduleContext</code>中。其内部维护了一个调度线程和一个线程池，以及一套自定义的状态转换机制。每个<code>ScheduleContext</code>就相当于一个独立的任务调度器，其生命周期，比如加载、启动、终止，则委托给spring 的应用上下文。对于具体的任务则抽象为 <code>Task</code>，即在 <code>Callable</code> 的基础上定义的一套任务执行模板。所以，整个spring-fom的功能，基本就是围绕 <code>ScheduleContext</code> 和 <code>Task</code> 来实现的。</p>
+<p>下面主要从定时任务的角度进行说明，当然如果不是定时任务，也可以将其简单作为一个线程池来提交任务使用。区别只是在于任务的创建和提交方式不同，前者由内部调度线程负责创建和提交，而后者来自外部线程，至于任务的执行则统一委托给内部线程池。</p>
 <h4 id="1-1-功能设计"><a href="#1-1-功能设计" class="headerlink" title="1.1. 功能设计"></a>1.1. 功能设计</h4><p>主要特性：</p>
 <table width=100%>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+  <tr style="border-bottom:0.01rem solid #736f6f;">
     <td>
-    1. 对于<b>定时任务场景</b>，支持基本的三种定时语义（cron / fixedRate / fixedDelay）
+    1. 支持常用的定时策略：cron ｜ fixedRate ｜ fixedDelay
     </td>
-    </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+  </tr>
+  <tr style="border-bottom:0.01rem solid #736f6f;">
     <td>
-    2. 支持<font color="#E51508">定时批(多)任务</font>执行<br>
-       &nbsp;&nbsp;&nbsp;&nbsp;实现接口 ScheduleFactory 可以创建批任务，或者通过 @Scheduled 指定多个任务方法<br>
-       &nbsp;&nbsp;&nbsp;&nbsp;实现接口 CompleteHandler 可以<font color="#E51508">自定义批任务结束处理</font>
+    2. 支持<font color="#E51508">批任务</font><br>
+       &nbsp;&nbsp;&nbsp;&nbsp;实现接口 ScheduleFactory 可以创建批任务，通过 @Scheduled 可以指定多个任务方法；<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;实现接口 CompleteHandler 可以<font color="#E51508">自定义批任务结束处理</font>；
     </td>
-    </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+  </tr>
+  <tr style="border-bottom:0.01rem solid #736f6f;">
     <td>
-    3. 支持<font color="#E51508">任务超时检测处理</font>，通过 taskOverTime 可以设置任务超时时间<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;实现接口 TaskCancelHandler 可以<font color="#E51508">自定义任务超时的取消处理</font>，默认只通过 Interrupt 中断<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;通过 detectTimeoutOnEachTask 可以设置是否对整体任务计算超时，默认是对每个任务单独检测超时
+    3. 支持<font color="#E51508">任务超时检测</font><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;通过 taskOverTime 可以设置任务超时时间，通过 detectTimeoutOnEachTask 可以设置是对整体还是单个任务计算超时；<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;实现接口 TaskCancelHandler 可以<font color="#E51508">自定义任务超时的取消处理</font>，默认进行 Interrupt 中断；
     </td>
-    </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+  </tr>
+  <tr style="border-bottom:0.01rem solid #736f6f;">
     <td>
     4. 支持<font color="#E51508">任务冲突检测</font><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;通过 enableTaskConflict 可以开启任务冲突检测，即如果提交任务时，发现已经存在对应id的任务，并且还在运行，则忽略本次任务，
-    &nbsp;&nbsp;&nbsp;&nbsp;这个在文件处理的场景中比较有用；
+    &nbsp;&nbsp;&nbsp;&nbsp;每个任务都有一个id，开启 enableTaskConflict 后如果提交任务时，发现已经存在对应id的任务，并且还在运行，则忽略本次任务；
     </td>
-    </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+  </tr>
+  <tr style="border-bottom:0.01rem solid #736f6f;">
     <td>
-    5. 支持实时监控管理功能，并提供一些监控和管理的接口，同时内置了一个简单的任务管理界面：<font color="#1F50CB">http://{ip}:{port}/{path}/fom.html</font><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;5.1. 可以实时查看定时器的状态，以及任务执行情况的统计等信息<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;5.2. 可以<font color="#E51508">实时启动 / 终止定时器</font>，并在终止时尝试取消还在运行的任务；<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实现接口 TaskCancelHandler 也可以自定义终止定时器时任务的取消处理，默认只通过 Interrupt 中断<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实现接口 TerminateHandler 可以自定义定时器终止时的处理，比如清理一些资源之类<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;5.3. 可以<font color="#E51508">实时触发任务的执行</font>，比如当定时任务未到执行时机时，可以手动使其立即执行<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果触发时任务正在执行，则支持两种策略：直接忽略（默认），或者等待本次执行完成后立即再重新执行<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;5.4. 可以<font color="#E51508">实时修改任务配置</font>，并支持持久化，即保证重启后修改依然有效<br>
+    5. 支持实时监控管理：http://{ip}:{port}/{path}/fom<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;5.1. 可以实时查看定时器状态、任务线程堆栈、以及执行统计等信息<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;5.2. 可以<font color="#E51508">实时启动 / 终止定时器</font><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实现接口 TaskCancelHandler 可以自定义定时器终止时任务的取消处理，默认通过 Interrupt 中断<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实现接口 TerminateHandler 可以自定义定时器终止时的处理，比如清理释放资源<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;5.3. 可以<font color="#E51508">实时触发执行任务</font>，比如当定时任务未到执行时机时，可以手动触发使其立即执行<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实时触发任务支持两种策略：如果任务正在执行则直接忽略（默认），或者等待本轮执行完成后立即再重新执行<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;5.4. 可以<font color="#E51508">实时修改任务配置</font>，支持注入属性，也做了本地持久化，这样重启后修改不会丢失<br>
     </td>
-    </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-    <td>
-    6. 对于<b>非定时任务场景</b>，比如提交的批任务<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;同样支持 CompleteHandler 接口，以及超时检测和冲突检测处理，具体可以见后面的使用示例
-    </td>
-    </tr>
-    </table>
+  </tr>
+</table>
 
-<h4 id="1-2-配置"><a href="#1-2-配置" class="headerlink" title="1.2. 配置"></a>1.2. 配置</h4><p>对应上面的功能，下面列举一下配置的定义：<br>    <table width=100%>
+
+<h4 id="1-2-配置"><a href="#1-2-配置" class="headerlink" title="1.2. 配置"></a>1.2. 配置</h4><p>对应上面的功能，下面列举一下相关的配置：<br>    <table width=100%>
         <tr style="border-bottom:0.01rem solid grey;">
-            <th width=25%>任务配置：@FomSchedule</th>
+            <th width=25%>任务配置：@Fom</th>
             <th width=14%>默认值：</th>
             <th width=42%>说明：</th>
             <th width=18%>生效：</th>
         </tr>
-        <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>cron</td>
             <td>null</td>
-            <td>定时计划：时间表</td>
-            <td>下次任务执行</td>
+            <td>cron计划</td>
+            <td>下轮任务执行</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>fixedRate</td>
             <td>0</td>
-            <td>定时计划：距离上次任务开始的时间，单位（毫秒）</td>
-            <td>下次任务执行</td>
+            <td>距离上次任务开始的时间（毫秒）</td>
+            <td>下轮任务执行</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>fixedDelay</td>
             <td>0</td>
-            <td>定时计划：距离上次任务结束的时间，单位（毫秒）<br><font color="gray">定时计划优先级：cron > fixedRate > fixedDelay</font></td>
-            <td>下次任务执行</td>
+            <td>距离上次任务结束的时间（毫秒）</td>
+            <td>下轮任务执行</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-            <td>threadCore</td>
-            <td>1</td>
-            <td>核心线程数，如果设置时core > max，则将max置为core</td>
-            <td>立即生效</td>
-        </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-            <td>threadMax</td>
-            <td>1</td>
-            <td>最大线程数，如果设置时max < core，则将core置为max</td>
-            <td>立即生效</td>
-        </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-            <td>threadAliveTime</td>
-            <td>1</td>
-            <td>线程最大空闲时间，单位（毫秒）</td>
-            <td>立即生效</td>
-        </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-            <td>queueSize</td>
-            <td>256</td>
-            <td>任务队列长度</td>
-            <td>任务重启</td>
-        </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-            <td>taskOverTime</td>
-            <td>0</td>
-            <td>任务超时时间，单位（毫秒）</td>
-            <td>下次任务执行</td>
-        </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>enable</td>
             <td>true</td>
             <td>是否在加载时启动（startup）</td>
             <td>任务重启</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>execOnLoad</td>
             <td>false</td>
-            <td>是否在启动时立即执行</td>
+            <td>是否在启动后立即执行</td>
             <td>任务重启</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>initialDelay</td>
+            <td>0</td>
+            <td>任务在启动后首次执行的延时时间（毫秒）</td>
+            <td>下轮任务执行</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>deadTime</td>
+            <td>0</td>
+            <td>任务截止时间，超过截止时间后任务不再执行</td>
+            <td>立即生效</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>threadCore</td>
+            <td>1</td>
+            <td>核心线程数，如果设置时core > max，则将max置为core</td>
+            <td>立即生效</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>threadMax</td>
+            <td>1</td>
+            <td>最大线程数，如果设置时max < core，则将core置为max</td>
+            <td>立即生效</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>threadAliveTime</td>
+            <td>10</td>
+            <td>线程最大空闲时间（毫秒）</td>
+            <td>立即生效</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>queueSize</td>
+            <td>256</td>
+            <td>任务队列长度</td>
+            <td>任务重启</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>taskOverTime</td>
+            <td>0</td>
+            <td>任务超时时间（毫秒）</td>
+            <td>下轮任务执行</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>enableTaskConflict</td>
             <td>false</td>
             <td>是否检测任务冲突（根据任务id）</td>
             <td>任务重启</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>detectTimeoutOnEachTask</td>
             <td>true</td>
             <td>是否针对每个任务单独检测超时</td>
-            <td>下次任务执行</td>
+            <td>下轮任务执行</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>ignoreExecRequestWhenRunning</td>
             <td>true</td>
-            <td>Running状态时，是否忽略立即执行请求</td>
+            <td>Running状态时，是否忽略触发执行请求</td>
             <td>立即生效</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>remark</td>
             <td>null</td>
-    <td>备注说明</td>
-    <td>立即生效</td>
+            <td>备注说明</td>
+            <td>立即生效</td>
         </tr>
         <tr style="border-bottom:0.01rem solid grey;">
             <th width=25%>启动开关：@EnableFom</th>
             <th width=10%>默认值：</th>
-    <th width=50%>说明：</th>
+            <th width=50%>说明：</th>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
             <td>enableFomView</td>
             <td>true</td>
-    <td>是否启用内置的任务管理接口及界面</td>
+        <td>是否启用管理界面</td>
         </tr>
         <tr style="border-bottom:0.01rem solid grey;">
             <th width=25%>环境变量：</th>
             <th width=10%>默认值：</th>
-    <th width=50%>说明：</th>
+            <th width=50%>说明：</th>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-            <td>spring.fom.config.cache.enable</td>
-            <td>true</td>
-    <td>是否对配置修改进行否持久化</td>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>spring.fom.cache.type</td>
+            <td>file</td>
+            <td>配置持久化方式，暂时只有本地文件保存</td>
         </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-            <td>spring.fom.config.cache.path</td>
-            <td>cache/schedule</td>
-    <td>配置持久化的文件路径</td>
-        </tr>
-    <tr style="border-bottom:0.01rem solid #ededed;">
-            <td>spring.fom.config.cache.history</td>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>spring.fom.cache.history</td>
             <td>false</td>
-    <td>是否保存历史修改的持久化文件，默认只保存最近一次修改</td>
+            <td>是否保存历史配置修改，默认只保存最新配置</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>spring.fom.cache.file.path</td>
+            <td>cache/schedule</td>
+        <td>保存文件路径</td>
         </tr>
     </table></p>
-<h4 id="1-3-状态定义"><a href="#1-3-状态定义" class="headerlink" title="1.3. 状态定义"></a>1.3. 状态定义</h4><p>对于<code>ScheduleContext</code>中维护的几个状态，其状态转换机制可以用下图表示：</p>
+<h4 id="1-3-状态定义"><a href="#1-3-状态定义" class="headerlink" title="1.3. 状态定义"></a>1.3. 状态定义</h4><p>对于<code>ScheduleContext</code>中维护的状态，其转换机制可以如下图表示：</p>
 <p><img src="/img/20190702/20190702.1.jpg" alt=""></p>
 <ul>
 <li>如果处于状态：<font color="#E51508">INITED</font> 或 <font color="#E51508">STOPPED</font></li>
 </ul>
-<p>可以接收外部线程的<code>startup</code>，然后启动定时线程，由定时线程将状态切换为 RUNNING；</p>
+<p>可以接收外部信号<code>startup</code>，然后启动调度线程，并将状态切换为 RUNNING；</p>
 <ul>
 <li>如果处于状态：<font color="#E51508">RUNNING</font></li>
 </ul>
-<p>正常情况下，定时线程会等待任务结束后，将状态切换为 SLEEPING，如果没有设置定时计划(一次性任务)，则切换为 INITED；</p>
-<p>另外，可以接收外部线程的<code>shutDown</code>，由外部线程将状态切换为 STOPPING，并请求中断定时线程。然后定时线程会跳过等待任务结束的过程，并很快检测到 STOPPING 状态，接着尝试取消还在执行的任务，关闭线程池，并在所有任务真正结束后将状态切换为 STOPPED；</p>
-<p>也可以接收外部线程的<code>execNow</code>，但默认是忽略，如果将<code>ignoreExecRequestWhenRunning</code>设置为<code>false</code>，那么会在本次任务结束之后会立即再重新执行一次；</p>
+<p>正常情况下，调度线程会等待任务结束后将状态切换为 SLEEPING，如果没有设置定时计划(一次性任务)，则切换为 INITED；</p>
+<p>可以接收外部信号<code>shutDown</code>，由外部线程将状态切换为 STOPPING，并请求中断调度线程。然后调度线程会跳过等待任务结束的过程，并及时检测到 STOPPING 状态，接着尝试取消还在执行的任务，关闭线程池，并在所有任务真正结束后将状态切换为 STOPPED；</p>
+<p>可以接收外部信号<code>execNow</code>，默认会被忽略，如果将<code>ignoreExecRequestWhenRunning</code>设置为<code>false</code>，那么将在本轮任务结束之后会立即再重新执行；</p>
 <ul>
 <li>如果处于状态：<font color="#E51508">SLEEPING</font></li>
 </ul>
-<p>正常情况下，定时线程会在<code>sleep</code>结束后进行下一次任务执行，并将状态切换为 RUNNING；</p>
-<p>另外，可以接收外部线程的<code>execNow</code>，由外部线程中断定时线程的等待，然后定时线程立即开始下一次任务执行，并将状态切换为 RUNNING；</p>
-<p>也可以接收外部线程的<code>shutDown</code>，也是由外部线程中断定时线程的等待，但在这之前，外部线程会将状态切换为 STOPPING，然后定时线程在开始下一次任务之前会检测到这个 STOPPING 状态，接着定时线程会关闭线程池，将状态切换为 STOPPED；</p>
+<p>正常情况下，调度线程会处于<code>sleep</code>状态直到下一轮执行时机，将状态切换为 RUNNING；</p>
+<p>可以接收外部信号<code>execNow</code>，由外部线程中断调度线程的等待，然后调度线程立即开始下一轮任务执行，并将状态切换为 RUNNING；</p>
+<p>可以接收外部信号<code>shutDown</code>，也是由外部线程中断调度线程的等待，但在这之前，外部线程会将状态切换为 STOPPING，然后调度线程在开始下一轮任务之前会检测到这个 STOPPING 状态，接着会去关闭线程池，并将状态切换为 STOPPED；</p>
 <ul>
 <li>如果处于状态：<font color="#E51508">STOPPING</font></li>
 </ul>
-<p>此时忽略一切外部请求，直到定时线程等待所有任务结束之后，由定时线程将状态切换为 STOPPED；</p>
-<h4 id="1-4-定时线程"><a href="#1-4-定时线程" class="headerlink" title="1.4. 定时线程"></a>1.4. 定时线程</h4><p>对于<code>ScheduleContext</code>中的定时线程，根据上面的状态描述，可以简要画出其执行流程如下：</p>
+<p>此时忽略一切外部信号，直到调度线程等待所有任务结束之后，由调度线程将状态切换为 STOPPED；</p>
+<h4 id="1-4-调度线程"><a href="#1-4-调度线程" class="headerlink" title="1.4. 调度线程"></a>1.4. 调度线程</h4><p>对于<code>ScheduleContext</code>中的调度线程，根据上面的状态描述，可以大概画出其执行流程如下：</p>
 <p><img src="/img/20190702/20190702.5.jpg" alt=""> </p>
 <h3 id="2-具体实现"><a href="#2-具体实现" class="headerlink" title="2. 具体实现"></a>2. 具体实现</h3><h4 id="2-1-加载启动"><a href="#2-1-加载启动" class="headerlink" title="2.1. 加载启动"></a>2.1. 加载启动</h4><ul>
 <li><strong>加载</strong></li>
 </ul>
-<p>对于任务的<font color="#E51508">加载和启动完全委托给了spring应用上下文</font>，首先定义一个注解<code>@FomSchedule</code>并继承<code>@Component</code>，这样spring在加载容器时会帮忙加载标识了<code>@FomSchedule</code>的目标类，然后在后面可以通过<code>@FomSchedule</code>来识别目标类</p>
-<figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/spring-fom/blob/master/src/main/java/org/springframework/fom/annotation/</span><span class="caption">FomSchedule.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line marked"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FomSchedule &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@AliasFor</span>(annotation = Component<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line">    String value() default "";</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 加载时是否启动</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">enable</span><span class="params">()</span> <span class="keyword">default</span> ENABLE_DEFAULT</span>;</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 启动时是否立即执行，默认false</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">execOnLoad</span><span class="params">()</span> <span class="keyword">default</span> EXEC_ONLOAN_DEFAULT</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>任务的<font color="#E51508">加载和启动完全委托给spring应用上下文</font>，首先定义一个注解<code>@Fom</code>继承<code>@Component</code>，这样spring容器就会帮忙加载所有<code>@Fom</code></p>
+<figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/spring-fom/blob/master/src/main/java/org/springframework/fom/annotation/</span><span class="caption">Fom.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line marked"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Fom &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AliasFor</span>(annotation = Component<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line">    String value() default "";</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>但这里不仅是想让spring帮忙创建和管理目标类的实例，还希望能根据类上面的<code>@FomSchedule</code>创建对应的<code>ScheduleContext</code></p>
 <p>于是通过实现接口<code>ImportBeanDefinitionRegistrar</code>扫描所有注册的<code>BeanDefinition</code>，如果其对应的类上面标识了<code>@FomSchedule</code>，就注册一个对应的<code>ScheduleContext</code>定义，至于<code>beanName</code>，就在原目标类的<code>beanName</code>前加一个<code>$</code>符，表示获取的意思，当然如果目标类已经继承了<code>ScheduleContext</code>，那么就简单注册一个别名。</p>
 <figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/spring-fom/blob/master/src/main/java/org/springframework/fom/annotation/</span><span class="caption">EnableFom.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line marked"><span class="meta">@Import</span>(FomBeanDefinitionRegistrar<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">EnableFom</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">enableFomView</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">true</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -381,7 +388,7 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2019/07/04/20190704/">
-		    基于线程池构建任务管理工具spring-fom 使用文档
+		    任务管理工具spring-fom 使用文档
 		  </a>
 	  
 	  
@@ -397,14 +404,14 @@
         
   
   <div class="categories">
-    <a href="/categories/开发随笔/">开发随笔</a>
+    <a href="/categories/开发笔记/">开发笔记</a>
   </div>
 
 
         
   
   <div class="tags">
-    <a href="/tags/ThreadPoolExecutor/">ThreadPoolExecutor</a>
+    <a href="/tags/Schedule/">Schedule</a>
   </div>
 
 
@@ -446,12 +453,9 @@
 <script src="/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-
-$("#java_ul").click(function(){ $("#java_li").toggle(); });
-$("#frame_ul").click(function(){ $("#frame_li").toggle(); });
-$("#os_ul").click(function(){ $("#os_li").toggle(); });
-$("#db_ul").click(function(){ $("#db_li").toggle(); });
-		
+    $("#java_ul").click(function(){ $("#java_li").toggle(); });
+    $("#os_ul").click(function(){ $("#os_li").toggle(); });
+    $("#db_ul").click(function(){ $("#db_li").toggle(); });		
 });
 </script>
 
@@ -462,7 +466,7 @@ $("#db_ul").click(function(){ $("#db_li").toggle(); });
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-思路"><span class="toc-text">1. 思路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-功能设计"><span class="toc-text">1.1. 功能设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-配置"><span class="toc-text">1.2. 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-状态定义"><span class="toc-text">1.3. 状态定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-定时线程"><span class="toc-text">1.4. 定时线程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-具体实现"><span class="toc-text">2. 具体实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-加载启动"><span class="toc-text">2.1. 加载启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-任务执行"><span class="toc-text">2.2. 任务执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-超时检测"><span class="toc-text">2.3. 超时检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-任务关闭"><span class="toc-text">2.4. 任务关闭</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-其它"><span class="toc-text">3. 其它</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-关于统计"><span class="toc-text">3.1. 关于统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-关于配置"><span class="toc-text">3.2. 关于配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-关于日志"><span class="toc-text">3.3. 关于日志</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-思路"><span class="toc-text">1. 思路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-功能设计"><span class="toc-text">1.1. 功能设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-配置"><span class="toc-text">1.2. 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-状态定义"><span class="toc-text">1.3. 状态定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-调度线程"><span class="toc-text">1.4. 调度线程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-具体实现"><span class="toc-text">2. 具体实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-加载启动"><span class="toc-text">2.1. 加载启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-任务执行"><span class="toc-text">2.2. 任务执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-超时检测"><span class="toc-text">2.3. 超时检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-任务关闭"><span class="toc-text">2.4. 任务关闭</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-其它"><span class="toc-text">3. 其它</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-关于统计"><span class="toc-text">3.1. 关于统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-关于配置"><span class="toc-text">3.2. 关于配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-关于日志"><span class="toc-text">3.3. 关于日志</span></a></li></ol></li></ol>
 </div>
 
 
@@ -475,7 +479,7 @@ $("#db_ul").click(function(){ $("#db_li").toggle(); });
 
   
   
-      &copy; 2022 shanhm1991 
+      &copy; 2017-2023 &nbsp;&nbsp; @by shanhm1991 &nbsp;&nbsp; @version 1.0.0
   
   
   
