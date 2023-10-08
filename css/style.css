@@ -12,6 +12,8 @@ body {
   background: #eee;
   color: #222;
   font: 13px/20px Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
   text-shadow: 0 0 1px transparent;
 }
 @media screen and (max-width: 1260px) {
@@ -365,7 +367,7 @@ table-layout fixed {
 table-layout fixed th {
   white-space: nowrap;
   color: #444;
-  font-weight: 600;
+  font-weight: 400;
   background: #eee;
 }
 table-layout fixed td,
@@ -402,9 +404,10 @@ pre {
 code {
   background: #eee;
   color: #666;
-  padding: 0 5px;
+  padding: 0 1px;
   margin: 0 2px;
-  font-size: 0.9em;
+  font-size: 0.5em;
+  font-family: menlo;
   border: 1px solid #ddd;
   border-radius: 3px;
 }
@@ -414,7 +417,6 @@ pre {
 pre overflow-x auto {
   background: #eee;
   border: none;
-  margin-top: 10px;
   padding: 7px 15px;
   border-radius: 2px;
 }
@@ -842,7 +844,7 @@ figure.highlight {
 }
 figure.highlight figcaption {
   color: #999;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   text-shadow: 0 0 1px #fff;
 }
 figure.highlight figcaption a {
@@ -855,21 +857,23 @@ figure.highlight pre {
 overflow-x auto {
   border: none;
   padding: 0px;
+  font-family: menlo;
 }
 table {
   margin-top: 0;
   border-spacing: 0;
 }
 .gutter {
-  width: 30px;
+  width: 26px;
+  display: inline-block;
   color: #999;
-  padding-right: 5px;
+  padding-right: 2px;
   border-right: 1px solid #ddd;
   text-align: right;
 }
 .code {
   width: 768px;
-  padding-left: 5px;
+  padding-left: 1px;
   border-left: 1px solid #fff;
   color: #333;
 }
