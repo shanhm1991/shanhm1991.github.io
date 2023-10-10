@@ -73,7 +73,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/06/30/20190630/">借助poi解析Excel 三 XML定义解析规则</a>
+       <a href="/2019/06/30/20190630/">poi解析Excel(三) XML定义解析规则</a>
     </h1>
     
   
@@ -87,7 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>相对于文本文件，Excel可以将表格数据描述的更结构化，它可以用不同的sheet存放不同的数据，并且在sheet中可指定各个字段的列头，在单元格中可以设置数据类型或格式校验。如果解析时能将这些结构信息利用并且可配，那么对解析处理将会有一些帮助<br>
+        <p>相对于普通文本，Excel可以将表格数据描述得更结构化，它可以用不同的sheet存放不同的数据，并且在sheet中可指定各个字段的列头，在单元格中可以设置数据类型或格式校验。如果解析时能将这些结构信息利用并且支持可配，那么对解析处理将会有一些帮助<br>
       
     </div>
 	
@@ -125,7 +125,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/06/29/20190629/">借助poi解析Excel 二 SAX解决内存溢出问题</a>
+       <a href="/2019/06/29/20190629/">poi解析Excel(二) SAX解决内存溢出问题</a>
     </h1>
     
   
@@ -139,7 +139,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>继续上文，Excel的数据存在Xml中，所以解析Excel也就是解析xml。对于文本文件，可以通过换行符来确定一行的结束。而对于xml，其描述数据的单位是节点，并且可以嵌套，因此读取时就是以节点结束来进行确定，不过除非事先知道xml的节点规则，即节点结构或相互之间的关系，否则无法正确读取。Excel中的Xml规则即由Excel规范来描述，而poi正是在这个规范的基础上提供了一套基于事件解析的api。<br>
+        <p>由于Excel的数据是通过xml来描述，所以解析Excel也就是解析xml。对于文本文件，可以通过换行符来确定一行的结束。而对于xml，其描述数据的单位是节点，并且可以嵌套，因此读取时是以节点结束来进行确定，但是除非事先知道xml的节点规则，即节点相互之间的嵌套结构，否则无法正确读取。这个xml规则就定义在Excel的规范中，poi也是基于这个规则来对Excel进行解析的<br>
       
     </div>
 	
@@ -177,7 +177,7 @@
   
   
     <h1 class="title">
-       <a href="/2019/06/28/20190628/">借助poi解析Excel 一 实现readLine读取</a>
+       <a href="/2019/06/28/20190628/">poi解析Excel(一) 实现readLine读取</a>
     </h1>
     
   
@@ -191,7 +191,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>一般读取文本时会使用<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上进行了装饰，提供<code>readLine()</code>来简化文本行的读取。使得行数据的读取可以像流水线一样，每当读取完一行后，它就自动准备好下一行并等待获取，直至全部读取结束。所以这里也<font color="#E51508">希望能够在poi的基础上提供一个类似<code>readLine()</code>的接口来读取Excel，并可以比较方便地获取行数据中的字段。</font><br>
+        <p>读取文本时通常会使用<code>BufferedReader</code>，它在<code>InputStreamReader</code>的基础上进行装饰，提供了<code>readLine()</code>来简化文本行的读取。使得行数据的读取可以像流水线一样，每当读取完一行后，它就自动准备好下一行并等待获取，直至全部读取结束。所以这里也希望能够<font color="#E51508">在poi的基础上提供一个类似<code>readLine()</code>的接口来读取Excel，并可以比较方便地获取行数据中的字段。</font><br>
       
     </div>
 	
@@ -598,36 +598,6 @@
   
   
   
-    <li><a href="/categories/日常笔记/" style="width:50px; display:inline-block;">日常笔记</a><small>12</small></li>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   
@@ -642,8 +612,38 @@
   
   
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <li><a href="/categories/日常笔记/" style="width:50px; display:inline-block;">日常笔记</a><small>12</small></li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
   <li id="os_ul"><a href="#" style="width:50px; display:inline-block;">读书笔记</a><small>42</small></li>
-  <ul id="os_li" class="entry_li" style="list-style: none; padding-left: 5px;">
+  <ul id="os_li" class="entry_li" style="list-style: none; padding-left: 5px; display: none;">
       
       
       
@@ -802,9 +802,7 @@
 <script src="/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#java_ul").click(function(){ $("#java_li").toggle(); });
     $("#os_ul").click(function(){ $("#os_li").toggle(); });
-    $("#db_ul").click(function(){ $("#db_li").toggle(); });		
 });
 </script>
 
@@ -813,7 +811,7 @@ $(document).ready(function(){
 <div class="widget tagcloud">
   <h3 class="title">Tags</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 15px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/Schedule/" style="font-size: 12.5px;">Schedule</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
+    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/Schedule/" style="font-size: 12.5px;">Schedule</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
   </div>
 </div>
 
