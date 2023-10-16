@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Java 字符串 | Echo</title>
+  <title>Java String | Echo</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="String是Java中使用最频繁的对象之一，其本质上是维护了一个char或byte数组，并提供了基于这个数组的一些操作">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Java 字符串"/>
+  <meta property="og:title" content="Java String"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -74,7 +74,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        Java 字符串
+        Java String
     </h1>
     
     
@@ -342,5 +342,20 @@ $(document).ready(function(){
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

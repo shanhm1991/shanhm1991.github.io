@@ -157,7 +157,7 @@
 <h4 id="2-1-简单I-O方式"><a href="#2-1-简单I-O方式" class="headerlink" title="2.1. 简单I/O方式"></a>2.1. 简单I/O方式</h4><p>简单地假设外设始终处于就绪状态，数据传送时，将不作任何的状态检测。当然，只有当I/O接口与外设之间采用无条件传送时，CPU与I/O接口直接才能采用无条件传送方式。当简单外设作为输入设备时，可采用三态缓冲器与数据总线相连，作为输出设备时，一般采用锁存器。</p>
 <h4 id="2-2-程序轮询方式"><a href="#2-2-程序轮询方式" class="headerlink" title="2.2. 程序轮询方式"></a>2.2. 程序轮询方式</h4><p>一般外设每传送完一次数据总有进行一段时间的处理或准备才能传送下一次数据，因此在数据传送之前，CPU需要通过接口对目标设备的状态进行查询。如果外设已经准备好了则传数据，如果未准备好则要不断地查询并等待，直到外设准备好信息交互。</p>
 <p>程序轮询方式是一种简单的输入输出方式，数据在CPU和外设之间的传送完全交给计算机程序控制，其优点是CPU的操作和外设的操作能够同步，而且软硬件结构都比较简单。</p>
-<p><img src="/img/20180202/20180202.9.jpg" alt=""> </p>
+<p><img src="/img/20180202/20180202.8.jpg" alt=""> </p>
 <ol>
 <li>接到总线上的每个设备都预先给定了设备地址码。CPU执行I/O指令时需要把指令中的设备地址送到总线上，用以指示CPU要选择的设备。每个设备接口都包含一个设备选择电路，<br>用来判断总线上呼叫的是不是本设备，如果是则进入工作状态，否则不予理睬。</li>
 <li>CPU将读指令发送到控制寄存器，询问状态</li>
@@ -175,6 +175,7 @@
 <p>中断处理过程是由硬件和软件结合来完成的，中断周期由硬件实现，而中断服务子程序由机器指令序列实现，后者要负责保存和恢复现场。</p>
 <p><img src="/img/20180202/20180202.10.jpg" alt=""> </p>
 <p>中断方式中CPU将等待过程完全交给了IO设备自行处理，CPU在发起请求后继续执行后续指令（一般会对执行进行预取，放到指令队列中），然后I/O接口收到请求后，等到数据准备好后自行向CPU请求中断，这样CPU可以腾出更多的周期来执行程序指令。</p>
+<p><img src="/img/20180202/20180202.9.jpg" alt=""> </p>
 <h4 id="2-4-DMA方式"><a href="#2-4-DMA方式" class="headerlink" title="2.4. DMA方式"></a>2.4. DMA方式</h4><p>中断的方式只是将等待过程交给IO设备自行处理，但是数据的传送依然有CPU自己负责，每一次传送，CPU都要进行一遍中断处理，完成一系列取指令、分析指令、执行指令的过程，而且要保存和恢复被中断程序的状态，在指令流水方式中，在中断发生或从中断返回时，指令队列预取的指令将全部作废。因此，在高速、大量地传送数据时，中断方式难以满足速度要求。</p>
 <p>DMA是一种完全由硬件执行I/O交换的工作，由DMA控制器从CPU完全接管对总线的控制，数据交换不经过CPU，而直接在内存和外围设备之间进行，这样既能响应随机发生的服务请求，同时也省去了中断处理的开销。</p>
 <p><img src="/img/20180202/20180202.11.jpg" alt=""> </p>
@@ -319,5 +320,20 @@ $(document).ready(function(){
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

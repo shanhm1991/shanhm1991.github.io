@@ -124,10 +124,10 @@
 <li><p><strong>v-node表：</strong>与文件表一样，所有进程共享 v-node 表。每个表项包含 stat 结构中的大多数信息，包括 st_mode 和 st_size 成员</p>
 </li>
 </ul>
-<p><img src="/img/20180202/20180202.12.jpg" alt=""> </p>
+<p><img src="/img/20180310/20180310.1.jpg" alt=""> </p>
 <p>多个描述符也可以通过不同的文件表项来引用同一个文件，例如以同一个 filename 调用 open 函数两次，就会发生这种情况。另外，Linux shell创建的每个进程开始时都有三个打开的文件：标准输入（STDIN_FILENO=0）、标准输出（STDOUT_FILENO=1）和标准错误（STDERR_FILENO=2）</p>
 <h3 id="1-磁盘IO"><a href="#1-磁盘IO" class="headerlink" title="1. 磁盘IO"></a>1. 磁盘IO</h3><h4 id="1-1-缓存IO"><a href="#1-1-缓存IO" class="headerlink" title="1.1. 缓存IO"></a>1.1. 缓存IO</h4><p>大多数文件系统的默认 I/O 操作都是缓存 I/O，所以一般也称为标准 I/O 操作。以读操作为例，应用程序需要走 read 系统调用，这样数据会先拷贝到操作系统的内核缓存，然后再从内核拷贝到应用进程空间。反之写操作，需要走 write 调用，也是类似的。</p>
-<p><img src="/img/20180202/20180202.8.jpg" alt=""> </p>
+<p><img src="/img/20180310/20180310.2.jpg" alt=""> </p>
 <p>根据程序的<font style="color:#E51508;">局部性原理</font>，最近被访问的信息很可能还要被访问（时间局部性），以及与最近被访问数据邻近的数据也可能被访问（空间局部性）。因此实际读取时，操作系统会帮进程作一部分预读，这样的好处是可以减少对 I/O 设备的实际访问次数，但由于读写操作都要先经过内核缓存，然后再复制到用户空间，因此也多了一次内存复制操作。</p>
 <h4 id="1-2-页缓存-PageCache"><a href="#1-2-页缓存-PageCache" class="headerlink" title="1.2. 页缓存 PageCache"></a>1.2. 页缓存 PageCache</h4><p>PageCache 是操作系统对文件的缓存，用来减少对磁盘的 I/O 操作，以页为单位的，内容就是磁盘上的物理块，页缓存能让程序对文件进行顺序读写时的速度几乎接近于内存的读写速度，主要原因就是由于 OS 使用 PageCache 机制对读写访问操作进行了一下缓冲。</p>
 <ul>
@@ -169,7 +169,7 @@
 <li>数据准备：等待网络上的数据分组到达，然后复制到内核缓冲区</li>
 <li>数据拷贝：将数据从内核缓冲区复制到应用进程空间</li>
 </ol>
-<p><img src="/img/20180310/20180310.1.jpg" alt=""></p>
+<p><img src="/img/20180310/20180310.3.jpg" alt=""></p>
 <h4 id="2-1-阻塞IO"><a href="#2-1-阻塞IO" class="headerlink" title="2.1. 阻塞IO"></a>2.1. 阻塞IO</h4><p>这种处理比较简单，即用户进程走<code>recv</code>系统调用，然后交给内核处理并进行等待，内核完成操作后再返回给进程，但进程在等待期间将一直处于阻塞状态，而这里的等待包括了上面两个阶段。</p>
 <p>其优点是可以及时返回数据，无延迟，而且实现简单，而缺点则是进程一直处于阻塞等待，程序性能较低。</p>
 <h4 id="2-2-非阻塞IO"><a href="#2-2-非阻塞IO" class="headerlink" title="2.2. 非阻塞IO"></a>2.2. 非阻塞IO</h4><p>即内核在进程发出调用后会立即响应一个状态，但这个状态可能是数据还没准备好，因此需要进程自己处理轮询检测状态。   </p>
@@ -332,5 +332,20 @@ $(document).ready(function(){
 })(jQuery);
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
