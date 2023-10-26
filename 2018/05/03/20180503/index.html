@@ -3,19 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>vmware设置ubuntu静态ip | Echo</title>
+  <title>vmware网络设置 桥接 &amp; NAT | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="vmware版本：14.1.1ubuntu版本：16.0.4  
-问题
-以nat方式设置ubuntu的静态ip
-域名无法解析
-ssh无法登录">
+  <meta name="description" content="vmware版本：14.1.1ubuntu版本：16.0.4centos版本：7.9">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="vmware设置ubuntu静态ip"/>
+  <meta property="og:title" content="vmware网络设置 桥接 &amp; NAT"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -78,7 +74,7 @@ ssh无法登录">
   
   
     <h1 class="p-name title" itemprop="headline name">
-        vmware设置ubuntu静态ip
+        vmware网络设置 桥接 &amp; NAT
     </h1>
     
     
@@ -92,7 +88,7 @@ ssh无法登录">
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 568  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
+   <font style="color: #999;"> words: 1.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 5min</font>
    
    
   
@@ -113,35 +109,58 @@ ssh无法登录">
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>vmware版本：14.1.1<br>ubuntu版本：16.0.4  </p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
-<li>以nat方式设置ubuntu的静态ip</li>
-<li>域名无法解析</li>
-<li>ssh无法登录<a id="more"></a>
-</li>
-</ol>
-<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><h4 id="问题1：以nat方式设置ubuntu的静态ip"><a href="#问题1：以nat方式设置ubuntu的静态ip" class="headerlink" title="问题1：以nat方式设置ubuntu的静态ip"></a>问题1：以nat方式设置ubuntu的静态ip</h4><p>参考<a href="https://www.jianshu.com/p/2e5fecf2a7df" target="_blank" rel="noopener">https://www.jianshu.com/p/2e5fecf2a7df</a> ，按部就班进行配置，比如：</p>
+        <p>vmware版本：14.1.1<br>ubuntu版本：16.0.4<br>centos版本：7.9<br><a id="more"></a></p>
+<h3 id="桥接与NAT区别"><a href="#桥接与NAT区别" class="headerlink" title="桥接与NAT区别"></a>桥接与NAT区别</h3><p><strong>桥接模式(bridged):</strong></p>
+<p>在桥接模式下，vmware虚拟出来的操作系统就像是局域网中的一台独立主机，此时虚拟机与host机在网络关系上处于对等的地位，它可以访问网内任何一台机器。主机网卡和虚拟网卡的IP地址处于同一个网段，子网掩码、网关、DNS等参数都相同。</p>
+<p><img src="/img/20180503/20180503.0.jpg" alt=""> </p>
+<p>这种方式是直接将虚拟机桥接到一个物理网卡上，此时虚拟机和host机同时使用真实网卡工作，通过真实网卡发送数据。如果虚拟机发送数据给host机，那么数据流是：虚拟机-&gt;真实网卡-&gt;路由器-&gt;真实网卡-&gt;host机，这样一个数据是经过网卡在路由器上面绕了一圈又回到了网卡。所以桥接必须经过真实网卡和路由器，这也是为什么当你的电脑没有连接有线网或者Wifi时，host机无法与虚拟机进行交互的原因，即便看起来两者很近也不行。</p>
+<p><strong>NAT模式:</strong></p>
+<p>NAT模式实际虚拟了一个网卡出来，虚拟机连接这个虚拟网卡，每次访问和交互都通过这个虚拟网卡交换数据。如果虚拟机发送数据给host机，那么数据流是：虚拟机-&gt;虚拟网卡-&gt;host机，不用再经过真实网卡。如果虚拟机访问外网，则数据流是：虚拟机-&gt;虚拟网卡-&gt;host机-&gt;真实网卡-&gt;路由器-&gt;外网。</p>
 <p><img src="/img/20180503/20180503.1.jpg" alt=""> </p>
+<p>在NAT模式中，虚拟机不需要与真实网卡处于同一个网络，这种模式的优势是虚拟系统接入互联网非常简单，你不需要进行任何其他的配置，只需要host机器能访问互联网即可。但是反之如果虚拟机要提供服务，并想从外网访问，就需要对NAT网关进行设置，因为对于网络中的其它机子来说，它们只能看到host机，所以需要将虚拟机提供的服务端口映射到host机的端口上。</p>
+<p>一般如果是在自己电脑上（比如出差）提供类似Gitlab这种团队协作的公共服务时，我们会使用NAT模式，这样当host机在不同网断之间切换时对虚拟机没有任何影响，别人只要能访问你主机就行。而如果是将虚拟机作为服务器来安装各种程序对外提供服务，则应该用桥接模式，不然每次安装一个服务，都需要配置端口映射，而且端口一旦变化链路就是失效，会很麻烦。</p>
+<h3 id="vmware网络设置"><a href="#vmware网络设置" class="headerlink" title="vmware网络设置"></a>vmware网络设置</h3><p><strong>桥接模式(bridged):</strong></p>
+<p>打开host机的网络设置，会看到有如下网卡，其中Wi-Fi是可以连网的</p>
 <p><img src="/img/20180503/20180503.2.jpg" alt=""> </p>
+<p>所以我们选择这个网卡进行桥接，这里可以看到VMnet0在宿主机的网络设置中并没有出现，因为桥接是直接连接物理网卡</p>
 <p><img src="/img/20180503/20180503.3.jpg" alt=""> </p>
-<p>对于dns的配置，文中说修改/etc/resolv.conf，但是重启时会重写这个文件，而且它就根据interfaces里的设置来写的，所以可以直接设置interfaces，设置之后，重启下网络服务，会看到ip已经生效了</p>
+<p>记住这个网卡的连接信息（后面配置虚拟机网络时有用）</p>
 <p><img src="/img/20180503/20180503.4.jpg" alt=""> </p>
-<h4 id="问题2：域名无法解析"><a href="#问题2：域名无法解析" class="headerlink" title="问题2：域名无法解析"></a>问题2：域名无法解析</h4><p><img src="/img/20180503/20180503.5.jpg" alt=""> </p>
-<p>提示域名无法解析，不过在windows上是可以ping的通的，所以怀疑的是配的dns地址问题。<br>这边耗了很长时间，后来参考<a href="https://blog.csdn.net/u013304231/article/details/53319375" target="_blank" rel="noopener">https://blog.csdn.net/u013304231/article/details/53319375</a><br>想到了可能是路由的问题，关于路由/网关/dns的办法介绍可以看这篇：<a href="https://blog.csdn.net/sgl520lxl/article/details/51974215" target="_blank" rel="noopener">https://blog.csdn.net/sgl520lxl/article/details/51974215</a></p>
+<p><strong>NAT模式:</strong></p>
+<p>选择NAT模式，首先设置NAT网段</p>
+<p><img src="/img/20180503/20180503.5.jpg" alt=""> </p>
+<p>然后进入NAT设置，配置NAT网关，如果虚拟机要对外提供服务的话，需要在这里添加端口映射</p>
 <p><img src="/img/20180503/20180503.6.jpg" alt=""> </p>
-<p><code>route add default gw 192.168.141.1 ens33</code>增加路由后，再执行wget，就可以看到200 ok的响应了。</p>
-<h4 id="问题3：ssh无法登录"><a href="#问题3：ssh无法登录" class="headerlink" title="问题3：ssh无法登录"></a>问题3：ssh无法登录</h4><p>本以为都结束了，然后发现ssh无法登录，连接失败。参考<a href="https://blog.csdn.net/niuwei22007/article/details/50486872" target="_blank" rel="noopener">https://blog.csdn.net/niuwei22007/article/details/50486872</a><br>应该是由于网关不一致的问题（以前在电脑与电脑之间用网线传数据时经常会修改网关，只要两边网关一致就可以远程桌面了）    </p>
-<p>于是修改本机的网络配置：</p>
+<h3 id="以桥接模式连接ubuntu"><a href="#以桥接模式连接ubuntu" class="headerlink" title="以桥接模式连接ubuntu"></a>以桥接模式连接ubuntu</h3><p>选择ubuntu虚拟机进入设置，然后选择桥接模式</p>
 <p><img src="/img/20180503/20180503.7.jpg" alt=""> </p>
-<p>其实一开始我是改的Ethernet，然后发现在window上能ping通了，ssh也可以登录，但是虚拟机不能上网了，改回自动获取ip后，虚拟机可以上网但是又无法ssh登录了，难道只能二者选其一吗，然后想大概是我用的wifi连接的网络，Ethernet本身没有连接网络所以虚拟机跟这个网关保持一致估计也不能上网，可以用有线网连上网后试一下是不是这个原因。</p>
-<p>最后是将vmnet8的网关改成一致，最后虚拟机ip改成静态，并且可以通过nat上网，主机也可以ssh登录了。</p>
+<p>登录ubuntu，然后根据上面桥接的网卡信息，修改网络配置文件<code>vim /etc/network/interfaces</code>，并重启网络</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">auto ens33</span><br><span class="line">iface ens33 inet static</span><br><span class="line"></span><br><span class="line">address 172.20.10.138</span><br><span class="line">netmask 255.255.255.240</span><br><span class="line">gateway 172.20.10.1</span><br></pre></td></tr></table></figure>
+<h3 id="以NAT模式连接centos"><a href="#以NAT模式连接centos" class="headerlink" title="以NAT模式连接centos"></a>以NAT模式连接centos</h3><p>选择centos虚拟机进入设置，然后选择NAT模式</p>
 <p><img src="/img/20180503/20180503.8.jpg" alt=""> </p>
+<p>登录centos，然后根据上面的NAT设置信息，修改网络配置文件<code>vim /etc/sysconfig/network-scripts/ifcfg-ens33</code>，并重启网络</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#修改</span><br><span class="line">BOOTPROTO&#x3D;static #将dhcp改为static</span><br><span class="line">ONBOOT&#x3D;yes       将no改为yes</span><br><span class="line">#新增</span><br><span class="line">IPADDR&#x3D;192.168.141.21 #静态IP</span><br><span class="line">GATEWAY&#x3D;192.168.141.1 #默认网关</span><br><span class="line">NETMASK&#x3D;255.255.255.0 #子网掩码</span><br></pre></td></tr></table></figure>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><ul>
+<li>无法连网问题</li>
+</ul>
+<p>一般如果虚拟机无法访问外网的话，如果不是dns域名解析问题，就检查网关是否设置正确，也就是上面配置的gateway，可以通过route命令查看</p>
+<p><img src="/img/20180503/20180503.9.jpg" alt=""> </p>
+<p>当然也可以手动添加网关：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add default gw 192.168.141.1 ens33</span><br></pre></td></tr></table></figure>
+<p>网关的作用就是当访问的目标在所处网络中找不到时，就会将内容发给网关。</p>
+<ul>
+<li>设置多个ip问题</li>
+</ul>
+<p>一个网卡设置两个或者多个IP地址的，也就是同时访问多个网段，但前提是这些网段的物理层是连接在一起。</p>
+<p>假设有两个局域网（LAN）通过交换机连接在一起，LAN1网段为:192.168.0.0/24，LAN2网段为:192.168.1.0/24，在没有第三层设备的情况下LAN1与LAN2下的主机是不可以相互访问的，虽然两个LAN通过交换机连接在了一起。</p>
+<p>但如果LAN1下的一台主机PC1设置了两个IP地址192.168.0.100/24和192.168.1.100/24，那么PC1就可以访问LAN2下的主机，因为通过ip协议就能找到目标主机，不要进行路由交换。</p>
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li><a href="https://www.jianshu.com/p/2e5fecf2a7df" target="_blank" rel="noopener">https://www.jianshu.com/p/2e5fecf2a7df</a></li>
 <li><a href="https://blog.csdn.net/u013304231/article/details/53319375" target="_blank" rel="noopener">https://blog.csdn.net/u013304231/article/details/53319375</a></li>
 <li><a href="https://blog.csdn.net/sgl520lxl/article/details/51974215" target="_blank" rel="noopener">https://blog.csdn.net/sgl520lxl/article/details/51974215</a></li>
 <li><a href="https://blog.csdn.net/niuwei22007/article/details/50486872" target="_blank" rel="noopener">https://blog.csdn.net/niuwei22007/article/details/50486872</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/65103100" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/65103100</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1463782" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1463782</a></li>
 </ol>
 
       
@@ -154,7 +173,7 @@ ssh无法登录">
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2018/05/10/20180510/">
-		    vmware设置centos静态ip
+		    Linux服务开机自启 centos &amp; ubuntu
 		  </a>
 	  
 	  
@@ -225,7 +244,7 @@ $(document).ready(function(){
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决"><span class="toc-text">解决</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#问题1：以nat方式设置ubuntu的静态ip"><span class="toc-text">问题1：以nat方式设置ubuntu的静态ip</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#问题2：域名无法解析"><span class="toc-text">问题2：域名无法解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#问题3：ssh无法登录"><span class="toc-text">问题3：ssh无法登录</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#桥接与NAT区别"><span class="toc-text">桥接与NAT区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vmware网络设置"><span class="toc-text">vmware网络设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以桥接模式连接ubuntu"><span class="toc-text">以桥接模式连接ubuntu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以NAT模式连接centos"><span class="toc-text">以NAT模式连接centos</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAQ"><span class="toc-text">FAQ</span></a></li></ol>
 </div>
 
 
