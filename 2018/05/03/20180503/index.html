@@ -88,7 +88,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 1.4k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 5min</font>
+   <font style="color: #999;"> words: 1.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
    
    
   
@@ -113,38 +113,38 @@
 <h3 id="桥接与NAT区别"><a href="#桥接与NAT区别" class="headerlink" title="桥接与NAT区别"></a>桥接与NAT区别</h3><p><strong>桥接模式(bridged):</strong></p>
 <p>在桥接模式下，vmware虚拟出来的操作系统就像是局域网中的一台独立主机，此时虚拟机与host机在网络关系上处于对等的地位，它可以访问网内任何一台机器。主机网卡和虚拟网卡的IP地址处于同一个网段，子网掩码、网关、DNS等参数都相同。</p>
 <p><img src="/img/20180503/20180503.0.jpg" alt=""> </p>
-<p>这种方式是直接将虚拟机桥接到一个物理网卡上，此时虚拟机和host机同时使用真实网卡工作，通过真实网卡发送数据。如果虚拟机发送数据给host机，那么数据流是：虚拟机-&gt;真实网卡-&gt;路由器-&gt;真实网卡-&gt;host机，这样一个数据是经过网卡在路由器上面绕了一圈又回到了网卡。所以桥接必须经过真实网卡和路由器，这也是为什么当你的电脑没有连接有线网或者Wifi时，host机无法与虚拟机进行交互的原因，即便看起来两者很近也不行。</p>
+<p>这种方式是直接将虚拟机桥接到一个物理网卡上，此时虚拟机和host机同时使用真实网卡工作，通过真实网卡发送数据。如果虚拟机发送数据给host机，那么数据流是：虚拟机-&gt;真实网卡-&gt;路由器-&gt;真实网卡-&gt;host机。<br>这样一个数据是经过网卡在路由器上面绕了一圈又回到了网卡。所以桥接必须经过真实网卡和路由器，这也是为什么当你的电脑没有连接有线网或者Wifi时，host机无法与虚拟机进行交互的原因，即便看起来两者很近也不行。</p>
 <p><strong>NAT模式:</strong></p>
 <p>NAT模式实际虚拟了一个网卡出来，虚拟机连接这个虚拟网卡，每次访问和交互都通过这个虚拟网卡交换数据。如果虚拟机发送数据给host机，那么数据流是：虚拟机-&gt;虚拟网卡-&gt;host机，不用再经过真实网卡。如果虚拟机访问外网，则数据流是：虚拟机-&gt;虚拟网卡-&gt;host机-&gt;真实网卡-&gt;路由器-&gt;外网。</p>
 <p><img src="/img/20180503/20180503.1.jpg" alt=""> </p>
 <p>在NAT模式中，虚拟机不需要与真实网卡处于同一个网络，这种模式的优势是虚拟系统接入互联网非常简单，你不需要进行任何其他的配置，只需要host机器能访问互联网即可。但是反之如果虚拟机要提供服务，并想从外网访问，就需要对NAT网关进行设置，因为对于网络中的其它机子来说，它们只能看到host机，所以需要将虚拟机提供的服务端口映射到host机的端口上。</p>
 <p>一般如果是在自己电脑上（比如出差）提供类似Gitlab这种团队协作的公共服务时，我们会使用NAT模式，这样当host机在不同网断之间切换时对虚拟机没有任何影响，别人只要能访问你主机就行。而如果是将虚拟机作为服务器来安装各种程序对外提供服务，则应该用桥接模式，不然每次安装一个服务，都需要配置端口映射，而且端口一旦变化链路就是失效，会很麻烦。</p>
-<h3 id="vmware网络设置"><a href="#vmware网络设置" class="headerlink" title="vmware网络设置"></a>vmware网络设置</h3><p><strong>桥接模式(bridged):</strong></p>
-<p>打开host机的网络设置，会看到有如下网卡，其中Wi-Fi是可以连网的</p>
+<h3 id="vmware设置桥接模式"><a href="#vmware设置桥接模式" class="headerlink" title="vmware设置桥接模式"></a>vmware设置桥接模式</h3><p>打开宿主机的网络设置，看到有如下网卡，其中只有Wi-Fi是连网的</p>
 <p><img src="/img/20180503/20180503.2.jpg" alt=""> </p>
-<p>所以我们选择这个网卡进行桥接，这里可以看到VMnet0在宿主机的网络设置中并没有出现，因为桥接是直接连接物理网卡</p>
+<p>所以这里选择Wi-Fi网卡进行桥接，可以看到VMnet0在宿主机的网络设置中并没有出现，因为桥接是直接连接的物理网卡。当然这里也可以添加或移除网络，然后设置网络模式，在后面连接具体虚拟机直接选择对应的网络。</p>
 <p><img src="/img/20180503/20180503.3.jpg" alt=""> </p>
-<p>记住这个网卡的连接信息（后面配置虚拟机网络时有用）</p>
+<p>记住这个网卡的连接信息（后面配置虚拟机网络时用）</p>
 <p><img src="/img/20180503/20180503.4.jpg" alt=""> </p>
-<p><strong>NAT模式:</strong></p>
-<p>选择NAT模式，首先设置NAT网段</p>
+<h3 id="vmware设置NAT模式"><a href="#vmware设置NAT模式" class="headerlink" title="vmware设置NAT模式"></a>vmware设置NAT模式</h3><p>选择NAT模式，设置NAT网段</p>
 <p><img src="/img/20180503/20180503.5.jpg" alt=""> </p>
-<p>然后进入NAT设置，配置NAT网关，如果虚拟机要对外提供服务的话，需要在这里添加端口映射</p>
+<p>然后进入NAT设置，配置网关，如果虚拟机要对外提供服务的话，需要在这里添加端口映射</p>
 <p><img src="/img/20180503/20180503.6.jpg" alt=""> </p>
-<h3 id="以桥接模式连接ubuntu"><a href="#以桥接模式连接ubuntu" class="headerlink" title="以桥接模式连接ubuntu"></a>以桥接模式连接ubuntu</h3><p>选择ubuntu虚拟机进入设置，然后选择桥接模式</p>
+<p>再配置一下宿主机的虚拟网卡地址，网关就是上面配置的，ip不要与虚拟机冲突</p>
 <p><img src="/img/20180503/20180503.7.jpg" alt=""> </p>
-<p>登录ubuntu，然后根据上面桥接的网卡信息，修改网络配置文件<code>vim /etc/network/interfaces</code>，并重启网络</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">auto ens33</span><br><span class="line">iface ens33 inet static</span><br><span class="line"></span><br><span class="line">address 172.20.10.138</span><br><span class="line">netmask 255.255.255.240</span><br><span class="line">gateway 172.20.10.1</span><br></pre></td></tr></table></figure>
-<h3 id="以NAT模式连接centos"><a href="#以NAT模式连接centos" class="headerlink" title="以NAT模式连接centos"></a>以NAT模式连接centos</h3><p>选择centos虚拟机进入设置，然后选择NAT模式</p>
+<h3 id="桥接模式连接ubuntu"><a href="#桥接模式连接ubuntu" class="headerlink" title="桥接模式连接ubuntu"></a>桥接模式连接ubuntu</h3><p>选中ubuntu虚拟机进入设置，选择桥接模式</p>
 <p><img src="/img/20180503/20180503.8.jpg" alt=""> </p>
+<p>登录ubuntu，然后根据上面桥接的网卡信息，修改网络配置文件<code>vim /etc/network/interfaces</code>，并重启网络</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">auto ens33</span><br><span class="line">iface ens33 inet static</span><br><span class="line"></span><br><span class="line">address 192.168.124.138</span><br><span class="line">netmask 255.255.255.240</span><br><span class="line">gateway 192.168.124.1</span><br></pre></td></tr></table></figure>
+<h3 id="NAT模式连接centos"><a href="#NAT模式连接centos" class="headerlink" title="NAT模式连接centos"></a>NAT模式连接centos</h3><p>选中centos虚拟机进入设置，选择NAT模式（这里选择自定义网络是一样的，默认三种网络VMnet0、VMnet1、VMnet8，也可以自己添加和设置）</p>
+<p><img src="/img/20180503/20180503.9.jpg" alt=""> </p>
 <p>登录centos，然后根据上面的NAT设置信息，修改网络配置文件<code>vim /etc/sysconfig/network-scripts/ifcfg-ens33</code>，并重启网络</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#修改</span><br><span class="line">BOOTPROTO&#x3D;static #将dhcp改为static</span><br><span class="line">ONBOOT&#x3D;yes       将no改为yes</span><br><span class="line">#新增</span><br><span class="line">IPADDR&#x3D;192.168.141.21 #静态IP</span><br><span class="line">GATEWAY&#x3D;192.168.141.1 #默认网关</span><br><span class="line">NETMASK&#x3D;255.255.255.0 #子网掩码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#修改</span><br><span class="line">BOOTPROTO&#x3D;static #将dhcp改为static</span><br><span class="line">ONBOOT&#x3D;yes       #将no改为yes</span><br><span class="line">#新增</span><br><span class="line">IPADDR&#x3D;192.168.141.138 #静态IP</span><br><span class="line">GATEWAY&#x3D;192.168.141.1  #默认网关</span><br><span class="line">NETMASK&#x3D;255.255.255.0  #子网掩码</span><br></pre></td></tr></table></figure>
 <h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><ul>
 <li>无法连网问题</li>
 </ul>
 <p>一般如果虚拟机无法访问外网的话，如果不是dns域名解析问题，就检查网关是否设置正确，也就是上面配置的gateway，可以通过route命令查看</p>
-<p><img src="/img/20180503/20180503.9.jpg" alt=""> </p>
-<p>当然也可以手动添加网关：</p>
+<p><img src="/img/20180503/20180503.10.jpg" alt=""> </p>
+<p>也可以手动添加网关：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add default gw 192.168.141.1 ens33</span><br></pre></td></tr></table></figure>
 <p>网关的作用就是当访问的目标在所处网络中找不到时，就会将内容发给网关。</p>
 <ul>
@@ -153,6 +153,11 @@
 <p>一个网卡设置两个或者多个IP地址的，也就是同时访问多个网段，但前提是这些网段的物理层是连接在一起。</p>
 <p>假设有两个局域网（LAN）通过交换机连接在一起，LAN1网段为:192.168.0.0/24，LAN2网段为:192.168.1.0/24，在没有第三层设备的情况下LAN1与LAN2下的主机是不可以相互访问的，虽然两个LAN通过交换机连接在了一起。</p>
 <p>但如果LAN1下的一台主机PC1设置了两个IP地址192.168.0.100/24和192.168.1.100/24，那么PC1就可以访问LAN2下的主机，因为通过ip协议就能找到目标主机，不要进行路由交换。</p>
+<ul>
+<li>虚拟机压缩问题</li>
+</ul>
+<p>有些场景下我们需要拷贝安装好的虚拟机，但是压缩包会很大，就会想删除一些目录文件。但仅仅是删除文件并不能减小虚拟机占用磁盘大小，可以通过下面的命令来删除虚拟机的操作痕迹，如果提示超出磁盘，则重复执行几次，最后在虚拟机磁盘设置中，进行磁盘整理压缩即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;&#x2F;home&#x2F;zero.bak bs&#x3D;2048K</span><br><span class="line">sudo rm -rf &#x2F;home&#x2F;zero.bak</span><br></pre></td></tr></table></figure>
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li><a href="https://www.jianshu.com/p/2e5fecf2a7df" target="_blank" rel="noopener">https://www.jianshu.com/p/2e5fecf2a7df</a></li>
@@ -244,7 +249,7 @@ $(document).ready(function(){
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#桥接与NAT区别"><span class="toc-text">桥接与NAT区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vmware网络设置"><span class="toc-text">vmware网络设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以桥接模式连接ubuntu"><span class="toc-text">以桥接模式连接ubuntu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以NAT模式连接centos"><span class="toc-text">以NAT模式连接centos</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAQ"><span class="toc-text">FAQ</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#桥接与NAT区别"><span class="toc-text">桥接与NAT区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vmware设置桥接模式"><span class="toc-text">vmware设置桥接模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vmware设置NAT模式"><span class="toc-text">vmware设置NAT模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#桥接模式连接ubuntu"><span class="toc-text">桥接模式连接ubuntu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT模式连接centos"><span class="toc-text">NAT模式连接centos</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAQ"><span class="toc-text">FAQ</span></a></li></ol>
 </div>
 
 
