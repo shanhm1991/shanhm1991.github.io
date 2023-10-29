@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>vmware网络设置 桥接 &amp; NAT | Echo</title>
+  <title>虚拟机网络 桥接 &amp; NAT | Echo</title>
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="vmware版本：14.1.1ubuntu版本：16.0.4centos版本：7.9">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="vmware网络设置 桥接 &amp; NAT"/>
+  <meta property="og:title" content="虚拟机网络 桥接 &amp; NAT"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -74,7 +74,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        vmware网络设置 桥接 &amp; NAT
+        虚拟机网络 桥接 &amp; NAT
     </h1>
     
     
@@ -88,7 +88,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 1.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
+   <font style="color: #999;"> words: 1.6k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 6min</font>
    
    
   
@@ -111,7 +111,7 @@
       
         <p>vmware版本：14.1.1<br>ubuntu版本：16.0.4<br>centos版本：7.9<br><a id="more"></a></p>
 <h3 id="桥接与NAT区别"><a href="#桥接与NAT区别" class="headerlink" title="桥接与NAT区别"></a>桥接与NAT区别</h3><p><strong>桥接模式(bridged):</strong></p>
-<p>在桥接模式下，vmware虚拟出来的操作系统就像是局域网中的一台独立主机，此时虚拟机与host机在网络关系上处于对等的地位，它可以访问网内任何一台机器。主机网卡和虚拟网卡的IP地址处于同一个网段，子网掩码、网关、DNS等参数都相同。</p>
+<p>在桥接模式下，vmware虚拟出来的虚拟机就像是局域网中的一台独立主机，此时虚拟机与host机在网络关系上处于对等的地位，它可以访问网内任何一台机器。主机网卡和虚拟网卡的IP地址处于同一个网段，子网掩码、网关、DNS等参数都相同。</p>
 <p><img src="/img/20180503/20180503.0.jpg" alt=""> </p>
 <p>这种方式是直接将虚拟机桥接到一个物理网卡上，此时虚拟机和host机同时使用真实网卡工作，通过真实网卡发送数据。如果虚拟机发送数据给host机，那么数据流是：虚拟机-&gt;真实网卡-&gt;路由器-&gt;真实网卡-&gt;host机。<br>这样一个数据是经过网卡在路由器上面绕了一圈又回到了网卡。所以桥接必须经过真实网卡和路由器，这也是为什么当你的电脑没有连接有线网或者Wifi时，host机无法与虚拟机进行交互的原因，即便看起来两者很近也不行。</p>
 <p><strong>NAT模式:</strong></p>
@@ -142,11 +142,10 @@
 <h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><ul>
 <li>无法连网问题</li>
 </ul>
-<p>一般如果虚拟机无法访问外网的话，如果不是dns域名解析问题，就检查网关是否设置正确，也就是上面配置的gateway，可以通过route命令查看</p>
+<p>一般虚拟机无法访问外网的话，如果不是dns域名解析问题，就怀疑网关是否设置正确（网关的作用就是当访问的目标在所处网络中找不到时，就会将内容发给网关），也就是上面配置的gateway，可以通过route命令查看</p>
 <p><img src="/img/20180503/20180503.10.jpg" alt=""> </p>
 <p>也可以手动添加网关：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add default gw 192.168.141.1 ens33</span><br></pre></td></tr></table></figure>
-<p>网关的作用就是当访问的目标在所处网络中找不到时，就会将内容发给网关。</p>
 <ul>
 <li>设置多个ip问题</li>
 </ul>
@@ -154,10 +153,10 @@
 <p>假设有两个局域网（LAN）通过交换机连接在一起，LAN1网段为:192.168.0.0/24，LAN2网段为:192.168.1.0/24，在没有第三层设备的情况下LAN1与LAN2下的主机是不可以相互访问的，虽然两个LAN通过交换机连接在了一起。</p>
 <p>但如果LAN1下的一台主机PC1设置了两个IP地址192.168.0.100/24和192.168.1.100/24，那么PC1就可以访问LAN2下的主机，因为通过ip协议就能找到目标主机，不要进行路由交换。</p>
 <ul>
-<li>虚拟机压缩问题</li>
+<li>获取本级ip问题</li>
 </ul>
-<p>有些场景下我们需要拷贝安装好的虚拟机，但是压缩包会很大，就会想删除一些目录文件。但仅仅是删除文件并不能减小虚拟机占用磁盘大小，可以通过下面的命令来删除虚拟机的操作痕迹，如果提示超出磁盘，则重复执行几次，最后在虚拟机磁盘设置中，进行磁盘整理压缩即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;&#x2F;home&#x2F;zero.bak bs&#x3D;2048K</span><br><span class="line">sudo rm -rf &#x2F;home&#x2F;zero.bak</span><br></pre></td></tr></table></figure>
+<p>查看ip可以直接通过ifconfig或ip addr等命令，但有时需要在脚本中获取使用，所以希望有一种通用的获取办法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">host_ip=$(ip a | grep -Eo '([0-9]&#123;1,3&#125;\.)&#123;3&#125;[0-9]&#123;1,3&#125;' | grep -v "255.*.*.*" | grep -v 127.0.0.1 | grep -v 0.0.0.0 | awk 'NR==1&#123;print $1&#125;')</span><br></pre></td></tr></table></figure>
 <p><br><strong>参考：</strong> </p>
 <ol>
 <li><a href="https://www.jianshu.com/p/2e5fecf2a7df" target="_blank" rel="noopener">https://www.jianshu.com/p/2e5fecf2a7df</a></li>
@@ -178,7 +177,7 @@
 	<nav id="pagination">
 	  
 		  <a class="alignleft prev" href="/2018/05/10/20180510/">
-		    Linux服务开机自启 centos &amp; ubuntu
+		    虚拟机磁盘 扩容
 		  </a>
 	  
 	  

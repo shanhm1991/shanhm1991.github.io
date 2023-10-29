@@ -3,18 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Linux服务开机自启 centos &amp; ubuntu | Echo</title>
+  <title>虚拟机磁盘 扩容 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="vmware版本：14.1.1centos版本：7    
-问题
-安装centos并将ip改为静态
-解决上网和ssh登录问题">
+  <meta name="description" content="vmware版本：14.1.1ubuntu版本：16.0.4">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Linux服务开机自启 centos &amp; ubuntu"/>
+  <meta property="og:title" content="虚拟机磁盘 扩容"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -77,7 +74,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        Linux服务开机自启 centos &amp; ubuntu
+        虚拟机磁盘 扩容
     </h1>
     
     
@@ -91,7 +88,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 327  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 908  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 3min</font>
    
    
   
@@ -112,28 +109,42 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>vmware版本：14.1.1<br>centos版本：7    </p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ol>
-<li>安装centos并将ip改为静态</li>
-<li>解决上网和ssh登录问题<a id="more"></a>
-</li>
-</ol>
-<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>之前设置过ubuntu静态ip，这里设置centos就相对顺利很多了，参考<a href="https://www.linuxidc.com/Linux/2017-10/147449.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/147449.htm</a>  </p>
-<ol>
-<li>vmware的配置与之前一样，保持不变：</li>
-</ol>
-<p><img src="/img/20180503/20180503.1.jpg" alt=""> </p>
-<p><img src="/img/20180503/20180503.2.jpg" alt=""> </p>
-<ol>
-<li>修改centos的配置：vim /etc/sysconfig/network-scripts</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#修改</span><br><span class="line">BOOTPROTO&#x3D;static #将dhcp改为static</span><br><span class="line">ONBOOT&#x3D;yes #将no改为yes</span><br><span class="line">#新增</span><br><span class="line">IPADDR&#x3D;192.168.141.16 #静态IP</span><br><span class="line">GATEWAY&#x3D;192.168.141.1 #默认网关</span><br><span class="line">NETMASK&#x3D;255.255.255.0 #子网掩码</span><br></pre></td></tr></table></figure>
-<p>改完后重启网络服务：service network restart，然后就好了，可以查看下ip addr：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link&#x2F;loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1&#x2F;8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1&#x2F;128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    link&#x2F;ether 00:0c:29:35:94:01 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.141.10&#x2F;24 brd 192.168.141.255 scope global noprefixroute dynamic ens33</span><br><span class="line">       valid_lft 1458sec preferred_lft 1458sec</span><br><span class="line">    inet 192.168.141.21&#x2F;24 brd 192.168.141.255 scope global secondary ens33</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::8a04:3629:1c8e:4e06&#x2F;64 scope link noprefixroute </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+        <p>vmware版本：14.1.1<br>ubuntu版本：16.0.4<br><a id="more"></a></p>
+<h3 id="磁盘-扩容-新增"><a href="#磁盘-扩容-新增" class="headerlink" title="磁盘 扩容/新增"></a>磁盘 扩容/新增</h3><p>虚拟机设置，进行磁盘扩展或新增，最后效果是类似的，不过新增的磁盘后续方便移除，而扩展的话只能调大不能减小。<br>这里180G是由80G扩展后的磁盘，50G是新增的磁盘。</p>
+<p><img src="/img/20180510/20180510.1.jpg" alt=""> </p>
+<p>由于还没有经过分区，指定文件系统，此时磁盘还不能被操作系统识别</p>
+<p><img src="/img/20180510/20180510.2.jpg" alt=""> </p>
+<p>但是可以通过<code>fdisk -l</code>列出所有磁盘设备</p>
+<p><img src="/img/20180510/20180510.3.jpg" alt=""> </p>
+<h3 id="新建分区"><a href="#新建分区" class="headerlink" title="新建分区"></a>新建分区</h3><p>接下来选择磁盘新建分区，这里以扩展后的180G磁盘作为示例：<code>fdisk /dev/sda</code>，键入”n”新建分区，选择主分区”p”，分区号不要重复（默认就行），再设置下分区起止位置，最后”w”保存</p>
+<p><img src="/img/20180510/20180510.4.jpg" alt=""></p>
+<p>然后对分区进行格式化，参照上面sda1，将sda3的文件系统也格式化成ext4：<code>mkfs.ext4  /dev/sda3</code></p>
+<p><img src="/img/20180510/20180510.5.jpg" alt=""></p>
+<h3 id="挂载目录"><a href="#挂载目录" class="headerlink" title="挂载目录"></a>挂载目录</h3><p>最后进行目录挂载，可以手动挂载，比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount &#x2F;dev&#x2F;sda3 &#x2F;home&#x2F;work</span><br></pre></td></tr></table></figure>
+<p>如果希望开机自动挂载，则修改/etc/fstab文件，在文件里添加一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;dev&#x2F;sda3       &#x2F;home&#x2F;work      ext4    defaults,        0     0</span><br></pre></td></tr></table></figure>
+<p><img src="/img/20180510/20180510.6.jpg" alt=""></p>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><ul>
+<li>目录空间不够问题</li>
+</ul>
+<p>如果对某个目录操作时提示磁盘写满，一般我们有两个办法：</p>
+<p>1.通过软链接的方式将目录内容拷贝到另一个分区中，这种办法比较简单，比如目录/opt/data占用磁盘过大，那么我们可以将这个目录拷贝到/home/work，然后建个链接就行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;opt</span><br><span class="line">cp -rf data &#x2F;home&#x2F;work</span><br><span class="line">ln  -s data &#x2F;home&#x2F;work&#x2F;data</span><br></pre></td></tr></table></figure>
+<p>2.将目录挂载到一个独立的磁盘分区上，但是如果原先目录下有文件，直接挂载的话，会发现目录下的数据会变空</p>
+<blockquote>
+<p>这是由于linux的虚拟文件系统（VFS）机制导致的，正常登录以后所看到的各个目录、文件都是内核在加载时候构造在内存中的VFS目录树，而不是直接在硬盘上的实际目录树。<br>当你挂载某个设备到一个VFS挂载点上(比如/home/work），系统就把VFS中的这个挂载点指向所挂载的那个设备。当你访问挂载点时，就会看到挂载在此处的设备。而之前所挂载的设备依然在那里，只不过挂载点已不再指向它。所以之前的数据是被隐藏了，并没有删除，如果umount解除挂载，数据还能重新回来</p>
+</blockquote>
+<p>所以办法是需要新建一个空目录作为跳板，并将磁盘分区挂载到这个空目录上，然后将数据文件拷贝到这个目录，再将磁盘分区挂载到原先想挂载的目录上，就能实现目的了。最后别忘了解除跳板目录的挂载，并删除跳板目录。</p>
+<ul>
+<li>虚拟机压缩包过大问题</li>
+</ul>
+<p>有些场景下我们需要拷贝安装好的虚拟机，但是压缩包会很大，这时如果只是删除一些目录文件并不能减小虚拟机占用磁盘大小，那么可以通过下面的命令来删除虚拟机的操作痕迹（如果提示超出磁盘，则重复执行几次），然后在虚拟机磁的设置中，对磁盘进行整理压缩</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo dd if&#x3D;&#x2F;dev&#x2F;zero of&#x3D;&#x2F;home&#x2F;zero.bak bs&#x3D;2048K</span><br><span class="line">sudo rm -rf &#x2F;home&#x2F;zero.bak</span><br></pre></td></tr></table></figure>
 <p><br><strong>参考：</strong> </p>
 <ol>
-<li><a href="https://www.linuxidc.com/Linux/2017-10/147449.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2017-10/147449.htm</a></li>
-<li><a href="https://blog.csdn.net/jin970505/article/details/78631745" target="_blank" rel="noopener">https://blog.csdn.net/jin970505/article/details/78631745</a></li>
+<li><a href="https://blog.csdn.net/fuchen58/article/details/81172009" target="_blank" rel="noopener">https://blog.csdn.net/fuchen58/article/details/81172009</a></li>
+<li><a href="https://blog.csdn.net/thekenofDIS/article/details/125511609" target="_blank" rel="noopener">https://blog.csdn.net/thekenofDIS/article/details/125511609</a></li>
 </ol>
 
       
@@ -152,7 +163,7 @@
 	  
 	  
 		  <a class="alignright next" href="/2018/05/03/20180503/">
-		    vmware网络设置 桥接 &amp; NAT
+		    虚拟机网络 桥接 &amp; NAT
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -217,7 +228,7 @@ $(document).ready(function(){
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决"><span class="toc-text">解决</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#磁盘-扩容-新增"><span class="toc-text">磁盘 扩容&#x2F;新增</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新建分区"><span class="toc-text">新建分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#挂载目录"><span class="toc-text">挂载目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAQ"><span class="toc-text">FAQ</span></a></li></ol>
 </div>
 
 
