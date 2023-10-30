@@ -3,19 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>windows安装mysql | Echo</title>
+  <title>windows安装mysql5.7 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="环境：win7_x64版本：mysql-5.7.18    
-1、ERROR 1045 (28000): Access denied for user ‘root’@’localhost’
-解决：跳过密码登录mysql，修改root密码后重新登录
-2、sql执行错误#3167
-解决：set global show_compatibility_56=on;">
+  <meta name="description" content="环境：win10_x64版本：mysql-5.7.44">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="windows安装mysql"/>
+  <meta property="og:title" content="windows安装mysql5.7"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -78,7 +74,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        windows安装mysql
+        windows安装mysql5.7
     </h1>
     
     
@@ -92,7 +88,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 371  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 651  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 2min</font>
    
    
   
@@ -113,29 +109,153 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>环境：win7_x64<br>版本：mysql-5.7.18    </p>
-<p>1、ERROR 1045 (28000): Access denied for user ‘root’@’localhost’</p>
-<p>解决：跳过密码登录mysql，修改root密码后重新登录</p>
-<p>2、sql执行错误#3167</p>
-<p>解决：set global show_compatibility_56=on;<br><a id="more"></a></p>
-<p>场景：官网下载mysql-5.7.18-winx64包，解压，设置好环境变量，执行install等命令安装完毕，都正常未发现什么问题。但是使用客户端连接数据库时报错：ERROR 1045 (28000): Access denied for user ‘root’@’localhost’ …    </p>
-<p>1、在mysql的home目录下找my.ini文件，如果没有可以自己新建，基本配置差不多，主要在最下面添加一行：skip-grant-tables</p>
-<p><img src="/img/20171223/20171223.1.png" alt=""> </p>
-<p>2、重启mysql服务，然后重新登录</p>
-<p><img src="/img/20171223/20171223.2.png" alt=""> </p>
-<p>3、这时可以执行sql了，于是直接更新user表，注意字段名不叫password，而是authentication_string，可以select确认下</p>
-<p><img src="/img/20171223/20171223.3.png" alt=""> </p>
-<p>于是：</p>
-<p><img src="/img/20171223/20171223.4.png" alt=""> </p>
-<p>4、修改后quit，然后用密码重新登录（到这里已经解决了root的密码问题），接着新建库</p>
-<p><img src="/img/20171223/20171223.5.png" alt=""> </p>
-<p>5、新建用户时，注意要去掉my.ini中的skip-grant-tables，然后重启服务，不然会报错，建完之后设置密码并给用户赋权，最后执行：flush privileges（将修改刷到内存中，实时生效）</p>
-<p><img src="/img/20171223/20171223.6.png" alt=""> </p>
-<p>6、最后用客户端连接，发现报错：sql执行错误#3167    </p>
-<p><img src="/img/20171223/20171223.7.png" alt=""> </p>
-<p>网上查下错误3167，大概意思是mysql5.7.6开始information_schema.global_status已经被舍弃，为了兼容性，此时需要打开show_compatibility_56，即：set global show_compatibility_56=on; 修改之后就可以正常连接使用了。</p>
-<p><img src="/img/20171223/20171223.8.png" alt=""> </p>
+        <p>环境：win10_x64<br>版本：mysql-5.7.44<br><a id="more"></a></p>
+<p>下载安装包：<a href="https://dev.mysql.com/downloads/mysql" target="_blank" rel="noopener">https://dev.mysql.com/downloads/mysql</a></p>
+<p><img src="/img/20171223/20171223.0.jpg" alt=""> </p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>这里以下载zip包的方式进行安装，解压之后添加数据目录data，以及配置文件my.ini </p>
+<p><img src="/img/20171223/20171223.1.jpg" alt=""> </p>
+<p>配置文件中的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">port &#x3D; 3306</span><br><span class="line"> </span><br><span class="line">[mysqld]</span><br><span class="line">port &#x3D; 3306</span><br><span class="line">basedir&#x3D;E:\mysql5.7.44</span><br><span class="line">datadir&#x3D;basedir&#x3D;E:\mysql5.7.44\data</span><br><span class="line">max_connections&#x3D;100</span><br><span class="line">character-set-server&#x3D;utf8</span><br><span class="line">default-storage-engine&#x3D;INNODB</span><br><span class="line">#从 5.6开始，timestamp 的默认行为已经是deprecated了</span><br><span class="line">explicit_defaults_for_timestamp&#x3D;true</span><br><span class="line"> </span><br><span class="line">[mysql]</span><br><span class="line"># 设置mysql客户端默认字符集</span><br><span class="line">default-character-set&#x3D;utf8</span><br></pre></td></tr></table></figure>
+<p>然后进入bin目录对数据库进行初始化：<code>mysqld --initialize --user=mysql --console</code>，这里记下初始化密码</p>
+<p><img src="/img/20171223/20171223.2.jpg" alt=""> </p>
+<p>接下来进行安装mysql服务，服务名这里设置为mysql5</p>
+<p><img src="/img/20171223/20171223.3.jpg" alt=""> </p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>对应上面安装的服务名mysql5，这里可以直接启动<code>net start mysql5</code>，如果失败的话可以尝试重新initialize</p>
+<p><img src="/img/20171223/20171223.4.jpg" alt=""> </p>
+<h3 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h3><p>直接使用上面记住的密码登录root即可，这里最好重置一下root密码</p>
+<p><img src="/img/20171223/20171223.5.jpg" alt=""> </p>
+<p>mysql默认只允许localhost进行登录</p>
+<p><img src="/img/20171223/20171223.6.jpg" alt=""> </p>
+<p>可以改为允许远程登录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update user set host &#x3D; &#39;%&#39; where user &#x3D; &#39;root&#39;;</span><br></pre></td></tr></table></figure>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><ul>
+<li>管理员运行cmd</li>
+</ul>
+<p>上面步骤中运行命令时，需要以管理员身份运行cmd，这个可以通过右击左下角开始进入管理员</p>
+<ul>
+<li>windows常用操作</li>
+</ul>
+<p><strong>cmd命令行</strong></p>
+<table width=100%>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> cls </td>
+            <td>清屏</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> ver </td>
+            <td>Windows版本</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> systeminfo </td>
+            <td>计算机综合信息</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> dir </td>
+            <td>查看当前路径下文件列表</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> tree </td>
+            <td>查看当前路径下的文件树形图</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> set </td>
+            <td>查看当前用户所有环境变量</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> set path </td>
+            <td>查看path环境变量</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> write </td>
+            <td>写字板</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> notepad </td>
+            <td>记事本</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> explorer </td>
+            <td>资源管理器</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> mstsc </td>
+            <td>远程桌面</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #d9c6c6;"><td></td></tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> regedit </td>
+            <td>注册表信息</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> msconfig </td>
+            <td>系统配置</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> taskmgr </td>
+            <td>任务管理</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> certmgr </td>
+            <td>证书管理</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> compmgmt </td>
+            <td>计算机管理</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> diskmgmt </td>
+            <td>磁盘管理</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> devmgmt </td>
+            <td>设备管理</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #d9c6c6;"><td></td></tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> tasklist /? </td>
+            <td>任务列表，帮助信息</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> start /? </td>
+            <td>启动进程，帮助信息</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> taskkill /? </td>
+            <td>杀死进程，帮助信息</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> netstat -help </td>
+            <td>网络连接状态，帮助信息</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> net start </td>
+            <td>查看运行的服务</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #d9c6c6;"><td></td></tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> ipconfig -all </td>
+            <td>查看ip信息</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> tracert </td>
+            <td>路由跟踪</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> route print </td>
+            <td>查看路由表信息</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> ARP -a </td>
+            <td>查看地址转换表（地址解析协议ARP使用的IP与mac的映射表）</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #ededed;">
+            <td> nslookup </td>
+            <td>IP地址侦测器，监测网络中DNS服务器是否能正确实现域名解析</td>
+        </tr>
+    </table>
 
+<p><strong>场景：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">按名称结束指定进程（比如记事本）    taskkill &#x2F;im notepad.exe</span><br><span class="line">按进程号PID结束指定进程            taskkill &#x2F;pid 8080</span><br><span class="line">强制重启卡死进程（比如资源管理器）  taskkill &#x2F;f &#x2F;im explorer.exe &amp; start explorer.exe</span><br><span class="line">找到占用指定端口的进程（8080）      netstat -ano | find &quot;8080&quot;</span><br></pre></td></tr></table></figure>
       
     </div>
 	
@@ -217,7 +337,7 @@ $(document).ready(function(){
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动"><span class="toc-text">启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#登录"><span class="toc-text">登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAQ"><span class="toc-text">FAQ</span></a></li></ol>
 </div>
 
 
