@@ -7,7 +7,7 @@
   <meta name="author" content="shanhm1991">
   
   <meta name="description" content="背景对于数据的同步一般会想办法在数据库层解决，比较直接而且也有成熟的解决方案。但有时我们并不希望对整个库进行同步，只想对某些指定的业务模型数据进行同步。而且在有的场景下，可能希望在同步过程中插入一些操作，比如在合并时对变更的内容进行审查和修改，并在合并完成之前，仍然使用之前的数据；
-所以希望设计一种">
+所以希望设计一种通用的办法，让存在于各个系统节点中的数据能够各自进行变化，并保持数据一致，即便出现网络断开的情况。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -110,9 +110,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <a id="more"></a>
-<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对于数据的同步一般会想办法在数据库层解决，比较直接而且也有成熟的解决方案。但有时我们并不希望对整个库进行同步，只想对某些指定的业务模型数据进行同步。而且在有的场景下，可能希望在同步过程中插入一些操作，比如在合并时对变更的内容进行审查和修改，并在合并完成之前，仍然使用之前的数据；</p>
-<p>所以希望设计一种通用的办法，让存在于各个系统节点中的数据能够各自进行变化，并保持数据一致，即便出现网络断开的情况。<br><!--more--></p>
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对于数据的同步一般会想办法在数据库层解决，比较直接而且也有成熟的解决方案。但有时我们并不希望对整个库进行同步，只想对某些指定的业务模型数据进行同步。而且在有的场景下，可能希望在同步过程中插入一些操作，比如在合并时对变更的内容进行审查和修改，并在合并完成之前，仍然使用之前的数据；</p>
+<p>所以希望设计一种通用的办法，让存在于各个系统节点中的数据能够各自进行变化，并保持数据一致，即便出现网络断开的情况。<br><a id="more"></a></p>
 <h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>选择一个节点作为中心节点，然后统一以中心节点的数据版本为准，所有节点都将自己的数据变化上报给中心节点，由中心节点进行合并，然后再分发给所有节点。具体需要添加一些辅助字段来跟踪数据的版本和状态，并约定它们的变化规则。</p>
 <p>需要考虑的问题：<br>1.数据应该是以实际的业务实体为单位来进行同步，而不是针对某个库或某张表。比如一个人除了基本信息，还有部门信息，角色或者权限等；<br>2.数据变化在合并生效之前不应该影响当前的数据使用，并且允许撤销变化；<br>3.添加辅助字段不能直接修改原数据表结构，这样会影响已经存在的业务功能设计，需要另外记一份副本数据，将辅助字段加在副本上；<br>4.需要考虑中心节点断连的场景，以及当断连的中心节点恢复之后，保证所有的变更记录不会丢失；</p>
 <p>具体的字段设计如下：</p>
@@ -297,20 +296,5 @@ $(document).ready(function(){
 })(jQuery);
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
