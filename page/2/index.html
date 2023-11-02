@@ -41,7 +41,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
-  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #736f6f;">articles:  109 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -60,6 +60,62 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20210805" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-08-04T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/08/05/20210805/" style="color: #736f6f;">2021-08-05</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2021/08/05/20210805/">Netty NioEventLoopGroup</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>在Java中，任务执行的主要抽象不是<code>Thread</code>，而是<code>Executor</code>，它提供了一种标准的方式将任务的提交过程与执行过程解耦开来，为灵活而强大的异步任务执行框架提供了基础，线程池<code>ThreadPoolExecutor</code>便是在此基础上实现的一套异步执行框架。</p>
+<p>Netty也在<code>Executor</code>的基础上自定义实现了一套高性能的任务执行框架，本文尝试从I/O事件执行器<code>NioEventLoopGroup</code>作为切入点对其中的部分源码做一些分析，希望能从别人的设计中汲取一些思路和启发。建议在分析Netty中的任务执行机制之前先对Java中原生的任务执行框架有所了解，可以参考笔记：</p>
+<ul>
+<li><a href="https://shanhm1991.github.io/2019/01/05/20190105/">《Java并发编程实战》 任务的执行</a></li>
+<li><a href="https://shanhm1991.github.io/2019/01/06/20190106/">《Java并发编程实战》 任务的取消</a>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2021/08/05/20210805/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20210801" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -332,58 +388,6 @@
 
 
 
-  <article id="post-20210515" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2021-05-14T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/05/15/20210515/" style="color: #736f6f;">2021-05-15</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2021/05/15/20210515/">算法 堆排序 &amp; PriorityQueue</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>在有些场景中，并不一定要求所有元素有序，而只需知道其中最大或最小的 K 个元素，比如在优先级队列中，只要每次都能获取到队列中最大或最小的的元素即可，于是有人想到了利用树的形式来组织数据，这里称为堆。<br>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2021/05/15/20210515/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
 
 <nav id="pagination">
   
@@ -602,7 +606,7 @@
   
   
   
-    <li><a href="/categories/开发笔记/" style="width:50px; display:inline-block;">开发笔记</a><small>5</small></li>
+    <li><a href="/categories/开发笔记/" style="width:50px; display:inline-block;">开发笔记</a><small>6</small></li>
   
   
   
