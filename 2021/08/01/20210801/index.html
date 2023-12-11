@@ -53,7 +53,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
-  <h2><font style="color: #736f6f;">articles:  105 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -136,10 +136,10 @@
 <p>封装主要有两个方面，<font color="#E51508">首先通过<code>ChannelConfig</code>来封装与Channel相关的配置，然后将对Channel的操作抽象成一个接口<code>ChannelHander</code>，并通过链表的形式来进行组织，以便定义操作的顺序</font>，本文尝试从这两个角度对Netty中的Channel进行一些分析。<br><a id="more"></a></p>
 <p>另外，在分析之前，最好先对Linux I/O模型，以及Java中原生Nio的相关Api有所了解，具体可以参考相关笔记：</p>
 <ul>
-<li><a href="https://shanhm1991.github.io/2018/03/10/20180310/">Linux I/O模型</a></li>
-<li><a href="https://shanhm1991.github.io/2018/01/07/20180107/">Java I/O 网络</a></li>
-<li><a href="https://shanhm1991.github.io/2021/07/01/20210701/">NIO Buffer</a></li>
-<li><a href="https://shanhm1991.github.io/2021/07/05/20210705/">NIO Channel &amp; Selector</a></li>
+<li><a href="https://shanhm1991.github.io/2021/03/21/20210321/">Linux I/O模型</a></li>
+<li><a href="https://shanhm1991.github.io/2018/04/12/20180412/">Java I/O 网络</a></li>
+<li><a href="https://shanhm1991.github.io/2018/04/09/20180409/">NIO Buffer</a></li>
+<li><a href="https://shanhm1991.github.io/2018/04/10/20180410/">NIO Channel &amp; Selector</a></li>
 </ul>
 <h3 id="继承结构"><a href="#继承结构" class="headerlink" title="继承结构"></a>继承结构</h3><p><img src="/img/20210801/20210801.1.jpg" alt=""></p>
 <p>对于BIO相关的类这里不再赘述，主要说下<code>NioServerSocketChannel</code>/<code>NioSocketChannel</code>，它们都继承自<code>AbstractNioChannel</code>，其维护了与java Nio中Channel的对应关系，并提供了获取方法</p>
@@ -206,7 +206,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ChannelOption.SO_BACKLOG <span class="comment">// 对应StandardSocketOptions.SO_BACKLOG</span></span><br></pre></td></tr></table></figure>
 <p>BACKLOG用于构造服务端套接字ServerSocket，标识当服务器请求处理线程全满时，用于<font color="#E51508">临时存放已完成TCP连接三次握手的请求的队列最大长度</font>。如果未设置或所设置的值小于1，Java将使用默认值50。在Netty中，默认从文件/proc/sys/net/core/somaxconn中读取，如果没有读到，默认取3072。</p>
 <h4 id="2-ChannelHandler"><a href="#2-ChannelHandler" class="headerlink" title="2. ChannelHandler"></a>2. ChannelHandler</h4><p>对于<code>Channel</code>的I/O事件处理，Netty中抽象出了一个<code>ChannelHandler</code>接口，并且针对输入和输出，分成了<code>ChannelInboundHandler</code>和<code>ChannelOutboundHandler</code>，其继承结构如下</p>
-<p><img src="/img/20210801/20210801.4.jpg" alt=""></p>
+<p><img src="/img/20210801/20210801.2.jpg" alt=""></p>
 <p>在实现输入输出事件处理器时，可以直接继承适配器<code>ChannelInboundHandlerAdapter</code>或<code>ChannelOutboundHandlerAdapter</code></p>
 <h5 id="2-1-ChannelPipeline"><a href="#2-1-ChannelPipeline" class="headerlink" title="2.1. ChannelPipeline"></a>2.1. ChannelPipeline</h5><p>通常对于IO事件的处理，会分成几个阶段，每个阶段执行不同的操作，比如处理TCP拆包/粘包问题、编解码、以及业务处理，因此通常需要编写多个<code>ChannelHandler</code>，并以特定的顺序进行组织。</p>
 <p>于是，Netty中定义了管道的概念，通过<code>ChannelPipeline</code>来定义<code>ChannelHandler</code>之间的处理顺序，每个 Channel 对象创建的时候，都会初始化一个私有的管道，可以通过<code>pipeline()</code>方法获取。</p>
@@ -226,8 +226,8 @@
 <p>以输入事件为例，可以看到<code>ChannelInboundHandler</code>中定义了9个事件处理</p>
 <figure class="highlight java"><figcaption><span class="caption">io.netty.channel.ChannelInboundHandler</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ChannelInboundHandler</span> <span class="keyword">extends</span> <span class="title">ChannelHandler</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">channelRegistered</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">channelUnregistered</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">channelActive</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">channelInactive</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">channelRead</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">channelReadComplete</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">userEventTriggered</span><span class="params">(ChannelHandlerContext ctx, Object evt)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">channelWritabilityChanged</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">exceptionCaught</span><span class="params">(ChannelHandlerContext ctx, Throwable cause)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后在<code>ChannelPipeline</code>和<code>ChannelHandlerContext</code>中，也可以看到与之对应的9个以fire开头的方法</p>
-<p><img src="/img/20210801/20210801.7.jpg" alt=""></p>
-<p><img src="/img/20210801/20210801.8.jpg" alt=""></p>
+<p><img src="/img/20210801/20210801.3.jpg" alt=""></p>
+<p><img src="/img/20210801/20210801.4.jpg" alt=""></p>
 <p>很明显这是一个责任链模式的应用，即首先<code>ChannelPipeline</code>某个事件被调用，然后它依次调用链表中<code>ChannelHandlerContext</code>对应的事件，进而再调用<code>ChannelHander</code>对应的事件，直至整个链表调用完为止。</p>
 <p><strong>下面看下具体事件被调用的时机：</strong></p>
 <ul>
@@ -276,8 +276,8 @@
 	  
 	  
 	  
-		  <a class="alignright next" href="/2021/07/05/20210705/">
-		    NIO Channel &amp; Selector
+		  <a class="alignright next" href="/2021/05/03/20210503/">
+		    Http调用工具spring-feign 设计文档
 		  </a>
 	  
 	  <div class="clearfix"></div>
@@ -349,6 +349,8 @@ $(document).ready(function(){
 
 
 
+
+  
 </aside>
     <div class="clearfix"></div>
   </div>

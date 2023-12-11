@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>NTP 时间同步 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="Network Time Protocol时间同步协议，运行NTP服务的设备可以作为客户端从NTP服务器同步时间，也可以作为服务器供其他NTP客户端来同步时间。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="NTP 时间同步"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20201019" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2020-10-18T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2020/10/19/20201019/" style="color: #736f6f;">2020-10-19</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        NTP 时间同步
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 2.9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 12min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/ntp/">ntp</a>   <a href="/tags/cron/">cron</a>   <a href="/tags/chrony/">chrony</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Network Time Protocol时间同步协议，运行NTP服务的设备可以作为客户端从NTP服务器同步时间，也可以作为服务器供其他NTP客户端来同步时间。<br><a id="more"></a></p>
+<h4 id="时间同步-ntp"><a href="#时间同步-ntp" class="headerlink" title="时间同步 ntp"></a>时间同步 ntp</h4><p>ntp是NTP的一种实现，ntpdate是ntp中的一个工具，也可以用来从外部时间服务器同步时间，但是会造成时间的突变，对于线上环境不是一个很理想的方式；ntp则采用平滑的方式，但是缺点是慢，而且对于超过17分钟的间隔会拒绝更新。</p>
+<p>ntpdate和ntp服务都使用udp123端口，同一时间只能有一个在跑。所以通常的做法是开机时使用ntpdate进行一次时间校准，然后使用ntpd服务进行持续的对齐。当然也可以关掉ntpd服务，直接使用crontab每分钟执行一次ntpdate操作。</p>
+<p>Linux中安装ntp，可以下载离线安装包：<a href="https://pkgs.org/download/ntp" target="_blank" rel="noopener">https://pkgs.org/download/ntp</a> ，然后主要就是修改下配置文件：/etc/ntp.conf</p>
+<h5 id="ntp-conf"><a href="#ntp-conf" class="headerlink" title="ntp.conf"></a>ntp.conf</h5><ul>
+<li>driftfile /var/lib/ntp/drift</li>
+</ul>
+<p>系统时间与BIOS时间的偏差记录，将自己主机的bios芯片震荡频率与上层的Time server频率比较，将误差记录在这个文件里</p>
+<ul>
+<li>restrict address [mask mask] [flag][…]</li>
+</ul>
+<p>address地址参数可以是IP或者域名，mask是子网掩码（默认：address 0.0.0.0,mask 0.0.0.0），其中IP也可以是default，表示所有的IP</p>
+<p>通常配置是先禁止所有的权限，然后再开放指定的权限，比如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">## restrict    default ignore</span><br><span class="line">## restrict -6 default ignore</span><br><span class="line">restrict    default nomodify notrap nopeer noquery</span><br><span class="line">restrict -6 default nomodify notrap nopeer noquery</span><br><span class="line"></span><br><span class="line">## 开放本地环回接口所有权限</span><br><span class="line">restrict 127.0.0.1 </span><br><span class="line">restrict ::1</span><br><span class="line"></span><br><span class="line">## 允许192.168.1.0&#x2F;24网段内主机进行时间同步</span><br><span class="line">restrict 192.168.141.0 mask 255.255.255.0 nomodify notrap</span><br></pre></td></tr></table></figure>
+<ul>
+<li>server 时间源IP/域名 参数</li>
+</ul>
+<p>fudge表示时间服务器的层次，stratum 0 表示为顶级；如果要向别的NTP服务器更新时间，请不要把它设为0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">## 127.127.1.0表示以本机时间作为时间服务（内网服务一定要加上），prefer表示优先级最高</span><br><span class="line">server 127.127.1.0 prefer   </span><br><span class="line">fudge 127.127.1.0 stratum 0</span><br></pre></td></tr></table></figure>
+<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><ul>
+<li>server 192.168.141.13</li>
+</ul>
+<p>根据上面的描述，修改服务端/etc/ntp.conf如下，然后重启：systemctl restart ntp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">driftfile &#x2F;var&#x2F;lib&#x2F;ntp&#x2F;ntp.drift</span><br><span class="line"></span><br><span class="line">server 127.127.1.0 prefer</span><br><span class="line">fudge 127.127.1.0 stratum 0</span><br><span class="line"></span><br><span class="line">restrict -4 default kod notrap nomodify nopeer noquery limited</span><br><span class="line">restrict -6 default kod notrap nomodify nopeer noquery limited</span><br><span class="line"></span><br><span class="line">restrict 127.0.0.1</span><br><span class="line">restrict ::1</span><br><span class="line"></span><br><span class="line">restrict 192.168.141.0 mask 255.255.255.0 nomodify notrap</span><br></pre></td></tr></table></figure>
+<p>通过netstat可以查看ntp服务的监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# netstat -nulp</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID&#x2F;Program name</span><br><span class="line">udp        0      0 192.168.141.13:123      0.0.0.0:*                           4401&#x2F;ntpd       </span><br><span class="line">udp        0      0 127.0.0.1:123           0.0.0.0:*                           4401&#x2F;ntpd       </span><br><span class="line">udp        0      0 0.0.0.0:123             0.0.0.0:*                           4401&#x2F;ntpd       </span><br><span class="line">udp6       0      0 fe80::20c:29ff:fea2:123 :::*                                4401&#x2F;ntpd       </span><br><span class="line">udp6       0      0 ::1:123                 :::*                                4401&#x2F;ntpd       </span><br><span class="line">udp6       0      0 :::123                  :::*                                4401&#x2F;ntpd</span><br></pre></td></tr></table></figure>
+<ul>
+<li>client 192.168.141.21</li>
+</ul>
+<p>对于客户端，只要改一下ntp服务的指向地址即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server 172.16.141.22</span><br></pre></td></tr></table></figure>
+<p>如果觉得ntp同步时间太慢，可以关掉ntp，然后手动执行同步命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntpdate 192.168.141.13</span><br></pre></td></tr></table></figure>
+<p>也可以添加cron定时任务，每分钟执行一次</p>
+<figure class="highlight plain"><figcaption><span class="caption">corntab -e</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * &#x2F;sbin&#x2F;ntpdate 192.168.141.13</span><br></pre></td></tr></table></figure>
+<p>然后通过日志来查看定时任务执行情况</p>
+<figure class="highlight plain"><figcaption><span class="fileDir">vim /var/log/</span><span class="caption">cron</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Nov 14 09:26:01 bogon CROND[2393]: (root) CMD (&#x2F;sbin&#x2F;ntpdate 192.168.141.13)</span><br><span class="line">Nov 14 09:27:01 bogon CROND[2474]: (root) CMD (&#x2F;sbin&#x2F;ntpdate 192.168.141.13)</span><br><span class="line">Nov 14 09:28:01 bogon CROND[2535]: (root) CMD (&#x2F;sbin&#x2F;ntpdate 192.168.141.13)</span><br><span class="line">Nov 14 09:29:01 bogon CROND[2598]: (root) CMD (&#x2F;sbin&#x2F;ntpdate 192.168.141.13)</span><br><span class="line">Nov 14 09:30:01 bogon CROND[2661]: (root) CMD (&#x2F;sbin&#x2F;ntpdate 192.168.141.13)</span><br></pre></td></tr></table></figure>
+<h4 id="时间同步-chrony"><a href="#时间同步-chrony" class="headerlink" title="时间同步 chrony"></a>时间同步 chrony</h4><p>chrony官网：<a href="https://chrony.tuxfamily.org" target="_blank" rel="noopener">https://chrony.tuxfamily.org</a></p>
+<p>Chrony是NTP网络时间协议的另一种实现，与ntpd不同，它可以更快更准确地同步系统时钟，最大程度的减少时间和频率误差。ntpd的同步时间并不理想，有可能需要几小时来同步时间，而chrony只需要几分钟。并且chrony兼容ntp监听在udp123端口上，自己则监听在udp的323端口上。如果在chrony配置文件中指定了ntp服务器的地址，那么chrony就是一台客户端，会去同步ntp服务器的时间，如果在chrony配置了允许某些客户端来向自己同步时间，则chrony也充当了一台服务器。</p>
+<ul>
+<li>chrony.conf</li>
+</ul>
+<figure class="highlight plain"><figcaption><span class="fileDir">vim /etc/</span><span class="caption">chrony.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"># 时间服务器，这里127.0.0.1表示自己</span><br><span class="line"># ibust 会在chrony启动的2秒内，去快速poll服务器4次来矫正当前系统时间</span><br><span class="line"># prefer 优先使用指定的服务器</span><br><span class="line"># minpoll 最小轮询时间服务器的时间间隔，比如6是2的6次方，也就是64秒</span><br><span class="line"># maxpoll 同上，比如10，表示最大轮询时间间隔是1024秒</span><br><span class="line">server 127.0.0.1 iburst</span><br><span class="line"></span><br><span class="line"># chronyd程序的主要行为之一，根据实际时间计算出计算机增减时间的比率，然后记录到一个文件中，在系统重启后为系统做出最佳时间补偿调整。</span><br><span class="line">driftfile &#x2F;var&#x2F;lib&#x2F;chrony&#x2F;drift</span><br><span class="line"></span><br><span class="line"># 一般如果系统时钟跟时间服务器不一致，chrony调整的方式是慢慢增加，或慢慢减少，不会一步到位，直接去跟时间服务器对齐</span><br><span class="line"># makestep 1.0 3 表示如果时间服务器跟系统时间相差超过1秒，那么就在下3个时钟更新中追上时间服务器，这样能快速追平时间，但会带来时间跳跃。</span><br><span class="line">makestep 1.0 3</span><br><span class="line"></span><br><span class="line"># 表示将系统时钟同步到主板的硬件时钟去，缺省情况下是11分钟同步一次</span><br><span class="line">rtcsync</span><br><span class="line"></span><br><span class="line"># Enable hardware timestamping on all interfaces that support it.</span><br><span class="line">#hwtimestamp *</span><br><span class="line"></span><br><span class="line"># Increase the minimum number of selectable sources required to adjust</span><br><span class="line"># the system clock.</span><br><span class="line">#minsources 2</span><br><span class="line"></span><br><span class="line"># Allow NTP client access from local network.</span><br><span class="line">#allow 192.168.0.0&#x2F;16</span><br><span class="line"></span><br><span class="line"># Serve time even if not synchronized to a time source.</span><br><span class="line">#local stratum 10</span><br><span class="line"></span><br><span class="line"># Specify file containing keys for NTP authentication.</span><br><span class="line">#keyfile &#x2F;etc&#x2F;chrony.keys</span><br><span class="line"></span><br><span class="line"># Specify directory for log files.</span><br><span class="line">logdir &#x2F;var&#x2F;log&#x2F;chrony</span><br><span class="line"></span><br><span class="line"># Select which information is logged.</span><br><span class="line">#log measurements statistics tracking</span><br></pre></td></tr></table></figure>
+<ul>
+<li>chronyc</li>
+</ul>
+<p>可以通过chronyc命令来查看时间同步情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]# chronyc sources</span><br><span class="line">210 Number of sources &#x3D; 4</span><br><span class="line">MS Name&#x2F;IP address         Stratum Poll Reach LastRx Last sample               </span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">^- electrode.felixc.at           2   7   367    63  -2108us[-2493us] +&#x2F;-  165ms</span><br><span class="line">^- ntp6.flashdance.cx            2   7   377     8  -2077us[-2077us] +&#x2F;-   85ms</span><br><span class="line">^- ntp1.flashdance.cx            2   6   377    11  +1057us[+1057us] +&#x2F;-   96ms</span><br><span class="line">^* time.neu.edu.cn               1   6   377    13   -462us[ -896us] +&#x2F;-   29ms</span><br></pre></td></tr></table></figure>
+<p>字段含义：</p>
+<p>M：时钟源类型，^表示服务器，=表示二级时钟源，#表示本地连接的参考时钟</p>
+<p>S：时钟源状态，*表示当前同步的源，+表示其他可接受的源，?表示连接丢失的源，x表示一个认为是falseticker时钟（即它的时间与大多数其他来源不一致），~表示其时间似乎具有太多可变性的来源</p>
+<p>Name/IP address：时钟源地址</p>
+<p>Stratum：时钟源层级，1表示本地连接的参考时钟，2表示通过第1层级计算机的时钟实现同步，依此类推。</p>
+<p>Poll：时钟同步频率，以秒为单位，值是基数2的对数，不过chronyd会根据当时的情况自动改变轮询频率</p>
+<p>Reach：时钟源的可达性的锁存值，当接收或丢失一次时进行一次更新，值377表示最后八次传输都收到了有效的回复</p>
+<p>LastRx：从时钟源同步的最近一次时间，通常是几秒钟</p>
+<p>Last sample：本地时间与时钟源的偏移量，方括号中的数字表示实际测量的偏移值，括号左侧表示原始测量值，这个值是经过调整以允许应用于本地时钟的任何偏差；括号右侧表示偏差值，+/-指示器后面的数字表示测量中的误差范围，+表示本地时钟快于时钟源</p>
+<h4 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h4><h5 id="date命令"><a href="#date命令" class="headerlink" title="date命令"></a>date命令</h5><ul>
+<li>格式化时间：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date &quot;+%Y-%m-%d %H:%M:%S&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改时间</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">## 修改时间</span><br><span class="line">date -s 11:12:00</span><br><span class="line">## 修改日期</span><br><span class="line">date -s 07&#x2F;13&#x2F;2011</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看时区</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date -R</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改时区</li>
+</ul>
+<p>在/usr/share/zoneinfo/下面有很多时区文件，可以复制这些时区文件覆盖/etc/localtime，或修改链接/etc/locatime对应的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -f &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;Asia&#x2F;Shanghai &#x2F;etc&#x2F;localtime</span><br><span class="line"></span><br><span class="line">ln -s &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;Asia&#x2F;Shanghai &#x2F;etc&#x2F;localtime</span><br></pre></td></tr></table></figure>
+<h5 id="cron表达式"><a href="#cron表达式" class="headerlink" title="cron表达式"></a>cron表达式</h5><ul>
+<li>命令格式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;minute&#125; &#123;hour&#125; &#123;day-of-month&#125; &#123;month&#125; &#123;day-of-week&#125; command</span><br></pre></td></tr></table></figure>
+<p>字段含义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">minute：      4个合法字符：,.*&#x2F;      取值范围：0~59</span><br><span class="line">hour：        4个合法字符：,.*&#x2F;      取值范围：0~23</span><br><span class="line">day-of-month：8个合法字符：,.*&#x2F;?LWC  取值范围：0~31</span><br><span class="line">month ：      4个合法字符：,.*&#x2F;      取值范围：1~12，或JAN-DEC</span><br><span class="line">day-of-week： 8个合法字符：,.*&#x2F;?LWC  取值范围：1~7，或SUN~SAT，1表示周日，2表示周一，以此类推</span><br></pre></td></tr></table></figure>
+<p>字符含义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">*：表示任意值，比如在&#123;minute&#125;域使用*, 就表示每分钟都会触发事件</span><br><span class="line"></span><br><span class="line">?：只能在&#123;day-of-month&#125;和&#123;day-of-week&#125;两个域使用，也是匹配任意值，但实际不会。因为&#123;day-of-month&#125;和&#123;day-of-week&#125;会相互影响。</span><br><span class="line">比如想在每月20日执行，不管20日到底是星期几，则表达式应该这样：13 13 15 20 * ? 其中最后一位只能用？，而不能使用*，如果使用*就表示不管星期几都会触发，但实际上并不想这样</span><br><span class="line"></span><br><span class="line">-：表示范围，比如在&#123;minute&#125;域使用5-20，表示从5到20分钟每分钟触发一次</span><br><span class="line"></span><br><span class="line">&#x2F;：表示起始触发时间，然后每隔固定时间触发一次。比如在&#123;minute&#125;域使用5&#x2F;20，表示第一次触发是在第5分钟，然后每20分钟触发一次，所以将在第25和45分别执行一次</span><br><span class="line"></span><br><span class="line">,：表示枚举值，比如在&#123;minute&#125;域使用5,20，就表示在5和20分钟各触发一次</span><br><span class="line"></span><br><span class="line">L：表示最后，只能在&#123;day-of-month&#125;和&#123;day-of-week&#125;两个域使用。如果在&#123;day-of-week&#125;域使用5L，就表示在最后一个星期四触发</span><br><span class="line"></span><br><span class="line">W：表示有效工作日(周一到周五)，只能在&#123;day-of-month&#125;域使用，系统将在离指定日期的最近的有效工作日触发事件。</span><br><span class="line">例如：在&#123;day-of-month&#125;域使用5W，</span><br><span class="line">如果5日是星期六，则将在最近的工作日，也就是星期五，4日触发。如果5日是星期天，则在6日(周一)触发；</span><br><span class="line">如果5日在星期一到星期五中的一天，则就在5日触发。另外一点，W的最近寻找不会跨过月份 。</span><br><span class="line"></span><br><span class="line">LW：可以连用，表示在某个月最后一个工作日，即最后一个星期五</span><br><span class="line"></span><br><span class="line">#：用于确定每个月第几个星期几，只能出现在&#123;day-of-month&#125;域，比如在4#2，表示某月的第二个星期三。</span><br></pre></td></tr></table></figure>
+<p><br><strong>参考：</strong>   </p>
+<ol>
+<li><a href="https://www.zhaowenyu.com/ntp-doc/ntpd-conf.html" target="_blank" rel="noopener">https://www.zhaowenyu.com/ntp-doc/ntpd-conf.html</a></li>
+<li><a href="https://blog.csdn.net/Victor2code/article/details/114091429" target="_blank" rel="noopener">https://blog.csdn.net/Victor2code/article/details/114091429</a></li>
+<li><a href="https://rumenz.com/rumenbiji/linux-date-format.html" target="_blank" rel="noopener">https://rumenz.com/rumenbiji/linux-date-format.html</a></li>
+<li><a href="https://www.mineor.xyz/posts/linux_cron/" target="_blank" rel="noopener">https://www.mineor.xyz/posts/linux_cron/</a></li>
+<li><a href="https://bajie.dev/posts/20211020-chrony/" target="_blank" rel="noopener">https://bajie.dev/posts/20211020-chrony/</a></li>
+<li><a href="https://www.jianshu.com/p/303ff208f174" target="_blank" rel="noopener">https://www.jianshu.com/p/303ff208f174</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2020/10/21/20201021/">
+		    Git 日常操作
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2020/10/17/20201017/">
+		    Linux系统服务 守护进程
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/ntp/">ntp</a>   <a href="/tags/cron/">cron</a>   <a href="/tags/chrony/">chrony</a>
+  </div>
+
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#os_ul").click(function(){ $("#os_li").toggle(); });
+    $("#xx_ul").click(function(){ $("#xx_li").toggle(); });
+});
+</script>
+
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#时间同步-ntp"><span class="toc-text">时间同步 ntp</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ntp-conf"><span class="toc-text">ntp.conf</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#时间同步-chrony"><span class="toc-text">时间同步 chrony</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FAQ"><span class="toc-text">FAQ</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#date命令"><span class="toc-text">date命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#cron表达式"><span class="toc-text">cron表达式</span></a></li></ol></li></ol>
+</div>
+
+
+
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2017-2023 &nbsp;&nbsp; shanhm1991 &nbsp;&nbsp; version@1.0.0 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

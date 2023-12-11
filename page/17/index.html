@@ -41,7 +41,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
-  <h2><font style="color: #736f6f;">articles:  105 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -60,20 +60,20 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article id="post-20170827" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20170601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-26T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/08/27/20170827/" style="color: #736f6f;">2017-08-27</a></time>
+        <time class="dt-published" datetime="2017-05-31T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/06/01/20170601/" style="color: #736f6f;">2017-06-01</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/08/27/20170827/">《深入理解Java虚拟机》 方法调用 重载 &amp; 重写</a>
+       <a href="/2017/06/01/20170601/">Java String</a>
     </h1>
     
   
@@ -87,7 +87,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p><font color="#E51508">Java虚拟机以方法作为最基本的执行单元，而栈帧则是用于支持虚拟机进行方法调用和方法执行背后的数据结构</font>，它也是虚拟机运行时数据区中的虚拟机栈的栈元素。<br>
+        <p>String是Java中使用最频繁的对象之一，其本质上是维护了一个char或byte数组，并提供了基于这个数组的一些操作</p>
       
     </div>
 	
@@ -95,7 +95,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/08/27/20170827/#more" class="more-link">more</a>
+            <a href="/2017/06/01/20170601/#more" class="more-link">more</a>
           </div>
         
         
@@ -112,20 +112,20 @@
 
 
 
-  <article id="post-20170825" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20170311" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-24T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/08/25/20170825/" style="color: #736f6f;">2017-08-25</a></time>
+        <time class="dt-published" datetime="2017-03-10T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/03/11/20170311/" style="color: #736f6f;">2017-03-11</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/08/25/20170825/">《深入理解Java虚拟机》 字节码指令</a>
+       <a href="/2017/03/11/20170311/">《Java并发编程实战》 Java内存模型</a>
     </h1>
     
   
@@ -139,8 +139,17 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>Java虚拟机的指令由一个字节长度（0 ~ 255）、代表着某种特定操作含义的数字（操作码），以及其后跟随的零至多个参数（操作数）构成。由于<font color="#E51508">Java虚拟机采用面向操作数栈而不是面向寄存器的架构</font>，所以大多数指令都不包含操作数，只有一个操作码，指令参数都存放在操作数栈中。</p>
-<p>采用一个字节来代表操作码，也是为了尽可能获得短小精干的编译代码，这种追求尽可能小数据量、高传输效率的设计，也是由于Java语言设计之初，主要面向网络、智能家电的技术背景所决定的，并一直沿用至今。<br>
+        <p>假设一个线程为变量赋值<code>var = 3</code>，那么内存模型需要解决一个问题：在什么条件下，读取<code>var</code>的线程能看到这个值为<code>3</code>。     </p>
+<p>这看上去理所当然，但如果缺少内存同步，那么将有许多因素使得线程无法立即看到，甚至永远看不到另一个线程的操作结果：   </p>
+<ul>
+<li>在编译器中生成的指令顺序，可以与源代码中的顺序不同，此外编译器还会将变量保存在寄存器而不是内存中；</li>
+<li>处理器可以采用乱序或并行等方式来执行指令；</li>
+<li>缓存可能会改变将写入变量提交到内存的次序；</li>
+<li>而且保存在处理器本地缓存中的值，对于其他处理器是不可见的；</li>
+</ul>
+<p>这些因素都会使得一个线程无法看到变量的最新值，并且会导致其他线程中的内存操作看起来似乎在乱序执行。</p>
+<p>Jvm规定了一组最小保证，这组保证规定了对变量的写入操作将在何时对于其他线程可见。Jvm在设计时就在可预测性和程序的易于开发性之间进行了权衡，从而在各种主流的处理器体系架构上都能实现高性能的Jvm。<font color="#E51508">Java语言规范要求Jvm在线程中维护一种类似串行的语义：只要程序的最终结果与严格串行环境中执行的结果相同，那么上面所有的操作都是允许的</font>。</p>
+<p>这确实是一件好事，因为计算机在性能上的提升很大程度要归功于这些重排序措施。在单线程环境中，我们无法看到所有这些底层技术，它们除了提高程序的执行速度外，不会产生其他影响。而在多线程环境中，要维护程序的串行性将导致很大的性能开销。对于并发应用程序中的线程来说，它们在大部分时间里都执行各自的任务，因此，在线程之间的协调操作只会降低应用程序的运行速度，而不会带来任何好处。只有当多个线程要共享数据时，才必须协调它们之间的操作，并且Jvm依赖程序也是通过同步操作来找出这些协调操作将在何时发生。<br>
       
     </div>
 	
@@ -148,7 +157,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/08/25/20170825/#more" class="more-link">more</a>
+            <a href="/2017/03/11/20170311/#more" class="more-link">more</a>
           </div>
         
         
@@ -165,20 +174,20 @@
 
 
 
-  <article id="post-20170823" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20170310" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-22T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/08/23/20170823/" style="color: #736f6f;">2017-08-23</a></time>
+        <time class="dt-published" datetime="2017-03-09T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/03/10/20170310/" style="color: #736f6f;">2017-03-10</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/08/23/20170823/">Java 枚举</a>
+       <a href="/2017/03/10/20170310/">《Java并发编程实战》 非阻塞的同步</a>
     </h1>
     
   
@@ -192,7 +201,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>枚举enum可以将一组具名的值得有限集合创建为一种新的类型，而这些具名的值可以作为常规的程序组件使用，这是一种非常有用的功能。<br>
+        <p>非阻塞算法可以使多个线程在竞争共享的数据时不发生阻塞，因此它能在粒度更细的层次上进行协调，并且极大地减少调度开销。在基于锁的算法中，如果一个线程在休眠或者自旋时持有锁，那么其他线程都无法执行下去，而非阻塞算法则不会受到单个线程失败的影响。<br>
       
     </div>
 	
@@ -200,7 +209,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/08/23/20170823/#more" class="more-link">more</a>
+            <a href="/2017/03/10/20170310/#more" class="more-link">more</a>
           </div>
         
         
@@ -217,20 +226,20 @@
 
 
 
-  <article id="post-20170822" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20170309" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-21T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/08/22/20170822/" style="color: #736f6f;">2017-08-22</a></time>
+        <time class="dt-published" datetime="2017-03-08T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/03/09/20170309/" style="color: #736f6f;">2017-03-09</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/08/22/20170822/">《深入理解Java虚拟机》 类 &amp; 对象创建/访问（HotSpot）</a>
+       <a href="/2017/03/09/20170309/">《Java并发编程实战》 同步工具类的设计</a>
     </h1>
     
   
@@ -244,7 +253,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>这里讨论的对象仅限于普通java对象，不包括数组和Class对象等<br>
+        <p>创建状态依赖类最简单的方法通常是在类库中现有状态依赖类的基础上进行构造，如果类库不支持，则可以使用Java语言和类库提供的底层机制来构造自己的同步机制，包括内置的条件队列、显示的<code>Condition</code>对象以及<code>AbstractQueuedSynchronizer</code>框架。</p>
+<p>在单线程的程序中调用方法时，如果基于某个状态的前提条件未得到满足，那么这个条件永远无法成真。而在并发程序中，基于状态的条件可能会由于其他线程的操作而改变。<br>
       
     </div>
 	
@@ -252,7 +262,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/08/22/20170822/#more" class="more-link">more</a>
+            <a href="/2017/03/09/20170309/#more" class="more-link">more</a>
           </div>
         
         
@@ -269,20 +279,20 @@
 
 
 
-  <article id="post-20170821" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20170308" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-20T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/08/21/20170821/" style="color: #736f6f;">2017-08-21</a></time>
+        <time class="dt-published" datetime="2017-03-07T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/03/08/20170308/" style="color: #736f6f;">2017-03-08</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/08/21/20170821/">《深入理解Java虚拟机》 类 &amp; Class对象/反射</a>
+       <a href="/2017/03/08/20170308/">《Java并发编程实战》 显式锁的使用</a>
     </h1>
     
   
@@ -296,7 +306,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>在类加载成功之后，便以Class对象的形式保存在内存中。可以将Class对象理解成实例对象的元数据，通过Class对象中描述的类型信息，便可以创建对应的实例对象，从而进行方法调用，以及字段修改。那么，便可以通过反射根据运行时获取的类型信息来创建实例，而且可以跳过访问权限的限制访问字段和方法<br>
+        <p>在java 5.0之前，协调共享对象的访问可以使用的机制有<code>synchronized</code>和<code>volatile</code>，java 5.0中新增了一种新的机制：<code>ReentrantLock</code>。它的作用并不是用来替代内置锁，而是当内置锁不再适用时，作为一种可选择的高级功能。在java 6.0中，也使用了与<code>ReentrantLock</code>类似的算法对内置锁本身进行了改进，有效地提高了内置锁的可伸缩性。<br>
       
     </div>
 	
@@ -304,7 +314,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/08/21/20170821/#more" class="more-link">more</a>
+            <a href="/2017/03/08/20170308/#more" class="more-link">more</a>
           </div>
         
         
@@ -321,20 +331,20 @@
 
 
 
-  <article id="post-20170820" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20170307" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2017-08-19T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/08/20/20170820/" style="color: #736f6f;">2017-08-20</a></time>
+        <time class="dt-published" datetime="2017-03-06T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2017/03/07/20170307/" style="color: #736f6f;">2017-03-07</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2017/08/20/20170820/">《深入理解Java虚拟机》 类 &amp; 加载</a>
+       <a href="/2017/03/07/20170307/">《Java并发编程实战》 同步的性能问题</a>
     </h1>
     
   
@@ -348,8 +358,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>类加载，即把描述类的字节数据（class文件）加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。与那些编译时需要链接的语言不同，java中类型的加载、链接和初始化都在运行期间完成，这种策略虽然在类加载时增加了一些性能开销，但是为java应用程序提供了高度的灵活性，<font color="#E51508">Java能够动态扩展的语言特性</font>就是依赖<font color="#E51508">运行期动态加载</font>和<font color="#E51508">动态连接</font>这些特点来实现的。</p>
-<p>比如，编写一个面向接口的应用程序，可以等到运行时再指定其实现类。用户可以通过Java预定义或自定义的加载器，让一个本地应用程序在运行时从网络或其它地方加载一个二进制流作为程序代码的一部分。这种组装应用程序的方式已广泛应用于Java程序之中，从最基础的Applet、JSP到相对复杂的OSGI。<br>
+        <p>在<font color="#E51508">安全性</font>与<font color="#E51508">活跃性</font>之间通常存在着某种制衡，我们可以使用加锁机制来确保线程安全，但如果过度的使用加锁，则可能导致死锁。<br>
       
     </div>
 	
@@ -357,7 +366,7 @@
       
         
           <div class="alignleft">
-            <a href="/2017/08/20/20170820/#more" class="more-link">more</a>
+            <a href="/2017/03/07/20170307/#more" class="more-link">more</a>
           </div>
         
         
@@ -402,7 +411,7 @@
 
   
   
-  <li><a href="/categories/Java-SE/" style="width:45px; display:inline-block;">Java SE</a><small>18</small></li>
+  <li><a href="/categories/Java-SE/" style="width:48px; display:inline-block;">Java SE</a><small>18</small></li>
   
   
   
@@ -448,7 +457,7 @@
   
   
   
-    <li><a href="/categories/算法设计/" style="width:45px; display:inline-block;">算法设计</a><small>11</small></li>
+    <li><a href="/categories/算法设计/" style="width:48px; display:inline-block;">算法设计</a><small>11</small></li>
   
   
   
@@ -480,7 +489,63 @@
   
   
   
-    <li><a href="/categories/设计模式/" style="width:45px; display:inline-block;">设计模式</a><small>6</small></li>
+    <li><a href="/categories/设计模式/" style="width:48px; display:inline-block;">设计模式</a><small>6</small></li>
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <li><a href="/categories/日常随笔/" style="width:48px; display:inline-block;">日常随笔</a><small>15</small></li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <li><a href="/categories/开发笔记/" style="width:48px; display:inline-block;">开发笔记</a><small>7</small></li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
 
@@ -500,36 +565,6 @@
   
   
   
-    <li><a href="/categories/日常随笔/" style="width:45px; display:inline-block;">日常随笔</a><small>13</small></li>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <li><a href="/categories/开发笔记/" style="width:45px; display:inline-block;">开发笔记</a><small>6</small></li>
-  
-  
-  
   
   
   
@@ -540,7 +575,7 @@
   
   
 
-  <li id="os_ul"><a href="#" style="width:45px; display:inline-block;">读书笔记</a><small>43</small></li>
+  <li id="os_ul"><a href="#" style="width:48px; display:inline-block;">读书笔记</a><small>43</small></li>
   <ul id="os_li" class="entry_li" style="list-style: none; padding-left: 5px; display: none;">
       
       
@@ -582,13 +617,13 @@
       
       
       
-      <li><a href="/categories/spring源码深度解析/" style="width:110px; display:inline-block;">spring源码深度解析</a><small>11</small></li>
       
       
       
       
       
       
+      <li><a href="/categories/深入理解Java虚拟机/" style="width:110px; display:inline-block;">深入理解Java虚拟机</a><small>15</small></li>
       
       
       
@@ -610,13 +645,13 @@
       
       
       
+      <li><a href="/categories/spring源码深度解析/" style="width:110px; display:inline-block;">spring源码深度解析</a><small>11</small></li>
       
       
       
       
       
       
-      <li><a href="/categories/深入理解Java虚拟机/" style="width:110px; display:inline-block;">深入理解Java虚拟机</a><small>15</small></li>
       
       
       
@@ -683,7 +718,7 @@
       
   </ul>
 
-  <li id="xx_ul"><a href="#" style="width:60px; display:inline-block;">框架|中间件</a><small>8</small></li>
+  <li id="xx_ul"><a href="#" style="width:65px; display:inline-block;">框架|中间件</a><small>8</small></li>
   <ul id="xx_li" class="entry_li" style="list-style: none; padding-left: 5px; display: none;">
       
       
@@ -759,7 +794,7 @@ $(document).ready(function(){
 <div class="widget tagcloud">
   <h3 class="title">Tags</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/Schedule/" style="font-size: 12.5px;">Schedule</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/netstat/" style="font-size: 10px;">netstat</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
+    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/chrony/" style="font-size: 10px;">chrony</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/cron/" style="font-size: 10px;">cron</a> <a href="/tags/feign/" style="font-size: 10px;">feign</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/netstat/" style="font-size: 10px;">netstat</a> <a href="/tags/ntp/" style="font-size: 10px;">ntp</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/schedule/" style="font-size: 12.5px;">schedule</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/swap/" style="font-size: 10px;">swap</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
   </div>
 </div>
 
@@ -767,6 +802,13 @@ $(document).ready(function(){
   
 
 
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">Archives</h3>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">2022-07</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">2022-04</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">2021-03</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">2020-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">2019-05</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018-07</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">2017-06</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017-03</a><span class="archive-list-count">11</span></li></ul>
+  </div>
 
 </aside>
     <div class="clearfix"></div>

@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>UML 关系图 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="在面向对象的设计中，类的关系涉及依赖、关联、聚合、组合和泛化这五种关系，耦合程度依次递增。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="UML 关系图"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20180701" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2018-06-30T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2018/07/01/20180701/" style="color: #736f6f;">2018-07-01</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        UML 关系图
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 329  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/UML/">UML</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>在面向对象的设计中，类的关系涉及依赖、关联、聚合、组合和泛化这五种关系，耦合程度依次递增。<br><a id="more"></a></p>
+<h3 id="依赖-Dependency"><a href="#依赖-Dependency" class="headerlink" title="依赖 Dependency"></a>依赖 Dependency</h3><p>依赖是五种关系中耦合最小的一种，类A为了完成某个功能而引用了类B，则称类A依赖类B。在代码中主要体现为类A的某个成员方法的返回值、形参、局部变量或静态方法的调用。</p>
+<p>比如学生与电脑的关系：</p>
+<p><img src="/img/20180701/20180701.1.jpg" alt=""> </p>
+<h3 id="关联-Association"><a href="#关联-Association" class="headerlink" title="关联 Association"></a>关联 Association</h3><p>关联关系比依赖要强，比如学生与老师的关系，学生可以不用电脑，但是学生不能没有老师。在代码中主要体现为类A的某个属性</p>
+<p><img src="/img/20180701/20180701.2.jpg" alt=""> </p>
+<h3 id="聚合-Aggregation"><a href="#聚合-Aggregation" class="headerlink" title="聚合 Aggregation"></a>聚合 Aggregation</h3><p>聚合用来表示集体与个体之间的关系，比如班级与学生之间的关系，在代码中也是体现为类A的某个属性</p>
+<p><img src="/img/20180701/20180701.3.jpg" alt=""> </p>
+<h3 id="组合-Composition"><a href="#组合-Composition" class="headerlink" title="组合 Composition"></a>组合 Composition</h3><p>组合用来表示整体与组成部分之间的关系，比如学生与心脏之间的关系，不可缺失</p>
+<p><img src="/img/20180701/20180701.4.jpg" alt=""> </p>
+<h3 id="泛化-Generalization"><a href="#泛化-Generalization" class="headerlink" title="泛化 Generalization"></a>泛化 Generalization</h3><p>泛化指的是类与类之间的继承关系和类与接口之间的实现关系</p>
+<ul>
+<li>继承关系</li>
+</ul>
+<p>比如学生与人类的关系</p>
+<p><img src="/img/20180701/20180701.5.jpg" alt=""> </p>
+<ul>
+<li>实现关系</li>
+</ul>
+<p>比如学生与某个动作之间的关系</p>
+<p><img src="/img/20180701/20180701.6.jpg" alt=""> </p>
+<p><br><strong>参考：</strong></p>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2018/07/05/20180705/">
+		    设计模式 原则&amp;分类
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2018/04/12/20180412/">
+		    Java I/O 网络
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/UML/">UML</a>
+  </div>
+
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#os_ul").click(function(){ $("#os_li").toggle(); });
+    $("#xx_ul").click(function(){ $("#xx_li").toggle(); });
+});
+</script>
+
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖-Dependency"><span class="toc-text">依赖 Dependency</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关联-Association"><span class="toc-text">关联 Association</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#聚合-Aggregation"><span class="toc-text">聚合 Aggregation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组合-Composition"><span class="toc-text">组合 Composition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#泛化-Generalization"><span class="toc-text">泛化 Generalization</span></a></li></ol>
+</div>
+
+
+
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2017-2023 &nbsp;&nbsp; shanhm1991 &nbsp;&nbsp; version@1.0.0 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

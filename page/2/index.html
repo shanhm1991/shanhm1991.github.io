@@ -41,7 +41,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
-  <h2><font style="color: #736f6f;">articles:  105 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -60,6 +60,60 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-20210814" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-08-13T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/08/14/20210814/" style="color: #736f6f;">2021-08-14</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2021/08/14/20210814/">Netty Future &amp; Promise</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>在Java中，对于<font color="#E51508">异步操作结果的获取</font>抽象出了一个接口<code>Future&lt;V&gt;</code>，它提供了一些方法来检查或等待操作是否完成，以及获取操作的结果，同时还提供了取消操作的能力，以及提供了检测操作是正常结束还是被取消的方法。不过如果操作已经完成了，就不能再对其进行取消了。在某些场景下，如果只是想借助<code>Future</code>实现操作取消的能力，而不关心操作结果，那么可以返回空即可。</p>
+<blockquote>
+<p>A <code>Future</code> represents the result of an asynchronous computation. Methods are provided to check if the computation is complete, to wait for its completion, and to retrieve the result of the computation.<br>The result can only be retrieved using method <code>get</code> when the computation has completed, blocking if necessary until it is ready. Cancellation is performed by the <code>cancel</code> method. Additional methods are provided to determine if the task completed normally or was cancelled. Once a computation has completed, the computation cannot be cancelled. If you would like to use a <code>Future</code> for the sake of cancellability but not provide a usable result, you can declare types of the form <code>Future&lt;?&gt;</code> and return <code>null</code> as a result of the underlying task.<br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2021/08/14/20210814/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
   <article id="post-20210805" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -90,8 +144,8 @@
         <p>在Java中，任务执行的主要抽象不是<code>Thread</code>，而是<code>Executor</code>，它提供了一种标准的方式将任务的提交过程与执行过程解耦开来，为灵活而强大的异步任务执行框架提供了基础，线程池<code>ThreadPoolExecutor</code>便是在此基础上实现的一套异步执行框架。</p>
 <p>Netty也在<code>Executor</code>的基础上自定义实现了一套高性能的任务执行框架，本文尝试从I/O事件执行器<code>NioEventLoopGroup</code>作为切入点对其中的部分源码做一些分析，希望能从别人的设计中汲取一些思路和启发。建议在分析Netty中的任务执行机制之前先对Java中原生的任务执行框架有所了解，可以参考笔记：</p>
 <ul>
-<li><a href="https://shanhm1991.github.io/2019/01/05/20190105/">《Java并发编程实战》 任务的执行</a></li>
-<li><a href="https://shanhm1991.github.io/2019/01/06/20190106/">《Java并发编程实战》 任务的取消</a>
+<li><a href="https://shanhm1991.github.io/2017/03/05/20170305/">《Java并发编程实战》 任务的执行</a></li>
+<li><a href="https://shanhm1991.github.io/2017/03/06/20170306/">《Java并发编程实战》 任务的取消</a>
       
     </div>
 	
@@ -178,20 +232,20 @@
 
 
 
-  <article id="post-20210705" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20210503" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2021-07-04T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/07/05/20210705/" style="color: #736f6f;">2021-07-05</a></time>
+        <time class="dt-published" datetime="2021-05-02T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/05/03/20210503/" style="color: #736f6f;">2021-05-03</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2021/07/05/20210705/">NIO Channel &amp; Selector</a>
+       <a href="/2021/05/03/20210503/">Http调用工具spring-feign 设计文档</a>
     </h1>
     
   
@@ -205,9 +259,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>Channel 与 Stream 是一个级别，只不过 Stream 是单向的，比如<code>InputStream</code>或<code>OutputStream</code>，而 Channel 可以是单向的，也可以是双向的，既可以同时支持读和写操作，具体由其实现的接口所决定</p>
-<figure class="highlight java"><figcaption><span class="caption">java.nio.channels</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReadableByteChannel</span> <span class="keyword">extends</span> <span class="title">Channel</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(ByteBuffer dst)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">WritableByteChannel</span> <span class="keyword">extends</span> <span class="title">Channel</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">write</span><span class="params">(ByteBuffer src)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到 read 和 write 方法接受的都是一个 ByteBuffer 参数，其中<font color="#E51508">Channel.read是向ByteBuffer中put数据</font>，然后应用从ByteBuffer中获取，而<font color="#E51508">Channel.write是从ByteBuffer中get数据</font>，然后发送给其他远程主机。两者均返回字节数，然后缓冲区的position位置也会前移对应的字节数，如果只进行了部分传输，缓冲区可以被重新提交给通道并从上次中断的地方继续传输，该过程可以重复进行直到缓冲区的<code>hasRemaining()</code>方法返回false<br>
+        <p>Feign是Netflix发布的一款轻量级Rest客户端框架，它在RestTemplate基础上做了进一步的封装，提供了一种声明式的服务调用组件。通过Feign只需声明一个接口并通过注解进行简单的配置即可实现对Http接口的绑定。然后就可以像调用本地方法一样来调用远程服务，而完全感觉不到是在进行远程调用。</p>
+<p>Feign支持多种注解，比如Feign自带的注解以及JAX-RS注解，但遗憾的是Feign本身并不支持Spring mvc注解，这无疑会给广大Spring用户带来不便。于是Spring Cloud又对Feign进行了封装，使其方便集成到Spring项目中，并添加了对Spring mvc注解的支持，以及简化与负载均衡、服务注册发现、断路器等组件的集成，所以集成之后又叫Spring Cloud Feign<br>
       
     </div>
 	
@@ -215,7 +268,7 @@
       
         
           <div class="alignleft">
-            <a href="/2021/07/05/20210705/#more" class="more-link">more</a>
+            <a href="/2021/05/03/20210503/#more" class="more-link">more</a>
           </div>
         
         
@@ -232,20 +285,20 @@
 
 
 
-  <article id="post-20210701" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20210321" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2021-06-30T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/07/01/20210701/" style="color: #736f6f;">2021-07-01</a></time>
+        <time class="dt-published" datetime="2021-03-20T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/03/21/20210321/" style="color: #736f6f;">2021-03-21</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2021/07/01/20210701/">NIO Buffer</a>
+       <a href="/2021/03/21/20210321/">Linux I/O模型</a>
     </h1>
     
   
@@ -259,7 +312,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>缓冲区 Buffer 是一个固定容量的数组，其作用是一个作为存储器，或者分段运输区，用于存储和检索数据。<br>
+        <p>操作系统负责对计算机资源进行管理，并对上层应用提供支持。其核心是操作系统内核空间，独立于应用程序，可以访问受保护的内存空间以及底层硬件设备。为了保证内核的安全，避免用户进程直接操作内核，因此将内存空间划分为两部分，即<font style="color:#E51508;">内核空间</font>和<font style="color:#E51508;">用户空间</font>。<br>
       
     </div>
 	
@@ -267,7 +320,7 @@
       
         
           <div class="alignleft">
-            <a href="/2021/07/01/20210701/#more" class="more-link">more</a>
+            <a href="/2021/03/21/20210321/#more" class="more-link">more</a>
           </div>
         
         
@@ -284,20 +337,20 @@
 
 
 
-  <article id="post-20210531" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20210315" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2021-05-30T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/05/31/20210531/" style="color: #736f6f;">2021-05-31</a></time>
+        <time class="dt-published" datetime="2021-03-14T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/03/15/20210315/" style="color: #736f6f;">2021-03-15</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2021/05/31/20210531/">算法 雪花算法 &amp; IdGenerator</a>
+       <a href="/2021/03/15/20210315/">《计算机组成原理》 并行组织与结构</a>
     </h1>
     
   
@@ -311,7 +364,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>之前在开发中自己设计了一个全局唯一请求id生成器，就是利用时间戳加上序列拼接而成，同时支持指定长度和前后缀，然后在网上看到原来这个思路还有个名字叫雪花算法 SnowFlake，所以这里拿出再来记一下。<br>
+        <p>由于物理规律对半导体器件的限制，传统单处理机通过提高主频提升性能的方法受到制约，不得不转向并行处理体系结构。下面主要介绍一些并行性相关的概念，然后分别讨论多线程和超线程处理机、多处理机和多核处理机。<br>
       
     </div>
 	
@@ -319,59 +372,7 @@
       
         
           <div class="alignleft">
-            <a href="/2021/05/31/20210531/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  <article id="post-20210526" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2021-05-25T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/05/26/20210526/" style="color: #736f6f;">2021-05-26</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2021/05/26/20210526/">算法 TopK问题</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>这里考虑一个具体问题：有大约40万个数字(数字范围：0～200000000000000），数字没有重复，求这些数字中，最大的100个数字之和<br>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2021/05/26/20210526/#more" class="more-link">more</a>
+            <a href="/2021/03/15/20210315/#more" class="more-link">more</a>
           </div>
         
         
@@ -416,7 +417,7 @@
 
   
   
-  <li><a href="/categories/Java-SE/" style="width:45px; display:inline-block;">Java SE</a><small>18</small></li>
+  <li><a href="/categories/Java-SE/" style="width:48px; display:inline-block;">Java SE</a><small>18</small></li>
   
   
   
@@ -462,7 +463,7 @@
   
   
   
-    <li><a href="/categories/算法设计/" style="width:45px; display:inline-block;">算法设计</a><small>11</small></li>
+    <li><a href="/categories/算法设计/" style="width:48px; display:inline-block;">算法设计</a><small>11</small></li>
   
   
   
@@ -494,7 +495,63 @@
   
   
   
-    <li><a href="/categories/设计模式/" style="width:45px; display:inline-block;">设计模式</a><small>6</small></li>
+    <li><a href="/categories/设计模式/" style="width:48px; display:inline-block;">设计模式</a><small>6</small></li>
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <li><a href="/categories/日常随笔/" style="width:48px; display:inline-block;">日常随笔</a><small>15</small></li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <li><a href="/categories/开发笔记/" style="width:48px; display:inline-block;">开发笔记</a><small>7</small></li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
 
@@ -514,36 +571,6 @@
   
   
   
-    <li><a href="/categories/日常随笔/" style="width:45px; display:inline-block;">日常随笔</a><small>13</small></li>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <li><a href="/categories/开发笔记/" style="width:45px; display:inline-block;">开发笔记</a><small>6</small></li>
-  
-  
-  
   
   
   
@@ -554,7 +581,7 @@
   
   
 
-  <li id="os_ul"><a href="#" style="width:45px; display:inline-block;">读书笔记</a><small>43</small></li>
+  <li id="os_ul"><a href="#" style="width:48px; display:inline-block;">读书笔记</a><small>43</small></li>
   <ul id="os_li" class="entry_li" style="list-style: none; padding-left: 5px; display: none;">
       
       
@@ -596,13 +623,13 @@
       
       
       
-      <li><a href="/categories/spring源码深度解析/" style="width:110px; display:inline-block;">spring源码深度解析</a><small>11</small></li>
       
       
       
       
       
       
+      <li><a href="/categories/深入理解Java虚拟机/" style="width:110px; display:inline-block;">深入理解Java虚拟机</a><small>15</small></li>
       
       
       
@@ -624,13 +651,13 @@
       
       
       
+      <li><a href="/categories/spring源码深度解析/" style="width:110px; display:inline-block;">spring源码深度解析</a><small>11</small></li>
       
       
       
       
       
       
-      <li><a href="/categories/深入理解Java虚拟机/" style="width:110px; display:inline-block;">深入理解Java虚拟机</a><small>15</small></li>
       
       
       
@@ -697,7 +724,7 @@
       
   </ul>
 
-  <li id="xx_ul"><a href="#" style="width:60px; display:inline-block;">框架|中间件</a><small>8</small></li>
+  <li id="xx_ul"><a href="#" style="width:65px; display:inline-block;">框架|中间件</a><small>8</small></li>
   <ul id="xx_li" class="entry_li" style="list-style: none; padding-left: 5px; display: none;">
       
       
@@ -773,7 +800,7 @@ $(document).ready(function(){
 <div class="widget tagcloud">
   <h3 class="title">Tags</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/Schedule/" style="font-size: 12.5px;">Schedule</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/netstat/" style="font-size: 10px;">netstat</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
+    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/chrony/" style="font-size: 10px;">chrony</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/cron/" style="font-size: 10px;">cron</a> <a href="/tags/feign/" style="font-size: 10px;">feign</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/netstat/" style="font-size: 10px;">netstat</a> <a href="/tags/ntp/" style="font-size: 10px;">ntp</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/schedule/" style="font-size: 12.5px;">schedule</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/swap/" style="font-size: 10px;">swap</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
   </div>
 </div>
 
@@ -781,6 +808,13 @@ $(document).ready(function(){
   
 
 
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">Archives</h3>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">2022-07</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">2022-04</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">2021-03</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">2020-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">2019-05</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018-07</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">2017-06</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017-03</a><span class="archive-list-count">11</span></li></ul>
+  </div>
 
 </aside>
     <div class="clearfix"></div>

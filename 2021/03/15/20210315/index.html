@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>《计算机组成原理》 并行组织与结构 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="由于物理规律对半导体器件的限制，传统单处理机通过提高主频提升性能的方法受到制约，不得不转向并行处理体系结构。下面主要介绍一些并行性相关的概念，然后分别讨论多线程和超线程处理机、多处理机和多核处理机。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="《计算机组成原理》 并行组织与结构"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20210315" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2021-03-14T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/03/15/20210315/" style="color: #736f6f;">2021-03-15</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        《计算机组成原理》 并行组织与结构
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 9k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 31min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/计算机组成原理/">计算机组成原理</a>
+  </div>
+
+
+   
+   
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>由于物理规律对半导体器件的限制，传统单处理机通过提高主频提升性能的方法受到制约，不得不转向并行处理体系结构。下面主要介绍一些并行性相关的概念，然后分别讨论多线程和超线程处理机、多处理机和多核处理机。<br><a id="more"></a></p>
+<h3 id="1-并行处理机的组织与结构"><a href="#1-并行处理机的组织与结构" class="headerlink" title="1. 并行处理机的组织与结构"></a>1. 并行处理机的组织与结构</h3><h4 id="1-1-超标量处理机与超长指令字处理机"><a href="#1-1-超标量处理机与超长指令字处理机" class="headerlink" title="1.1. 超标量处理机与超长指令字处理机"></a>1.1. 超标量处理机与超长指令字处理机</h4><p>在计算机系统的最底层，流水线技术将时间并行性引入处理机，而多发射处理机则把空间并行性引入处理机。</p>
+<p><font style="color:#E51508;">超标量</font>设计采用多发射技术，在处理机内部设置多条并行执行的指令流水线，通过在每个时钟周期内向执行单元发射多条指令实现指令级并行。<font style="color:#E51508;">超长指令字</font>技术则由编译器在编译时找出指令间潜在的并行性，进行适当的调度安排，把多个能并行执行的操作组合在一起，控制处理机中的多个相互独立的功能部件，相当于同时执行多条指令，从而提高处理机的并行性。</p>
+<h4 id="1-2-多处理机与多计算机"><a href="#1-2-多处理机与多计算机" class="headerlink" title="1.2. 多处理机与多计算机"></a>1.2. 多处理机与多计算机</h4><p>在单个处理机的性能一定的情况下，进一步提高计算机系统处理能力的简单办法就是让多个处理机协同工作，称为多处理机系统。</p>
+<p>狭义上的多处理机系统是指能在同一计算机内，处理机之间通过共享存储器方式通信的并行计算机系统。所有进程能够共享映射到公共内存的单一虚拟地址空间，然后进程都能通过 LOAD 或 STORE 指令来读写一个内存字。</p>
+<p>相对的，由多个不共享公共内存的处理机系统构成的并行系统则称为多计算机系统，每个系统都有自己的内存，通过消息传递的方式进行互相通信。多计算机系统有各种不同的形状和规模，集群系统就是一种常见的多计算机系统。集群是由一组完整计算机通过高性能的网络或局域网互连而成的系统，这组计算机作为统一的计算机资源一起工作，并对外呈现为一台机器的样子。</p>
+<h4 id="1-3-多线程处理机"><a href="#1-3-多线程处理机" class="headerlink" title="1.3. 多线程处理机"></a>1.3. 多线程处理机</h4><p>由于现代处理机广泛采用指令流水线技术，因而处理机必须面对一个问题：<font style="color:#E51508;">如果处理机在访存时 cache 缺失，则必须访问主存，这会导致执行部件长时间的等待，直到相关 cache 块被加载完成。</font>解决指令流水线因此必须暂停的一种方法就是片上多线程技术，即允许CPU同时运行多个硬件线程，如果某个线程被迫暂停，则其他线程仍可以运行，这样能保证计算资源被充分利用。</p>
+<h4 id="1-4-多核处理机"><a href="#1-4-多核处理机" class="headerlink" title="1.4. 多核处理机"></a>1.4. 多核处理机</h4><p>多线程技术能够屏蔽对存储器访问的延迟，增加系统吞吐率，但并未提高单个线程的执行速度。而<font style="color:#E51508;">多核</font>技术通过开发程序内的线程级或进程级并行性提高性能，多核处理机是指在一颗处理机芯片内集成两个或以上完整且并行工作的计算引擎，因此也称为<font style="color:#E51508;">片上多处理机</font>。核是指包含指令部件、算术/逻辑部件、寄存器堆和一级二级cache的处理单元，这些核通过某种方式互联后，能够相互交换数据，对外呈现为一个统一的多核处理机。</p>
+<p><img src="/img/20210315/20210315.1.jpg" alt=""></p>
+<h3 id="2-指令级并行与线程级并行"><a href="#2-指令级并行与线程级并行" class="headerlink" title="2. 指令级并行与线程级并行"></a>2. 指令级并行与线程级并行</h3><ul>
+<li><strong>指令级并行</strong></li>
+</ul>
+<p>超标量技术和超长指令字技术都是针对单一的指令流中的若干指令来提高并行处理能力的，但是当单一的指令流出现 cache 缺失等现象时，指令流水线就会断流；而指令之间的相关性也会严重影响执行单元的利用率。</p>
+<p>指令流断流会导致处理机流水线不能继续执行新的指令而造成<font style="color:#E51508;">垂直浪费</font>，而指令相关性会导致多条流水线中的部分流水线被闲置，造成<font style="color:#E51508;">水平浪费</font>。下图展示了一个有四条流水线的超标量处理机的指令执行实例，图中水平方向表示并行执行指令的4条指令流水线，垂直方向表示时钟周期，每个格子表示一个可用的指令处理周期，空白则表示被浪费的周期</p>
+<p><img src="/img/20210315/20210315.2.jpg" alt=""></p>
+<p>所以，提升处理机性能的关键就在于如何减少处理机执行部件的空闲时间，而线程级并行正是为了解决这一问题而引入的。</p>
+<ul>
+<li><strong>线程级并行</strong></li>
+</ul>
+<p>多任务系统必须解决的首要问题就是如何分配宝贵的处理机时间，这通常是由操作系统负责，操作系统除了负责管理用户程序的执行外，也需要处理各种系统任务。在操作系统中，通常使用<font style="color:#E51508;">进程</font>这一概念描述程序的动态执行过程。进程不仅仅包含程序代码，还包含了当前的状态和资源，通常由程序计数器和处理机中的相关寄存器表示。所以，如果两个用户用相同一段代码分别执行相同功能的程序，那么每个进程都是独立的，虽然其代码是相同的，但是数据未必相同。</p>
+<p>传统计算机将进程当作系统中的一个基本单位，操作系统将内存空间、I/O设备、文件等资源分配给每个进程，调度和代码执行也以进程为基本单位。但进程调度是频繁进行的，因而在处理机中从一个进程切换到另一个进程的过程中，系统要不断地进行资源的分配与回收、现场的保存与恢复等工作，为此要付出较大的时间与空间开销。</p>
+<p>因此，在现代操作系统中，大都引入线程作为进程概念的延伸，<font style="color:#E51508;">线程是在操作系统中描述能被独立执行的程序代码的基本单位。进程只作为资源分配的单位，不再是调度和执行的基本单位</font>。这样让每个进程拥有若干线程，然后将线程作为调度和执行的单位，线程除了拥有一点在运行时必不可少的独立资源（比如程序计数器、一组寄存器和栈）之外，与属于同一个进程的其他线程共享进程所拥有的全部资源。因此，由于线程调度时不进行资源的分配与回收等操作，其切换的开销比进程进行少得多。</p>
+<p>根据多线程处理机的具体实现差异，可以分为细粒度多线程和粗粒度多线程，所谓细粒度就是处理机交替执行两个线程的指令，在每个时钟周期都进行切换。而粗粒度多线程只有在遇到代价较高的长延迟操作才由处理机进行线程切换，否则一直执行同一个线程的指令，因此，粗粒度多线程的线程切换开销会比细粒度多线程低一些。</p>
+<p><img src="/img/20210315/20210315.3.jpg" alt=""></p>
+<p>通常，多线程处理机会为每个线程维护独立的程序计数器和数据寄存器，以便快速实现线程间的切换。由于多个相互独立的线程共享执行单元的处理时间，并且能够进行快速的切换，因此多线程处理机能有效地减少垂直浪费的情况，从而利用线程级并行来提高处理机资源的利用率。</p>
+<ul>
+<li><strong>同时多线程</strong></li>
+</ul>
+<p>多线程处理机虽然可以减少因延迟操作或资源冲突造成的垂直浪费，但还不能完全利用处理机中的所有资源，这是<font style="color:#E51508;">因为每个时钟周期执行的指令都来自同一个线程，因而不能有效地消除水平浪费</font>。于是，为了最大限度地利用处理机资源，又引入了同时多线程技术。也就是结合超标量技术和细粒度多线程的优点，运行在一个时钟周期内执行来自不同线程的多指令，因而可以同时降低垂直浪费和水平浪费。</p>
+<p>下图展示了一个支持两个线程的同时多线程处理机的指令执行实例，在一个时钟周期内，处理机可以执行来自不同线程的多条指令。</p>
+<p><img src="/img/20210315/20210315.4.jpg" alt=""></p>
+<p>由于同时运行的多个线程需要共享执行资源，因而处理机的实时调度机制非常复杂，就调度策略而言，取指部件要在单线程执行时间延迟与系统整体性能之间取得平衡。与单线程处理机相比，并发执行的多个线程必然会拉长单个线程的执行时间，但处理机可以通过指定一个线程为最高优先级而减小其执行延迟，只有当优先线程阻塞时才考虑其他线程。</p>
+<ul>
+<li><strong>超线程处理机</strong></li>
+</ul>
+<p>超线程是同时多线程技术在英特尔系列处理机产品中的具体实现，下图展示了支持超线程技术的 NetBurst 微体系结构的流水线结构，每条指令的执行过程大概都要经过10个功能段组成的流水线</p>
+<p><img src="/img/20210315/20210315.5.jpg" alt=""></p>
+<p>原有的流水线只支持单线程运行，统计表明，单线程的 NetBurst 微体系结构的流水线在执行典型的指令序列时仅仅利用了大约 35% 的流水线资源。为了支持两个硬件线程同时运行，就需要对流水线进行改造。改造的方式是让每级流水线中的资源通过以下三种方式之一复用于两个线程，即复制、分区和共享</p>
+<p>复制方式即分别为两个线程设置独立的部件，被复制的资源包括所有的处理机状态、指令指针IP（程序计数器）寄存器、寄存器重命名部件和一些简单资源，如TLB等。复制这些资源仅仅会少许提高处理机的成本，而每个线程使用这些资源的方式与单线程相同。</p>
+<p>分区方式则是将原有的用于单线程的独立资源分割成两部分，分别供两个线程使用。采用分区方式的主要是各种缓冲区和队列，比如重排序缓冲区、取数/存数缓冲区和各级队列等。与单线程相比，每个线程使用的缓冲区或队列的容量减半，而处理机成本并没有增加。</p>
+<p>共享方式则是由处理机在执行指令的过程中根据使用资源的需要在两个线程之间动态分享资源，比如 cache 和乱序执行部件。这种方式同样不增加处理机成本，但单线程运行时存在的资源闲置情况得到有效改善。</p>
+<h3 id="3-多核处理机"><a href="#3-多核处理机" class="headerlink" title="3. 多核处理机"></a>3. 多核处理机</h3><p>多核技术是在超线程、超标量和多处理机等技术的基础上发展起来的，也充分吸收了其他技术的优势。</p>
+<p>超线程是通过隐藏潜在的访存延迟的方法来提高处理机的性能，其主要目的是充分利用空闲的处理机资源，本质上仍然是多个线程共享一个处理机核。因此，采用超线程技术能否获得性能的提升依赖于应用程序以及硬件平台。</p>
+<p>多核处理机则是将多个独立的处理机核嵌入到一个处理机芯片内部，每个线程都具有完整的硬件执行环境，故各线程之间可以实现真正意义上的并行。当然，多核架构中灵活性的提升是以牺牲资源利用率为代价的，不管是超线程处理机还是多核处理机，性能的提升都需要软件的配合，最终的提升效果则取决于并行性的大小。</p>
+<p>多处理机系统是利用任务机并行的方式提高系统性能，即把任务并行化并分配到多个处理机中去执行。但由于多处理机之间的耦合度较低，不适合实现细粒度的并行，而且功耗也较高。而多核处理机由于在一个芯片内集成多个核心，核间耦合度高，因此互联延迟更小，功耗更低，故可以在任务级、线程级和指令级等多个层次充分发挥程序的并行性，灵活度更高。</p>
+<h4 id="3-1-cache组织"><a href="#3-1-cache组织" class="headerlink" title="3.1. cache组织"></a>3.1. cache组织</h4><p>在设计多核处理机时，除了处理机的结构和数量，cache的级数和大小也是需要考虑的重要问题，根据多核处理机内的 cache 配置，可以把多核处理机的组织结构分为以下四种</p>
+<p><img src="/img/20210315/20210315.6.jpg" alt=""></p>
+<p>其中对于L1 cache，通常会划分为两部分，即指令缓存 L1-I 和 数据缓存 L1-D</p>
+<h4 id="3-2-cache一致性"><a href="#3-2-cache一致性" class="headerlink" title="3.2. cache一致性"></a>3.2. cache一致性</h4><p>cache 一致性问题产生的原因是：<font style="color:#E51508;">在一个处理机中，不同的 cache 和主存中可能存放着同一个数据的多个副本，因此在写操作时，这些副本就会存在潜在的不一致性</font>。在单处理机系统中，一致性问题主要表现为在内存写操作过程中如何保持 cache 中的数据副本与主存内容一致，通常可以通过全写法进行解决，即使有 I/O 通道共享 cache 的情况下。</p>
+<p>但在多核系统中，多个核都能对内存进行写操作而且 cache 级数更多，同一数据的多个副本可能同时存放在多个 cache 存储器中，而某个核的私有 cache 又只能被自身访问，即便采用全写法，也只能保证一个 cache 和主存之间的一致性，并不能自动更新其他处理机核的私有 cache 中的相同副本。这些因素都无疑增加了 cache 一致性问题的复杂度。</p>
+<p>维护 cache 一致性的关键在于跟踪每一个 cache 块的状态，并根据处理机的读写操作及总线上的相应事件更新 cache 块的状态，通常导致多核处理机系统中 cache 不一致的原因有如下几种</p>
+<p><strong>可写数据的共享：</strong>某个处理机核采用全写法或回写法修改某一数据块时，会引起其他处理机核的cache中的同一副本不一致。</p>
+<p><strong>I/O活动：</strong>如果 I/O 设备直接接在系统总线上，也会导致 cache 不一致。</p>
+<p><strong>核间线程迁移：</strong>即将一个尚未执行完成的线程调度到另一个空闲的处理机核中执行，有时为了提高整个系统的效率，使系统负载均衡，会允许线程核间迁移，但这有可能引起 cache 不一致问题。</p>
+<p>通常可以通过进制 I/O 通道与处理机共享 cache 以及核间线程迁移来避免一些 cache 不一致的问题。因此，多处理机中的 cache 一致性问题主要是针对<font style="color:#E51508;">可写数据的共享</font>，具体解决办法则可以通过软件指令或者硬件上的一致性协议</p>
+<p><font style="color:#E51508;">软件方式</font>维护一致性问题时，需要处理机提供专门的显式 cache 操作指令，如 cache 拷贝、回收和无效等指令，让开发者或编译器分析源程序的逻辑结构和数据相关性，判断和预防可能出现的 cache 一致性问题。软件方式的优点是硬件开销小，缺点则是在多数情况下会对性能有较大的影响，而且需要开发人员介入。</p>
+<p>多数情况下，cache 一致性由<font style="color:#E51508;">硬件维护</font>，不同处理机系统使用不同的 cache 一致性协议进行维护。cache 一致性会维护一个有限状态机，并根据存储器读写指令或者总线上的操作进行状态转移并完成相应的 cache 块操作。目前，大多采用的总线侦听协议，即每个 cache 分别管理自身的状态，并通过广播进行不同 cache 间的状态同步。 也有的系统会采用目录协议解决多级 cache 间的一致性问题，目录协议会在全局的角度统一监管不同 cache 的状态。</p>
+<ul>
+<li><strong>目录协议：</strong>目录协议收集并维护有关数据块副本驻存在何处的信息，一般会通过一个中央控制器进行协调，它是主存控制器的一部分，目录就存于主存中。</li>
+</ul>
+<p>中央控制器维护着关于哪个处理机核存有哪个数据副本的信息，在处理机核向局部 cache 副本写入信息之前，必须向控制器请求排他性访问权限，然后控制器会发送一个消息给所有cache 中持有这一副本的处理机核，以强迫每个处理器核使它的副本无效，在接收到这些处理机核返回的确认信息后，控制器才将排他性访问权授予提出请求的处理机核。</p>
+<p>当一 cache 行已授权给某处理机核专有，另外的处理机核再试图读取此行时，它将发送一个未命中指示给控制器，控制器则向持有此行的处理机核发出命令，要求它将此行写回主存，于是便实现了两个处理机核间的数据共享。</p>
+<p>目录协议的缺点是存在中央瓶颈，而且各个 cache 控制器与中央控制器之间的通信开销也较大。不过，在采用了多条总线或某种另外的复杂互连机构的大型系统中，依然是很有效的。</p>
+<ul>
+<li><strong>监听协议：</strong>将维护 cache 一致性的责任分布到多核处理机中的每个 cache 控制器上。每个 cache 必须知晓它保存的某个数据何时会与其他 cache 共享。当对共享的 cache 进行修改时，必须通过一种广播机制通知到所有其他 cache。各个 cache 控制器应该能监听网络，以得到这些广播通知，并作出相应的反应。</li>
+</ul>
+<p>监听协议非常适合于基于总线的多核处理机，因为共享的总线能为广播和监听提供简洁的方式，但是，使用局部 cache 的目标之一就是希望避免或减少总线访问，因此必须小心设计以避免由于广播和监听而增加的总线传输消耗抵消了使用局部 cache 的好处。监听协议的实现一般有两种办法：写-作废和写-更新</p>
+<p><strong>写-作废协议：</strong>系统任一时刻可以由多个读者，但只能有一个写者。一个数据可能在几个 cache 中处于读共享状态，当某个 cache 要对此数据进行写操作时，它要先发出一个通知，以使其他 cache 中此数据作废，使此 cache 行变为独占状态。一旦变为独占状态，拥有该行的处理机核就可进行本地写操作，直到某些其他处理机核请求该行数据。</p>
+<p><strong>写-更新协议：</strong>也称为写-广播协议，系统中可以有多个写者以及多个读者，当一个处理机核打算修改一个共享 cache 行时，会将写入的字数据同时广播到其他所有 cache，于是拥有该数据副本的 cache 也能同时进行修改。</p>
+<p>监听协议实现比较简单，但只适用于总线结构的多处理机系统，而且不管是写作废还是写更新，都要占用总线不少时间，所以只能用于处理机核数量不多的系统中，通常总线上能连接的处理机核不能超过10 ~ 16 个。</p>
+<h4 id="3-3-核间通信"><a href="#3-3-核间通信" class="headerlink" title="3.3. 核间通信"></a>3.3. 核间通信</h4><p>多核处理机片内的多个核心虽然各自执行自己的代码，但是不同核心间需要进行数据的共享和同步，因此多核处理机硬件结构必须支持高效的核间通信，而片上通信的性能也将直接影响处理机的性能。目前主流的方式主要有下面三种</p>
+<ul>
+<li><p><strong>总线共享cache结构：</strong>指多处理机核共享L2 cache 或 L3 cache，处理机片上核心、输入输出端口以及主存储器通过连接核心的总线进行通信。其优点是结构简单、易于设计实现、通信速度高，但缺点则是总线结构的可扩展性较差，只适用于核心数较少的情况，常见的有英特尔的酷睿（Core）处理机，以及IBM公司开发的Power4和Power5。</p>
+</li>
+<li><p><strong>交叉开关互连结构：</strong>交叉开关是在传统电话交换机中沿用了数十年的经典技术，它可以按照任意的次序把输入线路与输出线路连接起来。    </p>
+</li>
+</ul>
+<p>比如下图展示了8个处理机核与8个内存模块的交叉开关结构，图中每个交叉点都可以根据控制信号的状态打开或闭合，其中实心的表示处于闭合连接状态，而空心的表示打开断开状态，也就是说图中同时有三个处理机核分别与不同的存储器模块在进行通信。</p>
+<p><img src="/img/20210315/20210315.7.jpg" alt=""></p>
+<p>交叉开关网络是一种无阻塞的网络，不会因为网络本身的限制导致处理机核无法与内存模块建立连接，只要不存在存储器模块本身的冲突，如图中所示结构最多可以同时支持八个连接。</p>
+<p>总线结构采用分时复用的工作模式，因而在同一总线上同一时刻只能有一对相互通信的过程，而交叉开关结构中的数据通道多，因而也有更大的访问带宽。但缺点是其占用的片上面积较大，毕竟节点数等于处理机核数的平方，而且随着核心数的增加，交叉开关结构的性能也会下降，因此这种方式也只适用于中等规模的系统。</p>
+<ul>
+<li><strong>片上网络结构：</strong>片上网络技术借鉴了并行计算机的互联网络，在单芯片上集成大量的计算资源以及连接这些资源的片上通信网络。每个处理机核都具体独立的处理单元及其私有 cache，并通过片上通信网络连接在一起，处理机核之间采用消息通信机制，用路由和分组交换技术代替传统的片上总线来完成通信任务，从而克服由总线互连所带来的各种瓶颈问题。</li>
+</ul>
+<p>片上网络与传统分布式计算机网络有很多相似之处，可以采用多种拓扑结构，如环形拓扑、网状拓扑、树状拓扑等。但限于片上资源有限，在设计时要更多的考虑开销限制，针对延时、功耗、面积等性能指标进行优化，为实现高性能片上系统提供高效的通信支持。</p>
+<p>与总线结构和交叉开关结构相比，片上网络可以连接更多的计算节点，可靠性高，可扩展性强，功耗也更低。因此是更加理想的大规模多核设计的选择，但其硬件结构复杂，而且软件改动较大。其实三种结构也可以相互融合，比如在整体上采用片上网络方式，而在局部选择总线或者交叉开关结构，以实现性能与复杂度之间的平衡。</p>
+<p><strong>同步互斥问题：</strong>多核系统还需要解决的一个问题就是核之间的同步和互斥，多核处理机上运行的多个任务可能会竞争共享资源，因此，需要操作系统与硬件配合提供核间的同步机制和共享资源的互斥访问机制。比如，多核系统硬件应该提供“读-修改-写回”的原子操作或其他互斥机制，保证对共享资源的互斥访问。</p>
+<p>由于多核处理机内的各个核之间需要通过中断方式进行通信，所以多核处理机的中断处理方式也和单核有很大不同。多核内部的本地中断控制器和负责仲裁各核之间中断分配的全局中断控制器也需要封装在芯片内部。</p>
+<h4 id="3-4-核间任务调度"><a href="#3-4-核间任务调度" class="headerlink" title="3.4. 核间任务调度"></a>3.4. 核间任务调度</h4><p>多核处理机中另一个必须要解决的问题就是如何在多个处理机核之间分配任务，支持多核的操作系统必须解决任务分配、任务调度、仲裁以及负载平衡等问题，必要时还需要支持在多核之间进行动态任务迁移，目前关于多核的任务调度算法主要有如下两种</p>
+<ul>
+<li><p><strong>全局队列调度策略：</strong>即由操作系统维护一个全局的任务等待队列，当系统中有某个处理机核空闲时，操作系统便从全局任务等待队列中选取就绪任务并分配到此核心上执行，这种调度策略的优点是处理机核的利用率低。</p>
+</li>
+<li><p><strong>局部队列调度策略：</strong>操作系统为每个处理机核维护一个局部任务等待队列，当系统中有某个处理机核空闲时，便从该核的任务等待队列中选取恰当的任务执行。这种队列的优点在于任务基本上无需在多个处理机核之间迁移，有利于提高处理机核私有 cache 的命中率，缺点是处理机核的利用率低。</p>
+</li>
+</ul>
+<p><strong>平衡设计原则：</strong>多核系统设计必须遵循的一个重要原则就是平衡设计，与单核处理机相比，多核系统的设计复杂度大幅度提高，因为在解决某个方面问题时往往会带来其他方面的问题，所以多核结构设计的重点不在于某个细节采用了什么复杂或性能表现较好的设计，而是在于整体设计目标。</p>
+<p>在多核系统设计过程中必须仔细权衡对某些问题的解决办法，尽量采用简单、易于实现、成本低廉而且对整体性能影响不大的设计方案。平衡设计原则是指在芯片的复杂度、内部结构、性能、功耗、扩展性、部件成本等各个方面做一定的权衡，不能为了单纯的获得某一方面的性能提升而导致其他方面的问题。在设计过程中要坚持从整体结构的角度去权衡具体的结构问题。要得到一个在通常情况下，逻辑结构简单并且对大多数应用程序而言性能优良的处理机结构，为了整体目标往往要牺牲掉某些局部的最佳设计方案。</p>
+<h3 id="4-缓存命中问题"><a href="#4-缓存命中问题" class="headerlink" title="4. 缓存命中问题"></a>4. 缓存命中问题</h3><p>现在的处理机一般都是多核结构，通常都有三级缓存，也就是上面所示的片内共享L3 cache 结构，其中：L1 缓存分成两种，一种是指令缓存，一种是数据缓存。L2 缓存和 L3 缓存不分指令和数据。L1 和 L2 缓存继承在每一个 CPU 核中，L3 则是所有 CPU 核心共享的内存，再往后就是内存，内存后面就是硬盘，可以比较一下他们的速度：</p>
+<ul>
+<li>L1 的存取速度：<strong>4 个CPU时钟周期</strong></li>
+<li>L2 的存取速度：<strong>11 个CPU时钟周期</strong></li>
+<li>L3 的存取速度：<strong>39 个CPU时钟周期</strong></li>
+<li>RAM内存的存取速度 ：<strong>107 个CPU时钟周期</strong></li>
+</ul>
+<p>可以看到，L1 的速度是 RAM 的 27 倍，但是 L1/L2 的大小基本上也就是 KB 级别的，L3 会是 MB 级别的。例如：Intel Core i7-8700K ，是一个 6 核的 CPU，每个核上的 L1 是 64KB（数据和指令各 32KB），L2 是 256K，L3 则有 2MB。</p>
+<p>通常数据的读取由内存向上，先到 L3，再到 L2，再到 L1，最后到寄存器进行 CPU 计算，为什么会设计成三层，主要是有下面几个考虑：</p>
+<ul>
+<li><p>一方面是物理速度，如果要更大的容量就需要更多的晶体管，除了芯片的体积会变大，更重要的是大量的晶体管会导致速度下降，因为访问速度和要访问的晶体管所在的位置成反比，也就是当信号路径变长时，通信速度会变慢，这部分是物理问题。</p>
+</li>
+<li><p>另一个问题是，多核技术中，数据的状态需要在多个CPU中进行同步，并且，我们可以看到，cache 和 RAM 的速度差距太大，所以，多级不同尺寸的缓存有利于提高整体的性能。</p>
+</li>
+<li><p><strong>缓存的命中</strong></p>
+</li>
+</ul>
+<p>对于 CPU 来说，它是不会按字节来进行加载的，因为这样非常没有效率，一般来说都是按块的加载的，这个单位称为<strong>Cache Line</strong>，也就是上面多次提到的缓存行的概念。</p>
+<p><font style="color:#E51508;">一般主流 CPU 的 Cache Line 是 64 Bytes</font>（也有的 CPU 用 32Bytes 或 128Bytes），64 Bytes 也就是 16 个 32 位的整型，这就是 CPU 从内存中捞数据的最小单位。比如：如果 Cache Line 最小单位为 64Bytes，L1 有 32KB，那么把 Cache 分布多个 Cache Line中去，L1 就有 32KB/64B = 512 个 Cache Line。</p>
+<p>缓存需要把内存中的数据读取进来，缓存的数据放置策略决定了内存中的数据块会拷贝到 CPU Cache 中的哪个位置上，因为 Cache 的大小远小于内存，所以需要一种地址关联算法，能够让内存中的数据可以被映射到 Cache 中来，这个有点像内存地址从逻辑地址向物理地址映射的方法，但不完全一样，通常有如下的一些方法</p>
+<ul>
+<li><p>一种方法是，任何一个内存地址的数据都可以被缓存在任何一个 Cache Line 里，这种方法是最灵活的，但是，如果我们想知道一个内存数据是否存在于 Cache 中，我们就需要进行 O(n) 复杂度的 Cache 遍历，这是很没有效率的。</p>
+</li>
+<li><p>为了降低缓存搜索复杂度，需要使用像Hash Table这样的数据结构，最简单的hash table就是做求模运算，比如：L1 Cache 有 512 个 Cache Line，那么，通过公式：<code>(内存地址 mod 512) * 64</code> 就可以直接找到所在的 Cache 地址的偏移了。但这样的方式需要程序对内存地址的访问要非常地平均，不然冲突就会非常严重，而这只能是一种非常理想的情况了。</p>
+</li>
+<li><p>为了避免上述问题，就要容忍一定的hash冲突，于是就出现了 N-Way 关联。也就是把连续的 N 个 Cache Line 绑成一组，然后，先找到相关的组，然后再在这个组内找到相关的 Cache Line，这样的方式称为 Set Associativity，如下图所示</p>
+</li>
+</ul>
+<p><img src="/img/20210315/20210315.8.jpg" alt=""></p>
+<p>对于 N-Way 组关联，可以举个例子，比如 Intel 大多处理器的 L1 Cache 都是 32KB，8-Way 组相联，Cache Line 是 64 Bytes。这意味着：</p>
+<ul>
+<li><p>32KB的可以分成，32KB / 64B = 512 条 Cache Line</p>
+</li>
+<li><p>因为是8 Way，于是会每一Way 有  512 / 8 = 64 条 Cache Line</p>
+</li>
+<li><p>于是每一Way就有 64 x 64 = 4096 Byts 的内存。</p>
+</li>
+</ul>
+<p>为了方便索引内存地址：</p>
+<ul>
+<li><p><strong>Tag：</strong>每条 Cache Line 前都会有一个独立分配的 24 bits来存 tag，也就是内存地址的前24bits</p>
+</li>
+<li><p><strong>Index：</strong>内存地址后续的 6 个 bits 则是在这一 Way 的是Cache Line 索引，2^6 = 64 刚好可以索引 64 组Cache Line</p>
+</li>
+<li><p><strong>Offset：</strong>再往后的 6bits 用于表示在 Cache Line 里的偏移量</p>
+</li>
+</ul>
+<p>如下图所示，对于 32KB 的 L1 cache，横向分为 8 Way，于是纵向就可以将 Cache Line 分为 64 组。于是当访问内存中的一个 Cache Line 时，首先读取其中间的 6bits，确定是在那组</p>
+<p><img src="/img/20210315/20210315.9.jpg" alt=""></p>
+<p>然后，在这一组的 8 Way 的 cache line 中，再进行 O(n) n=8 的遍历，也就是匹配前 24bits 的 tag。如果匹配中了，就算命中；如果没有匹配到，则 cache miss，如果是读操作，那就需要向后面的缓存进行访问了，对于 L2/L3 也是这样的思路。</p>
+<p><img src="/img/20210315/20210315.10.jpg" alt=""></p>
+<p>由于中间的 6bits 决定了 Cache Line 所在的组，所以对于一段连续的内存来说，每隔 4096B 的内存会被放在同一个组内，导致缓存冲突。</p>
+<p>了解这些细节，有利于我们知道在什么情况下可以避免冲突问题，比如下面摘抄的示例：</p>
+<p>看一下多核下的性能问题，两个线程分别操作同一个数组中的两个不同的元素（无需加锁），各自循环1000万次，做加法操作，其中对于p2指针，取两种情况：p[1] 和 p[30]，理论上来说，无论访问哪两个数组元素，都应该是一样的执行时间</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fn</span> <span class="params">(<span class="keyword">int</span>* data)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>*<span class="number">1024</span>*<span class="number">1024</span>; ++i)</span><br><span class="line">        *data += rand();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> p[<span class="number">32</span>];</span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span> *p1 = &amp;p[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">int</span> *p2 = &amp;p[<span class="number">1</span>]; <span class="comment">// 或者 int *p2 = &amp;p[30];</span></span><br><span class="line"> </span><br><span class="line"><span class="function">thread <span class="title">t1</span><span class="params">(fn, p1)</span></span>;</span><br><span class="line"><span class="function">thread <span class="title">t2</span><span class="params">(fn, p2)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>然而，实际结果是：<br>对于 p[0] 和 p[1] ：560ms<br>对于 p[0] 和 p[30]：104ms    </p>
+<p>这是因为 p[0] 和 p[1] 在同一条 Cache Line 上，而 p[0] 和 p[30] 则不可能在同一条Cache Line 上 ，CPU 的缓存最小的更新单位是 Cache Line，所以，这导致虽然两个线程在写不同的数据，但是因为这两个数据在同一条 Cache Line 上，就会导致缓存需要不断进在两个 CPU 的 L1/L2 中进行同步，从而导致了 5 倍的时间差异。</p>
+<p><font style="color:gray;">同样的逻辑，使用Java在自己电脑上并没能复现这样的效果，而是两者执行下来差不多，这个可能跟具体的机子以及编译执行时的优化有关，不过能理解和体会示例中的意思就可以了</font>。</p>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li>《计算机组成原理》</li>
+<li><a href="https://blog.csdn.net/songguangfan/article/details/115479861" target="_blank" rel="noopener">https://blog.csdn.net/songguangfan/article/details/115479861</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2021/03/21/20210321/">
+		    Linux I/O模型
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2021/03/13/20210313/">
+		    《计算机组成原理》 输入输出系统
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/计算机组成原理/">计算机组成原理</a>
+  </div>
+
+
+        
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#os_ul").click(function(){ $("#os_li").toggle(); });
+    $("#xx_ul").click(function(){ $("#xx_li").toggle(); });
+});
+</script>
+
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-并行处理机的组织与结构"><span class="toc-text">1. 并行处理机的组织与结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-超标量处理机与超长指令字处理机"><span class="toc-text">1.1. 超标量处理机与超长指令字处理机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-多处理机与多计算机"><span class="toc-text">1.2. 多处理机与多计算机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-多线程处理机"><span class="toc-text">1.3. 多线程处理机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-多核处理机"><span class="toc-text">1.4. 多核处理机</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-指令级并行与线程级并行"><span class="toc-text">2. 指令级并行与线程级并行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-多核处理机"><span class="toc-text">3. 多核处理机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-cache组织"><span class="toc-text">3.1. cache组织</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-cache一致性"><span class="toc-text">3.2. cache一致性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-核间通信"><span class="toc-text">3.3. 核间通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-核间任务调度"><span class="toc-text">3.4. 核间任务调度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-缓存命中问题"><span class="toc-text">4. 缓存命中问题</span></a></li></ol>
+</div>
+
+
+
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2017-2023 &nbsp;&nbsp; shanhm1991 &nbsp;&nbsp; version@1.0.0 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

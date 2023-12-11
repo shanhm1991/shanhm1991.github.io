@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Git 日常操作 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="官方文档：https://git-scm.com/book/zh/v2
+主要整理了一下Git基本的工作机制，以及一些常用操作。如果想了解git的各种命令，推荐访问：https://learngitbranching.js.org/?locale=zh_CN">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Git 日常操作"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20201021" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2020-10-20T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2020/10/21/20201021/" style="color: #736f6f;">2020-10-21</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        Git 日常操作
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 4.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 16min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>官方文档：<a href="https://git-scm.com/book/zh/v2" target="_blank" rel="noopener">https://git-scm.com/book/zh/v2</a></p>
+<p>主要整理了一下Git基本的工作机制，以及一些常用操作。如果想了解git的各种命令，推荐访问：<a href="https://learngitbranching.js.org/?locale=zh_CN" target="_blank" rel="noopener">https://learngitbranching.js.org/?locale=zh_CN</a><br><a id="more"></a></p>
+<h3 id="Git-特点"><a href="#Git-特点" class="headerlink" title="Git 特点"></a>Git 特点</h3><ul>
+<li><strong>记录快照，而非比较差异</strong></li>
+</ul>
+<p>早期版本控制系统，大部分以文件变更列表的方式存储信息，比如SVN，它们将存储的信息看作是一组基本文件和每个文件随时间逐步累积的差异，通常称作基于差异（delta-based）的版本控制。  </p>
+<p>而在Git中，每当提交更新或保存项目状态时，它基本上是对当前全部文件创建一个快照并保存这个快照的索引。考虑效率，如果文件没有修改，那么Git不再重新存储该文件，而是只保留一个链接指向之前存储的文件，因此Git对待数据更像是一个快照流。</p>
+<ul>
+<li><strong>本地操作</strong></li>
+</ul>
+<p>在Git中，绝大部分操作都可以在本地完成，不需要来自网络上其它计算机的信息。所以大部分操作看起来瞬间完成，而且就算离线也没有影响，等到有网络连接时再推送服务就行。相对SVN等版本控制系统，这个解决了一个很大的痛点，因为在使用SVN时，离线情况下是无法进行代码提交的。</p>
+<ul>
+<li><strong>分支切换</strong></li>
+</ul>
+<p>Git的分支非常轻量，它只是简单地指向某个提交纪录而已。所以创建再多的分支也不会造成存储上的开销，并且是按逻辑分解工作到不同的分支，这要比维护那些特别臃肿的分支简单得多。如果使用过SVN，应该能体会到拉分支的代价，拉分支就相当于拷贝，分支太多容易将磁盘撑爆。</p>
+<ul>
+<li><strong>保证完整性</strong></li>
+</ul>
+<p>Git对所有的数据在存储前会计算校验和，然后以校验和来引用，所以不可能在Git不知情的情况下更改任何文件或目录内容。其计算校验和的机制是基于SHA-1散列，即hash，结果为40位由十六进制符组成的字符串。</p>
+<ul>
+<li><strong>只添加数据</strong></li>
+</ul>
+<p>Git操作只会往Git数据库中添加数据，也就是说Git几乎不会执行任何可能导致文件不可恢复的操作，所以你提交快照到Git中，很难丢失数据。</p>
+<h3 id="Git-配置"><a href="#Git-配置" class="headerlink" title="Git 配置"></a>Git 配置</h3><p>git config是Git自带的一个工具，用来对Git进行配置，其配置有三个保存位置：<br>    <table>
+        <tr>
+            <td>git config --system</td>
+            <td>：针对所有用户及他们仓库的通用配置，对应配置文件为：/etc/gitconfig</td>
+        </tr>
+        <tr>
+            <td>git config --global</td>
+            <td>：针对当前用户进行配置，对应配置文件为：~/.gitconfig</td>
+        </tr>
+        <tr>
+            <td>git config</td>
+            <td>：针对当前仓库进行配置，对应配置文件为：.git/config</td>
+        </tr>
+    </table></p>
+<p>常用配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git config -l   # 列出配置项</span><br><span class="line"></span><br><span class="line">git config --global credential.helper store          # 记住密码</span><br><span class="line">git config --global user.name "shanhm1991"           # 用户名</span><br><span class="line">git config --global user.email "shanhm1991@163.com"  # 邮箱</span><br></pre></td></tr></table></figure>
+<p>另外对于当前仓库的配置，经常也会修改或增加其远程仓库地址，这些配置对应下面的git fetch和git pull操作</p>
+<figure class="highlight plain"><figcaption><span class="fileDir">.git/</span><span class="caption">config</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[core]</span><br><span class="line">        repositoryformatversion &#x3D; 0</span><br><span class="line">        filemode &#x3D; false</span><br><span class="line">        bare &#x3D; false</span><br><span class="line">        logallrefupdates &#x3D; true</span><br><span class="line">        symlinks &#x3D; false</span><br><span class="line">        ignorecase &#x3D; true</span><br><span class="line">[remote &quot;mac&quot;]</span><br><span class="line">        url &#x3D; http:&#x2F;&#x2F;localhost:8083&#x2F;common&#x2F;spring-fom.git</span><br><span class="line">        fetch &#x3D; +refs&#x2F;heads&#x2F;*:refs&#x2F;remotes&#x2F;mac&#x2F;*</span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">        url &#x3D; https:&#x2F;&#x2F;github.com&#x2F;shanhm1991&#x2F;spring-fom.git</span><br><span class="line">        fetch &#x3D; +refs&#x2F;heads&#x2F;*:refs&#x2F;remotes&#x2F;origin&#x2F;*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">        remote &#x3D; origin</span><br><span class="line">        merge &#x3D; refs&#x2F;heads&#x2F;master</span><br></pre></td></tr></table></figure>
+<p>当然一般我们不需要直接编辑文件，可以通过可视化工具来管理，有小乌龟、IntelliJ IDEA、Sourcetree等</p>
+<p>比如在IntelliJ IDEA中管理远程仓库：Git -&gt; Manage Remotes</p>
+<p><img src="/img/20201021/20201021.0.jpg" alt=""> </p>
+<p>然后在推送时便可以选择目标仓库和分支，但是反过来fetch拉取是不能选择远程和分支的，然后默认推送也是推到当时检出的远程分支上，它们之间有跟踪关系，除非通过命令<code>git branch -u &lt;remote-branch&gt; &lt;local-branch&gt;</code>强行修改远程跟踪分支的关系，但通常并不需要这样</p>
+<p><img src="/img/20201021/20201021.1.jpg" alt=""> </p>
+<h3 id="Git-提交-撤销"><a href="#Git-提交-撤销" class="headerlink" title="Git 提交/撤销"></a>Git 提交/撤销</h3><p>Git中有三个区域，对应能够更容易理解Git的流程机制：</p>
+<ul>
+<li><strong>Working Tree</strong>： 工作区域</li>
+<li><strong>Index/Stage</strong>： 暂存区域，git add xx，可以将xx从工作区域添加到暂存区域</li>
+<li><strong>Repository</strong>： 提交历史，git commit提交后的结果</li>
+</ul>
+<p><img src="/img/20201021/20201021.2.jpg" alt=""> </p>
+<p>下面简述一下文件提交Repository的流程：<br>1.刚开始working tree、index、repository(HEAD)里面的內容都是一致的<br>2.当git管理的文件夹中内容出现变更时，working tree就会与index和repository(HEAD)不一致，而git知道是哪些文件被改动过(Tracked File)，于是将文件状态设置为modified(Unstaged files)<br>3.当执行git add后，会将改变的文件內容加入index中(Staged files)，此时working tree与index是一致的，但他们与repository(HEAD)不一致<br>4.接着执行git commit后，git索引中变动的文件提交至Repository中，建立新的commit节点(HEAD)，此时working tree、index与repository(HEAD)又重新保持一致</p>
+<ul>
+<li>示例</li>
+</ul>
+<p>可以在本地非常方便地初始化一个git仓库，新建一个空目录，执行命令：git init</p>
+<p>此时仓库是空的，可以查看仓库状态，通过git status，可以查看各个区域之间的差异，友好的git还会提示如何提交或撤销这些差异</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">shanhuiming@MacBook-Pro test$ git status</span><br><span class="line">On branch main</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">nothing to commit (create&#x2F;copy files and use &quot;git add&quot; to track)</span><br></pre></td></tr></table></figure>
+<p>然后我们可以在添加两个文件后，再次查看状态，提示有2个未被跟踪的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">shanhuiming@MacBook-Pro test$ touch a.txt</span><br><span class="line">shanhuiming@MacBook-Pro test$ touch b.txt</span><br><span class="line">shanhuiming@MacBook-Pro test$ git status</span><br><span class="line">On branch main</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span><br><span class="line">    a.txt</span><br><span class="line">    b.txt</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use &quot;git add&quot; to track)</span><br></pre></td></tr></table></figure>
+<p>git add添加a.txt文件到暂存区，再次查看状态，提示有1个文件未跟踪，1个文件未提交</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">shanhuiming@MacBook-Air test1$ git status</span><br><span class="line">On branch main</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)</span><br><span class="line">    new file:   a.txt</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span><br><span class="line">    b.txt</span><br></pre></td></tr></table></figure>
+<p>然后便可以提交a.txt了，再次查看状态，提示还有1个文件未跟踪</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">shanhuiming@MacBook-Air test1$ git commit -m &quot;first commit&quot;</span><br><span class="line">shanhuiming@MacBook-Air test1$ git status</span><br><span class="line">On branch main</span><br><span class="line">Untracked files:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span><br><span class="line">    b.txt</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use &quot;git add&quot; to track)</span><br></pre></td></tr></table></figure>
+<p>继续修改下a.txt文件，然后再查看状态，提示有1个文件未跟踪，还有一个已跟踪的文件发生了修改，但是没有添加到缓存区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">shanhuiming@MacBook-Air test1$ vim a.txt </span><br><span class="line">shanhuiming@MacBook-Air test1$ git status</span><br><span class="line">On branch main</span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line">    modified:   a.txt</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span><br><span class="line">    b.txt</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and&#x2F;or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>git reset/revert</li>
+</ul>
+<p>相对提交修改，git reset用来撤销，其有三个模式，分别对应上面介绍的三个区域：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">soft： 撤销修改，但是保留工作区域和暂存区域的改动；</span><br><span class="line">mixed：撤销修改(默认)，并擦除暂存区域的改动，但是保留工作区域的改动；</span><br><span class="line">hard： 撤销修改，并擦除工作区域和暂存区域的改动</span><br></pre></td></tr></table></figure>
+<p><img src="/img/20201021/20201021.3.jpg" alt=""> </p>
+<p>当发现提交的内容有误，并希望撤销时，可以通过命令<code>git reset HEAD^</code>（^相对引用，表示指向上一次提交记录）。如果提交记录已经推送远程服务，并希望也撤销远程的记录，则需要使用<code>git push -f</code>来强制推送。但是要慎用，因为可能本地当前版本已经落后于远程仓库，强制推送的话可能会删除别人的推送记录。而且如果别人已经拉取了你的提交，即便你现在强制回退了，很可能在后面又被队友给推送回来。</p>
+<p>所以在团队多人合作时，最好使用<code>git revert</code>来撤销修改。它是在当前版本上撤销掉之前的改动，但是会向前产生一个新的版本号，这样就不需要版本回退也不会影响队友了。</p>
+<p>还有一种<code>git reset</code>场景，在打包环境上，为了防止环境上的文件被人有意或无意的修改（这些改动肯定是不希望打到包里的），我们希望拉取最新的代码并强制忽略掉本地的修改</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch --all</span><br><span class="line">git reset --hard origin/master</span><br></pre></td></tr></table></figure>
+<h3 id="Git-分支"><a href="#Git-分支" class="headerlink" title="Git 分支"></a>Git 分支</h3><p>上面已经介绍过git分支的特点，就是新建一个指向提交记录的指针，所以以下命令的效果就相当于</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">## git branch bugFix</span><br><span class="line">## git checkout bugFix</span><br><span class="line">git checkout -b bugFix</span><br></pre></td></tr></table></figure>
+<p><img src="/img/20201021/20201021.4.jpg" alt=""> </p>
+<ul>
+<li>git merge/rebase</li>
+</ul>
+<p>git merge用于合并指定分支到当前分支，使用merge合并两个分支时会产生一个特殊的提交记录，它有两个父节点。如果要合并的记录继承自当前节点，则git什么都不用做，只需移动到要合并的记录即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch -b bugFix</span><br><span class="line">git commit</span><br><span class="line">git checkout master</span><br><span class="line">git commit</span><br><span class="line">git merge bugFix</span><br></pre></td></tr></table></figure>
+<p><img src="/img/20201021/20201021.5.jpg" alt=""> </p>
+<p>git rebase合并的办法是取出一系列的提交记录，然后在另外一个分支逐个的放进去。Rebase的优势在于可以创造更线性的提交历史，让代码库的提交历史变得更清晰。rebase是将后面分支（默认当前分支）上的记录追加到前面分支中，同样如果要合并的分支记录继承自当前节点，也只要移动下指针。</p>
+<p>比如下面如果将bugFix分支rebase到新的master上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git branch -b bugFix</span><br><span class="line">git commit</span><br><span class="line">git checkout master</span><br><span class="line">git commit</span><br><span class="line"></span><br><span class="line">git checkout bugFix</span><br><span class="line">git rebase master</span><br></pre></td></tr></table></figure>
+<p><img src="/img/20201021/20201021.6.jpg" alt=""> </p>
+<p>但此时是处于分支bugFix上，master分支还停留在之前的记录上，可以如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git rebase bugFix</span><br></pre></td></tr></table></figure>
+<p><img src="/img/20201021/20201021.7.jpg" alt=""> </p>
+<h3 id="Git-标签"><a href="#Git-标签" class="headerlink" title="Git 标签"></a>Git 标签</h3><p>分支很容易被人改变，当有新的提交时，它就会移动。如果希望永久的指向某个提交记录，那么可以使用tag。</p>
+<p>HEAD是一个对当前检出记录的符号引用，也就是指向正在其基础上进行工作的提交记录，默认是指向当前分支上最近一次提交记录，即指向分支名，但是也可以使其指向具体的提交记录，称为分离HEAD，比如：<code>git checkout c4</code></p>
+<h3 id="Git-远程"><a href="#Git-远程" class="headerlink" title="Git 远程"></a>Git 远程</h3><ul>
+<li>git clone</li>
+</ul>
+<p>git clone会在本地建一个分支，一般是origin/master（远程仓库名/分支名），记为远程分支，其目的是为了反映远程仓库的状态。对应的还会创建一个远程跟踪分支，用来记录本地的修改，这样不会影响远程分支。当我们通过远程分支来检出一个本地分支时，它们就自动建立的跟踪关系。比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b master origin&#x2F;master</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>git fetch</li>
+</ul>
+<p>git fetch会从远程仓库下载本地仓库中缺失的提交记录，并更新远程分支，使其指向最新的提交记录。但它并不会修改本地仓库的状态，也不会修改你磁盘上的文件，只是将所需的所有数据都下载了下来。不带参数则按照跟踪关系进行拉取，也可以如下指定参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push &lt;repository&gt; &lt;remote-branch&gt;:&lt;local-branch&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>git pull</li>
+</ul>
+<p>git pull相当于先git fetch更新了远程分支，然后默认进行git merger合并远程分支到本地分支上，当然也可以git pull —rebase 指定合并方式</p>
+<ul>
+<li>git push</li>
+</ul>
+<p>git push负责将本地commit记录推送到远程仓库，并在远程仓库上合并提交记录。不带参数则按照跟踪关系进行推送，当然也可以如下指定参数，很多时候，我们可能有多个远程仓库，比如我们拉取A仓库的分支进行了一些修改，然后也想把这些修改推送到B仓库中去，这时就需要指定了，因为默认只会推送到A仓库中被跟踪的远程分支上。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push &lt;repository&gt; &lt;local-branch&gt;:&lt;remote-branch&gt;</span><br></pre></td></tr></table></figure>
+<p>这里记一个github push 遇到的问题：Connection was reset, errno 10054，可以如下解决</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.sslVerify &quot;false&quot;</span><br><span class="line">git config --global --unset http.proxy</span><br></pre></td></tr></table></figure>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><ul>
+<li>branch/tag日常命令</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">git branch -D v1.2.0            #删除本地分支</span><br><span class="line">git push origin --delete v1.2.0 #删除远程分支</span><br><span class="line">git push origin v1.2.0          #推送指定分支到远程</span><br><span class="line">git push --all origin           #推送所有分支到远程</span><br><span class="line"></span><br><span class="line">git tag -l               #查看本地tag</span><br><span class="line">git show v1.2.0          #查看tag信息</span><br><span class="line">git tag v1.2.0           #创建本地tag</span><br><span class="line">git tag -d v1.2.0        #删除本地tag</span><br><span class="line"></span><br><span class="line">git ls-remote --tags origin  #查看远程tag</span><br><span class="line">git push origin :v1.2.0      #删除远程tag</span><br><span class="line">git push origin v1.2.0       #推送指定tag到远程</span><br><span class="line">git push origin --tags       #推送所有tag到远程</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改commit msg</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">## 修改最近一次commit log</span><br><span class="line">git commit --amend</span><br><span class="line"></span><br><span class="line">## 修改历史log</span><br><span class="line">git log --oneline     #先定位到对应的提交记录 xxx</span><br><span class="line">git rebase -i xxx     #将对应记录前面的pick改为edit，退出</span><br><span class="line">git commit --amend    #修改提交日志</span><br><span class="line">git rebase --continue</span><br><span class="line">git push -f           #如果已经push过了，则需要-f强制推送</span><br></pre></td></tr></table></figure>
+<ul>
+<li>只拉取子目录</li>
+</ul>
+<p>如果希望只拉取仓库中的一个子目录，可以通过如下方式，这点不如SVN方便</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone –n &lt;repo&gt; &lt;local-directory-name&gt;</span><br><span class="line">cd &lt;local-directory-name&gt;</span><br><span class="line">git config core.sparsecheckout true</span><br><span class="line">echo some&#x2F;sub-folder&#x2F;you&#x2F;want &gt;&gt; .git&#x2F;info&#x2F;sparse-checkout</span><br><span class="line">git checkout &lt;branch-name&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>github拉取推送慢问题</li>
+</ul>
+<p>由于github是外网，在国内访问域名会被DNS限制，会异常的慢，所以可以修改本地host文件，查询ip地址：<a href="https://www.ipaddress.com/ip-lookup" target="_blank" rel="noopener">https://www.ipaddress.com/ip-lookup</a> </p>
+<p>主要就下面两个域名，经过长时间的实践，它们的ip一般不会超过下面这些选项，如果访问还是慢，可以换个ip再试一下</p>
+<figure class="highlight plain"><figcaption><span class="fileDir">/etc/</span><span class="caption">hosts</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">199.232.69.194  github.global.ssl.fastly.net</span><br><span class="line">#140.82.112.3    github.com</span><br><span class="line">#140.82.112.4    github.com</span><br><span class="line">#140.82.113.3    github.com</span><br><span class="line">#140.82.113.4    github.com</span><br><span class="line">140.82.114.3    github.com</span><br><span class="line">#140.82.114.4    github.com</span><br></pre></td></tr></table></figure>
+<ul>
+<li>工作场景</li>
+</ul>
+<p>在实际工作中，我们遇到了两个异地团队需要合作开发的场景，而且由于保密协议，是在两个内部局域网。这个使用git其实比较简单，可以保证能够跟踪到所有的提交记录。具体先在两地分别准备一个gitlab环境，这里使用docker部署（启动后需要修改下文件config/gitlab.rb中的external_url地址）</p>
+<figure class="highlight plain"><figcaption><span class="caption">docker-compose.yaml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  gitlab:</span><br><span class="line">    image: gitlab&#x2F;gitlab-ce:latest</span><br><span class="line">    container_name: gitlab</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8082:443&quot;</span><br><span class="line">      - &quot;8083:80&quot;</span><br><span class="line">      - &quot;8084:22&quot;</span><br><span class="line">    environment:</span><br><span class="line">      GITLAB_SKIP_UNMIGRATED_DATA_CHECK: &quot;true&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - .&#x2F;config:&#x2F;etc&#x2F;gitlab</span><br><span class="line">      - .&#x2F;logs:&#x2F;var&#x2F;log&#x2F;gitlab</span><br><span class="line">      - .&#x2F;data:&#x2F;var&#x2F;opt&#x2F;gitlab</span><br><span class="line">      - &#x2F;etc&#x2F;localtime:&#x2F;etc&#x2F;localtime</span><br><span class="line">    privileged: true</span><br></pre></td></tr></table></figure>
+<p>假设是两地是南京和北京，那么给仓库创建两个分支，然后在南京开发的同学使用分支：branch-NJ，在北京开发的同学使用分支：branch-BJ<br>如果A同学从南京到了北京，那么先将本地的branch-NJ分支推送到北京仓库，然后切换本地当前分支到branch-BJ，并拉取更新，最后再将分支branch-NJ合并到branch-BJ上，这样后面就在branch-BJ分支上进行开发<br>如果A同学又从北京回到了南京，就反过来先将本地的branch-BJ分支推送到南京仓库，然后切换本地当前分支到branch-NJ，并拉取更新，最后再将分支branch-BJ合并到branch-NJ上，然后又回到branch-NJ分支上开发</p>
+<p>为了避免混乱以及合并麻烦，最好再加个约束：在北京的开发禁止向branch-NJ提交，同样在南京的开发禁止向branch-BJ提交，这样避免了再第一步推送仓库时出现冲突。</p>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li><a href="https://www.jianshu.com/p/c2ec5f06cf1a" target="_blank" rel="noopener">https://www.jianshu.com/p/c2ec5f06cf1a</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2020/10/25/20201025/">
+		    Postgre 日常操作
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2020/10/19/20201019/">
+		    NTP 时间同步
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#os_ul").click(function(){ $("#os_li").toggle(); });
+    $("#xx_ul").click(function(){ $("#xx_li").toggle(); });
+});
+</script>
+
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-特点"><span class="toc-text">Git 特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-配置"><span class="toc-text">Git 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-提交-撤销"><span class="toc-text">Git 提交&#x2F;撤销</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-分支"><span class="toc-text">Git 分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-标签"><span class="toc-text">Git 标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-远程"><span class="toc-text">Git 远程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAQ"><span class="toc-text">FAQ</span></a></li></ol>
+</div>
+
+
+
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2017-2023 &nbsp;&nbsp; shanhm1991 &nbsp;&nbsp; version@1.0.0 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

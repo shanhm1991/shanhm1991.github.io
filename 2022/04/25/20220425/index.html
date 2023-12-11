@@ -1,0 +1,376 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Oscar 神通数据库日常操作 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="官网文档：http://www.shentongdata.com/index.php/download/list-26
+由于甲方要求，项目实施必须使用国产数据库，最后是选择了神通数据库，在这方面其实我们也没有什么话语权。oscar是一款类Oracle系列的国产数据库，这里只是记录一些常用的操作。另外如果想选择国产数据库，可以参考开源软件联盟PostgreSQL分会的这篇文章《国产数据库的谱系》">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Oscar 神通数据库日常操作"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20220425" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2022-04-24T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2022/04/25/20220425/" style="color: #736f6f;">2022-04-25</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        Oscar 神通数据库日常操作
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 3.1k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 13min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+   
+   
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>官网文档：<a href="http://www.shentongdata.com/index.php/download/list-26" target="_blank" rel="noopener">http://www.shentongdata.com/index.php/download/list-26</a></p>
+<p>由于甲方要求，项目实施必须使用国产数据库，最后是选择了神通数据库，在这方面其实我们也没有什么话语权。oscar是一款类Oracle系列的国产数据库，这里只是记录一些常用的操作。另外如果想选择国产数据库，可以参考开源软件联盟PostgreSQL分会的这篇文章<a href="https://mp.weixin.qq.com/s/W7EtaJAw3k2Fwk7vuatkdQ" target="_blank" rel="noopener">《国产数据库的谱系》</a><br><a id="more"></a></p>
+<p>在介绍oscar的具体操作之前，可以先对Oracle中一些概念有个基本的了解，如下图简要说明了实例、用户、表空间、以及表之间的关系。</p>
+<p>Oracle由一系列的后台进程和内存结构组成。可以创建n个数据库实例。用户是在实例下创建的，不同实例中可以创建相同名字的用户。表空间是用来管理数据存储的逻辑概念，而数据文件是物理的，一个表空间可以包含多个数据文件，而一个数据文件只能属于一个表空间。<br>表的数据，是由用户存入某一个表空间的，而这个表空间会随机把这些表数据写到一个或者多个数据文件中。表数据也不是由表空间去查的，而是由用户去查询的，因为不同用户可以在同一个表空间建立同一个名字的表，这里区分就是用户了。</p>
+<p><img src="/img/20220425/20220425.1.jpg" alt=""> </p>
+<ul>
+<li>神通的默认配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">端口：2003</span><br><span class="line">用户名：sysdba</span><br><span class="line">密码：szoscar55</span><br><span class="line">数据库实例： OSRDB</span><br><span class="line">部署路径： &#x2F;opt&#x2F;ShenTong</span><br></pre></td></tr></table></figure>
+<h3 id="命令操作"><a href="#命令操作" class="headerlink" title="命令操作"></a>命令操作</h3><ul>
+<li>isql</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## /opt/ShengTong/bin/isql</span></span><br><span class="line">isql -d osrdb -P 2003 -U sysdba/szoscar55</span><br></pre></td></tr></table></figure>
+<ul>
+<li>oscar</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">oscar --version                   查看数据库版本</span><br><span class="line">oscar –o normal –d osrdb          正常模式启动osrdb数据库</span><br><span class="line">oscar –o install –d osrdb         安装数据库实例OSRDB的服务</span><br><span class="line">oscar –o uninstall –d osrdb       卸载数据库实例OSRDB的服务</span><br><span class="line">oscar –o uninstall all            卸载所有数据库实例的服务</span><br><span class="line">oscar –h d:\ShenTong –o normal –d osrdb     设定数据库安装目录并正常启动</span><br><span class="line">oscar –o normal –d osrdb –P 2004            在2004端口启动数据库实例</span><br><span class="line">oscar –e “create database osrdb”            执行创建数据库OSRDB实例的命令</span><br></pre></td></tr></table></figure>
+<ul>
+<li>oscaragent</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">oscaragent –v                    查看agent版本号</span><br><span class="line">oscaragent –c                    命令行方式启动</span><br><span class="line">oscaragent –r                    以服务方式启动(windows)</span><br><span class="line">oscaragent –e d:\ShenTong –c     设定数据库安装目录并启动</span><br><span class="line">oscaragent –s                    关闭agent（通过socket向agent发送退出信号）</span><br><span class="line">oscaragent –S                    关闭agent服务</span><br><span class="line">oscaragent –S –A                 停止所有数据库服务</span><br><span class="line">oscaragent –S –D &lt;DBNAME&gt;        停止指定的数据库实例服务</span><br><span class="line">oscaragent –Q                    查询agent的服务运行状态</span><br><span class="line">oscaragent –Q -A                 查询所有数据库实例服务的运行状态</span><br><span class="line">oscaragent –Q –D &lt;DBNAME&gt;        查询指定的数据库实例服务运行状态</span><br><span class="line">oscaragent –i                    安装agent系统服务（跨平台）</span><br><span class="line">oscaragent –u                    卸载agent系统服务（跨平台）</span><br></pre></td></tr></table></figure>
+<h3 id="SQL操作"><a href="#SQL操作" class="headerlink" title="SQL操作"></a>SQL操作</h3><ul>
+<li>数据库</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 列出数据库</span></span><br><span class="line">list database;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 删除数据库</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">database</span> osrdb;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建数据库</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> osrdb <span class="keyword">encoding</span> <span class="string">'GBK'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> <span class="string">"HNBILL"</span> <span class="keyword">noarchivelog</span> <span class="keyword">logfile</span> <span class="string">'HNBILL01.log'</span> <span class="keyword">size</span> <span class="number">10</span>G <span class="keyword">autoextend</span> <span class="keyword">on</span> <span class="keyword">next</span> <span class="number">100</span>M <span class="keyword">controlfile</span> “/oscar/<span class="keyword">admin</span>/test.ctrl” <span class="keyword">datafile</span> <span class="string">'HNBILL01.dbf'</span> <span class="keyword">size</span> <span class="number">100</span>M <span class="keyword">autoextend</span> <span class="keyword">on</span> <span class="keyword">next</span> <span class="number">100</span>M;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>表空间</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">tablespace</span> DR_G_A <span class="keyword">datafile</span> <span class="string">'DR_G_A.dbf'</span> <span class="keyword">size</span> <span class="number">200</span>M <span class="keyword">autoextend</span> <span class="keyword">on</span> <span class="keyword">next</span> <span class="number">20</span>M;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>数据文件</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 添加日志文件</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">database</span> stlcdr <span class="keyword">add</span> <span class="keyword">logfile</span> <span class="string">'/stl_db/db_data/stdb/odbs/STLCDR/STLCDR00.log'</span> <span class="keyword">size</span> <span class="number">50</span>G <span class="keyword">autoextend</span> <span class="keyword">on</span> <span class="keyword">next</span> <span class="number">1</span>G;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 添加日志文件</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">database</span> <span class="keyword">rename</span> <span class="keyword">file</span> ‘/diska/<span class="keyword">logs</span>/log1a.log’ <span class="keyword">to</span> ‘/diskc/<span class="keyword">logs</span>/log1c.log’;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>用户</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建用户</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> usr_test <span class="keyword">with</span> <span class="keyword">password</span> <span class="string">'xxxx'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> usr_test <span class="keyword">with</span> <span class="keyword">default</span> <span class="keyword">tablespace</span> stlts <span class="keyword">password</span> <span class="string">'xxxx'</span> <span class="keyword">role</span> <span class="keyword">sysdba</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 修改密码</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> test_usr <span class="keyword">with</span> <span class="keyword">password</span> <span class="string">'test_change'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 删除用户</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">user</span> usr_test;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>角色权限</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">role</span> role_all_select;</span><br><span class="line"></span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">select</span> <span class="keyword">on</span> sys_class <span class="keyword">to</span> <span class="keyword">role</span> role_all_select;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>序列</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">sequence</span> seq_up_moni_col_id <span class="keyword">minvalue</span> <span class="number">1</span> maxvalue <span class="number">1111111111111</span> <span class="keyword">start</span> <span class="keyword">with</span> <span class="number">132</span> <span class="keyword">increment</span> <span class="keyword">by</span> <span class="number">1</span> <span class="keyword">cache</span> <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">nextval</span>(<span class="string">'seq_up_moni_col_id'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> currval(<span class="string">'seq_up_moni_col_id'</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="SQL查询"><a href="#SQL查询" class="headerlink" title="SQL查询"></a>SQL查询</h3><ul>
+<li>表空间使用情况</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> t.tsname <span class="keyword">as</span> tsname,</span><br><span class="line">       d.path,</span><br><span class="line">       <span class="keyword">count</span>(*) <span class="string">"file count"</span>,</span><br><span class="line">       <span class="keyword">sum</span>(d.size) / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"size(mb)"</span>,</span><br><span class="line">       <span class="keyword">sum</span>(d.freesize) / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"free size(mb)"</span>,</span><br><span class="line">       (<span class="keyword">sum</span>(d.size) - <span class="keyword">sum</span>(d.freesize)) / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"used size(mb)"</span></span><br><span class="line">  <span class="keyword">from</span> sys_tablespace t</span><br><span class="line">  <span class="keyword">left</span> <span class="keyword">join</span> v_sys_datafile_info d</span><br><span class="line">    <span class="keyword">on</span> t.tsid = d.tablespaceid</span><br></pre></td></tr></table></figure>
+<ul>
+<li>数据文件使用情况</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> t.tsname <span class="keyword">as</span> <span class="string">"name"</span>,</span><br><span class="line">       <span class="keyword">path</span>,</span><br><span class="line">       <span class="string">"CREATIONTIME"</span> <span class="keyword">as</span> <span class="string">"creation time"</span>,</span><br><span class="line">       <span class="string">"NEXTSIZE"</span> / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"next size(mb)"</span>,</span><br><span class="line">       <span class="string">"MAXSIZE"</span> / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"max size(mb)"</span>,</span><br><span class="line">       <span class="string">"SIZE"</span> / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"size(mb)"</span>,</span><br><span class="line">       freesize / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"free size(mb)"</span>,</span><br><span class="line">       (<span class="string">"SIZE"</span> - freesize) / <span class="number">1048576</span> <span class="keyword">AS</span> <span class="string">"used size(mb)"</span>,</span><br><span class="line">       (<span class="string">"SIZE"</span> - freesize) * <span class="number">100.0</span> / <span class="keyword">SIZE</span> <span class="keyword">as</span> <span class="string">"used ratio"</span></span><br><span class="line">  <span class="keyword">from</span> v_sys_datafile_info, sys_tablespace t</span><br><span class="line"> <span class="keyword">where</span> t.tsid = tablespaceid;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>日志文件使用情况</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">path</span>,</span><br><span class="line">       <span class="string">"CREATIONTIME"</span> <span class="keyword">as</span> <span class="string">"creation time"</span>,</span><br><span class="line">       <span class="string">"INITSIZE"</span> / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"init size(mb)"</span>,</span><br><span class="line">       <span class="string">"REALSIZE"</span> / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"real size(mb)"</span>,</span><br><span class="line">       <span class="string">"NEXTSIZE"</span> / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"next size(mb)"</span>,</span><br><span class="line">       <span class="string">"MAXSIZE"</span> / <span class="number">1048576</span> <span class="keyword">AS</span> <span class="string">"max size(mb)"</span>,</span><br><span class="line">       <span class="string">"ISACTIVE"</span> <span class="keyword">as</span> <span class="string">"is active)"</span>,</span><br><span class="line">       (<span class="string">"REALSIZE"</span> * (<span class="number">100</span>-<span class="string">"USAGERATIO"</span>)/<span class="number">100</span>) / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"free size(mb)"</span>,</span><br><span class="line">       (<span class="string">"REALSIZE"</span> * <span class="string">"USAGERATIO"</span>/<span class="number">100</span>) / <span class="number">1048576</span> <span class="keyword">as</span> <span class="string">"used size(mb)"</span>,</span><br><span class="line">       <span class="string">"USAGERATIO"</span> <span class="keyword">as</span> <span class="string">"used ratio"</span></span><br><span class="line">  <span class="keyword">from</span> v_sys_logfile_info;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>表定义</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> sys_get_tabledef <span class="keyword">from</span> v_sys_table <span class="keyword">where</span> tablename=<span class="string">'xxx'</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>会话信息</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 用户会话</span></span><br><span class="line"><span class="keyword">select</span> <span class="string">"SESSION ID"</span>, <span class="string">"DBNAME"</span>, <span class="string">"CURRENT_USER"</span>, <span class="string">"APPNAME"</span>, <span class="string">"SQL COUNT"</span>, <span class="string">"CURRENT SQL"</span> <span class="keyword">from</span> v_sys_sessions;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询阻塞语句session</span></span><br><span class="line"><span class="keyword">select</span> s.prev_sql, s.sid, w.pid, w.blocker_pid <span class="keyword">from</span> v$wait_chains w, v$<span class="keyword">session</span> s <span class="keyword">where</span> blocker_pid <span class="keyword">is</span> <span class="literal">null</span> <span class="keyword">and</span> s.sid = w.session_id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看等待链</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> v$wait_chains;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- kill掉session</span></span><br><span class="line"><span class="keyword">kill</span> <span class="keyword">session</span> <span class="number">631</span> <span class="keyword">abort</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="数据备份"><a href="#数据备份" class="headerlink" title="数据备份"></a>数据备份</h3><ul>
+<li>物理备份&amp;恢复</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 备份</span></span><br><span class="line">brcmd -O <span class="keyword">backup</span> -d HNBILL -t <span class="keyword">full</span> -k <span class="keyword">file</span>  -f <span class="string">"/kstore/sttmp/test_T.osrbk"</span> -c <span class="literal">TRUE</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 恢复</span></span><br><span class="line">brcmd -O <span class="keyword">restore</span> -d HNBAK -u KSTORE -p kstore -P <span class="number">2003</span> -t backup_point_last -k <span class="keyword">file</span> -f <span class="string">"/kstore/sttmp/test.osrbk"</span> -b <span class="number">8192</span> -e <span class="string">"/kstore/sttmp/brcmd_log_021509.txt"</span></span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> -O     Operatin类型：backup&#x2F;restore&#x2F;delete_backup&#x2F;query_db_verify_code 备份&#x2F;恢复&#x2F;删除备份&#x2F;查询数据库验证代码				</span><br><span class="line"> -f     备份文件的完整路径（管道）</span><br><span class="line"> -d     数据库的名称，注意大写和小写字母,默认值是OSRDB</span><br><span class="line"> -u     数据库的用户名,默认值是SYSDBA</span><br><span class="line"> -p     用户名的密码, 默认值是szoscar55</span><br><span class="line"> -P     数据库服务的监听端口，默认值是2003</span><br><span class="line"> -k     数据传输类型：file&#x2F;pipe，文件&#x2F;管道，默认值是文件</span><br><span class="line"> -e     brcmd的日志路径， 默认值是oscaragent的日志路径</span><br><span class="line"> -b     数据传输缓冲区大小（KB）,默认数量为4096，最大数量是8192</span><br><span class="line"></span><br><span class="line">备份参数：</span><br><span class="line"> -t     备份类型：full&#x2F;incr&#x2F;diff,完全&#x2F;增量&#x2F;差异</span><br><span class="line"> -S     备份阶段：all&#x2F;df&#x2F;lsn&#x2F;al</span><br><span class="line"> -D     备份描述,默认值是null</span><br><span class="line"> -c     是压缩备份文件？默认值是false</span><br><span class="line"> -m     是永远保持备份文件？默认值是false</span><br><span class="line"> -A     是自动将数据库设置为归档模式时，你会做一个在线备份，但数据库正在运行无存档模式吗？默认值是false</span><br><span class="line"> -n     是没有在线备份归档日志？默认值是false</span><br><span class="line"></span><br><span class="line">恢复参数：</span><br><span class="line"> -t     还原类型： backup_point&#x2F;backup_point_last&#x2F;full&#x2F;full_last&#x2F;full_last_ignore_error&#x2F;time_point&#x2F;time_point_last</span><br><span class="line">                 备份点&#x2F;最后一次备份点&#x2F;完全&#x2F;上一次完全&#x2F;上一次完全忽略错误&#x2F;时间点&#x2F;最后一次时间点</span><br><span class="line"> -T     将数据库恢复到某一时间点，时间格式是YYYYMMDD_HHMMSS，只有当使用了-t参数是time_point&#x2F;time_point_last</span><br><span class="line"> -s     还原数据库的数据文件路径，只有当使用了-t参数是backup_point &#x2F; backup_point_last</span><br><span class="line"> -l     恢复数据库的日志文件的路径，只有当使用了-t参数是backup_point &#x2F; backup_point_last</span><br><span class="line"> -a     恢复拱数据库的日志文件路径,只有当使用了-t参数是backup_point &#x2F; backup_point_last</span><br><span class="line"> -B     DB_CFG_BUF_DATA_BUFFER_PAGES参数的值,默认值是8192，数据缓冲区的实际大小是64MB,操作系统的虚拟内存应该超过此值</span><br><span class="line"> -F     还原参数的XML文件的路径</span><br><span class="line"> -v     显示版本</span><br><span class="line"> -?     显示帮助</span><br></pre></td></tr></table></figure>
+<ul>
+<li>逻辑备份&amp;恢复</li>
+</ul>
+<p>备份：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 全库备份</span></span><br><span class="line">osrexp -hlocalhost -p2003 -usysdba/szoscar55 -dosrdb level=full file=d:/<span class="keyword">backup</span> <span class="keyword">log</span>=d:/bk.log <span class="keyword">mode</span>=entirety <span class="keyword">ignore</span>=<span class="literal">false</span> <span class="keyword">view</span>=<span class="literal">true</span> <span class="keyword">sequence</span>=<span class="literal">true</span> <span class="keyword">procedure</span>=<span class="literal">true</span> <span class="keyword">constraint</span>=<span class="literal">true</span> <span class="keyword">trigger</span>=<span class="literal">true</span> <span class="keyword">index</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 模式备份</span></span><br><span class="line">osrexp -hlocalhost -p2003 -usysdba/szoscar55 -dosrdb <span class="keyword">level</span>=<span class="keyword">schema</span> <span class="keyword">file</span>=d:/<span class="keyword">backup</span> <span class="keyword">log</span>=d:/bk.log <span class="keyword">mode</span>=entirety <span class="keyword">ignore</span>=<span class="literal">false</span> <span class="keyword">schema</span>=(<span class="keyword">sysdba</span>,<span class="keyword">public</span>) excludetable=(public.test,sysdba.test) <span class="keyword">view</span>=<span class="literal">true</span> <span class="keyword">sequence</span>=<span class="literal">true</span> <span class="keyword">procedure</span>=<span class="literal">true</span> <span class="keyword">constraint</span>=<span class="literal">true</span> <span class="keyword">trigger</span>=<span class="literal">true</span> <span class="keyword">index</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 表备份：</span></span><br><span class="line">osrexp -hlocalhost -p2003 -usysdba/szoscar55 -dosrdb <span class="keyword">level</span>=<span class="keyword">table</span> <span class="keyword">file</span>=d:/<span class="keyword">backup</span> <span class="keyword">log</span>=d:/bk.log <span class="keyword">mode</span>=entirety <span class="keyword">ignore</span>=<span class="literal">false</span> <span class="keyword">table</span>=(messagebord.test,sysdba.test) <span class="keyword">view</span>=<span class="literal">false</span> <span class="keyword">procedure</span>=<span class="literal">false</span> <span class="keyword">sequence</span>=<span class="literal">false</span> <span class="keyword">constraint</span>=<span class="literal">true</span> <span class="keyword">trigger</span>=<span class="literal">true</span> <span class="keyword">index</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>备份参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">-h                       服务器名</span><br><span class="line">-p                       服务器端口</span><br><span class="line">-u                       用户名和密码(sysdba&#x2F;szoscar55)</span><br><span class="line">-k                       表示以操作系统用户登录</span><br><span class="line">-d                       数据库名称</span><br><span class="line">level                    备份级别</span><br><span class="line">parfile                  指定一个文件名,文件包含备份操作参数的列表</span><br><span class="line">file                     指定备份的文件</span><br><span class="line">log                      指定备份的日志</span><br><span class="line">mode                     备份方式</span><br><span class="line">ignore                   是否忽略不重要的错误</span><br><span class="line">view                     是否备份视图</span><br><span class="line">sequence                 是否备份序列</span><br><span class="line">procedure                是否备份存储过程</span><br><span class="line">constraint               是否备份表约束</span><br><span class="line">trigger                  是否备份表触发器</span><br><span class="line">index                    是否备份表索引</span><br><span class="line">schema                   模式级别下要备份的模式</span><br><span class="line">table                    表级别下要备份的表对象</span><br><span class="line">single                   是否只备份单个表对象</span><br><span class="line">excludetable             模式级别下不要备份的表</span><br></pre></td></tr></table></figure>
+<p>恢复：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 全库恢复</span></span><br><span class="line">osrimp -hlocalhost -p2003 -usysdba/szoscar55 -dosrdb level=full file=d:/<span class="keyword">backup</span> <span class="keyword">log</span>=d:/rt.log <span class="keyword">mode</span>=entirety <span class="keyword">ignore</span>=y recreateschema=<span class="literal">false</span> <span class="keyword">view</span>=<span class="literal">true</span> <span class="keyword">sequence</span>=<span class="literal">true</span> <span class="keyword">procedure</span>=<span class="literal">true</span> recreateotherobject=<span class="literal">true</span> recreatetable=<span class="literal">true</span> <span class="keyword">constraint</span>=<span class="literal">true</span>  deletetabledata=<span class="literal">true</span> <span class="keyword">trigger</span>=<span class="literal">true</span> <span class="keyword">index</span>=<span class="literal">true</span></span><br><span class="line">(如果recreateschema=<span class="literal">true</span> 则后面的recreateotherobject=<span class="literal">true</span> recreatetable=<span class="literal">true</span>无效了)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 模式恢复</span></span><br><span class="line">osrimp -hlocalhost -p2003 -usysdba/szoscar55 -dosrdb <span class="keyword">level</span>=<span class="keyword">schema</span> <span class="keyword">file</span>=d:/<span class="keyword">backup</span> <span class="keyword">log</span>=d:/rt.log <span class="keyword">mode</span>=entirety <span class="keyword">ignore</span>=<span class="literal">true</span> <span class="keyword">schema</span>=(<span class="keyword">sysdba</span>,<span class="keyword">public</span>) recreateschema=<span class="literal">false</span> <span class="keyword">view</span>=<span class="literal">true</span> <span class="keyword">sequence</span>=<span class="literal">true</span> <span class="keyword">procedure</span>=<span class="literal">true</span> recreateotherobject=<span class="literal">true</span> excludetable=(sysdba.test,public.test) recreatetable=<span class="literal">false</span> <span class="keyword">constraint</span>=<span class="literal">false</span> deletetabledata=<span class="literal">true</span> <span class="keyword">trigger</span>=<span class="literal">false</span> <span class="keyword">index</span>=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 表恢复</span></span><br><span class="line">osrimp -hlocalhost -p2003 -usysdba/szoscar55 -dosrdb <span class="keyword">level</span>=<span class="keyword">table</span> <span class="keyword">file</span>=d:/<span class="keyword">backup</span> <span class="keyword">log</span>=d:/rt.log <span class="keyword">mode</span>=entirety <span class="keyword">ignore</span>=<span class="literal">true</span> recreateschema=<span class="literal">false</span> <span class="keyword">view</span>=<span class="literal">false</span> <span class="keyword">procedure</span>=<span class="literal">false</span> <span class="keyword">sequence</span>=<span class="literal">true</span> recreateotherobject=<span class="literal">false</span> <span class="keyword">table</span>=(sysdba.test,public.test) recreatetable=<span class="literal">true</span> <span class="keyword">constraint</span>=<span class="literal">true</span> deletetabledata=<span class="literal">true</span> <span class="keyword">trigger</span>=<span class="literal">true</span> <span class="keyword">index</span>=<span class="literal">true</span></span><br><span class="line">(recreatetable=<span class="literal">true</span> 后面的<span class="keyword">trigger</span>=<span class="literal">true</span> <span class="keyword">index</span>=<span class="literal">true</span>才有效)</span><br></pre></td></tr></table></figure>
+<p>恢复参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">-h                       服务器名</span><br><span class="line">-p                       服务器端口</span><br><span class="line">-u                       用户名和密码(sysdba&#x2F;szoscar55)</span><br><span class="line">-k                       表示以操作系统用户登录</span><br><span class="line">-d                       数据库名称</span><br><span class="line">level                    恢复级别</span><br><span class="line">parfile                  指定一个文件名,文件包含恢复操作参数的列表</span><br><span class="line">file                     指定恢复的文件</span><br><span class="line">log                      指定恢复的日志</span><br><span class="line">mode                     恢复方式</span><br><span class="line">ignore                   是否忽略不重要的错误</span><br><span class="line">view                     是否恢复视图</span><br><span class="line">sequence                 是否恢复序列</span><br><span class="line">procedure                是否恢复存储过程</span><br><span class="line">constraint               是否恢复表约束</span><br><span class="line">trigger                  是否恢复表触发器</span><br><span class="line">index                    是否恢复表索引</span><br><span class="line">schema                   模式级别下要恢复的模式</span><br><span class="line">table                    表级别下要恢复的表对象</span><br><span class="line">single                   是否只恢复单个表对象</span><br><span class="line">excludetable             模式级别下不要恢复的表</span><br><span class="line">recreateschema           是否重构模式</span><br><span class="line">recreateotherobject      是否重构视图、存储过程、序列</span><br><span class="line">recreatetable            是否重构表</span><br><span class="line">tablespace               是否恢复表空间</span><br><span class="line">deletetabledata          是否清空原表中的数据</span><br></pre></td></tr></table></figure>
+<h3 id="主备环境"><a href="#主备环境" class="headerlink" title="主备环境"></a>主备环境</h3><p>主备集群的搭建这部分内容主要咨询的售后，其采用浮动ip的方式来实现。</p>
+<ul>
+<li>首先将数据库设置为普通模式</li>
+</ul>
+<figure class="highlight plain"><figcaption><span class="fileDir">/opt/ShengTong/admin/</span><span class="caption">OSRDB.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HOTSTANDBY_DATABASE_TYPE&#x3D;0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动数据库</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">oscar -o normal -d osrdb  ## 命令行启动，如果不存在可以先 source /etc/profile</span><br><span class="line"></span><br><span class="line">/etc/init.d/oscardb_OSRDBd start ## 后台启动</span><br></pre></td></tr></table></figure>
+<ul>
+<li>并开启归档</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看归档</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">archive</span> <span class="keyword">from</span> v$<span class="keyword">instance</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 打开归档</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">database</span> <span class="keyword">archivelog</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置节点</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">database</span> <span class="keyword">set</span> node <span class="keyword">list</span> node <span class="string">'192.168.141.13'</span>, node <span class="string">'192.168.141.15'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 可以查询节点设置情况</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> v_sys_ha_slave_info;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关闭数据库，改为HA模式，进行设置，并重启数据库</li>
+</ul>
+<figure class="highlight properties"><figcaption><span class="fileDir">/opt/ShengTong/admin/</span><span class="caption">OSRDB.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">HOTSTANDBY_DATABASE_TYPE</span>=<span class="string">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 网关ip，如果没有网关，填一个子网中存在的ip</span></span><br><span class="line"><span class="attr">HA_GATEWAY</span>=<span class="string">192.168.141.1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 网卡名称:1</span></span><br><span class="line"><span class="attr">HA_LOCAL_NET_DEV_NAME</span>=<span class="string">"ens33:1"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 设置浮动ip</span></span><br><span class="line"><span class="attr">HA_SERVER_IP_ADDRESS</span>=<span class="string">192.168.141.18</span></span><br></pre></td></tr></table></figure>
+<h3 id="实例创建-amp-卸载"><a href="#实例创建-amp-卸载" class="headerlink" title="实例创建&amp;卸载"></a>实例创建&amp;卸载</h3><ul>
+<li>创建一个lsp库实例</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. oscar打开单用户模式</span><br><span class="line"></span><br><span class="line">2. 创建数据库</span><br><span class="line">CREATE DATABASE lsp ENCODING &#39;GBK&#39; ARCHIVELOG &#39;&#x2F;opt&#x2F;ShenTong&#x2F;arch&#x2F;&#39; CONTROLFILE &#39;&#x2F;opt&#x2F;ShenTong&#x2F;admin&#x2F;lsp.ctrl&#39; LOGFILE &#39;&#x2F;opt&#x2F;ShenTong&#x2F;odbs&#x2F;lsp&#x2F;TDB01.log&#39; SIZE 500M TEMPFILE &#39;&#x2F;opt&#x2F;ShenTong&#x2F;odbs&#x2F;lsp&#x2F;TDB01temp.dbf&#39; SIZE 100M AUDITFILE &#39;&#x2F;opt&#x2F;ShenTong&#x2F;odbs&#x2F;lsp&#x2F;TDBaux01.dbf&#39; SIZE 100M AUTOEXTEND ON NEXT 20M DATAFILE &#39;&#x2F;opt&#x2F;ShenTong&#x2F;odbs&#x2F;lsp&#x2F;TDB01.dbf&#39; SIZE 1G AUTOEXTEND ON NEXT 200M undo tablespace UNDOTS01 datafile &#39;&#x2F;opt&#x2F;ShenTong&#x2F;odbs&#x2F;lsp&#x2F;UNDO_SAPM01.dbf&#39;;</span><br><span class="line"></span><br><span class="line">## 3. 初始化数据库 </span><br><span class="line">oscar -o restrict -d lsp</span><br><span class="line"></span><br><span class="line">## 4. 注册服务</span><br><span class="line">oscar -o install -d lsp</span><br><span class="line"></span><br><span class="line">## 5. 使环境变量生效</span><br><span class="line">source &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置库实例</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## 拷贝一份osrdb的配置文件，然后修改默认端口 PORT&#x3D;2005，不然端口冲突起不来</span><br><span class="line">cp &#x2F;opt&#x2F;ShenTong&#x2F;admin&#x2F;OSRDB.conf &#x2F;opt&#x2F;ShenTong&#x2F;admin&#x2F;LSP.conf</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动数据库</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;etc&#x2F;init.d&#x2F;oscardb_LSPd start</span><br><span class="line"></span><br><span class="line">## 登录</span><br><span class="line">isql -d lsp -p 2005 -U sysdba&#x2F;szoscar55</span><br></pre></td></tr></table></figure>
+<ul>
+<li>卸载数据库</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">## 停止数据库</span><br><span class="line">&#x2F;etc&#x2F;init.d&#x2F;oscardb_LSPd stop</span><br><span class="line"></span><br><span class="line">## 卸载数据库</span><br><span class="line">oscar -o uninstall -d LSP</span><br><span class="line"></span><br><span class="line">## oscar进入单用户模式，删除这个库</span><br><span class="line">oscar</span><br><span class="line">drop database LSP</span><br></pre></td></tr></table></figure>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li><a href="https://blog.csdn.net/asd051377305/article/details/108766792" target="_blank" rel="noopener">https://blog.csdn.net/asd051377305/article/details/108766792</a></li>
+<li><a href="https://blog.csdn.net/qq_57052445/article/details/130360393" target="_blank" rel="noopener">https://blog.csdn.net/qq_57052445/article/details/130360393</a></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2022/07/25/20220725/">
+		    系统间数据同步设计
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2021/08/26/20210826/">
+		    Netty NioEventLoop
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+        
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#os_ul").click(function(){ $("#os_li").toggle(); });
+    $("#xx_ul").click(function(){ $("#xx_li").toggle(); });
+});
+</script>
+
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令操作"><span class="toc-text">命令操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL操作"><span class="toc-text">SQL操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL查询"><span class="toc-text">SQL查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据备份"><span class="toc-text">数据备份</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主备环境"><span class="toc-text">主备环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例创建-amp-卸载"><span class="toc-text">实例创建&amp;卸载</span></a></li></ol>
+</div>
+
+
+
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2017-2023 &nbsp;&nbsp; shanhm1991 &nbsp;&nbsp; version@1.0.0 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

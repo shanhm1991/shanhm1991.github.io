@@ -41,7 +41,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
-  <h2><font style="color: #736f6f;">articles:  105 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #736f6f;">articles:  108 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -60,20 +60,20 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article id="post-20210515" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20210313" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2021-05-14T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/05/15/20210515/" style="color: #736f6f;">2021-05-15</a></time>
+        <time class="dt-published" datetime="2021-03-12T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/03/13/20210313/" style="color: #736f6f;">2021-03-13</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2021/05/15/20210515/">算法 堆排序 &amp; PriorityQueue</a>
+       <a href="/2021/03/13/20210313/">《计算机组成原理》 输入输出系统</a>
     </h1>
     
   
@@ -87,7 +87,17 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>在有些场景中，并不一定要求所有元素有序，而只需知道其中最大或最小的 K 个元素，比如在优先级队列中，只要每次都能获取到队列中最大或最小的的元素即可，于是有人想到了利用树的形式来组织数据，这里称为堆。<br>
+        <p>I/O功能模块通常简称为：I/O接口，也叫适配器，<font style="color:red;">指CPU、主存和外围设备之间通过系统总线进行连接的标准化逻辑部件</font>。为了保证处理器和不同外设之间高效和可靠的交互，CPU必须通过I/O接口与外设连接，其数据传送过程分为两个阶段：I/O接口与外设之间的数据传送，以及CPU与I/O接口之间的数据传送。</p>
+<p>下图展示了CPU、I/O接口和外围设备之间的连接关系。其中外围设备自身带有设备控制器，它是控制外围设备进行操作的控制部件，它通过I/O接口接收来自CPU传送的各种信息，并根据设备的不同要求将这些信息传送到设备，或者从设备中读出信息传送到I/O接口。</p>
+<p><img src="/img/20210313/20210313.1.jpg" alt=""> </p>
+<p>一个标准的I/O接口可以连接一个或多个设备，其结构也如图中所示，通常包括如下功能：</p>
+<ul>
+<li>控制：接口模块根据指令信息来控制外围设备的动作，比如启动或者关闭；</li>
+<li>缓冲：接口模块在外围设备和计算机其他部件之间作为一个缓冲器，以补偿各种设备在速度上的差异；</li>
+<li>状态：接口模块监视外围设备的工作状态并保存，比如准备就绪或者忙，供CPU询问外围设备状态时用；</li>
+<li>转换：接口模块可以完成数据转换，保证数据能在外围设备和CPU之间正确的传送；</li>
+<li>整理：接口模块可以完成一些特别功能，当需要时可以修改字计数器或者当前内存地址寄存器；</li>
+<li>程序中断：当外围设备向CPU请求某种动作时，接口模块会产生一个中断请求信号到CPU;
       
     </div>
 	
@@ -95,7 +105,7 @@
       
         
           <div class="alignleft">
-            <a href="/2021/05/15/20210515/#more" class="more-link">more</a>
+            <a href="/2021/03/13/20210313/#more" class="more-link">more</a>
           </div>
         
         
@@ -112,20 +122,20 @@
 
 
 
-  <article id="post-20210506" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20210309" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2021-05-05T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/05/06/20210506/" style="color: #736f6f;">2021-05-06</a></time>
+        <time class="dt-published" datetime="2021-03-08T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/03/09/20210309/" style="color: #736f6f;">2021-03-09</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2021/05/06/20210506/">算法 关于排序</a>
+       <a href="/2021/03/09/20210309/">《计算机组成原理》 总线系统</a>
     </h1>
     
   
@@ -139,9 +149,12 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>排序即将一组对象按照某种逻辑顺序重新排列的过程，通常，整理数据的第一步就是进行排序，因此它是后面很多其它算法和数据结构的基础。在计算机早期年代，据说大约有30%的计算周期都花在了排序操作上，如今这个比例有所降低，并非排序的重要性降低了，而是前辈们不懈的研究，使得如今的排序算法更加高效。</p>
-<p>在不同的场景下选择合适的排序算法其实是很重要的，比如下面是使用文中的几种排序策略对同样的1000个随机数进行排序的结果，可以看出来差距还是比较大的</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT         comp=<span class="number">511566</span>  swap=<span class="number">251579</span>  cost=<span class="number">16355</span>ms</span><br><span class="line">INSERT         comp=<span class="number">252594</span>  wap=<span class="number">251584</span>   cost=<span class="number">16449</span>ms</span><br><span class="line">INSERT_BINARY  comp=<span class="number">14294</span>   move=<span class="number">1011</span>    cost=<span class="number">111</span>ms</span><br><span class="line">INSERT_XIER    comp=<span class="number">13576</span>   swap=<span class="number">8453</span>    cost=<span class="number">578</span>ms</span><br><span class="line">MERGE          comp=<span class="number">9413</span>    swap=<span class="number">0</span>       cost=<span class="number">68</span>ms</span><br><span class="line">QUICK          comp=<span class="number">15391</span>   swap=<span class="number">2225</span>    cost=<span class="number">191</span>ms</span><br><span class="line">QUICK2         comp=<span class="number">13857</span>   swap=<span class="number">13853</span>   cost=<span class="number">905</span>ms</span><br></pre></td></tr></table></figure>
+        <p>总线是构成计算机系统的互联机构，是多个系统部件之间进行数据传输的公共通道。借助于总线，各部件之间实现地址、数据、控制信息的互换。一个单处理器系统中的总线，可以分为三类：</p>
+<ul>
+<li>内部总线：CPU内部连接各寄存器及运算部件之间的总线；</li>
+<li>系统总线：CPU同计算机的其他高速功能部件，如存储器、通道等互相连接的总线，称为系统总线；</li>
+<li>I/O总线：低速I/O设备之间互相连接的总线；</li>
+</ul>
       
     </div>
 	
@@ -149,7 +162,7 @@
       
         
           <div class="alignleft">
-            <a href="/2021/05/06/20210506/#more" class="more-link">more</a>
+            <a href="/2021/03/09/20210309/#more" class="more-link">more</a>
           </div>
         
         
@@ -166,20 +179,20 @@
 
 
 
-  <article id="post-20200601" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20210306" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2020-05-31T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2020/06/01/20200601/" style="color: #736f6f;">2020-06-01</a></time>
+        <time class="dt-published" datetime="2021-03-05T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/03/06/20210306/" style="color: #736f6f;">2021-03-06</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2020/06/01/20200601/">《UNIX环境高级编程》 文件</a>
+       <a href="/2021/03/06/20210306/">《计算机组成原理》 存储系统</a>
     </h1>
     
   
@@ -193,7 +206,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>Linux中所有的 I/O 设备都被抽象为文件，这样所有的输入输出都被当作对相应的文件进行读写操作。这种将设备统一映射为文件的方式，允许Linux内核引出一个简单、低级的应用接口，称为 Unix I/O， 使得所有的输入输出都能以一种统一的方式执行。<br>
+        <p>存储器是计算机的核心部件之一，用于存储程序和数据。由于现代计算机对于存储器容量和速度的要求越来越高，使得存储器以及演变成了存储系统</p>
       
     </div>
 	
@@ -201,7 +214,7 @@
       
         
           <div class="alignleft">
-            <a href="/2020/06/01/20200601/#more" class="more-link">more</a>
+            <a href="/2021/03/06/20210306/#more" class="more-link">more</a>
           </div>
         
         
@@ -218,20 +231,20 @@
 
 
 
-  <article id="post-20191125" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20201027" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-11-24T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2019/11/25/20191125/" style="color: #736f6f;">2019-11-25</a></time>
+        <time class="dt-published" datetime="2020-10-26T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2020/10/27/20201027/" style="color: #736f6f;">2020-10-27</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/11/25/20191125/">redis 常用操作</a>
+       <a href="/2020/10/27/20201027/">Redis 日常操作</a>
     </h1>
     
   
@@ -245,9 +258,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>Redis(Remote Dictionary Server)，即远程字典服务，是一个开源的使用C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。</p>
-<p>redis是一个基于内存的key-value存储系统，类似Memcached，区别的是redis会周期性的把更新的数据写入磁盘（RDB）或者把修改操作写入追加的记录文件（AOF），并在此基础上实现master-slave(主从)同步。     </p>
-<p>因此redis可以用于高速缓存，同时它支持多种数据类型，以及集群和事务的操作，进而也可以用于发布订阅、地图信息分析、计数器等系统<br>
+        <p>官方文档：<a href="https://redis.io/commands/" target="_blank" rel="noopener">https://redis.io/commands/</a> </p>
+<p>Remote Dictionary Server远程字典服务，是一个开源的使用C语言编写的Key-Value数据库。redis是一个基于内存的存储系统，当然也支持持久化，它会周期性的把更新的数据写入磁盘（RDB）或者把修改操作追加的记录文件（AOF），并在此基础上实现master-slave(主从)同步。所以redis可以用于高速缓存（内存&amp;多路复用IO），同时它支持多种数据类型，以及集群和事务的操作，进而也可以用于发布订阅、地图信息分析、计数器等系统<br>
       
     </div>
 	
@@ -255,7 +267,7 @@
       
         
           <div class="alignleft">
-            <a href="/2019/11/25/20191125/#more" class="more-link">more</a>
+            <a href="/2020/10/27/20201027/#more" class="more-link">more</a>
           </div>
         
         
@@ -272,20 +284,20 @@
 
 
 
-  <article id="post-20191017" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20201025" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-10-16T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2019/10/17/20191017/" style="color: #736f6f;">2019-10-17</a></time>
+        <time class="dt-published" datetime="2020-10-24T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2020/10/25/20201025/" style="color: #736f6f;">2020-10-25</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/10/17/20191017/">git 常用操作</a>
+       <a href="/2020/10/25/20201025/">Postgre 日常操作</a>
     </h1>
     
   
@@ -299,7 +311,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>本文大概整理了下git的工作机制和常用操作，主要内容来自官网和gitlearn网站<br>
+        <p>PostgreSQL中文手册：<a href="http://www.postgres.cn/docs/13/" target="_blank" rel="noopener">http://www.postgres.cn/docs/13/</a></p>
+<p>简单记录了一些pg的日常使用命令，比较琐碎<br>
       
     </div>
 	
@@ -307,7 +320,7 @@
       
         
           <div class="alignleft">
-            <a href="/2019/10/17/20191017/#more" class="more-link">more</a>
+            <a href="/2020/10/25/20201025/#more" class="more-link">more</a>
           </div>
         
         
@@ -324,20 +337,20 @@
 
 
 
-  <article id="post-20190925" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <article id="post-20201021" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time class="dt-published" datetime="2019-09-24T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2019/09/25/20190925/" style="color: #736f6f;">2019-09-25</a></time>
+        <time class="dt-published" datetime="2020-10-20T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2020/10/21/20201021/" style="color: #736f6f;">2020-10-21</a></time>
       
       
 
   
   
     <h1 class="title">
-       <a href="/2019/09/25/20190925/">postgre 常用操作</a>
+       <a href="/2020/10/21/20201021/">Git 日常操作</a>
     </h1>
     
   
@@ -351,7 +364,8 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>本文主要是将日常对pg的使用做了一些整理，其实主要就是几个命令<code>psql</code>、<code>pg_dump</code>、<code>pg_restore</code>，如果会查文档完全不用记，并且一些常用的操作用多了自然会记得，但是对于一些常用的记录一下也是为了减轻自己的记忆负担，毕竟脑瓜子内存有限不如记在电脑硬盘上，忘记翻一下也比较方便直接<br>
+        <p>官方文档：<a href="https://git-scm.com/book/zh/v2" target="_blank" rel="noopener">https://git-scm.com/book/zh/v2</a></p>
+<p>主要整理了一下Git基本的工作机制，以及一些常用操作。如果想了解git的各种命令，推荐访问：<a href="https://learngitbranching.js.org/?locale=zh_CN" target="_blank" rel="noopener">https://learngitbranching.js.org/?locale=zh_CN</a><br>
       
     </div>
 	
@@ -359,7 +373,7 @@
       
         
           <div class="alignleft">
-            <a href="/2019/09/25/20190925/#more" class="more-link">more</a>
+            <a href="/2020/10/21/20201021/#more" class="more-link">more</a>
           </div>
         
         
@@ -404,7 +418,7 @@
 
   
   
-  <li><a href="/categories/Java-SE/" style="width:45px; display:inline-block;">Java SE</a><small>18</small></li>
+  <li><a href="/categories/Java-SE/" style="width:48px; display:inline-block;">Java SE</a><small>18</small></li>
   
   
   
@@ -450,7 +464,7 @@
   
   
   
-    <li><a href="/categories/算法设计/" style="width:45px; display:inline-block;">算法设计</a><small>11</small></li>
+    <li><a href="/categories/算法设计/" style="width:48px; display:inline-block;">算法设计</a><small>11</small></li>
   
   
   
@@ -482,7 +496,63 @@
   
   
   
-    <li><a href="/categories/设计模式/" style="width:45px; display:inline-block;">设计模式</a><small>6</small></li>
+    <li><a href="/categories/设计模式/" style="width:48px; display:inline-block;">设计模式</a><small>6</small></li>
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <li><a href="/categories/日常随笔/" style="width:48px; display:inline-block;">日常随笔</a><small>15</small></li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <li><a href="/categories/开发笔记/" style="width:48px; display:inline-block;">开发笔记</a><small>7</small></li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
 
@@ -502,36 +572,6 @@
   
   
   
-    <li><a href="/categories/日常随笔/" style="width:45px; display:inline-block;">日常随笔</a><small>13</small></li>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <li><a href="/categories/开发笔记/" style="width:45px; display:inline-block;">开发笔记</a><small>6</small></li>
-  
-  
-  
   
   
   
@@ -542,7 +582,7 @@
   
   
 
-  <li id="os_ul"><a href="#" style="width:45px; display:inline-block;">读书笔记</a><small>43</small></li>
+  <li id="os_ul"><a href="#" style="width:48px; display:inline-block;">读书笔记</a><small>43</small></li>
   <ul id="os_li" class="entry_li" style="list-style: none; padding-left: 5px; display: none;">
       
       
@@ -584,13 +624,13 @@
       
       
       
-      <li><a href="/categories/spring源码深度解析/" style="width:110px; display:inline-block;">spring源码深度解析</a><small>11</small></li>
       
       
       
       
       
       
+      <li><a href="/categories/深入理解Java虚拟机/" style="width:110px; display:inline-block;">深入理解Java虚拟机</a><small>15</small></li>
       
       
       
@@ -612,13 +652,13 @@
       
       
       
+      <li><a href="/categories/spring源码深度解析/" style="width:110px; display:inline-block;">spring源码深度解析</a><small>11</small></li>
       
       
       
       
       
       
-      <li><a href="/categories/深入理解Java虚拟机/" style="width:110px; display:inline-block;">深入理解Java虚拟机</a><small>15</small></li>
       
       
       
@@ -685,7 +725,7 @@
       
   </ul>
 
-  <li id="xx_ul"><a href="#" style="width:60px; display:inline-block;">框架|中间件</a><small>8</small></li>
+  <li id="xx_ul"><a href="#" style="width:65px; display:inline-block;">框架|中间件</a><small>8</small></li>
   <ul id="xx_li" class="entry_li" style="list-style: none; padding-left: 5px; display: none;">
       
       
@@ -761,7 +801,7 @@ $(document).ready(function(){
 <div class="widget tagcloud">
   <h3 class="title">Tags</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/Schedule/" style="font-size: 12.5px;">Schedule</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/WeakCache/" style="font-size: 10px;">WeakCache</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/netstat/" style="font-size: 10px;">netstat</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
+    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/chrony/" style="font-size: 10px;">chrony</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/cron/" style="font-size: 10px;">cron</a> <a href="/tags/feign/" style="font-size: 10px;">feign</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/netstat/" style="font-size: 10px;">netstat</a> <a href="/tags/ntp/" style="font-size: 10px;">ntp</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/schedule/" style="font-size: 12.5px;">schedule</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/swap/" style="font-size: 10px;">swap</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
   </div>
 </div>
 
@@ -769,6 +809,13 @@ $(document).ready(function(){
   
 
 
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">Archives</h3>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">2022-07</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">2022-04</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">2021-03</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">2020-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">2019-05</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018-07</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">2017-06</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017-03</a><span class="archive-list-count">11</span></li></ul>
+  </div>
 
 </aside>
     <div class="clearfix"></div>
