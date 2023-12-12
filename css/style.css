@@ -872,7 +872,7 @@ table {
   text-align: right;
 }
 .code {
-  width: 768px;
+  width: 100%;
   padding-left: 1px;
   border-left: 1px solid #fff;
   color: #333;
