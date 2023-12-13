@@ -1,0 +1,322 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>节点间连接管理设计 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="问题在一个拓扑结构中，每个节点都是独立的。如何让每个节点都感知到拓扑中其他节点的信息变化，以及节点之间的连接情况。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="节点间连接管理设计"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
+  <h2><font style="color: #736f6f;">articles:  109 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20220721" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2022-07-20T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2022/07/21/20220721/" style="color: #736f6f;">2022-07-21</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        节点间连接管理设计
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 2.2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 7min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/开发笔记/">开发笔记</a>
+  </div>
+
+
+   
+   
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>在一个拓扑结构中，每个节点都是独立的。如何让每个节点都感知到拓扑中其他节点的信息变化，以及节点之间的连接情况。<br><a id="more"></a></p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>每个节点只维护自身的信息，然后通过在节点间设置心跳消息来进行连接检测和信息交换，相互补充和更新，最终在每个节点中都维护一份完整的节点拓扑数据。对于同样的数据，在更新时会以心跳时间最新的为准，所以这也要求了所有的节点在时间上必须是同步的。</p>
+<h4 id="数据结构定义"><a href="#数据结构定义" class="headerlink" title="数据结构定义"></a>数据结构定义</h4><p>如下为拓扑数据的结构，每条数据包括源节点的全部信息，目标节点的id和地址，以及连接状态和心跳时间。通过源节点id、目标节点id、源节点地址、目标节点地址这四个信息，简单称为四元组，可以确定一个的拓扑连接。通过节点id和节点地址，则可以确定节点信息。</p>
+<p><img src="/img/20220721/20220721.1.jpg" alt=""> </p>
+<p>规定每个节点都有一个固定的id标识，由节点自己提供。但是并不要求节点的id唯一，因为节点的地址已经能保证节点的唯一性，所以通过共用id可以对节点进行分组，并以组为单位对外进行暴露，这样同一组内的节点就可以互相作为主备。</p>
+<p>另外，我们可以定义一个id为”-1”的虚拟节点，其地址记为”#”，用来作为拓扑中孤立节点和边缘节点（本身不发起任何连接，但可以被其它节点连接）的目标节点，而对于其它节点则不应该指向”-1”节点。</p>
+<h4 id="心跳消息定义"><a href="#心跳消息定义" class="headerlink" title="心跳消息定义"></a>心跳消息定义</h4><p>上面拓扑数据中的目标节点id其实是来自于心跳响应，对于拓扑中的任何节点，它可以向附近已知的一个或多个节点发送心跳消息。</p>
+<ul>
+<li>对于心跳请求的定义：</li>
+</ul>
+<p><img src="/img/20220721/20220721.2.jpg" alt=""> </p>
+<ul>
+<li>对于心跳响应的定义：</li>
+</ul>
+<p><img src="/img/20220721/20220721.3.jpg" alt=""> </p>
+<h4 id="连接状态检测"><a href="#连接状态检测" class="headerlink" title="连接状态检测"></a>连接状态检测</h4><p>对于心跳的发起节点，它一定是最先知道连接的状态变化，只要心跳失败了，它就会将连接状态改为断开。而对于心跳接收方，它只能根据刷新时间来判断。比如，如果超过五个心跳周期没刷新时间，就将状态改为断开；如果超过十个心跳周期没刷新，就删除对应的连接数据；</p>
+<h4 id="数据更新规则"><a href="#数据更新规则" class="headerlink" title="数据更新规则"></a>数据更新规则</h4><p>对于连接数据中的心跳时间，只有在收到心跳请求或者响应时才应该进行更新，如果只是更新节点信息则不可以修改心跳时间。</p>
+<ul>
+<li>对于心跳接收方：</li>
+</ul>
+<p>如果节点B收到节点A的心跳请求，则说明节点A到节点B的链路是连通的，所以：<br>1.刷新当前心跳连接A-B的状态和时间，同时更新A-B连接中源节点A的信息；<br>2.根据节点id和节点地址更新其它连接（由节点A发起的连接）中的A节点信息，但是不更新连接状态和时间；<br>3.对于心跳请求中的其它连接数据，根据四元组信息进行比较更新，如果数据的刷新时间比节点B维护的对应数据的时间还旧则忽略。另外，对于上面已经更新了的A-B连接，以及由B作为源节点的连接，也忽略更新，因为节点B自己更了解自己所发起的连接情况。</p>
+<ul>
+<li>对于心跳发起方：</li>
+</ul>
+<p>类似的节点A收到节点B的心跳响应，也说明节点A到节点B的链路是连通的，所以：<br>1.刷新当前心跳连接A-B的状态和时间；<br>2.根据节点id和节点地址更新连接（由节点B发起的连接）中的B节点信息，但是不更新连接状态和时间；<br>3.对于心跳响应中的其它连接数据，根据四元组信息进行比较更新，同样如果连接数据的刷新时间比发起节点A维护的对应数据的时间还旧则忽略。对于已经更新了的A-B连接，以及其他由A作为源节点的连接，也忽略更新。</p>
+<ul>
+<li>对于孤立节点或边缘节点</li>
+</ul>
+<p>这些节点不会主动发起心跳，最多只会作为心跳接收方，它们会记一条指向节点”-1”的数据，但是也要按照心跳周期来刷新与节点”-1”之间连接的时间，否则那些指向它的其他节点可能得不到更新（因为修改节点信息并不会修改数据时间），而且如果时间不刷新，将会很快被检测为无效链接而被删除。</p>
+<p>另外，如果给孤立节点或边缘节点添加了心跳目标，那么应该在心跳成功后删除指向”-1”的连接数据，因为它已经不再符合孤立节点或边缘节点的定义。</p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>这里小结一下，其实主要的问题就是要确定是由谁在什么时机更新哪些数据的什么信息</p>
+<p>对于节点的信息，肯定节点自己最清楚，所以他可以修改自己的信息。其次是直接相邻的心跳节点，他们可以更新对方节点的信息。但是在更新节点信息时并不刷新心跳时间。</p>
+<p>对于节点的连接，只有心跳的双方清楚情况，所以只有它们有资格直接更新连接情况，并刷新心跳时间。对于其它节点，只是能在接收数据时根据四元组信息进行覆盖更新，并以时间最新的为准。</p>
+<h3 id="示例推演"><a href="#示例推演" class="headerlink" title="示例推演"></a>示例推演</h3><ul>
+<li>假设有2个独立的节点，节点A[id=10]和节点B[id=20]，那么他们会各自记录一条指向”-1”的连接数据</li>
+</ul>
+<p><img src="/img/20220721/20220721.4.jpg" alt=""> </p>
+<p>现在让节点B指向节点A发起心跳（假设心跳间隔为30秒），那么在一次心跳之后他们的数据应该如下</p>
+<p><img src="/img/20220721/20220721.5.jpg" alt=""> </p>
+<ul>
+<li>如果将节点数添加到6个，并将它们直接的连接关系设置成如下</li>
+</ul>
+<p><img src="/img/20220721/20220721.6.jpg" alt=""> </p>
+<p>那么经过几个周期之后，它们各自的节点数据应该如下所示</p>
+<p><img src="/img/20220721/20220721.7.jpg" alt=""> </p>
+<ul>
+<li>假设现在断开节点F与节点E之间的连接</li>
+</ul>
+<p><img src="/img/20220721/20220721.8.jpg" alt=""> </p>
+<p>那么节点F将因为心跳失败而发现连接被断开，于是将F-E连接的状态置为断开，而其它的连接数据由于得不到更新，将会在一段时间之后被清除。最终只会剩一条F-E连接数据，这是因为心跳会不停的失败重试并更新时间。对于左侧的节点，也会在一段时间发现F-E连接没有更新而将其删除，所以最终节点中的数据应该如下两个版本</p>
+<p><img src="/img/20220721/20220721.9.jpg" alt=""> </p>
+<ul>
+<li>如果再断开节点E与节点B之间的连接</li>
+</ul>
+<p><img src="/img/20220721/20220721.10.jpg" alt=""> </p>
+<p>类似的，节点E也会很快发现E-B连接被断开。但是在节点B中，E-B连接数据并不会被删除，因为节点E很快会将这个断开的E-B连接数据通过其他节点传给节点B，并且由于失败重试，数据时间会一直刷新，除非节点E主动去除这个心跳目标从而停止尝试。所以这里数据最终会如下所示</p>
+<p><img src="/img/20220721/20220721.11.jpg" alt=""> </p>
+<ul>
+<li>同理，我们还可以继续断开节点[A、B、C、G]直接的任意一个连接，只要保证节点间还有链路能够连接到，最终就能保证每个节点都有完整的拓扑数据以及最新的节点信息。这里以断开节点B与节点G的连接为例</li>
+</ul>
+<p><img src="/img/20220721/20220721.12.jpg" alt=""> </p>
+<p>这样的话，最终数据会变成下面这样</p>
+<p><img src="/img/20220721/20220721.13.jpg" alt=""> </p>
+<ul>
+<li>进一步假设现在节点G发生宕机</li>
+</ul>
+<p><img src="/img/20220721/20220721.14.jpg" alt=""> </p>
+<p>那么其他节点将会很快发现B-G这条链路也断开了，并且由于节点G指向”-1”的连接数据不再更新，将很快被剔除，最终数据变成下面这样</p>
+<p><img src="/img/20220721/20220721.15.jpg" alt=""> </p>
+<p>可以看到，虽然节点G在拓扑数据中被剔除了，但是如果以节点id标识作为目标，我们依然可以访问节点A，这样也就达到了灾备的效果。</p>
+<p><br><strong>参考：</strong></p>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2022/07/25/20220725/">
+		    节点间数据同步设计
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2022/04/25/20220425/">
+		    Oscar 神通数据库日常操作
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/开发笔记/">开发笔记</a>
+  </div>
+
+
+        
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#os_ul").click(function(){ $("#os_li").toggle(); });
+    $("#xx_ul").click(function(){ $("#xx_li").toggle(); });
+});
+</script>
+
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#思路"><span class="toc-text">思路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#数据结构定义"><span class="toc-text">数据结构定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#心跳消息定义"><span class="toc-text">心跳消息定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#连接状态检测"><span class="toc-text">连接状态检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据更新规则"><span class="toc-text">数据更新规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例推演"><span class="toc-text">示例推演</span></a></li></ol>
+</div>
+
+
+
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2017-2023 &nbsp;&nbsp; shanhm1991 &nbsp;&nbsp; version@1.0.0 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
