@@ -1,0 +1,331 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用Liquibase管理应用数据库版本 | Echo</title>
+  <meta name="author" content="shanhm1991">
+  
+  <meta name="description" content="Liquibase是一个用于用于跟踪和管理应用数据库变化的开源工具，通过changelog日志的形式来记录数据库的变更，然后执行日志文件中的修改，将数据库更新或回滚到一致的状态。它的目标是提供一种与数据库类型无关的解决方案，主要优点包括：
+
+支持几乎所有主流的数据库，包括Oracle、Sql Server、DB2、MySql、Sybase、PostgreSQL等，这样在数据库的部署和升级环节可以支持多数据库；
+日志文件支持多种格式，如XML、YAML、JSON、SQL等；
+支持回滚功能，可以按时间、数量、标签回滚变化；
+
+官网文档：https://docs.liquibase.com/home.html">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="使用Liquibase管理应用数据库版本"/>
+  <meta property="og:site_name" content="Echo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Echo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-147251181-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="alignleft">
+  <h1><a href="/">Echo</a></h1>
+  <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
+  <h2><font style="color: #736f6f;">articles:  111 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/about">Abount</a></li>
+    
+      <li><a href="/books">Books</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-20220421" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2022-04-20T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2022/04/21/20220421/" style="color: #736f6f;">2022-04-21</a></time>
+      
+      
+
+  
+  
+    <h1 class="p-name title" itemprop="headline name">
+        使用Liquibase管理应用数据库版本
+    </h1>
+    
+    
+  
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+   <span style="line-height:35px; height:35px; ">  </span>
+
+   <font style="color: #999;"> words: 2k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 9min</font>
+   
+   
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+   
+   
+  
+  <div class="tags">
+    <a href="/tags/Liquibase/">Liquibase</a>
+  </div>
+
+
+   
+   <hr style="background-color: #ddd; height:1px; border:none;" /><br>
+   
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Liquibase是一个用于用于跟踪和管理应用数据库变化的开源工具，通过changelog日志的形式来记录数据库的变更，然后执行日志文件中的修改，将数据库更新或回滚到一致的状态。它的目标是提供一种与数据库类型无关的解决方案，主要优点包括：</p>
+<ul>
+<li>支持几乎所有主流的数据库，包括Oracle、Sql Server、DB2、MySql、Sybase、PostgreSQL等，这样在数据库的部署和升级环节可以支持多数据库；</li>
+<li>日志文件支持多种格式，如XML、YAML、JSON、SQL等；</li>
+<li>支持回滚功能，可以按时间、数量、标签回滚变化；</li>
+</ul>
+<p>官网文档：<a href="https://docs.liquibase.com/home.html" target="_blank" rel="noopener">https://docs.liquibase.com/home.html</a><br><a id="more"></a></p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>在使用Liquibase之前，我们也想过一些办法来进行数据库版本管理。思路是在库中约定一张版本表，用来记录每次数据库的变化版本，本地也会给每次数据库升级的sql文件定义一个版本进行维护，然后每次在升级应用之前，先人工比较升级下数据库版本。这样可以解决数据库与应用版本之间的对应关系，但是要依赖人工检查，而且将数据库与应用的版本分开管理也容易出现不一致问题。</p>
+<p>Liquibase解决了上面两个问题，它将人工检查数据库版本的工作进行了自动化（只要数据库实例存在就行），并且将数据库的变化内容放在应用代码中进行维护。当然它还进一步也做了很多工作，比如为了避免多个应用实例升级时对同一个数据库的操作，它加了一张表来进行同步控制，以及在有的场景中可能要根据参数判断对不同环境的数据库执行不同的操作等等。</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>这里以springboot 2.7.0为例来使用Liquibase</p>
+<ul>
+<li>依赖</li>
+</ul>
+<figure class="highlight xml"><figcaption><span class="caption">pom.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.liquibase<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>liquibase-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.9.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Liquibase配置</li>
+</ul>
+<p>虽然Liquibase提供了xml/yaml格式来描述数据库变化，方便支持不同数据库，但我们还是倾向于使用直接的sql文件来描述。</p>
+<figure class="highlight yaml"><figcaption><span class="caption">application.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">com.alibaba.druid.pool.DruidDataSource</span></span><br><span class="line">    <span class="attr">driverClassName:</span> <span class="string">org.postgresql.Driver</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:postgresql://127.0.0.1:5432/test</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">postgres</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">postgres</span></span><br><span class="line">  <span class="attr">liquibase:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span>                  </span><br><span class="line">    <span class="attr">change-log:</span> <span class="string">sql/changelog.yml</span></span><br><span class="line">    <span class="attr">parameters:</span></span><br><span class="line">      <span class="attr">cluster:</span> <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>changelog</li>
+</ul>
+<p>一个changeSet可以包含多个change，对应数据库的一条日志记录，所以它们共用tag、labels、comment等属性。change的类型可以是sqlFile、createProduce或其他更多类型，具体可以查看官方文档。另外，还可以对change配置条件执行，这个在文档中没有找到，不过看它代码找到了，它里面维护了一个map，并且在触发时会进行检查。</p>
+<figure class="highlight yaml"><figcaption><span class="fileDir">sql/</span><span class="caption">changelog.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">databaseChangeLog:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">changeSet:</span></span><br><span class="line">      <span class="attr">id:</span> <span class="string">init</span></span><br><span class="line">      <span class="attr">labels:</span> <span class="string">init</span></span><br><span class="line">      <span class="attr">author:</span> <span class="string">shanhm1991</span></span><br><span class="line">      <span class="attr">comment:</span> <span class="string">初始化</span></span><br><span class="line">      <span class="attr">changes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">sqlFile:</span></span><br><span class="line">            <span class="attr">splitStatements:</span> <span class="literal">true</span></span><br><span class="line">            <span class="attr">stripComments:</span> <span class="literal">false</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">sql/init.ddl.sql</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">sqlFile:</span></span><br><span class="line">            <span class="attr">splitStatements:</span> <span class="literal">true</span></span><br><span class="line">            <span class="attr">stripComments:</span> <span class="literal">false</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">sql/init.dml.sql</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">tagDatabase:</span></span><br><span class="line">            <span class="attr">tag:</span> <span class="number">1.0</span><span class="number">.0</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">changeSet:</span></span><br><span class="line">      <span class="attr">id:</span> <span class="string">update.20220421</span></span><br><span class="line">      <span class="attr">labels:</span> <span class="string">update.20220421</span></span><br><span class="line">      <span class="attr">author:</span> <span class="string">shanhm1991</span></span><br><span class="line">      <span class="attr">comment:</span> <span class="string">更新xxx</span></span><br><span class="line">      <span class="attr">preConditions:</span>                      <span class="comment">## 对应application.yml中的参数配置cluster，只要值为10的时候才执行</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">onFail:</span> <span class="string">MARK_RAN</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">changeLogPropertyDefined:</span></span><br><span class="line">            <span class="attr">property:</span> <span class="string">cluster</span></span><br><span class="line">            <span class="attr">value:</span> <span class="number">10</span></span><br><span class="line">      <span class="attr">changes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">sqlFile:</span></span><br><span class="line">            <span class="attr">splitStatements:</span> <span class="literal">false</span></span><br><span class="line">            <span class="attr">stripComments:</span> <span class="literal">false</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">sql/update.20220421.sql</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">tagDatabase:</span></span><br><span class="line">            <span class="attr">tag:</span> <span class="number">1.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>sql</li>
+</ul>
+<figure class="highlight sql"><figcaption><span class="fileDir">sql/</span><span class="caption">init.ddl.sql</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> sys_project;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> sys_project(</span><br><span class="line">    <span class="keyword">id</span>              bigserial primary <span class="keyword">key</span>,</span><br><span class="line">    project_code    <span class="built_in">character</span> <span class="built_in">varying</span>(<span class="number">64</span>),</span><br><span class="line">    project_name    <span class="built_in">character</span> <span class="built_in">varying</span>(<span class="number">255</span>),</span><br><span class="line">    archive_version <span class="built_in">character</span> <span class="built_in">varying</span>(<span class="number">64</span>),</span><br><span class="line">    archive_time    <span class="built_in">timestamp</span>,</span><br><span class="line">    remark          <span class="built_in">character</span> <span class="built_in">varying</span>(<span class="number">512</span>),</span><br><span class="line">    create_user     <span class="built_in">int8</span>,</span><br><span class="line">    create_time     <span class="built_in">timestamp</span>,</span><br><span class="line">    update_user     <span class="built_in">int8</span>,</span><br><span class="line">    update_time     <span class="built_in">timestamp</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">unique</span> <span class="keyword">index</span> sys_project_unique <span class="keyword">on</span> sys_project(project_code);</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><figcaption><span class="fileDir">sql/</span><span class="caption">init.dml.sql</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> sys_project(project_code,project_name,archive_version,archive_time,remark)</span><br><span class="line"><span class="keyword">values</span> (<span class="string">'xxx-test'</span>,<span class="string">'xxx-test'</span>,<span class="string">'1.0.0'</span>,<span class="string">'2022-01-01'</span>,<span class="string">'test'</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><figcaption><span class="fileDir">sql/</span><span class="caption">update.20220421.sql</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">function</span> dataFill() <span class="keyword">returns</span> <span class="built_in">boolean</span> <span class="keyword">AS</span></span><br><span class="line">$<span class="keyword">BODY</span>$</span><br><span class="line"><span class="keyword">declare</span> i <span class="built_in">integer</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="keyword">FOR</span> i <span class="keyword">IN</span> <span class="number">1.</span><span class="number">.100</span> <span class="keyword">LOOP</span></span><br><span class="line">  <span class="keyword">insert</span> <span class="keyword">into</span> sys_project(project_code,project_name,archive_version,archive_time,remark)</span><br><span class="line">  <span class="keyword">values</span> (<span class="string">'xxx-test'</span> || i,<span class="string">'xxx-test'</span>,<span class="string">'1.0.0'</span>,<span class="string">'2022-01-01'</span>,<span class="string">'test'</span>);</span><br><span class="line"><span class="keyword">end</span> <span class="keyword">loop</span>;</span><br><span class="line">return true;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line">$BODY$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> dataFill() <span class="keyword">as</span> tab;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>结果</li>
+</ul>
+<p>除了context字段没有用到，版本记录表字段与上面的配置基本对应</p>
+<p><img src="/img/20220421/20220421.1.jpg" alt=""> </p>
+<ul>
+<li>日志</li>
+</ul>
+<p>从日志我们可以看到Liquibase对锁的获取和释放操作，并且是以Changeset作为单位来执行并记录tag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">2023-12-19 11:40:30.508  INFO 38857 --- [main] com.alibaba.druid.pool.DruidDataSource   : &#123;dataSource-1&#125; inited</span><br><span class="line">2023-12-19 11:40:31.011  INFO 38857 --- [main] liquibase.database       [ Set default schema name to public</span><br><span class="line">2023-12-19 11:40:31.079  INFO 38857 --- [main] liquibase.lockservice    [ Successfully acquired change log lock</span><br><span class="line">2023-12-19 11:40:31.145  INFO 38857 --- [main] liquibase.changelog      [ Creating database history table with name: public.databasechangelog</span><br><span class="line">2023-12-19 11:40:31.159  INFO 38857 --- [main] liquibase.changelog      [ Reading from public.databasechangelog </span><br><span class="line">Running Changeset: sql&#x2F;changelog.yml::init::shanhm1991</span><br><span class="line">2023-12-19 11:40:31.206  INFO 38857 --- [main] liquibase.changelog      [ SQL in file sql&#x2F;init.ddl.sql executed</span><br><span class="line">2023-12-19 11:40:31.210  INFO 38857 --- [main] liquibase.changelog      [ SQL in file sql&#x2F;init.dml.sql executed</span><br><span class="line">2023-12-19 11:40:31.211  INFO 38857 --- [main] liquibase.changelog      [ Tag &#39;1.0.0&#39; applied to database</span><br><span class="line">2023-12-19 11:40:31.211  INFO 38857 --- [main] liquibase.changelog      [ ChangeSet sql&#x2F;changelog.yml::init::shanhm1991 ran successfully in 30ms</span><br><span class="line">Running Changeset: sql&#x2F;changelog.yml::update.20220421::shanhm1991</span><br><span class="line">2023-12-19 11:40:31.227  INFO 38857 --- [main] liquibase.changelog      [ SQL in file sql&#x2F;update.20220421.sql executed</span><br><span class="line">2023-12-19 11:40:31.227  INFO 38857 --- [main] liquibase.changelog      [ Tag &#39;1.0.1&#39; applied to database</span><br><span class="line">2023-12-19 11:40:31.228  INFO 38857 --- [main] liquibase.changelog      [ ChangeSet sql&#x2F;changelog.yml::update.20220421::shanhm1991 ran successfully in 12ms</span><br><span class="line">2023-12-19 11:40:31.231  INFO 38857 --- [main] liquibase.lockservice    [ Successfully released change log lock</span><br></pre></td></tr></table></figure>
+<h4 id="注意问题"><a href="#注意问题" class="headerlink" title="注意问题"></a>注意问题</h4><p>以下只是我们在实践过程遇到记录的一些问题，更多问题可以查看官方文档</p>
+<ul>
+<li>已经执行过的sql文件不要修改，否则会启动失败。Liquibase会校验文件的md5，原则应该只新增不修改；</li>
+<li>在容器初始化完成前不要执行sql操作，比如@PostConstruct中，建议将操作放到ApplicationRunner中。因为Liquibase完成之前可能会数据库版本不对而导致错误，而Liquibase又依赖datasource实例的初始化；</li>
+<li>如果希望区分环境来执行不同的sql，可以通过定义参数，以及preConditions来进行控制，具体见上面示例；</li>
+<li>如果是存储过程或函数，将splitStatements改为false，默认会以分号”;”作为一条语句结束。也尝试过用createProduce来定义change，但还是有些问题，不过多纠结，直接不分行整个作为一个sql执行就可以了。</li>
+</ul>
+<h4 id="数据库适配"><a href="#数据库适配" class="headerlink" title="数据库适配"></a>数据库适配</h4><p>如果使用的数据库不在Liquibase的支持列表中，可能要进行一些适配修改，下面记录一下自己适配OSCAR神通数据库的实践，具体修改记录可以查看仓库（分支oscar.4.9.1）：<a href="https://github.com/shanhm1991/liquibase" target="_blank" rel="noopener">https://github.com/shanhm1991/liquibase</a> </p>
+<ul>
+<li>首先添加OSCARDatabase定义，这个可以复制一下OracleDatabase，然后稍微改改就行</li>
+</ul>
+<figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/liquibase/blob/oscar.4.9.1/liquibase-core/src/main/java/liquibase/database/core/</span><span class="caption">OSCARDatabase.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OSCARDatabase</span> <span class="keyword">extends</span> <span class="title">AbstractJdbcDatabase</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Pattern PROXY_USER = Pattern.compile(<span class="string">".*(?:thin|oci)\\:(.+)/@.*"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String PRODUCT_NAME = <span class="string">"OSCAR"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ResourceBundle coreBundle = getBundle(<span class="string">"liquibase/i18n/liquibase-core"</span>);</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">int</span> SHORT_IDENTIFIERS_LENGTH = <span class="number">30</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">int</span> LONG_IDENTIFIERS_LEGNTH = <span class="number">128</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ORACLE_12C_MAJOR_VERSION = <span class="number">12</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Set&lt;String&gt; reservedWords = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> Set&lt;String&gt; userDefinedTypes;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String&gt; savedSessionNlsSettings;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Boolean canAccessDbaRecycleBin;</span><br><span class="line">    <span class="keyword">private</span> Integer databaseMajorVersion;</span><br><span class="line">    <span class="keyword">private</span> Integer databaseMinorVersion;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Default constructor for an object that represents the Oracle Database DBMS.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OSCARDatabase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.unquotedObjectsAreUppercased = <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">//noinspection HardCodedStringLiteral</span></span><br><span class="line">        <span class="keyword">super</span>.setCurrentDateTimeFunction(<span class="string">"SYSTIMESTAMP"</span>);</span><br><span class="line">        <span class="comment">// Setting list of Oracle's native functions</span></span><br><span class="line">        <span class="comment">//noinspection HardCodedStringLiteral</span></span><br><span class="line">        dateFunctions.add(<span class="keyword">new</span> DatabaseFunction(<span class="string">"SYSDATE"</span>));</span><br><span class="line">        <span class="comment">//noinspection HardCodedStringLiteral</span></span><br><span class="line">        dateFunctions.add(<span class="keyword">new</span> DatabaseFunction(<span class="string">"SYSTIMESTAMP"</span>));</span><br><span class="line">        <span class="comment">//noinspection HardCodedStringLiteral</span></span><br><span class="line">        dateFunctions.add(<span class="keyword">new</span> DatabaseFunction(<span class="string">"CURRENT_TIMESTAMP"</span>));</span><br><span class="line">        <span class="comment">//noinspection HardCodedStringLiteral</span></span><br><span class="line">        <span class="keyword">super</span>.sequenceNextValueFunction = <span class="string">"%s.nextval"</span>;</span><br><span class="line">        <span class="comment">//noinspection HardCodedStringLiteral</span></span><br><span class="line">        <span class="keyword">super</span>.sequenceCurrentValueFunction = <span class="string">"%s.currval"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPriority</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">6</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... ... </span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>然后可以手动注册到DatabaseFactory，也许有自动检测机制，但试了下没效果就直接这里硬编码了</li>
+</ul>
+<figure class="highlight java"><figcaption><span class="fileDir">https://github.com/shanhm1991/liquibase/blob/oscar.4.9.1/liquibase-core/src/main/java/liquibase/database/</span><span class="caption">DatabaseFactory.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DatabaseFactory</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOG = Scope.getCurrentScope().getLog(DatabaseFactory<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> DatabaseFactory instance;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, SortedSet&lt;Database&gt;&gt; implementedDatabases = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, SortedSet&lt;Database&gt;&gt; internalDatabases = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">DatabaseFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (Database database : Scope.getCurrentScope().getServiceLocator().findInstances(Database<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">                register(database);</span><br><span class="line">            &#125;</span><br><span class="line">            Database oscar = <span class="keyword">new</span> OSCARDatabase();</span><br><span class="line">            register(oscar);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>最后一步是检查所有关于Oracle的判断，增加一个OSCAR，这是最麻烦的，因为源码中充斥着大量的硬编码判断，比如</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(database <span class="keyword">instanceof</span> OracleDatabase) 改为 <span class="keyword">if</span>(database <span class="keyword">instanceof</span> OracleDatabase || database <span class="keyword">instanceof</span> OSCARDatabase)</span><br></pre></td></tr></table></figure>
+<p><br><strong>参考：</strong></p>
+<ol>
+<li></li>
+</ol>
+
+      
+    </div>
+	
+    <footer>
+      
+	  
+	    
+	<nav id="pagination">
+	  
+		  <a class="alignleft prev" href="/2022/04/25/20220425/">
+		    Oscar 神通数据库日常操作
+		  </a>
+	  
+	  
+	  
+		  <a class="alignright next" href="/2021/08/26/20210826/">
+		    Netty NioEventLoop
+		  </a>
+	  
+	  <div class="clearfix"></div>
+	</nav>
+	
+	    
+        
+  
+  <div class="categories">
+    <a href="/categories/日常随笔/">日常随笔</a>
+  </div>
+
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Liquibase/">Liquibase</a>
+  </div>
+
+
+         		        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'd7beb7890a79c73a3e3d',
+        clientSecret: '80ea1fc195ae4b80cbd65ec9f1ce68d59595af4b',
+        id: md5(window.location.pathname),
+        repo: 'shanhm1991.github.io',
+        owner: 'shanhm1991',
+        admin: 'shanhm1991'
+    })
+    gitalk.render('gitalk-container')
+</script>                              
+
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+
+
+  
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#os_ul").click(function(){ $("#os_li").toggle(); });
+    $("#xx_ul").click(function(){ $("#xx_li").toggle(); });
+});
+</script>
+
+
+  
+
+  
+<div class="widget catlog">
+<h3 class="title">Catlog</h3>
+<ul class="entry_catlog">
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#思路"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注意问题"><span class="toc-text">注意问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据库适配"><span class="toc-text">数据库适配</span></a></li></ol>
+</div>
+
+
+
+
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+
+  
+  
+      &copy; 2017-2023 &nbsp;&nbsp; shanhm1991 &nbsp;&nbsp; version@1.0.0 
+  
+  
+  
+  <font style="float: right">
+</div>
+<div class="clearfix"></div>
+</footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

@@ -41,7 +41,7 @@
 <div class="alignleft">
   <h1><a href="/">Echo</a></h1>
   <span style="color:#736f6f; height:20px;line-height:30px;">It's a long long way to go</span>
-  <h2><font style="color: #736f6f;">articles:  110 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
+  <h2><font style="color: #736f6f;">articles:  111 &nbsp;&nbsp;&nbsp; views: <span id="busuanzi_value_site_uv"></span></font></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -149,6 +149,64 @@
         
           <div class="alignleft">
             <a href="/2022/04/25/20220425/#more" class="more-link">more</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  <article id="post-20220421" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2022-04-20T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2022/04/21/20220421/" style="color: #736f6f;">2022-04-21</a></time>
+      
+      
+
+  
+  
+    <h1 class="title">
+       <a href="/2022/04/21/20220421/">使用Liquibase管理应用数据库版本</a>
+    </h1>
+    
+  
+  
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+    </header>
+      
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>Liquibase是一个用于用于跟踪和管理应用数据库变化的开源工具，通过changelog日志的形式来记录数据库的变更，然后执行日志文件中的修改，将数据库更新或回滚到一致的状态。它的目标是提供一种与数据库类型无关的解决方案，主要优点包括：</p>
+<ul>
+<li>支持几乎所有主流的数据库，包括Oracle、Sql Server、DB2、MySql、Sybase、PostgreSQL等，这样在数据库的部署和升级环节可以支持多数据库；</li>
+<li>日志文件支持多种格式，如XML、YAML、JSON、SQL等；</li>
+<li>支持回滚功能，可以按时间、数量、标签回滚变化；</li>
+</ul>
+<p>官网文档：<a href="https://docs.liquibase.com/home.html" target="_blank" rel="noopener">https://docs.liquibase.com/home.html</a><br>
+      
+    </div>
+	
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2022/04/21/20220421/#more" class="more-link">more</a>
           </div>
         
         
@@ -324,62 +382,6 @@
 
 
 
-  <article id="post-20210805" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time class="dt-published" datetime="2021-08-04T16:00:00.000Z" style="margin-bottom: 10px;"><a href="/2021/08/05/20210805/" style="color: #736f6f;">2021-08-05</a></time>
-      
-      
-
-  
-  
-    <h1 class="title">
-       <a href="/2021/08/05/20210805/">Netty NioEventLoopGroup</a>
-    </h1>
-    
-  
-  
-
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-    </header>
-      
-    <div class="e-content entry" itemprop="articleBody">
-      
-        <p>在Java中，任务执行的主要抽象不是<code>Thread</code>，而是<code>Executor</code>，它提供了一种标准的方式将任务的提交过程与执行过程解耦开来，为灵活而强大的异步任务执行框架提供了基础，线程池<code>ThreadPoolExecutor</code>便是在此基础上实现的一套异步执行框架。</p>
-<p>Netty也在<code>Executor</code>的基础上自定义实现了一套高性能的任务执行框架，本文尝试从I/O事件执行器<code>NioEventLoopGroup</code>作为切入点对其中的部分源码做一些分析，希望能从别人的设计中汲取一些思路和启发。建议在分析Netty中的任务执行机制之前先对Java中原生的任务执行框架有所了解，可以参考笔记：</p>
-<ul>
-<li><a href="https://shanhm1991.github.io/2017/03/05/20170305/">《Java并发编程实战》 任务的执行</a></li>
-<li><a href="https://shanhm1991.github.io/2017/03/06/20170306/">《Java并发编程实战》 任务的取消</a>
-      
-    </div>
-	
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2021/08/05/20210805/#more" class="more-link">more</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-
-
-
 
 <nav id="pagination">
   
@@ -506,7 +508,7 @@
   
   
   
-    <li><a href="/categories/日常随笔/" style="width:48px; display:inline-block;">日常随笔</a><small>15</small></li>
+    <li><a href="/categories/日常随笔/" style="width:48px; display:inline-block;">日常随笔</a><small>16</small></li>
   
   
   
@@ -791,7 +793,7 @@ $(document).ready(function(){
 <div class="widget tagcloud">
   <h3 class="title">Tags</h3>
   <div class="entry">
-    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/chrony/" style="font-size: 10px;">chrony</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/cron/" style="font-size: 10px;">cron</a> <a href="/tags/feign/" style="font-size: 12.5px;">feign</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/netstat/" style="font-size: 10px;">netstat</a> <a href="/tags/ntp/" style="font-size: 10px;">ntp</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/schedule/" style="font-size: 12.5px;">schedule</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/swap/" style="font-size: 10px;">swap</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
+    <a href="/tags/AQS/" style="font-size: 12.5px;">AQS</a> <a href="/tags/Aop/" style="font-size: 12.5px;">Aop</a> <a href="/tags/AspectJ/" style="font-size: 10px;">AspectJ</a> <a href="/tags/CAS/" style="font-size: 12.5px;">CAS</a> <a href="/tags/Excel/" style="font-size: 15px;">Excel</a> <a href="/tags/Future/" style="font-size: 17.5px;">Future</a> <a href="/tags/GC/" style="font-size: 12.5px;">GC</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/I-O/" style="font-size: 20px;">I/O</a> <a href="/tags/IOC/" style="font-size: 15px;">IOC</a> <a href="/tags/JIT/" style="font-size: 10px;">JIT</a> <a href="/tags/Jdbc/" style="font-size: 15px;">Jdbc</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/Liquibase/" style="font-size: 10px;">Liquibase</a> <a href="/tags/List/" style="font-size: 10px;">List</a> <a href="/tags/Lock/" style="font-size: 12.5px;">Lock</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/PriorityQueue/" style="font-size: 10px;">PriorityQueue</a> <a href="/tags/String/" style="font-size: 10px;">String</a> <a href="/tags/ThreadLocal/" style="font-size: 12.5px;">ThreadLocal</a> <a href="/tags/ThreadPool/" style="font-size: 15px;">ThreadPool</a> <a href="/tags/Transactional/" style="font-size: 10px;">Transactional</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/cglib/" style="font-size: 10px;">cglib</a> <a href="/tags/chrony/" style="font-size: 10px;">chrony</a> <a href="/tags/class/" style="font-size: 17.5px;">class</a> <a href="/tags/cron/" style="font-size: 10px;">cron</a> <a href="/tags/feign/" style="font-size: 12.5px;">feign</a> <a href="/tags/final/" style="font-size: 12.5px;">final</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/intern/" style="font-size: 12.5px;">intern</a> <a href="/tags/invokedynamic/" style="font-size: 10px;">invokedynamic</a> <a href="/tags/iostat/" style="font-size: 10px;">iostat</a> <a href="/tags/netstat/" style="font-size: 10px;">netstat</a> <a href="/tags/ntp/" style="font-size: 10px;">ntp</a> <a href="/tags/postgre/" style="font-size: 10px;">postgre</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/schedule/" style="font-size: 12.5px;">schedule</a> <a href="/tags/servlet/" style="font-size: 10px;">servlet</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/swap/" style="font-size: 10px;">swap</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/vmstat/" style="font-size: 10px;">vmstat</a> <a href="/tags/volatile/" style="font-size: 12.5px;">volatile</a>
   </div>
 </div>
 
@@ -804,7 +806,7 @@ $(document).ready(function(){
   
   <div class="widget tag">
     <h3 class="title">Archives</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">2022-07</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">2022-04</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">2021-03</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">2020-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">2019-05</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018-07</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">2017-06</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017-03</a><span class="archive-list-count">11</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">2022-07</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">2022-04</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021-08</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">2021-05</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">2021-03</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">2020-10</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">2020-06</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">2020-01</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">2019-11</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">2019-05</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019-02</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">2018-10</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018-07</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">2018-04</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017-09</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">2017-06</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017-03</a><span class="archive-list-count">11</span></li></ul>
   </div>
 
 </aside>
