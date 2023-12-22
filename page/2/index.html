@@ -250,7 +250,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>smart-doc是一款支持Java Rest Api和Apache Dubbo Rpc接口文档生成的工具，官方文档已经介绍得很好，就不过多赘述了。相比swagger基于注解生成接口文档，它是基于注释来生成，将代码无侵入这一目标进行的更加彻底，而且生成的接口文档画风也非常简单干净，基本满足了我们所有的期望。这里记录一下在springboot应用中通过maven插件来生成smart接口文档的具体实践。</p>
+        <p>smart-doc是一款支持Java Rest Api和Apache Dubbo Rpc接口文档生成的工具，官方文档已经介绍得很好，就不过多赘述了。相比swagger基于注解生成接口文档，它基于注释来生成，将代码无侵入这一目标进行的更加彻底，生成的接口文档画风也非常简单干净，而且支持JSR-303规范，可以解析Validation API相关的参数校验。这里记录一下在springboot应用中通过maven插件来生成smart接口文档的具体实践。</p>
 <p>官网文档：<a href="https://smart-doc-group.github.io/#/zh-cn/?id=smart-doc" target="_blank" rel="noopener">https://smart-doc-group.github.io/#/zh-cn/?id=smart-doc</a><br>
       
     </div>
@@ -341,7 +341,7 @@
   
   
     <h1 class="title">
-       <a href="/2022/04/15/20220415/">springboot应用启动脚本</a>
+       <a href="/2022/04/15/20220415/">springboot应用配置和脚本</a>
     </h1>
     
   
@@ -355,7 +355,7 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>Maven是Java应用中一种很常见的构建方式，这里记录下我们使用Maven来构建springboot应用的一次实践以及遇到的问题<br>
+        <p>在springboot中，推荐的方式是直接打包成可执行JAR，这样简单、方便，并且使应用的部署和运行更加一致和可靠，非常适用于应用容器化部署。但我们希望也能兼容旧的打包部署方式，在一些非容器化部署的环境中，可能有直接修改应用配置文件甚至替换jar包的行为。所以我们还是保持以前的打包目录结构，在应用部署之后分为bin、config、lib、log4个子目录，区别只是lib中从原来的多个jar变成了现在的一个jar。<br>
       
     </div>
 	
