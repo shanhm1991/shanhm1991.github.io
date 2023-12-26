@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>JSR-303参数校验 | Echo</title>
+  <title>Bean Validation对象验证标准 | Echo</title>
   <meta name="author" content="shanhm1991">
   
-  <meta name="description" content="xxx">
+  <meta name="description" content="Java’s standard for object validation最早在Java EE6中提出，作为Bean Validation 1.0(JSR-303)。它定义了一种在Java对象上执行声明性验证的方式，提供了一个运行时的数据验证框架。更多详细内容可以参考官网：https://beanvalidation.org
+Bean Validationn可以让代码变得更简洁清晰，让开发人员在定义数据模型时不必考虑实现框架的限制。当然它不止提供了一些基本的constraint，也可以自定义验证规则，在实际的开发中，可以根据自己的需要组合或开发出更加合适的constraint。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="JSR-303参数校验"/>
+  <meta property="og:title" content="Bean Validation对象验证标准"/>
   <meta property="og:site_name" content="Echo"/>
 
   
@@ -74,7 +75,7 @@
   
   
     <h1 class="p-name title" itemprop="headline name">
-        JSR-303参数校验
+        Bean Validation对象验证标准
     </h1>
     
     
@@ -88,7 +89,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 3  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 1min</font>
+   <font style="color: #999;"> words: 969  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 4min</font>
    
    
   
@@ -114,8 +115,224 @@
       
     <div class="e-content entry" itemprop="articleBody">
       
-        <p>xxx<br><a id="more"></a></p>
-<h4 id=""><a href="#" class="headerlink" title=" "></a> </h4><p><br><strong>参考：</strong></p>
+        <p>Java’s standard for object validation最早在Java EE6中提出，作为Bean Validation 1.0(JSR-303)。它定义了一种在Java对象上执行声明性验证的方式，提供了一个运行时的数据验证框架。更多详细内容可以参考官网：<a href="https://beanvalidation.org" target="_blank" rel="noopener">https://beanvalidation.org</a></p>
+<p>Bean Validationn可以让代码变得更简洁清晰，让开发人员在定义数据模型时不必考虑实现框架的限制。当然它不止提供了一些基本的constraint，也可以自定义验证规则，在实际的开发中，可以根据自己的需要组合或开发出更加合适的constraint。<br><a id="more"></a></p>
+<h4 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h4><p>validation-api主要提供了一套用于在Java Bean对象上执行声明性验证的标准接口和注解，但不包含具体实现，而是留给不同的厂商或项目来提供实现</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>jakarta.validation<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jakarta.validation-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>hibernate-validator是Bean Validation规范的一个实现，它实现了validation-api中定义的接口和功能</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate.validator<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-validator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.2.3.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>一般在基于springboot开发的Java应用中，只需添加对应的starter依赖即可。它配置好了对应的依赖版本，以上版本都以spring-boot-2.7.0为例</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="Valid与-Validated"><a href="#Valid与-Validated" class="headerlink" title="@Valid与@Validated"></a>@Valid与@Validated</h4><p>javax.validation.Valid是标准规范validation-api提供的注解，而org.springframework.validation.annotation.Validated是Spring自定义的一个注解，在spring-context包中，其增强了分组功能，作为JSR-303在spring中的一个变体。它们都可以对方法和参数进行校验，两者可以兼容，但也有一些区别：<br>    <table width=100%>
+        <tr style="border-bottom:0.01rem solid grey;">
+            <th width=15%>区别</th>
+            <th width=50%>@Valid</th>
+            <th width=35%>@Validated</th>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>提供者</td>
+            <td>JSR-303规范</td>
+            <td>spring</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>分组验证</td>
+            <td>不支持</td>
+            <td>支持</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>嵌套验证</td>
+            <td>支持</td>
+            <td>不支持</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>标记位置</td>
+            <td>CONSTRUCTOR, FIELD, TYPE_USE, METHOD, PARAMETER</td>
+            <td>TYPE, METHOD, PARAMETER</td>
+        </tr>
+    </table></p>
+<p>spring中的Validated还是基于Aop来增强实现的，MethodValidationPostProcessor在Bean的初始化完成之后，会判断类是否被@Validated标记，然后MethodValidationInterceptor会拦截所有方法，执行校验逻辑。最后委派给Validator执行参数和返回值校验，并得到ConstraintViolation进行处理。</p>
+<h4 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h4><p>Validation 2.0(JSR-380) 相关的22个注解：</p>
+<ul>
+<li><p>非空检查</p>
+  <table width=100%>
+      <tr style="border-bottom:0.01rem solid grey;">
+          <th width=25%>注解</th>
+          <th width=50%>支持类型</th>
+          <th width=25%>备注</th>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Null</td>
+          <td>Object</td>
+          <td>为null</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@NotNull</td>
+          <td>Object</td>
+          <td>不为null</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@NotBlank</td>
+          <td>CharSequence</td>
+          <td>不为null，且必须有一个非空格字符</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@NotEmpty</td>
+          <td>CharSequence, Collection, Map, Array</td>
+          <td>不为null，且length/size > 0</td>
+      </tr>
+  </table>
+</li>
+<li><p>Boolean判断</p>
+  <table width=100%>
+      <tr style="border-bottom:0.01rem solid grey;">
+          <th width=25%>注解</th>
+          <th width=50%>支持类型</th>
+          <th width=25%>备注</th>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@AssertTrue</td>
+          <td>boolean, Boolean</td>
+          <td>为true</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@AssertFalse</td>
+          <td>boolean, Boolean</td>
+          <td>为false</td>
+      </tr>
+  </table>
+</li>
+<li><p>日期检查</p>
+  <table width=100%>
+      <tr style="border-bottom:0.01rem solid grey;">
+          <th width=25%>注解</th>
+          <th width=50%>支持类型</th>
+          <th width=25%>备注</th>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Future</td>
+          <td>Date、Calendar等</td>
+          <td>日期为当前时间之后</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@FutureOrPresent</td>
+          <td>Date、Calendar等</td>
+          <td>验证日期为当前时间或之后</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Past</td>
+          <td>Date、Calendar等</td>
+          <td>日期为当前时间之前</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@PastOrPresent</td>
+          <td>Date、Calendar等</td>
+          <td>验证日期为当前时间或之前</td>
+      </tr>
+  </table>
+</li>
+<li><p>数值检查</p>
+  <table width=100%>
+      <tr style="border-bottom:0.01rem solid grey;">
+          <th width=25%>注解</th>
+          <th width=50%>支持类型</th>
+          <th width=25%>备注</th>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Max</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long</td>
+          <td>小于或等于</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Min</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long</td>
+          <td>大于或等于</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@DecimalMax</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long, CharSequence</td>
+          <td>小于或等于</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@DecimalMin</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long, CharSequence</td>
+          <td>大于或等于</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Negative</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long, float, double</td>
+          <td>负数</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@NegativeOrZero</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long, float, double</td>
+          <td>负数或零</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Positive</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long, float, double</td>
+          <td>正数</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@PositiveOrZero</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long, float, double</td>
+          <td>正数或零</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Digits(integer = 3, fraction = 2)</td>
+          <td>BigDecimal, BigInteger, byte, short, int, long, CharSequence</td>
+          <td>精度限制，整数位数和小数位上限</td>
+      </tr>
+  </table>
+</li>
+<li><p>其它</p>
+  <table width=100%>
+      <tr style="border-bottom:0.01rem solid grey;">
+          <th width=25%>注解</th>
+          <th width=50%>支持类型</th>
+          <th width=25%>备注</th>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Pattern</td>
+          <td>CharSequence</td>
+          <td>匹配正则表达式</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Email</td>
+          <td>CharSequence</td>
+          <td>邮箱地址</td>
+      </tr>
+      <tr style="border-bottom:0.01rem solid #e6e0e0;">
+          <td>@Size</td>
+          <td>CharSequence, Collection, Map, Array</td>
+          <td>大小范围length/size</td>
+      </tr>
+  </table>
+
+</li>
+</ul>
+<p>hibernate-validator的扩展：<br>    <table width=100%>
+        <tr style="border-bottom:0.01rem solid grey;">
+            <th width=25%>注解</th>
+            <th width=50%>支持类型</th>
+            <th width=25%>备注</th>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>@Length</td>
+            <td>String</td>
+            <td>字符串长度范围</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>@Range</td>
+            <td>数值类型和String</td>
+            <td>指定范围</td>
+        </tr>
+        <tr style="border-bottom:0.01rem solid #e6e0e0;">
+            <td>@URL</td>
+            <td></td>
+            <td>URL地址验证</td>
+        </tr>
+    </table></p>
+<p><br><strong>参考：</strong><br>1.<a href="https://developer.aliyun.com/article/888561" target="_blank" rel="noopener">https://developer.aliyun.com/article/888561</a></p>
 
       
     </div>
@@ -204,7 +421,7 @@ $(document).ready(function(){
 <div class="widget catlog">
 <h3 class="title">Catlog</h3>
 <ul class="entry_catlog">
-<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#null"><span class="toc-text"> </span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#依赖"><span class="toc-text">依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Valid与-Validated"><span class="toc-text">@Valid与@Validated</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#附录"><span class="toc-text">附录</span></a></li></ol>
 </div>
 
 
