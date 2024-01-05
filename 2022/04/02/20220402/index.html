@@ -88,7 +88,7 @@
 
    <span style="line-height:35px; height:35px; ">  </span>
 
-   <font style="color: #999;"> words: 8.8k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 41min</font>
+   <font style="color: #999;"> words: 8.7k  &nbsp;&nbsp; views: <span id="busuanzi_value_page_pv"></span> &nbsp;&nbsp; time: 41min</font>
    
    
   
@@ -125,9 +125,17 @@
 <li>关系缓存</li>
 </ul>
 <p>为了方便Tree数据在界面查询过滤，我们会提前构建以下缓存</p>
-<p>单位树缓存：<code>Tree:dept</code><br>岗位树缓存：<code>Tree:post</code><br>用户树缓存：<code>Tree:user</code><br>单位用户树缓存：<code>Tree:dept-user</code><br>单位岗位树缓存：<code>Tree:dept-post</code></p>
+<p>用户树缓存：<code>Tree:user</code></p>
+<p><img src="/img/20220402/20220402.16.jpg" alt=""> </p>
+<p>单位树缓存：<code>Tree:dept</code></p>
 <p><img src="/img/20220402/20220402.2.jpg" alt=""> </p>
-<p>比如上面这个单位树，我们可以直接从缓存获取。但这又有一个问题，如果数据发生了变化，应该在<strong>什么时机更新缓存</strong>？而且这可能是一个耗时操作，如果放在每次数据变化后更新，那么会增加请求耗时降低用户体验。所以我们提供了一个刷新缓存操作，交给用户自己来决定何时更新缓存，他可以在批量操作之后再刷新缓存，我们觉得以上这些并不是那种会频繁变动的业务数据，让用户自己手动刷新缓存也是能够接受的。如果因为数据量大导致刷新延时，那也是可预期的，好过那种由于刷新缓存导致其它增删改查操作出现不可预期的延时。</p>
+<p>岗位树缓存：<code>Tree:post</code></p>
+<p><img src="/img/20220402/20220402.15.jpg" alt=""> </p>
+<p>单位用户树缓存：<code>Tree:dept-user</code></p>
+<p><img src="/img/20220402/20220402.18.jpg" alt=""> </p>
+<p>单位岗位树缓存：<code>Tree:dept-post</code></p>
+<p><img src="/img/20220402/20220402.17.jpg" alt=""> </p>
+<p>使用缓存存在另一个问题，如果数据发生了变化，应该在<strong>什么时机更新缓存</strong>？而且这可能是一个耗时操作，如果放在每次数据变化后更新，那么会增加请求耗时降低用户体验。所以我们提供了一个刷新缓存操作，交给用户自己来决定何时更新缓存，他可以在批量操作之后再刷新缓存，我们觉得以上这些并不是那种会频繁变动的业务数据，让用户自己手动刷新缓存也是能够接受的。如果因为数据量大导致刷新延时，那也是可预期的，好过那种由于刷新缓存导致其它增删改查操作出现不可预期的延时。</p>
 <p>很多场景中，我们可能是获取一个子Tree，以下是使用广度优先进行遍历获取子树的示例</p>
 <figure class="highlight java"><figcaption><span class="caption">Tree:dept</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String KEY_DEPT = <span class="string">"Tree:dept"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> List&lt;Tree&lt;String&gt;&gt; tree(String deptId) &#123;</span><br><span class="line">    Tree&lt;String&gt; root = redis.getValue(KEY_DEPT);</span><br><span class="line">    <span class="comment">// 如果没有传deptId，或者传的根部门id，则返回整棵树</span></span><br><span class="line">    <span class="keyword">if</span>(deptId == <span class="keyword">null</span> || deptId.equals(root.getId())) &#123;</span><br><span class="line">            <span class="keyword">return</span> List.of(root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 空树</span></span><br><span class="line">    <span class="keyword">if</span>(CollectionUtils.isEmpty(root.getChildren())) &#123;</span><br><span class="line">        <span class="keyword">return</span> List.of(<span class="keyword">new</span> Tree&lt;&gt;());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 广度优先，如果节点id与deptId一样则返回</span></span><br><span class="line">    Deque&lt;Tree&lt;String&gt;&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;(root.getChildren());</span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">        root = queue.pop();</span><br><span class="line">        <span class="keyword">if</span>(Objects.equals(deptId, root.getId())) &#123;</span><br><span class="line">            <span class="keyword">return</span> List.of(root);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(CollectionUtils.isNotEmpty(root.getChildren())) &#123;</span><br><span class="line">            queue.addAll(root.getChildren());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> List.of(<span class="keyword">new</span> Tree&lt;&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="角色菜单权限"><a href="#角色菜单权限" class="headerlink" title="角色菜单权限"></a>角色菜单权限</h4><p><img src="/img/20220402/20220402.3.jpg" alt=""> </p>
